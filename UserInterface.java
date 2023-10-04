@@ -20,85 +20,100 @@ public class UserInterface {
          if(input.equals("1")){
             listClasses();
         }else if(input.equals("2")){
-            listClass(kb);
+            listClass();
         }else if(input.equals("3")){
             addClass();
         }else if(input.equals("4")){
-            deleteClass(kb);
+            deleteClass();
         }else if(input.equals("5")){
-            renameClass(kb);
+            renameClass();
         }else if(input.equals("6")){
-            addAttribute(kb);
+            addAttribute();
         }else if(input.equals("7")){
-            deleteAttribute(kb);
+            deleteAttribute();
         }else if(input.equals("8")){
-            renameAttribute(kb);
+            renameAttribute();
         }else if(input.equals("9")){
             listRelationships();
         }else if(input.equals("10")){
-            save(kb);
+            save();
         }else if(input.equals("11")){
-            load(kb);
+            load();
         }else if(input.equals("12")){
             help();
         }else if(input.equals("13")){
-            menuExit(kb);    
+            menuExit();    
         }else{
             System.out.println("That is not a valid input. Please try again");
         }
     }
     public void addClass(){
-        ClassBox newClass = new ClassBox(null, null, null, null);
+        System.out.println("What would you like to name your class?");
+        String name = kb.nextLine();
+        ClassBox newClass = new ClassBox(name, null, null, null);
         createdClasses.add(newClass);
+        System.out.println("Class created!");
     }
     //confirm?
-    public void deleteClass(Scanner kb){
+    public void deleteClass(){
+        if(createdClasses.isEmpty()){
+            System.out.println("Nothing to delete!");
+        }else{
+        System.out.println("What index do you want to remove?");
+        //listClasses();
+        int input = kb.nextInt();
+        createdClasses.remove(input);
+        System.out.println("Class deleted");
+        }
 
     }
-    public void renameClass(Scanner kb){
+    public void renameClass(){
 
     }
-    public void addRelationship(Scanner kb){
+    public void addRelationship(){
 
     }
     //confirm?
-    public void deleteRelationship(Scanner kb){
+    public void deleteRelationship(){
 
     }
-    public void addAttribute(Scanner kb){
+    public void addAttribute(){
 
     }
     //confirm?
-    public void deleteAttribute(Scanner kb){
+    public void deleteAttribute(){
 
     }
-    public void renameAttribute(Scanner kb){
+    public void renameAttribute(){
 
     }
     //export createdClasses
     //confirm?
-    public void save(Scanner kb){
+    public void save(){
 
     }
     //import/set createdClasses
     //confirm?
-    public void load(Scanner kb){
+    public void load(){
 
     }
     public void listClasses(){
-
+        System.out.println("Current Class list");
+        for(int i = 0; i < createdClasses.size() - 1; i++){
+            System.out.println(createdClasses.get(i).getName());
+        }
     }
     public void listRelationships(){
 
     }
-    public void listClass(Scanner kb){
-
+    public void listClass(){
+        
     }
     public void help(){
 
     }
     //confirm?
-    public void menuExit(Scanner kb){
+    public void menuExit(){
         System.out.println("Type \"c\" to confirm: ");
         if(!(kb.nextLine().equals("c"))){
             //returns to menu loop
