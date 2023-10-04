@@ -43,7 +43,6 @@ public class ClassBox {
     }
     //For list class details
     public String toString(){
-
     }
 
     public String getName() {

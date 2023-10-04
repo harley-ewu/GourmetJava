@@ -47,23 +47,33 @@ public class UserInterface {
             System.out.println("That is not a valid input. Please try again");
         }
     }
+
+    // Creates a new Classbox object and adds to to the arraylist createdClasses
     public void addClass(){
         System.out.println("What would you like to name your class?");
         String name = kb.nextLine();
+
         ClassBox newClass = new ClassBox(name, null, null, null);
         createdClasses.add(newClass);
         System.out.println("Class created!");
     }
-    //confirm?
+
+    //Removes class from createdClasses
     public void deleteClass(){
         if(createdClasses.isEmpty()){
             System.out.println("Nothing to delete!");
         }else{
         System.out.println("What index do you want to remove?");
-        //listClasses();
+        listClasses();
         int input = kb.nextInt();
-        createdClasses.remove(input);
-        System.out.println("Class deleted");
+        if(input > 0){
+            input -= 1;
+            createdClasses.remove(input);
+            System.out.println("Class deleted");
+        }else if(input <= 0){
+            System.out.println("Invalid input. Try again");
+        }
+        
         }
 
     }
@@ -99,8 +109,8 @@ public class UserInterface {
     }
     public void listClasses(){
         System.out.println("Current Class list");
-        for(int i = 0; i < createdClasses.size() - 1; i++){
-            System.out.println(createdClasses.get(i).getName());
+        for(int i = 0; i < createdClasses.size(); i++){
+            System.out.println(i+1 + " . " + createdClasses.get(i).getName() + " ");
         }
     }
     public void listRelationships(){
