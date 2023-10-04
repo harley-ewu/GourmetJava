@@ -19,6 +19,7 @@ public class Attribute {
         this.parameters = parameters;
     }
 
+// Getters //
     public String getName() {
         return name;
     }
@@ -39,7 +40,28 @@ public class Attribute {
         return parameters;
     }
 
+// Setters //
+     public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setView(String view) {
+        this.view = view;
+    }
+
+    public void setTags(LinkedList<String> tags) {
+        this.Tags = tags;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String toString(){
-        return "";
+        String tempString = "";
+        tempString = "Name: " + getName() + " View: " + getView() + " Tags: " 
+                    + getTags() + " Type: " + getType() + " Parameters: " + getParameters();
+
+        return tempString;
     }
 }
