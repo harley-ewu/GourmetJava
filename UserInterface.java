@@ -49,6 +49,8 @@ public class UserInterface {
     }
 
     // Creates a new Classbox object and adds to to the arraylist createdClasses
+    //Rachael
+    //Allows the user to name their class, then adds it to the list of created classes
     public void addClass(){
         System.out.println("What would you like to name your class?");
         String name = kb.nextLine();
@@ -59,6 +61,8 @@ public class UserInterface {
     }
 
     //Removes class from createdClasses
+    //Rachael
+    //Takes in the index of the item user wants removed from the list and removes it
     public void deleteClass(){
         if(createdClasses.isEmpty()){
             System.out.println("Nothing to delete!");
@@ -77,8 +81,30 @@ public class UserInterface {
         }
 
     }
+    //Renames a classbox item that has already been created
+    //Rachael
+    //Takes in the index of the item they want renamed, then asks them to type in a new name
     public void renameClass(){
-
+         if(createdClasses.isEmpty()){
+            System.out.println("Nothing to rename!");
+        }else{
+        System.out.println("What index do you want to rename?");
+        listClasses();
+        int input = kb.nextInt();
+        if(input > 0){
+            input -= 1;
+            System.out.println("What would you like to rename your class?");
+            Scanner temp = new Scanner(System.in);
+            String name = temp.nextLine();
+            createdClasses.get(input).renameClass(name);
+            temp.close();
+            System.out.println("Class renamed!");
+            listClasses();
+        }else if(input <= 0){
+            System.out.println("Invalid input. Try again");
+        }
+        
+        }
     }
     public void addRelationship(){
 
@@ -116,8 +142,19 @@ public class UserInterface {
     public void listRelationships(){
 
     }
+    //Allows the user to choose what Classbox item they want to see in detail
+    //Rachael
+    //Takes input from user on what index from the list they want to see then calls a toString for that object
     public void listClass(){
-        
+        System.out.println("What index do you want to see?");
+        listClasses();
+        int input = kb.nextInt();
+        if(input > 0){
+            System.out.println(createdClasses.get(input -1).toString());
+        }else if(input <= 0){
+            System.out.println("Invalid input. Try again");
+        }
+
     }
     public void help(){
 
