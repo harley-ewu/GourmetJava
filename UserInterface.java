@@ -36,12 +36,16 @@ public class UserInterface {
         }else if(input.equals("9")){
             listRelationships();
         }else if(input.equals("10")){
-            save();
+            addRelationship();
         }else if(input.equals("11")){
-            load();
+            deleteRelationship();
         }else if(input.equals("12")){
-            help();
+            save();
         }else if(input.equals("13")){
+            load();
+        }else if(input.equals("14")){
+            help();
+        }else if(input.equals("15")){
             menuExit();    
         }else{
             System.out.println("That is not a valid input. Please try again");
@@ -107,7 +111,19 @@ public class UserInterface {
         }
     }
     public void addRelationship(){
+        System.out.println("What is the index of the first class you want to have a relationship?");
+        int index1 = kb.nextInt();
+        System.out.println("What is the index of the second class you want to have a relationship?");
+        Scanner kb2 = new Scanner(System.in);
+        int index2 = kb2.nextInt();
+        kb2.close();
+        if(index1 < 0 || index2 < 0 || index1 > createdClasses.size() || index2 > createdClasses.size()){
+            System.out.println("Thats not a vaild option. Please try again");
 
+        }else{
+            System.out.println("Relationship created!");
+            createdClasses.get(index1).addRelationship(null, createdClasses.get(index1).getName(), createdClasses.get(index2).getName(), null);
+        }
     }
     //confirm?
     public void deleteRelationship(){
