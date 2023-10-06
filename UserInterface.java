@@ -10,13 +10,15 @@ public class UserInterface {
     public UserInterface(){
         createdClasses = new ArrayList<>();
         kb = new Scanner(System.in);
-    
+
     }
     //recall menu at end if not
     public void menu(String input){
         //get user input of 1-15
         //call io method below
         //io method calls actual method in other classes
+        printMenu();
+        
          if(input.equals("1")){
             listClasses();
         }else if(input.equals("2")){
@@ -47,6 +49,25 @@ public class UserInterface {
             System.out.println("That is not a valid input. Please try again");
         }
     }
+
+    //PrintMenu will display the menu options and prompt the user to choose a corresponding number on the menu
+    public void printMenu(){
+        System.out.println("Please choose a number from the following options below");
+        System.out.println("1.) List classes");
+        System.out.println("2.) List class details");
+        System.out.println("3.) Add a class");
+        System.out.println("4.) Delete a class");
+        System.out.println("5.) Rename a class");
+        System.out.println("6.) Add an attribute");
+        System.out.println("7.) Delete an attribute");
+        System.out.println("8.) Rename an attribute");
+        System.out.println("9.) List relationships");
+        System.out.println("10.) Save");
+        System.out.println("11.) Load");
+        System.out.println("12.) Help");
+        System.out.println("13.) Exit");
+    }
+
 
     // Creates a new Classbox object and adds to to the arraylist createdClasses
     //Rachael
