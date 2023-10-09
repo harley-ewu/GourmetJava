@@ -1,3 +1,8 @@
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonWriter;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -17,41 +22,50 @@ public class UserInterface {
         //call io method below
         //io method calls actual method in other classes
     }
-    public void addClass(kb){
+    public void addClass(Scanner kb){
 
     }
     //confirm?
-    public void deleteClass(kb){
+    public void deleteClass(Scanner kb){
 
     }
-    public void renameClass(kb){
+    public void renameClass(Scanner kb){
 
     }
-    public void addRelationship(kb){
-
-    }
-    //confirm?
-    public void deleteRelationship(kb){
-
-    }
-    public void addAttribute(kb){
+    public void addRelationship(Scanner kb){
 
     }
     //confirm?
-    public void deleteAttribute(kb){
+    public void deleteRelationship(Scanner kb){
 
     }
-    public void renameAttribute(kb){
+    public void addAttribute(Scanner kb){
+
+    }
+    //confirm?
+    public void deleteAttribute(Scanner kb){
+
+    }
+    public void renameAttribute(Scanner kb){
 
     }
     //export createdClasses
     //confirm?
-    public void save(kb){
+    public void save() {
+        Gson gson = new Gson();
+        FileWriter converter = null;
+        try {
+            converter = new FileWriter("SavedFile.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String test = "dogs";
+        gson.toJson(test, converter);
 
     }
     //import/set createdClasses
     //confirm?
-    public void load(kb){
+    public void load(Scanner kb){
 
     }
     public void listClasses(){
@@ -60,7 +74,7 @@ public class UserInterface {
     public void listRelationships(){
 
     }
-    public void listClass(kb){
+    public void listClass(Scanner kb){
 
     }
     public void help(){
