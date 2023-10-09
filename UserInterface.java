@@ -147,12 +147,42 @@ public class UserInterface {
         }
     }
     //confirm?
+    //Delete a relationship between two classes
     public void deleteRelationship(){
+        //Add an else for if one of the names isn't found
 
-    }
+        System.out.println("What is the name of the first class of this relationship?");
+        String className = kb.nextLine();
+        for(int i = 0; i < createdClasses.size(); i++){
+            if(createdClasses.get(i).getName().equals(className)){
+                System.out.println("What is the name of the second");
+                String className2 = kb.nextLine();
+                System.out.println("Are you sure you want to delete this relationship? Please write yes or no.");
+                String answer = kb.nextLine();
+                if(answer.toLowerCase().equals("yes")){
+                    createdClasses.get(i).deleteRelationship(className2);
+                    System.out.println("Relationship Deleted!");
+                }
+            }
+        }
+    } //End of deleteRelationship
+
+
     public void addAttribute(){
+        // possibly change to take in a classbox, with prompt in menu
+        //check for if name doesn't exist
+
+        System.out.println("What is the name of the class you would like to add an attribute to?");
+        String className = kb.nextLine();
+        for(int i = 0; i < createdClasses.size(); i++){
+            if(createdClasses.get(i).getName().equals(className)){
+                
+            }
+        }
 
     }
+
+
     //confirm?
     public void deleteAttribute(){
 
