@@ -171,11 +171,12 @@ public class UserInterface {
     public void addAttribute(){
         // possibly change to take in a classbox, with prompt in menu
         //check for if name doesn't exist
+        //Not completed
 
         System.out.println("What is the name of the class you would like to add an attribute to?");
-        String className = kb.nextLine();
+        String className = kb.nextLine().toLowerCase();
         for(int i = 0; i < createdClasses.size(); i++){
-            if(createdClasses.get(i).getName().equals(className)){
+            if(createdClasses.get(i).getName().toLowerCase().equals(className)){
                 
             }
         }
@@ -185,8 +186,30 @@ public class UserInterface {
 
     //confirm?
     public void deleteAttribute(){
-
+        System.out.println("What is the name of the class you'd like to remove an attribute from?");
+        String className = kb.nextLine().toLowerCase();
+        for(int i = 0; i < createdClasses.size(); i++){
+            if(createdClasses.get(i).getName().toLowerCase().equals(className)){
+                //check if attributes is empty, if not do below
+                System.out.println("Which attribute would you like to delete?");
+                // list attributes?
+                String attribute = kb.nextLine();
+                //find attribute using loop
+                System.out.println("Are you sure you want to delete " + attribute + "? Please enter yes or no.");
+                String answer = kb.nextLine().toLowerCase();
+                if(answer.equals("yes")){
+                    //delete the relationship
+                }
+                else if (answer.equals("no")) {
+                    System.out.println("Canceled");
+                }
+                else{
+                    System.out.println("That is not a valid input");
+                }
+            }
+        }
     }
+
     public void renameAttribute(){
 
     }
