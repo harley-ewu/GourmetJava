@@ -57,6 +57,7 @@ public class Attribute {
         this.type = type;
     }
 
+    // not sure if correct yet need to do a code review on this
     public String toString(){
         String tempString = "";
         tempString = "Name: " + getName() + " View: " + getView() + " Tags: " 
