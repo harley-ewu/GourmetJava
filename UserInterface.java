@@ -16,7 +16,6 @@ public class UserInterface {
         //get user input of 1-15
         //call io method below
         //io method calls actual method in other classes
-        printMenu();
         
          if(input.equals("1")){
             listClasses();

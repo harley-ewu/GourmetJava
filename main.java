@@ -6,6 +6,7 @@ public class main {
 
         String input = "";
         while(!input.equals("15")) {
+            m.printMenu();
             input = m.kb.nextLine();
             m.menu(input);
         }
