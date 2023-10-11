@@ -1,3 +1,4 @@
+import javax.management.relation.RelationException;
 
 public class Relationship {
     private enum RelationshipType {
@@ -41,6 +42,13 @@ public class Relationship {
         this.to = to;
         //add this relationship to both class' lists
         this.type = RelationshipType.valueOf(type.strip().toUpperCase());
+    }
+
+    public static void printRelationshipTypes(){
+        RelationshipType[] relations = RelationshipType.values();
+        for(int i = 0; i < relations.length; ++i){
+            System.out.println((i + 1) + " - " + relations[i].name());
+        }
     }
 
     //remove itself from the lists of the "to" and "from" ClassBoxes
