@@ -142,7 +142,7 @@ public class UserInterface {
 
         }else{
             System.out.println("Relationship created!");
-            createdClasses.get(index1).addRelationship(null, createdClasses.get(index1).getName(), createdClasses.get(index2).getName(), null);
+            //createdClasses.get(index1).addRelationship(null, createdClasses.get(index1).getName(), createdClasses.get(index2).getName(), null);
         }
     }
     //confirm?
