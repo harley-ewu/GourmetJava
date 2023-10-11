@@ -40,10 +40,28 @@ public class Relationship {
         }
         this.from = from;
         this.to = to;
-        //add this relationship to both class' lists
         this.type = RelationshipType.valueOf(type.strip().toUpperCase());
     }
 
+    /**
+     * @param to A ClassBox object
+     * @param from A ClassBox object
+     * @param type The relationship type, as an int. The ints can be printed with printRelationshipTypes()<br>
+     * Relationship types: Aggregation, Composition, Extension, Dependency, Implementation, Association
+     * @throws IllegalArgumentException if any objects are null, or the enum type does not exist
+     */
+    public Relationship(final ClassBox to, final ClassBox from, final int type){
+        if(to == null || from == null || type < 1 || type > RelationshipType.values().length){
+            throw new IllegalArgumentException("illegal param passed to Relationship object");
+        }
+        this.from = from;
+        this.to = to;
+        this.type = RelationshipType.values()[type - 1];
+    }
+
+    /**
+     * Prints the relationships in the format "[num] - [relationship type]
+     */
     public static void printRelationshipTypes(){
         RelationshipType[] relations = RelationshipType.values();
         for(int i = 0; i < relations.length; ++i){
