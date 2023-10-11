@@ -1,17 +1,18 @@
-import java.util.ArrayList;
+import java.util.Scanner;
+
 public class main {
-    public static void main(String args[]){
+    public static void main(String[] args) {
         UserInterface m = new UserInterface();
         System.out.println("Welcome to Gourmet Java's UML Editor!");
-
+        Scanner kb = new Scanner(System.in);
         String input = "";
-        while(!input.equals("15")) {
+        while (!input.equals("15")) {
             m.printMenu();
-            input = m.kb.nextLine();
+            input = kb.nextLine().trim();
             m.menu(input);
         }
-        
-       }
+        System.out.println("bye!");
+    }
 
        // This is a test
 
