@@ -79,23 +79,10 @@ public class UserInterface {
         System.out.println("What would you like to name your class?");
         String name = kb.nextLine();
         System.out.println("What is the class's type?");
-        
-        Relationship.printRelationshipTypes();
-
-        int result = 0;
         String type = kb.nextLine();
-       
-        try{
-            result = Integer.parseInt(type);
-        }catch(Exception e){
-            System.out.print("Input is not valid. Please try again.");
-            return;
-        }
-
-        ClassBox newClass = new ClassBox(name, result);
+        ClassBox newClass = new ClassBox(name, type);
         createdClasses.add(newClass);
         System.out.println("Class created!");
-    
     }
 
     //Removes class from createdClasses
@@ -154,12 +141,12 @@ public class UserInterface {
         System.out.println("Please select an option for the relationship type by number");
         int num = kb2.nextInt();
         kb2.close();
-        if(index1 < 1 || index2 < 1 || index1 > createdClasses.size() || index2 > createdClasses.size()){
+        if(index1 < 0 || index2 < 0 || index1 >= createdClasses.size() || index2 >= createdClasses.size()){
             System.out.println("Thats not a vaild option. Please try again");
 
         }else{
             System.out.println("Relationship created!");
-            ClassBox.addRelationship(createdClasses.get(index1), createdClasses.get(index2), num);
+            ClassBox.addRelationship(createdClasses.get(index1-1), createdClasses.get(index2-1), num);
         }
     }
     //confirm?

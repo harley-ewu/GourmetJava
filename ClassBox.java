@@ -11,11 +11,11 @@ public class ClassBox {
     private LinkedList<Attribute> attributes;
     private LinkedList<Relationship> relationships;
 
-    public ClassBox(String name, String type, LinkedList<Attribute> attributes, LinkedList<Relationship> relationships) {
+    public ClassBox(String name, String type) {
         this.name = name;
         this.type = type;
-        this.attributes = attributes;
-        this.relationships = relationships;
+        this.attributes = new LinkedList<>();
+        this.relationships = new LinkedList<>();
     }
 
     public void addAttribute(String name){
