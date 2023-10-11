@@ -30,7 +30,7 @@ public class ClassBox {
     public static void printClassTypes(){
         ClassBox.ClassType[] types = ClassBox.ClassType.values();
         for(int i = 0; i < 5; ++i){
-            System.out.println((i) + " - " + types[i].name());
+            System.out.println((i+1) + " - " + types[i].name());
         }
     }
 

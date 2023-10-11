@@ -80,7 +80,7 @@ public class UserInterface {
         String name = kb.nextLine();
         System.out.println("What is the class's type?");
         
-        Relationship.printRelationshipTypes();
+        ClassBox.printClassTypes();
 
         int result = 0;
         String type = kb.nextLine();
@@ -150,8 +150,7 @@ public class UserInterface {
         int index2 = Integer.parseInt(kb.nextLine());
         Relationship.printRelationshipTypes();
         System.out.println("Please select an option for the relationship type by number");
-        int num = kb2.nextInt();
-        kb2.close();
+        int num = kb.nextInt();
         if(index1 < 1 || index2 < 1 || index1 > createdClasses.size() || index2 > createdClasses.size()){
             System.out.println("Thats not a vaild option. Please try again");
 
