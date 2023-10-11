@@ -65,10 +65,12 @@ public class UserInterface {
         System.out.println("7.) Delete an attribute");
         System.out.println("8.) Rename an attribute");
         System.out.println("9.) List relationships");
-        System.out.println("10.) Save");
-        System.out.println("11.) Load");
-        System.out.println("12.) Help");
-        System.out.println("13.) Exit");
+        System.out.println("10.) Add a relationship");
+        System.out.println("11.) Delete a relationship");
+        System.out.println("12.) Save");
+        System.out.println("13.) Load");
+        System.out.println("14.) Help");
+        System.out.println("15.) Exit");
     }
 
 
