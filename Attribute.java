@@ -2,44 +2,28 @@ import java.util.LinkedList;
 
 public class Attribute {
     private String name;
-    //Private, Public, or Protected
-    private String view;
-    //Static, constructor, getter, etc
-    private LinkedList<String> Tags;
-    //return type if method, field type if field, capitalize if object
-    private String type;
-    //null/empty if field, only for method
-    private LinkedList<String> parameters;
 
-    public Attribute(String name, String view, LinkedList<String> tags, String type, LinkedList<String> parameters) {
+    public Attribute(String name) {
         this.name = name;
-        this.view = view;
-        this.Tags = tags;
-        this.type = type;
-        this.parameters = parameters;
     }
 
+// Getters //
     public String getName() {
         return name;
     }
 
-    public String getView() {
-        return view;
-    }
+// Setters //
+    public void setName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Name cannot be null");
+        }
 
-    public LinkedList<String> getTags() {
-        return Tags;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public LinkedList<String> getParameters() {
-        return parameters;
+        this.name = name;
     }
 
     public String toString(){
-        return "";
+        String tempString = "";
+        tempString = "Name: " + getName();
+        return tempString;
     }
 }
