@@ -8,7 +8,7 @@ public class main {
         String input = "";
         while (!input.equals("15")) {
             m.printMenu();
-            input = kb.nextLine().trim();
+            input = kb.nextLine();
             m.menu(input);
         }
         System.out.println("bye!");
