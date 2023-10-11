@@ -134,7 +134,6 @@ public class UserInterface {
             System.out.println("What would you like to rename your class?");
             String name = kb.nextLine();
             createdClasses.get(input).renameClass(name);
-            kb.close();
             System.out.println("Class renamed!");
             listClasses();
         }else if(input <= 0){
