@@ -78,12 +78,24 @@ public class UserInterface {
     public void addClass(){
         System.out.println("What would you like to name your class?");
         String name = kb.nextLine();
-        System.out.println("What is the class's type? (As an int)");
-        ClassBox.printClassTypes();
-        int type = Integer.parseInt(kb.nextLine());
-        ClassBox newClass = new ClassBox(name, type);
+        System.out.println("What is the class's type?");
+        
+        Relationship.printRelationshipTypes();
+
+        int result = 0;
+        String type = kb.nextLine();
+       
+        try{
+            result = Integer.parseInt(type);
+        }catch(Exception e){
+            System.out.print("Input is not valid. Please try again.");
+            return;
+        }
+
+        ClassBox newClass = new ClassBox(name, result);
         createdClasses.add(newClass);
         System.out.println("Class created!");
+    
     }
 
     //Removes class from createdClasses
@@ -138,8 +150,9 @@ public class UserInterface {
         int index2 = Integer.parseInt(kb.nextLine());
         Relationship.printRelationshipTypes();
         System.out.println("Please select an option for the relationship type by number");
-        int num = Integer.parseInt(kb.nextLine());
-        if(index1 < 0 || index2 < 0 || index1 >= createdClasses.size() || index2 >= createdClasses.size()){
+        int num = kb2.nextInt();
+        kb2.close();
+        if(index1 < 1 || index2 < 1 || index1 > createdClasses.size() || index2 > createdClasses.size()){
             System.out.println("Thats not a vaild option. Please try again");
 
         }else{
