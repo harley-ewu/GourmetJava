@@ -107,7 +107,7 @@ public class UserInterface {
         }else{
         System.out.println("What index do you want to remove?");
         listClasses();
-        int input = kb.nextInt();
+        int input = Integer.parseInt(kb.nextLine());
         if(input > 0){
             input -= 1;
             createdClasses.remove(input);
@@ -128,7 +128,7 @@ public class UserInterface {
         }else{
         System.out.println("What index do you want to rename?");
         listClasses();
-        int input = kb.nextInt();
+        int input = Integer.parseInt(kb.nextLine());
         if(input > 0){
             input -= 1;
             System.out.println("What would you like to rename your class?");
@@ -150,7 +150,7 @@ public class UserInterface {
         int index2 = Integer.parseInt(kb.nextLine());
         Relationship.printRelationshipTypes();
         System.out.println("Please select an option for the relationship type by number");
-        int num = kb.nextInt();
+        int num = Integer.parseInt(kb.nextLine());
         if(index1 < 1 || index2 < 1 || index1 > createdClasses.size() || index2 > createdClasses.size()){
             System.out.println("Thats not a vaild option. Please try again");
 
