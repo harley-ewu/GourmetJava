@@ -39,14 +39,27 @@ public class Relationship {
         }
         this.from = from;
         this.to = to;
-        this.type = RelationshipType.valueOf(type.toUpperCase());
+        //add this relationship to both class' lists
+        this.type = RelationshipType.valueOf(type.strip().toUpperCase());
     }
 
     //remove itself from the lists of the "to" and "from" ClassBoxes
     /* commented out to hide build errors
-    public void delete(){
+    //TODO Guarantee that, given ClassBox objects/names (must be 2), the relationship is deleted
+    public void deleteRelationship(final ClassBox b1, final ClassBox b2){
+
         this.to.deleteRelationship(this);
         this.from.deleteRelationship(this);
+    }
+    */
+
+    /*
+    public void addRelationship(final ClassBox b1, final ClassBox b2){
+        box.addRelationship(this);
+    }
+
+    public void replaceRelationship(final ClassBox b1, final ClassBox b2){
+
     }
     */
 
@@ -114,7 +127,7 @@ public class Relationship {
         if(type == null){
             throw new IllegalArgumentException("null type object in Relationship.setFrom");
         }
-        this.type = RelationshipType.valueOf(type.toUpperCase());
+        this.type = RelationshipType.valueOf(type.strip().toUpperCase());
     }
 
 }
