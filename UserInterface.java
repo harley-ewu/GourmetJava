@@ -138,8 +138,8 @@ public class UserInterface {
         Scanner kb2 = new Scanner(System.in);
         int index2 = kb2.nextInt();
         kb2.close();
-        if(index1 < 0 || index2 < 0 || index1 > createdClasses.size() || index2 > createdClasses.size()){
-            System.out.println("Thats not a vaild option. Please try again");
+        if(index1 < 0 || index2 < 0 || index1 >= createdClasses.size() || index2 >= createdClasses.size()){
+            System.out.println("That's not a vaild option. Please try again");
 
         }else{
             System.out.println("Relationship created!");
