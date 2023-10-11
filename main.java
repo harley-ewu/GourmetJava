@@ -4,8 +4,8 @@ public class main {
         UserInterface m = new UserInterface();
         System.out.println("Welcome to Gourmet Java's UML Editor!");
 
-        String input;
-        while(true) {
+        String input = "";
+        while(!input.equals("15")) {
             input = m.kb.nextLine();
             m.menu(input);
         }

@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static java.lang.System.exit;
-
 public class UserInterface {
     private ArrayList<ClassBox> createdClasses;
     public Scanner kb;
@@ -14,6 +12,7 @@ public class UserInterface {
     }
     //recall menu at end if not
     public void menu(String input){
+        
         //get user input of 1-15
         //call io method below
         //io method calls actual method in other classes
@@ -46,7 +45,7 @@ public class UserInterface {
         }else if(input.equals("14")){
             help();
         }else if(input.equals("15")){
-            menuExit();    
+            return;    
         }else{
             System.out.println("That is not a valid input. Please try again");
         }
@@ -176,13 +175,5 @@ public class UserInterface {
 
     }
     //confirm?
-    public void menuExit(){
-        System.out.println("Type \"c\" to confirm: ");
-        if(!(kb.nextLine().equals("c"))){
-            //returns to menu loop
-            return;
-        }
-        System.out.println("bye!");
-        exit(0);
-    }
+
 }
