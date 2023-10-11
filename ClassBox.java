@@ -52,8 +52,13 @@ public class ClassBox {
         }
     }
 
-    public void addRelationship(String name, ClassBox class1, ClassBox class2, String type, String fromNum, String toNum){
-        this.relationships.add(new Relationship(name, class1, class2, type, fromNum, toNum));
+    public static void addRelationship(final ClassBox class1, final ClassBox class2, final String type){
+        if(class1 == null || class2 == null || type == null){
+            throw new IllegalArgumentException("null object passed to addRelationship");
+        }
+        Relationship newRel = new Relationship(class1,class2,type);
+        class1.relationships.add(newRel);
+        class2.relationships.add(newRel);
     }
 
     public void deleteRelationship(String name){
