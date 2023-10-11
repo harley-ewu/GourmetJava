@@ -52,9 +52,9 @@ public class ClassBox {
         }
     }
 
-    public static void addRelationship(final ClassBox class1, final ClassBox class2, final String type){
-        if(class1 == null || class2 == null || type == null){
-            throw new IllegalArgumentException("null object passed to addRelationship");
+    public static void addRelationship(final ClassBox class1, final ClassBox class2, final int type){
+        if(class1 == null || class2 == null || type<1||type>6){
+            throw new IllegalArgumentException("Bad object passed to addRelationship");
         }
         Relationship newRel = new Relationship(class1,class2,type);
         class1.relationships.add(newRel);
