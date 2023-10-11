@@ -39,36 +39,20 @@ public class Relationship {
         }
         this.from = from;
         this.to = to;
-        //add this relationship to both class' lists
         this.type = RelationshipType.valueOf(type.strip().toUpperCase());
     }
-
-    //remove itself from the lists of the "to" and "from" ClassBoxes
-    /* commented out to hide build errors
-    //TODO Guarantee that, given ClassBox objects/names (must be 2), the relationship is deleted
-    public void deleteRelationship(final ClassBox b1, final ClassBox b2){
-
-        this.to.deleteRelationship(this);
-        this.from.deleteRelationship(this);
+    public Relationship(final ClassBox to, final ClassBox from, final int type){
+        if(to == null || from == null || type>6||type<1){
+            throw new IllegalArgumentException("null object passed to Relationship object");
+        }
     }
-    */
-
-    /*
-    public void addRelationship(final ClassBox b1, final ClassBox b2){
-        box.addRelationship(this);
-    }
-
-    public void replaceRelationship(final ClassBox b1, final ClassBox b2){
-
-    }
-    */
 
     /**
      * @return String in format "ClassBox to [relationship verb] ClassBox from"
      */
     @Override
     public String toString(){
-        return this.to.toString() + " " + this.type.toString() + " " + this.from.toString();
+        return this.to.getName() + " " + this.type + " " + this.from.getName();
     }
 
     /**
@@ -116,7 +100,7 @@ public class Relationship {
     }
 
     public String getType() {
-        return this.type.name();
+        return this.type.toString();
     }
 
     /**
