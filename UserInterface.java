@@ -80,7 +80,7 @@ public class UserInterface {
         String name = kb.nextLine();
         System.out.println("What is the class's type?");
         String type = kb.nextLine();
-        ClassBox newClass = new ClassBox(name, type, null, null);
+        ClassBox newClass = new ClassBox(name, type);
         createdClasses.add(newClass);
         System.out.println("Class created!");
     }
@@ -146,7 +146,7 @@ public class UserInterface {
 
         }else{
             System.out.println("Relationship created!");
-            ClassBox.addRelationship(createdClasses.get(index1), createdClasses.get(index2), num);
+            ClassBox.addRelationship(createdClasses.get(index1-1), createdClasses.get(index2-1), num);
         }
     }
     //confirm?
