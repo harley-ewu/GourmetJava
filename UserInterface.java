@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class UserInterface {
     private ArrayList<ClassBox> createdClasses;
-    public Scanner kb;
+    private Scanner kb;
     //Display all program options, choose from list, call other method based on choice
     public UserInterface(){
         createdClasses = new ArrayList<>();
@@ -78,8 +78,9 @@ public class UserInterface {
     public void addClass(){
         System.out.println("What would you like to name your class?");
         String name = kb.nextLine();
-        System.out.println("What is the class's type?");
-        String type = kb.nextLine();
+        System.out.println("What is the class's type? (As an int)");
+        ClassBox.printClassTypes();
+        int type = Integer.parseInt(kb.nextLine());
         ClassBox newClass = new ClassBox(name, type);
         createdClasses.add(newClass);
         System.out.println("Class created!");
@@ -119,10 +120,9 @@ public class UserInterface {
         if(input > 0){
             input -= 1;
             System.out.println("What would you like to rename your class?");
-            Scanner temp = new Scanner(System.in);
-            String name = temp.nextLine();
+            String name = kb.nextLine();
             createdClasses.get(input).renameClass(name);
-            temp.close();
+            kb.close();
             System.out.println("Class renamed!");
             listClasses();
         }else if(input <= 0){
@@ -133,14 +133,12 @@ public class UserInterface {
     }
     public void addRelationship(){
         System.out.println("What is the index of the first class you want to have a relationship?");
-        int index1 = kb.nextInt();
+        int index1 = Integer.parseInt(kb.nextLine());
         System.out.println("What is the index of the second class you want to have a relationship?");
-        Scanner kb2 = new Scanner(System.in);
-        int index2 = kb2.nextInt();
+        int index2 = Integer.parseInt(kb.nextLine());
         Relationship.printRelationshipTypes();
         System.out.println("Please select an option for the relationship type by number");
-        int num = kb2.nextInt();
-        kb2.close();
+        int num = Integer.parseInt(kb.nextLine());
         if(index1 < 0 || index2 < 0 || index1 >= createdClasses.size() || index2 >= createdClasses.size()){
             System.out.println("Thats not a vaild option. Please try again");
 
@@ -253,7 +251,7 @@ public class UserInterface {
     public void listClass(){
         System.out.println("What index do you want to see?");
         listClasses();
-        int input = kb.nextInt();
+        int input = Integer.parseInt(kb.nextLine());
         if(input > 0){
             System.out.println(createdClasses.get(input -1).toString());
         }else if(input <= 0){
