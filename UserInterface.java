@@ -8,7 +8,6 @@ public class UserInterface {
     public UserInterface(){
         createdClasses = new ArrayList<>();
         kb = new Scanner(System.in);
-
     }
     //recall menu at end if not
     public void menu(String input){
@@ -16,8 +15,7 @@ public class UserInterface {
         //get user input of 1-15
         //call io method below
         //io method calls actual method in other classes
-        printMenu();
-        
+
          if(input.equals("1")){
             listClasses();
         }else if(input.equals("2")){
@@ -47,7 +45,7 @@ public class UserInterface {
         }else if(input.equals("14")){
             help();
         }else if(input.equals("15")){
-            return;    
+            return;
         }else{
             System.out.println("That is not a valid input. Please try again");
         }
@@ -55,7 +53,7 @@ public class UserInterface {
 
     //PrintMenu will display the menu options and prompt the user to choose a corresponding number on the menu
     public void printMenu(){
-        System.out.println("Please choose a number from the following options below");
+        System.out.println("\nPlease choose a number from the following options below");
         System.out.println("1.) List classes");
         System.out.println("2.) List class details");
         System.out.println("3.) Add a class");
@@ -65,10 +63,12 @@ public class UserInterface {
         System.out.println("7.) Delete an attribute");
         System.out.println("8.) Rename an attribute");
         System.out.println("9.) List relationships");
-        System.out.println("10.) Save");
-        System.out.println("11.) Load");
-        System.out.println("12.) Help");
-        System.out.println("13.) Exit");
+        System.out.println("10.) Add a relationship");
+        System.out.println("11.) Delete a relationship");
+        System.out.println("12.) Save");
+        System.out.println("13.) Load");
+        System.out.println("14.) Help");
+        System.out.println("15.) Exit");
     }
 
 
@@ -78,8 +78,9 @@ public class UserInterface {
     public void addClass(){
         System.out.println("What would you like to name your class?");
         String name = kb.nextLine();
-
-        ClassBox newClass = new ClassBox(name, null, null, null);
+        System.out.println("What is the class's type?");
+        String type = kb.nextLine();
+        ClassBox newClass = new ClassBox(name, type, null, null);
         createdClasses.add(newClass);
         System.out.println("Class created!");
     }
@@ -136,34 +137,49 @@ public class UserInterface {
         System.out.println("What is the index of the second class you want to have a relationship?");
         Scanner kb2 = new Scanner(System.in);
         int index2 = kb2.nextInt();
+        Relationship.printRelationshipTypes();
+        System.out.println("Please select an option for the relationship type by number");
+        int num = kb2.nextInt();
         kb2.close();
-        if(index1 < 0 || index2 < 0 || index1 > createdClasses.size() || index2 > createdClasses.size()){
+        if(index1 < 0 || index2 < 0 || index1 >= createdClasses.size() || index2 >= createdClasses.size()){
             System.out.println("Thats not a vaild option. Please try again");
 
         }else{
             System.out.println("Relationship created!");
-            createdClasses.get(index1).addRelationship(null, createdClasses.get(index1).getName(), createdClasses.get(index2).getName(), null);
+            ClassBox.addRelationship(createdClasses.get(index1), createdClasses.get(index2), num);
         }
     }
     //confirm?
     //Delete a relationship between two classes
     public void deleteRelationship(){
         //Add an else for if one of the names isn't found
-
+        ClassBox c1=null, c2 = null;
         System.out.println("What is the name of the first class of this relationship?");
         String className = kb.nextLine();
-        for(int i = 0; i < createdClasses.size(); i++){
-            if(createdClasses.get(i).getName().equals(className)){
-                System.out.println("What is the name of the second");
-                String className2 = kb.nextLine();
-                System.out.println("Are you sure you want to delete this relationship? Please write yes or no.");
-                String answer = kb.nextLine();
-                if(answer.toLowerCase().equals("yes")){
-                    createdClasses.get(i).deleteRelationship(className2);
-                    System.out.println("Relationship Deleted!");
+        System.out.println("What is the name of the second");
+        String className2 = kb.nextLine();
+        System.out.println("Are you sure you want to delete this relationship? Please write yes or no.");
+        String answer = kb.nextLine();
+        if(answer.equalsIgnoreCase("yes")) {
+            for (ClassBox createdClass : createdClasses) {
+                if (createdClass.getName().equals(className)) {
+                    c1 = createdClass;
+                }
+                if (createdClass.getName().equals(className2)) {
+                    c2 = createdClass;
                 }
             }
+            if(c1==null||c2==null){
+                System.out.println("Error, class(es) not found");
+            }
+            else {
+                c1.deleteRelationship(c2);
+            }
         }
+        else {
+            System.out.println("No relationship deleted");
+        }
+
     } //End of deleteRelationship
 
 
@@ -197,7 +213,7 @@ public class UserInterface {
                 System.out.println("Are you sure you want to delete " + attribute + "? Please enter yes or no.");
                 String answer = kb.nextLine().toLowerCase();
                 if(answer.equals("yes")){
-                    //delete the relationship
+                    //delete the attribute
                 }
                 else if (answer.equals("no")) {
                     System.out.println("Canceled");
