@@ -1,3 +1,4 @@
+import javax.management.relation.RelationException;
 
 public class Relationship {
     private enum RelationshipType {
@@ -41,10 +42,40 @@ public class Relationship {
         this.to = to;
         this.type = RelationshipType.valueOf(type.strip().toUpperCase());
     }
+
+    /**
+     * @param to A ClassBox object
+     * @param from A ClassBox object
+     * @param type The relationship type, as an int. The ints can be printed with printRelationshipTypes()<br>
+     * Relationship types: Aggregation, Composition, Extension, Dependency, Implementation, Association
+     * @throws IllegalArgumentException if any objects are null, or the enum type does not exist
+     */
     public Relationship(final ClassBox to, final ClassBox from, final int type){
-        if(to == null || from == null || type>6||type<1){
-            throw new IllegalArgumentException("null object passed to Relationship object");
+        if(to == null || from == null || type < 1 || type > RelationshipType.values().length){
+            throw new IllegalArgumentException("illegal param passed to Relationship object");
         }
+        this.from = from;
+        this.to = to;
+        this.type = RelationshipType.values()[type - 1];
+    }
+
+    /**
+     * Prints the relationships in the format "[num] - [relationship type]
+     */
+    public static void printRelationshipTypes(){
+        RelationshipType[] relations = RelationshipType.values();
+        for(int i = 0; i < relations.length; ++i){
+            System.out.println((i + 1) + " - " + relations[i].name());
+        }
+    }
+
+    //remove itself from the lists of the "to" and "from" ClassBoxes
+    /* commented out to hide build errors
+    //TODO Guarantee that, given ClassBox objects/names (must be 2), the relationship is deleted
+    public void deleteRelationship(final ClassBox b1, final ClassBox b2){
+
+        this.to.deleteRelationship(this);
+        this.from.deleteRelationship(this);
     }
 
     /**
