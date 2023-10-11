@@ -16,7 +16,7 @@ public class UserInterface {
         //get user input of 1-15
         //call io method below
         //io method calls actual method in other classes
-        printMenu();
+
         
          if(input.equals("1")){
             listClasses();
@@ -65,10 +65,12 @@ public class UserInterface {
         System.out.println("7.) Delete an attribute");
         System.out.println("8.) Rename an attribute");
         System.out.println("9.) List relationships");
-        System.out.println("10.) Save");
-        System.out.println("11.) Load");
-        System.out.println("12.) Help");
-        System.out.println("13.) Exit");
+        System.out.println("10.) Add a relationship");
+        System.out.println("11.) Delete a relationship");
+        System.out.println("12.) Save");
+        System.out.println("13.) Load");
+        System.out.println("14.) Help");
+        System.out.println("15.) Exit");
     }
 
 
@@ -93,7 +95,7 @@ public class UserInterface {
         }else{
         System.out.println("What index do you want to remove?");
         listClasses();
-        int input = kb.nextInt();
+        int input = Integer.parseInt(kb.nextLine());
         if(input > 0){
             input -= 1;
             createdClasses.remove(input);
@@ -114,14 +116,13 @@ public class UserInterface {
         }else{
         System.out.println("What index do you want to rename?");
         listClasses();
-        int input = kb.nextInt();
+        int input = Integer.parseInt(kb.nextLine());
         if(input > 0){
             input -= 1;
             System.out.println("What would you like to rename your class?");
-            Scanner temp = new Scanner(System.in);
-            String name = temp.nextLine();
+            //Scanner temp = new Scanner(System.in);
+            String name = kb.nextLine();
             createdClasses.get(input).renameClass(name);
-            temp.close();
             System.out.println("Class renamed!");
             listClasses();
         }else if(input <= 0){
@@ -132,11 +133,10 @@ public class UserInterface {
     }
     public void addRelationship(){
         System.out.println("What is the index of the first class you want to have a relationship?");
-        int index1 = kb.nextInt();
+        int index1 = Integer.parseInt(kb.nextLine());
         System.out.println("What is the index of the second class you want to have a relationship?");
-        Scanner kb2 = new Scanner(System.in);
-        int index2 = kb2.nextInt();
-        kb2.close();
+        //Scanner kb2 = new Scanner(System.in);
+        int index2 = Integer.parseInt(kb.nextLine());
         if(index1 < 0 || index2 < 0 || index1 >= createdClasses.size() || index2 >= createdClasses.size()){
             System.out.println("That's not a vaild option. Please try again");
 
@@ -237,7 +237,7 @@ public class UserInterface {
     public void listClass(){
         System.out.println("What index do you want to see?");
         listClasses();
-        int input = kb.nextInt();
+        int input = Integer.parseInt(kb.nextLine());
         if(input > 0){
             System.out.println(createdClasses.get(input -1).toString());
         }else if(input <= 0){
