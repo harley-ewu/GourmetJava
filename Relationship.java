@@ -1,13 +1,11 @@
-import javax.management.relation.RelationException;
-
 public class Relationship {
     private enum RelationshipType {
         AGGREGATION("aggregates"),
-        COMPOSITION("composes?"),
-        EXTENSION("extends?"),
+        COMPOSITION("composes"),
+        EXTENSION("extends"),
         IMPLEMENTATION("implements"),
         DEPENDENCY("depends on"),
-        ASSOCIATION("associates?");
+        ASSOCIATION("associates with");
 
         private final String verb;
 
@@ -22,39 +20,34 @@ public class Relationship {
 
     }
 
-    private ClassBox from;
     private ClassBox to;
     //Aggregation, Composition, extension, etc
     private RelationshipType type;
 
     /**
      * @param to A ClassBox object
-     * @param from A ClassBox object
      * @param type The relationship type, as a case-insensitive String<br>
      * Relationship types: Aggregation, Composition, Extension, Dependency, Implementation, Association
      * @throws IllegalArgumentException if any objects are null, or the enum type does not exist
      */
-    public Relationship(final ClassBox to, final ClassBox from, final String type){
-        if(to == null || from == null || type == null){
+    public Relationship(final ClassBox to, final String type){
+        if(to == null || type == null){
             throw new IllegalArgumentException("null object passed to Relationship object");
         }
-        this.from = from;
         this.to = to;
         this.type = RelationshipType.valueOf(type.strip().toUpperCase());
     }
 
     /**
      * @param to A ClassBox object
-     * @param from A ClassBox object
      * @param type The relationship type, as an int. The ints can be printed with printRelationshipTypes()<br>
      * Relationship types: Aggregation, Composition, Extension, Dependency, Implementation, Association
      * @throws IllegalArgumentException if any objects are null, or the enum type does not exist
      */
-    public Relationship(final ClassBox to, final ClassBox from, final int type){
-        if(to == null || from == null || type < 1 || type > RelationshipType.values().length||to.equals(from)){
+    public Relationship(final ClassBox to, final int type){
+        if(to == null || type < 1 || type > RelationshipType.values().length){
             throw new IllegalArgumentException("illegal param passed to Relationship object");
         }
-        this.from = from;
         this.to = to;
         this.type = RelationshipType.values()[type - 1];
     }
@@ -71,14 +64,10 @@ public class Relationship {
     
     @Override
     public String toString(){
-        return this.to.getName() + " " + this.type + " " + this.from.getName();
+        return " " + this.type.verb + " " + this.to.getName();
     }
 
     //Getters and setters are self-explanatory
-    public ClassBox getFrom() {
-        return from;
-    }
-
     public ClassBox getTo() {
         return this.to;
     }

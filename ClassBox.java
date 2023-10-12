@@ -1,5 +1,7 @@
 import java.util.LinkedList;
 public class ClassBox {
+
+
     private enum ClassType {
 
         CLASS, INTERFACE, RECORD, ENUM, ANNOTATION;
@@ -66,19 +68,18 @@ public class ClassBox {
         }
     }
 
-    public static void addRelationship(final ClassBox class1, final ClassBox class2, final int type){
-        if(class1 == null || class2 == null || type<1||type>6){
+    public void addRelationship(final ClassBox toClass, final int type){
+        if(toClass == null || type<1||type>6){
             throw new IllegalArgumentException("Bad object passed to addRelationship");
         }
-        Relationship newRel = new Relationship(class1,class2,type);
-        class1.relationships.add(newRel);
-        class2.relationships.add(newRel);
+        Relationship newRel = new Relationship(toClass,type);
+        this.relationships.add(newRel);
     }
 
     public void deleteRelationship(ClassBox otherClass){
         Relationship r = null;
         for (Relationship relationship : this.relationships) {
-            if (relationship.getFrom().equals(otherClass)||relationship.getTo().equals(otherClass)) {
+            if (relationship.getTo().equals(otherClass)) {
                 r = relationship;
             }
         }
@@ -87,7 +88,6 @@ public class ClassBox {
         }
         else{
             this.relationships.remove(r);
-            otherClass.relationships.remove(r);
         }
     }
 
@@ -105,7 +105,7 @@ public class ClassBox {
         }
         s.append("Relationships: \n");
         for(Relationship r: this.relationships){
-            s.append("\t").append(r);
+            s.append("\t").append(this.name).append(r);
         }
         return s.toString();
     }
@@ -117,5 +117,7 @@ public class ClassBox {
     public LinkedList<Relationship> getRelationships() {
         return this.relationships;
     }
+
+    public LinkedList<Attribute> getAttributes() {return this.attributes;}
 
 }

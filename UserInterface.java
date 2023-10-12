@@ -85,7 +85,7 @@ public class UserInterface {
                 }
             }
             case "4" -> {
-                if (this.createdClasses.isEmpty()) {
+                if (this.createdClasses.size()<2) {
                     System.out.println("Please create 2 classes first");
                 } else {
                     System.out.println("Please choose a number from the options below: ");
@@ -182,12 +182,12 @@ public class UserInterface {
             System.out.println("What index do you want to remove?");
             listClasses();
             int input = Integer.parseInt(kb.nextLine());
-            if(input > 0&&input<this.createdClasses.size()){
+            if(input > 0&&input<=this.createdClasses.size()){
                 ClassBox clas = createdClasses.get(input-1);
                 for(ClassBox otherClass: this.createdClasses){
                     if(!(otherClass.equals(clas))) {
                         for (Relationship r : otherClass.getRelationships()) {
-                            if (r.getTo().equals(clas) || r.getFrom().equals(clas)) {
+                            if (r.getTo().equals(clas)) {
                                 otherClass.deleteRelationship(clas);
                             }
                         }
@@ -226,9 +226,9 @@ public class UserInterface {
          }
     }
     public void addRelationship(){
-        System.out.println("What is the index of the first class you want to have a relationship?");
+        System.out.println("What is the index of the first class you want to have a relationship? (The from class)");
         int index1 = Integer.parseInt(kb.nextLine());
-        System.out.println("What is the index of the second class you want to have a relationship?");
+        System.out.println("What is the index of the second class you want to have a relationship?(The to class)");
         int index2 = Integer.parseInt(kb.nextLine());
         Relationship.printRelationshipTypes();
         System.out.println("Please select an option for the relationship type by number");
@@ -238,7 +238,7 @@ public class UserInterface {
 
         }else{
             System.out.println("Relationship created!");
-            ClassBox.addRelationship(createdClasses.get(index1-1), createdClasses.get(index2-1), num);
+            createdClasses.get(index1-1).addRelationship(createdClasses.get(index2-1), num);
         }
     }
     //confirm?
