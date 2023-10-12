@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UserInterface {
-    private ArrayList<ClassBox> createdClasses;
-    private Scanner kb;
+    private final ArrayList<ClassBox> createdClasses;
+    private final Scanner kb;
     //Display all program options, choose from list, call other method based on choice
     public UserInterface(){
         createdClasses = new ArrayList<>();
@@ -16,121 +16,118 @@ public class UserInterface {
         //call io method below
         //io method calls actual method in other classes
 
-         if(input.equals("1")){
-             System.out.println("Please choose a number from the options below: ");
-             System.out.println("1.) Display Classes");
-             System.out.println("2.) Display Class Details");
-             System.out.println("3.) Display Relationships");
-             System.out.println("4.) Back");
-             input2 = Integer.parseInt(kb.nextLine());
-             if(input2==1){
-                 listClasses();
-             }
-             else if(input2==2){
-                 listClass();
-             }
-             else if(input2==3){
-                 listRelationships();
-             }
-             else if(input2==4){
-                 return;
-             }
-             else{
-                 System.out.println("Invalid input, please try again");
-             }
-         }
-         else if(input.equals("2")){
-             System.out.println("Please choose a number from the options below: ");
-             System.out.println("1.) Add Class");
-             System.out.println("2.) Remove Class");
-             System.out.println("3.) Rename Class");
-             System.out.println("4.) Back");
-             input2 = Integer.parseInt(kb.nextLine());
-             if(input2==1){
-                 addClass();
-             }
-             else if(input2==2){
-                 deleteClass();
-             }
-             else if(input2==3){
-                 renameClass();
-             }
-             else if(input2==4){
-                 return;
-             }
-             else{
-                 System.out.println("Invalid input, please try again");
-             }
-         }
-         else if(input.equals("3")){
-             System.out.println("Please choose a number from the options below: ");
-             System.out.println("1.) Add Attribute");
-             System.out.println("2.) Remove Attribute");
-             System.out.println("3.) Rename Attribute");
-             System.out.println("4.) Back");
-             input2 = Integer.parseInt(kb.nextLine());
-             if(input2==1){
-                 addAttribute();
-             }
-             else if(input2==2){
-                 deleteAttribute();
-             }
-             else if(input2==3){
-                 renameAttribute();
-             }
-             else if(input2==4){
-                 return;
-             }
-             else{
-                 System.out.println("Invalid input, please try again");
-             }
-         }
-         else if(input.equals("4")){
-             System.out.println("Please choose a number from the options below: ");
-             System.out.println("1.) Add Relationship");
-             System.out.println("2.) Remove Relationship");
-             System.out.println("3.) Back");
-             input2 = Integer.parseInt(kb.nextLine());
-             if(input2==1){
-                 addRelationship();
-             }
-             else if(input2==2){
-                 deleteRelationship();
-             }
-             else if(input2==3){
-                 return;
-             }
-             else{
-                 System.out.println("Invalid input, please try again");
-             }
-         }
-         else if(input.equals("5")){
-             System.out.println("Please choose a number from the options below: ");
-             System.out.println("1.) Save");
-             System.out.println("2.) Load");
-             System.out.println("3.) Back");
-             input2 = Integer.parseInt(kb.nextLine());
-             if(input2==1){
-                 save();
-             }
-             else if(input2==2){
-                 load();
-             }
-             else if(input2==3){
-                 return;
-             }
-             else{
-                 System.out.println("Invalid input, please try again");
-             }
-         }
-         else if(input.equals("6")){
-            help();
-         }
-         else if(input.equals("7")){
-            return;
-         }
-         else{
-            System.out.println("That is not a valid input. Please try again");
+        switch (input) {
+            case "1" -> {
+                if(this.createdClasses.isEmpty()){
+                    System.out.println("Nothing to display! Please make a class first");
+                }
+                else {
+                    System.out.println("Please choose a number from the options below: ");
+                    System.out.println("1.) Display Classes");
+                    System.out.println("2.) Display Class Details");
+                    System.out.println("3.) Display Relationships");
+                    System.out.println("4.) Back");
+                    input2 = Integer.parseInt(kb.nextLine());
+                    if (input2 == 1) {
+                        listClasses();
+                    } else if (input2 == 2) {
+                        listClass();
+                    } else if (input2 == 3) {
+                        listRelationships();
+                    } else if (input2 == 4) {
+                        return;
+                    } else {
+                        System.out.println("Invalid input, please try again");
+                    }
+                }
+            }
+            case "2" -> {
+                System.out.println("Please choose a number from the options below: ");
+                System.out.println("1.) Add Class");
+                System.out.println("2.) Remove Class");
+                System.out.println("3.) Rename Class");
+                System.out.println("4.) Back");
+                input2 = Integer.parseInt(kb.nextLine());
+                if (input2 == 1) {
+                    addClass();
+                } else if (input2 == 2) {
+                    deleteClass();
+                } else if (input2 == 3) {
+                    renameClass();
+                } else if (input2 == 4) {
+                    return;
+                } else {
+                    System.out.println("Invalid input, please try again");
+                }
+            }
+            case "3" -> {
+                if (this.createdClasses.isEmpty()) {
+                    System.out.println("Please create a class first");
+                } else {
+                    System.out.println("Please choose a number from the options below: ");
+                    System.out.println("1.) Add Attribute");
+                    System.out.println("2.) Remove Attribute");
+                    System.out.println("3.) Rename Attribute");
+                    System.out.println("4.) Back");
+                    input2 = Integer.parseInt(kb.nextLine());
+                    if (input2 == 1) {
+                        addAttribute();
+                    } else if (input2 == 2) {
+                        deleteAttribute();
+                    } else if (input2 == 3) {
+                        renameAttribute();
+                    } else if (input2 == 4) {
+                        return;
+                    } else {
+                        System.out.println("Invalid input, please try again");
+                    }
+                }
+            }
+            case "4" -> {
+                if (this.createdClasses.isEmpty()) {
+                    System.out.println("Please create 2 classes first");
+                } else {
+                    System.out.println("Please choose a number from the options below: ");
+                    System.out.println("1.) Add Relationship");
+                    System.out.println("2.) Remove Relationship");
+                    System.out.println("3.) Back");
+                    input2 = Integer.parseInt(kb.nextLine());
+                    if (input2 == 1) {
+                        addRelationship();
+                    } else if (input2 == 2) {
+                        deleteRelationship();
+                    } else if (input2 == 3) {
+                        return;
+                    } else {
+                        System.out.println("Invalid input, please try again");
+                    }
+                }
+            }
+            case "5" -> {
+                System.out.println("Please choose a number from the options below: ");
+                System.out.println("1.) Save");
+                System.out.println("2.) Load");
+                System.out.println("3.) Back");
+                input2 = Integer.parseInt(kb.nextLine());
+                if (input2 == 1) {
+                    if (this.createdClasses.isEmpty()) {
+                        System.out.println("Nothing to save!");
+                    } else {
+                        save();
+                    }
+                } else if (input2 == 2) {
+                    load();
+                } else if (input2 == 3) {
+                    return;
+                } else {
+                    System.out.println("Invalid input, please try again");
+                }
+            }
+            case "6" -> help();
+            case "7" -> {
+                return;
+            }
+            default -> System.out.println("That is not a valid input. Please try again");
         }
     }
 
@@ -179,29 +176,29 @@ public class UserInterface {
     public void deleteClass(){
         if(createdClasses.isEmpty()){
             System.out.println("Nothing to delete!");
-        }else{
-        System.out.println("What index do you want to remove?");
-        listClasses();
-        int input = Integer.parseInt(kb.nextLine());
-        if(input > 0&&input<this.createdClasses.size()){
-            ClassBox clas = createdClasses.get(input-1);
-            for(ClassBox otherClass: this.createdClasses){
-                if(!(otherClass.equals(clas))) {
-                    for (Relationship r : otherClass.getRelationships()) {
-                        if (r.getTo().equals(clas) || r.getFrom().equals(clas)) {
-                            otherClass.deleteRelationship(clas);
+        }
+        else{
+            System.out.println("What index do you want to remove?");
+            listClasses();
+            int input = Integer.parseInt(kb.nextLine());
+            if(input > 0&&input<this.createdClasses.size()){
+                ClassBox clas = createdClasses.get(input-1);
+                for(ClassBox otherClass: this.createdClasses){
+                    if(!(otherClass.equals(clas))) {
+                        for (Relationship r : otherClass.getRelationships()) {
+                            if (r.getTo().equals(clas) || r.getFrom().equals(clas)) {
+                                otherClass.deleteRelationship(clas);
+                            }
                         }
                     }
                 }
+                this.createdClasses.remove(clas);
+                System.out.println("Class deleted");
             }
-            this.createdClasses.remove(clas);
-            System.out.println("Class deleted");
-        }else{
-            System.out.println("Invalid input. Try again");
+            else{
+                System.out.println("Invalid input. Try again");
+            }
         }
-        
-        }
-
     }
     //Renames a classbox item that has already been created
     //Rachael
@@ -209,22 +206,23 @@ public class UserInterface {
     public void renameClass(){
          if(createdClasses.isEmpty()){
             System.out.println("Nothing to rename!");
-        }else{
-        System.out.println("What index do you want to rename?");
-        listClasses();
-        int input = Integer.parseInt(kb.nextLine());
-        if(input > 0){
-            input -= 1;
-            System.out.println("What would you like to rename your class?");
-            String name = kb.nextLine();
-            createdClasses.get(input).renameClass(name);
-            System.out.println("Class renamed!");
+         }
+         else{
+            System.out.println("What index do you want to rename?");
             listClasses();
-        }else if(input <= 0){
+            int num = Integer.parseInt(kb.nextLine());
+            if(num > 0&&num<=this.createdClasses.size()){
+                int index = num-1;
+                System.out.println("What would you like to rename your class?");
+                String name = kb.nextLine();
+                createdClasses.get(index).renameClass(name);
+                System.out.println("Class renamed!");
+                listClasses();
+            }
+            else{
             System.out.println("Invalid input. Try again");
-        }
-        
-        }
+            }
+         }
     }
     public void addRelationship(){
         System.out.println("What is the index of the first class you want to have a relationship?");
@@ -262,8 +260,16 @@ public class UserInterface {
                     c2 = createdClass;
                 }
             }
-            if(c1==null||c2==null){
-                System.out.println("Error, class(es) not found");
+            if(c1==null&&c2==null){
+                System.out.println("Error, classes not found");
+            }
+            else if(c1==null||c2==null) {
+                if (c1 == null) {
+                    System.out.println("Error, class 1 not found");
+                }
+                else{
+                    System.out.println("Error, class 2 not found");
+                }
             }
             else {
                 c1.deleteRelationship(c2);
@@ -296,8 +302,8 @@ public class UserInterface {
     public void deleteAttribute(){
         System.out.println("What is the name of the class you'd like to remove an attribute from?");
         String className = kb.nextLine().toLowerCase();
-        for(int i = 0; i < createdClasses.size(); i++){
-            if(createdClasses.get(i).getName().toLowerCase().equals(className)){
+        for (ClassBox createdClass : createdClasses) {
+            if (createdClass.getName().equalsIgnoreCase(className)) {
                 //check if attributes is empty, if not do below
                 System.out.println("Which attribute would you like to delete?");
                 // list attributes?
@@ -305,13 +311,12 @@ public class UserInterface {
                 //find attribute using loop
                 System.out.println("Are you sure you want to delete " + attribute + "? Please enter yes or no.");
                 String answer = kb.nextLine().toLowerCase();
-                if(answer.equals("yes")){
+                if (answer.equals("yes")) {
                     //delete the attribute
-                }
-                else if (answer.equals("no")) {
+                    createdClass.deleteAttribute(attribute);
+                } else if (answer.equals("no")) {
                     System.out.println("Canceled");
-                }
-                else{
+                } else {
                     System.out.println("That is not a valid input");
                 }
             }
@@ -347,9 +352,10 @@ public class UserInterface {
         System.out.println("What index do you want to see?");
         listClasses();
         int input = Integer.parseInt(kb.nextLine());
-        if(input > 0){
+        if(input > 0&&input<=this.createdClasses.size()){
             System.out.println(createdClasses.get(input -1).toString());
-        }else if(input <= 0){
+        }
+        else{
             System.out.println("Invalid input. Try again");
         }
 

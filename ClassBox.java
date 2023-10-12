@@ -1,5 +1,3 @@
-import org.w3c.dom.Attr;
-
 import java.util.LinkedList;
 public class ClassBox {
     private enum ClassType {
@@ -10,10 +8,10 @@ public class ClassBox {
     private String name;
     //Possibly change to enum later?
     //Class, Interface, Enum, etc
-    private ClassType type;
+    private final ClassType type;
     //Way to sort fields first, methods last?
-    private LinkedList<Attribute> attributes;
-    private LinkedList<Relationship> relationships;
+    private final LinkedList<Attribute> attributes;
+    private final LinkedList<Relationship> relationships;
 
     public ClassBox(String name, int type) {
         if(name==null||name.isEmpty()||type<1||type>5) {
@@ -114,14 +112,6 @@ public class ClassBox {
 
     public String getName() {
         return this.name;
-    }
-
-    public String getType() {
-        return this.type.name();
-    }
-
-    public LinkedList<Attribute> getAttributes() {
-        return this.attributes;
     }
 
     public LinkedList<Relationship> getRelationships() {
