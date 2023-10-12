@@ -51,7 +51,7 @@ public class Relationship {
      * @throws IllegalArgumentException if any objects are null, or the enum type does not exist
      */
     public Relationship(final ClassBox to, final ClassBox from, final int type){
-        if(to == null || from == null || type < 1 || type > RelationshipType.values().length){
+        if(to == null || from == null || type < 1 || type > RelationshipType.values().length||to.equals(from)){
             throw new IllegalArgumentException("illegal param passed to Relationship object");
         }
         this.from = from;

@@ -11,42 +11,125 @@ public class UserInterface {
     }
     //recall menu at end if not
     public void menu(String input){
-        
+        int input2 = 0;
         //get user input of 1-15
         //call io method below
         //io method calls actual method in other classes
 
          if(input.equals("1")){
-            listClasses();
-        }else if(input.equals("2")){
-            listClass();
-        }else if(input.equals("3")){
-            addClass();
-        }else if(input.equals("4")){
-            deleteClass();
-        }else if(input.equals("5")){
-            renameClass();
-        }else if(input.equals("6")){
-            addAttribute();
-        }else if(input.equals("7")){
-            deleteAttribute();
-        }else if(input.equals("8")){
-            renameAttribute();
-        }else if(input.equals("9")){
-            listRelationships();
-        }else if(input.equals("10")){
-            addRelationship();
-        }else if(input.equals("11")){
-            deleteRelationship();
-        }else if(input.equals("12")){
-            save();
-        }else if(input.equals("13")){
-            load();
-        }else if(input.equals("14")){
+             System.out.println("Please choose a number from the options below: ");
+             System.out.println("1.) Display Classes");
+             System.out.println("2.) Display Class Details");
+             System.out.println("3.) Display Relationships");
+             System.out.println("4.) Back");
+             input2 = Integer.parseInt(kb.nextLine());
+             if(input2==1){
+                 listClasses();
+             }
+             else if(input2==2){
+                 listClass();
+             }
+             else if(input2==3){
+                 listRelationships();
+             }
+             else if(input2==4){
+                 return;
+             }
+             else{
+                 System.out.println("Invalid input, please try again");
+             }
+         }
+         else if(input.equals("2")){
+             System.out.println("Please choose a number from the options below: ");
+             System.out.println("1.) Add Class");
+             System.out.println("2.) Remove Class");
+             System.out.println("3.) Rename Class");
+             System.out.println("4.) Back");
+             input2 = Integer.parseInt(kb.nextLine());
+             if(input2==1){
+                 addClass();
+             }
+             else if(input2==2){
+                 deleteClass();
+             }
+             else if(input2==3){
+                 renameClass();
+             }
+             else if(input2==4){
+                 return;
+             }
+             else{
+                 System.out.println("Invalid input, please try again");
+             }
+         }
+         else if(input.equals("3")){
+             System.out.println("Please choose a number from the options below: ");
+             System.out.println("1.) Add Attribute");
+             System.out.println("2.) Remove Attribute");
+             System.out.println("3.) Rename Attribute");
+             System.out.println("4.) Back");
+             input2 = Integer.parseInt(kb.nextLine());
+             if(input2==1){
+                 addAttribute();
+             }
+             else if(input2==2){
+                 deleteAttribute();
+             }
+             else if(input2==3){
+                 renameAttribute();
+             }
+             else if(input2==4){
+                 return;
+             }
+             else{
+                 System.out.println("Invalid input, please try again");
+             }
+         }
+         else if(input.equals("4")){
+             System.out.println("Please choose a number from the options below: ");
+             System.out.println("1.) Add Relationship");
+             System.out.println("2.) Remove Relationship");
+             System.out.println("3.) Back");
+             input2 = Integer.parseInt(kb.nextLine());
+             if(input2==1){
+                 addRelationship();
+             }
+             else if(input2==2){
+                 deleteRelationship();
+             }
+             else if(input2==3){
+                 return;
+             }
+             else{
+                 System.out.println("Invalid input, please try again");
+             }
+         }
+         else if(input.equals("5")){
+             System.out.println("Please choose a number from the options below: ");
+             System.out.println("1.) Save");
+             System.out.println("2.) Load");
+             System.out.println("3.) Back");
+             input2 = Integer.parseInt(kb.nextLine());
+             if(input2==1){
+                 save();
+             }
+             else if(input2==2){
+                 load();
+             }
+             else if(input2==3){
+                 return;
+             }
+             else{
+                 System.out.println("Invalid input, please try again");
+             }
+         }
+         else if(input.equals("6")){
             help();
-        }else if(input.equals("15")){
+         }
+         else if(input.equals("7")){
             return;
-        }else{
+         }
+         else{
             System.out.println("That is not a valid input. Please try again");
         }
     }
@@ -54,21 +137,13 @@ public class UserInterface {
     //PrintMenu will display the menu options and prompt the user to choose a corresponding number on the menu
     public void printMenu(){
         System.out.println("\nPlease choose a number from the following options below");
-        System.out.println("1.) List classes");
-        System.out.println("2.) List class details");
-        System.out.println("3.) Add a class");
-        System.out.println("4.) Delete a class");
-        System.out.println("5.) Rename a class");
-        System.out.println("6.) Add an attribute");
-        System.out.println("7.) Delete an attribute");
-        System.out.println("8.) Rename an attribute");
-        System.out.println("9.) List relationships");
-        System.out.println("10.) Add a relationship");
-        System.out.println("11.) Delete a relationship");
-        System.out.println("12.) Save");
-        System.out.println("13.) Load");
-        System.out.println("14.) Help");
-        System.out.println("15.) Exit");
+        System.out.println("1.) List Display (Classes, Class details, Relationships)");
+        System.out.println("2.) Class Options (Add, Delete, Rename)");
+        System.out.println("3.) Attribute Options (Add, Delete, Rename)");
+        System.out.println("4.) Relationship Options (Add, Delete)");
+        System.out.println("5.) Save/Load");
+        System.out.println("6.) Help");
+        System.out.println("7.) Exit");
     }
 
 
@@ -108,11 +183,20 @@ public class UserInterface {
         System.out.println("What index do you want to remove?");
         listClasses();
         int input = Integer.parseInt(kb.nextLine());
-        if(input > 0){
-            input -= 1;
-            createdClasses.remove(input);
+        if(input > 0&&input<this.createdClasses.size()){
+            ClassBox clas = createdClasses.get(input-1);
+            for(ClassBox otherClass: this.createdClasses){
+                if(!(otherClass.equals(clas))) {
+                    for (Relationship r : otherClass.getRelationships()) {
+                        if (r.getTo().equals(clas) || r.getFrom().equals(clas)) {
+                            otherClass.deleteRelationship(clas);
+                        }
+                    }
+                }
+            }
+            this.createdClasses.remove(clas);
             System.out.println("Class deleted");
-        }else if(input <= 0){
+        }else{
             System.out.println("Invalid input. Try again");
         }
         
