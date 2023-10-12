@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -227,7 +228,36 @@ public class UserInterface {
 
     public void renameAttribute(){
 
+        if(createdClasses.isEmpty()){
+            System.out.println("Nothing to rename!");
+        }
+        
+        else{
+
+            listClasses();            
+            System.out.println("What index do you want to manipulate?"); 
+            int input = Integer.parseInt(kb.nextLine());
+            // may have indexing errors
+
+            if(createdClasses.size() <= input && input >= 1){
+                System.out.println("That is not a valid input. Please try again");
+            }
+
+            ClassBox cb = createdClasses.get(input-1); // may need to sort out later depending on indexing
+            listAttributes(cb);
+
+            System.out.println("Type the name of the attribute you want to rename");
+            String attributeChoice = kb.nextLine().toLowerCase();
+
+            System.out.println("What would you like to rename the attribute to?");
+            String newName = kb.nextLine().toLowerCase();
+            
+            cb.renameAttribute(attributeChoice, newName);
+            System.out.println("Attribute renamed!");
+        }
+
     }
+
     //export createdClasses
     //confirm?
     public void save(){
@@ -244,6 +274,15 @@ public class UserInterface {
             System.out.println(i+1 + " . " + createdClasses.get(i).getName() + " ");
         }
     }
+
+    public void listAttributes(ClassBox cb){
+        System.out.println("Current Attribute list");
+        LinkedList<Attribute> attributes = cb.getAttributes();
+        for(int i = 0; i < attributes.size(); i++){
+            System.out.println(i+1 + " . " + attributes.get(i).getName() + " ");
+        }
+    }
+
     public void listRelationships(){
 
     }
