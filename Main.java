@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class main {
+public class Main {
     public static void main(String[] args) {
         UserInterface m = new UserInterface();
         System.out.println("Welcome to Gourmet Java's UML Editor!");
