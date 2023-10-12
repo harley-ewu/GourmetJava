@@ -1,21 +1,37 @@
 import org.w3c.dom.Attr;
 
 import java.util.LinkedList;
-
 public class ClassBox {
+    private enum ClassType {
+
+        CLASS, INTERFACE, RECORD, ENUM, ANNOTATION;
+
+    }
     private String name;
     //Possibly change to enum later?
     //Class, Interface, Enum, etc
-    private String type;
+    private ClassType type;
     //Way to sort fields first, methods last?
     private LinkedList<Attribute> attributes;
     private LinkedList<Relationship> relationships;
 
-    public ClassBox(String name, String type) {
-        this.name = name;
-        this.type = type;
-        this.attributes = new LinkedList<>();
-        this.relationships = new LinkedList<>();
+    public ClassBox(String name, int type) {
+        if(name==null||name.isEmpty()||type<1||type>5) {
+            throw new IllegalArgumentException("Bad params at ClassBox constructor");
+        }
+        else {
+            this.name = name;
+            this.attributes = new LinkedList<>();
+            this.relationships = new LinkedList<>();
+            this.type = ClassBox.ClassType.values()[type - 1];
+        }
+    }
+
+    public static void printClassTypes(){
+        ClassBox.ClassType[] types = ClassBox.ClassType.values();
+        for(int i = 0; i < 5; ++i){
+            System.out.println((i+1) + " - " + types[i].name());
+        }
     }
 
     public void addAttribute(String name){
@@ -101,7 +117,7 @@ public class ClassBox {
     }
 
     public String getType() {
-        return this.type;
+        return this.type.name();
     }
 
     public LinkedList<Attribute> getAttributes() {
