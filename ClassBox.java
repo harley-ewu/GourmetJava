@@ -1,25 +1,41 @@
 import org.w3c.dom.Attr;
 
 import java.util.LinkedList;
-
 public class ClassBox {
+    private enum ClassType {
+
+        CLASS, INTERFACE, RECORD, ENUM, ANNOTATION;
+
+    }
     private String name;
     //Possibly change to enum later?
     //Class, Interface, Enum, etc
-    private String type;
+    private ClassType type;
     //Way to sort fields first, methods last?
     private LinkedList<Attribute> attributes;
     private LinkedList<Relationship> relationships;
 
-    public ClassBox(String name, String type, LinkedList<Attribute> attributes, LinkedList<Relationship> relationships) {
-        this.name = name;
-        this.type = type;
-        this.attributes = attributes;
-        this.relationships = relationships;
+    public ClassBox(String name, int type) {
+        if(name==null||name.isEmpty()||type<1||type>5) {
+            throw new IllegalArgumentException("Bad params at ClassBox constructor");
+        }
+        else {
+            this.name = name;
+            this.attributes = new LinkedList<>();
+            this.relationships = new LinkedList<>();
+            this.type = ClassBox.ClassType.values()[type - 1];
+        }
     }
 
-    public void addAttribute(String name, String view, LinkedList<String> tags, String returnType, LinkedList<String> params){
-        attributes.add(new Attribute(name, view, tags, returnType, params));
+    public static void printClassTypes(){
+        ClassBox.ClassType[] types = ClassBox.ClassType.values();
+        for(int i = 0; i < 5; ++i){
+            System.out.println((i+1) + " - " + types[i].name());
+        }
+    }
+
+    public void addAttribute(String name){
+        attributes.add(new Attribute(name));
     }
 
     public void deleteAttribute(String name){
@@ -48,26 +64,32 @@ public class ClassBox {
             System.out.println("Error: Attribute not found");
         }
         else {
-            a.setName(name);
+            a.setName(newName);
         }
     }
 
-    public void addRelationship(String name, ClassBox class1, ClassBox class2, String type, String fromNum, String toNum){
-        this.relationships.add(new Relationship(name, class1, class2, type, fromNum, toNum));
+    public static void addRelationship(final ClassBox class1, final ClassBox class2, final int type){
+        if(class1 == null || class2 == null || type<1||type>6){
+            throw new IllegalArgumentException("Bad object passed to addRelationship");
+        }
+        Relationship newRel = new Relationship(class1,class2,type);
+        class1.relationships.add(newRel);
+        class2.relationships.add(newRel);
     }
 
-    public void deleteRelationship(String name){
+    public void deleteRelationship(ClassBox otherClass){
         Relationship r = null;
         for (Relationship relationship : this.relationships) {
-            if (relationship.getName().equals(name)) {
+            if (relationship.getFrom().equals(otherClass)||relationship.getTo().equals(otherClass)) {
                 r = relationship;
             }
         }
         if(r==null){
-            System.out.println("Error, relationship not found");
+            System.out.println("Error, relationship not found"); //lol
         }
         else{
             this.relationships.remove(r);
+            otherClass.relationships.remove(r);
         }
     }
 
@@ -76,32 +98,34 @@ public class ClassBox {
     }
     //For list class details
     public String toString(){
-        System.out.println("Class: "+this.name);
-        System.out.println("Type: "+this.type);
-        System.out.println("Attributes: ");
+        StringBuilder s = new StringBuilder();
+        s.append("Class: ").append(this.name).append("\n");
+        s.append("Type: ").append(this.type).append("\n");
+        s.append("Attributes: \n");
         for(Attribute a: this.attributes){
-            System.out.println("\t"+a);
+            s.append("\t").append(a);
         }
-        System.out.println("Relationships: ");
+        s.append("Relationships: \n");
         for(Relationship r: this.relationships){
-            System.out.println("\t"+r);
+            s.append("\t").append(r);
         }
+        return s.toString();
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getType() {
-        return type;
+        return this.type.name();
     }
 
     public LinkedList<Attribute> getAttributes() {
-        return attributes;
+        return this.attributes;
     }
 
     public LinkedList<Relationship> getRelationships() {
-        return relationships;
+        return this.relationships;
     }
 
 }
