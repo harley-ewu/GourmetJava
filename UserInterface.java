@@ -221,13 +221,18 @@ public class UserInterface {
             if (createdClasses.get(i).getName().toLowerCase().equals(className)) {
                 // check if attributes is empty, if not do below
                 System.out.println("Which attribute would you like to delete?");
-                // list attributes?
+                // list attributes
+                for(int j = 0; j < createdClasses.get(i).getAttributes().size(); i++){
+                    int counter = j + 1;
+                    System.out.println(counter + ".) " + createdClasses.get(i).getAttributes().get(j));
+                }
                 String attribute = kb.nextLine();
                 // find attribute using loop
                 System.out.println("Are you sure you want to delete " + attribute + "? Please enter yes or no.");
                 String answer = kb.nextLine().toLowerCase();
+                //stick the part below in a loop so if an incorrect input is entered, it'll re-prompt
                 if (answer.equals("yes")) {
-                    // delete the attribute
+                    createdClasses.get(i).deleteAttribute(attribute);
                 } else if (answer.equals("no")) {
                     System.out.println("Canceled");
                 } else {
