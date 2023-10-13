@@ -272,9 +272,9 @@ public class UserInterface {
         System.out.println("What index do you want to see?");
         listClasses();
         int input = Integer.parseInt(kb.nextLine());
-        if(input > 0){
-            System.out.println(createdClasses.get(input -1).toString());
-        }else if(input <= 0){
+        if (input > 0) {
+            System.out.println(createdClasses.get(input - 1).toString());
+        } else if (input <= 0) {
             System.out.println("Invalid input. Try again");
         }
 
