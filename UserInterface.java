@@ -167,8 +167,8 @@ public class UserInterface {
         }
     }
 
-    // confirm?
-    // Delete a relationship between two classes
+
+    // Deletes a relationship between two classes while prompting the user to verify they wish to delete along the way
     public void deleteRelationship() {
         // Add an else for if one of the names isn't found
         ClassBox c1 = null, c2 = null;
@@ -198,6 +198,7 @@ public class UserInterface {
 
     } // End of deleteRelationship
 
+    //Adds an attribute to a given class
     public void addAttribute() {
 
         System.out.println("What is the name of the class you would like to add an attribute to?");
@@ -217,7 +218,8 @@ public class UserInterface {
         }
     }// end addAttribute
 
-    // confirm?
+
+    // Finds an attribute, checks with the user to verify intent, then deletes the attribute
     public void deleteAttribute() {
         System.out.println("What is the name of the class you'd like to remove an attribute from?");
         String className = kb.nextLine().toLowerCase();
