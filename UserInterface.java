@@ -199,19 +199,23 @@ public class UserInterface {
     } // End of deleteRelationship
 
     public void addAttribute() {
-        // possibly change to take in a classbox, with prompt in menu
-        // check for if name doesn't exist
-        // Not completed
 
         System.out.println("What is the name of the class you would like to add an attribute to?");
         String className = kb.nextLine().toLowerCase();
+        ClassBox temp = null;
         for (int i = 0; i < createdClasses.size(); i++) {
             if (createdClasses.get(i).getName().toLowerCase().equals(className)) {
-
+                temp = createdClasses.get(i);
+                System.out.println("What would you like to call your attribute?");
+                String attributeName = kb.nextLine();
+                createdClasses.get(i).addAttribute(attributeName);
+                System.out.println(attributeName + " has been added to " + className);
             }
         }
-
-    }
+        if(temp == null){
+            System.out.println("That name does not exist.");
+        }
+    }// end addAttribute
 
     // confirm?
     public void deleteAttribute() {
