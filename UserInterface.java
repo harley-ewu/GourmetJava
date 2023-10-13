@@ -240,13 +240,16 @@ public class UserInterface {
                     System.out.println("Are you sure you want to delete " + attribute + "? Please enter yes or no.");
                     String answer = kb.nextLine().toLowerCase();
                     //stick the part below in a loop so if an incorrect input is entered, it'll re-prompt
+                    while(!(answer.equals("yes") || answer.equals("no"))){
+                            System.out.println("That is not a valid input. Please enter yes or no.");
+                            answer = kb.nextLine().toLowerCase();
+                    }//end of while loop checking for valid input
                     if (answer.equals("yes")) {
                         createdClasses.get(i).deleteAttribute(attribute);
                     } else if (answer.equals("no")) {
                         System.out.println("Canceled");
-                    } else {
-                        System.out.println("That is not a valid input");
                     }
+
                 } else {
                     System.out.println("No attributes found for class " + className);
                 }
