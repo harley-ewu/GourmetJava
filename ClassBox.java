@@ -91,6 +91,12 @@ public class ClassBox {
         }
     }
 
+    public void listRelationships(){
+        for (Relationship rel : this.relationships){
+            System.out.println(rel.toString());
+        }
+    }
+
     public void renameClass(String name){
         this.name  = name;
     }

@@ -382,7 +382,9 @@ public class UserInterface {
     }
 
     public void listRelationships(){
-
+        for(ClassBox cb : createdClasses){
+            cb.listRelationships();
+        }
     }
     //Allows the user to choose what Classbox item they want to see in detail
     //Rachael

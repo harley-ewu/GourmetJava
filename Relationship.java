@@ -61,7 +61,12 @@ public class Relationship {
             System.out.println((i + 1) + " - " + relations[i].name());
         }
     }
-    
+
+    /**
+     * @return a String in the format "[verb] [class name]"<br>
+     * Ex: If class1 extends class2, this will only print out "extends class2"<br>
+     * It is up to the calling class' object to print its own name
+     */
     @Override
     public String toString(){
         return " " + this.type.verb + " " + this.to.getName();
