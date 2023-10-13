@@ -1,3 +1,9 @@
+import com.google.gson.Gson;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -360,16 +366,146 @@ public class UserInterface {
 
     }
 
-    //export createdClasses
-    //confirm?
+    // The save method takes the current state of the program and saves it into a .json file
+    // Currently only a single save is supported
     public void save(){
+        //Create a gson object that will take java objects and translate them to json
+        Gson gson = new Gson();
+        // Create a FileWriter that will write the converted Java to SavedFile.json
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter("SavedFile.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        //Get relationship info ie : (index of first class), (index of second class), (RelationshipType)
+        for (int i = 0; i < createdClasses.size(); i++) {
+            //need to store index of first ClassBox and index of second classBox to create a relationship
+            // index of first class will be i
+
+            //With this for loop we are going to write each relationship to the file so that we can recreate
+            //them in the load method
+            LinkedList<Relationship> relationships = createdClasses.get(i).getRelationships();
+            for(int j = 0; j < relationships.size(); j++) {
+
+                //Find second index
+                int secondIndex = -1;
+                for (int p = 0; p < createdClasses.size(); p++) {
+                    if (createdClasses.get(p).getName().equals(relationships.get(j).getFrom().getName())) {
+                        secondIndex = p;
+                        p = createdClasses.size();
+                    }
+                }
+
+                // find type index for creation
+                String verb = relationships.get(j).getType();
+                int typeSelection;
+                if (verb.equals("aggregates")) {
+                    typeSelection = 1;
+                } else if (verb.equals("composes")) {
+                    typeSelection = 2;
+                } else if (verb.equals("extends")) {
+                    typeSelection = 3;
+                } else if (verb.equals("implements")) {
+                    typeSelection = 4;
+                } else if (verb.equals("depends on")) {
+                    typeSelection = 5;
+                } else {
+                    typeSelection = 6;
+                }
+                RelationshipBuilder relB = new RelationshipBuilder(i, secondIndex, typeSelection);
+
+                try {
+                    writer.append(gson.toJson(relB));
+                    writer.flush();
+                    writer.append("\n");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        //Set relationships to null to avoid StackOverflow, then write ClassBoxes to file
+        for (int i = 0; i < createdClasses.size(); i++) {
+            //for loop to delete all relationships to avoid StackOverflow
+            for (int d = 0; d < createdClasses.get(i).getRelationships().size(); d++) {
+                createdClasses.get(i).getRelationships().remove(0);
+            }
+            //Now that our relationships list is empty, we can safely store each ClassBox in our json file
+            gson.toJson(createdClasses.get(i), writer);
+            try {
+                writer.flush();
+                writer.append("\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Your progress has been saved!");
     }
 
-    // import/set createdClasses
-    // confirm?
-    public void load() {
+    //The load function is used to restore data that was previously saved using the save function
+    //Again we only support up to a single save
+    public void load(){
+        // Create a File and add a scanner to it to read the data
+        File inputFile = new File("SavedFile.json");
+        Scanner fileScanner = null;
+        try {
+            fileScanner = new Scanner(inputFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        //Gson object created to transfer the json to Java objects
+        Gson gson = new Gson();
 
+        // Scan in each line containing a ClassBox and create it using our gson object
+        while (fileScanner.hasNextLine()) {
+            String loadTest = fileScanner.nextLine();
+            if (loadTest.contains("name") && loadTest.contains("type") && loadTest.contains("attributes")) {
+                this.createdClasses.add(gson.fromJson(loadTest, ClassBox.class));
+            }
+        }
+
+        fileScanner.close();
+        // Reopen our scanner to fetch the Relationship data
+        try {
+            fileScanner = new Scanner(inputFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Create the relationships between classes to finish restoring the save state
+        String inputString = "";
+        int firstIndex = -1;
+        int secondIndex = -1;
+        int type = -1;
+        boolean endOfRelationships = false;
+
+        while (!endOfRelationships) {
+            inputString = fileScanner.nextLine();
+            RelationshipBuilder relB = gson.fromJson(inputString, RelationshipBuilder.class);
+
+            if (inputString.contains("name") && inputString.contains("type") && inputString.contains("attributes")) {
+                endOfRelationships = true;
+            }
+            else {
+                firstIndex = relB.getFirstIndex();
+                secondIndex = relB.getSecondIndex();
+                type = relB.getRelationshipType();
+                ClassBox class1 = createdClasses.get(firstIndex);
+                ClassBox class2 = createdClasses.get(secondIndex);
+
+                class1.addRelationship(class2, type);
+            }
+        }
+        fileScanner.close();
+        System.out.println("Your previous save has been loaded!");
     }
 
     public void listClasses() {
