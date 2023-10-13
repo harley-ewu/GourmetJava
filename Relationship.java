@@ -1,13 +1,11 @@
-import javax.management.relation.RelationException;
-
 public class Relationship {
     private enum RelationshipType {
         AGGREGATION("aggregates"),
-        COMPOSITION("composes?"),
-        EXTENSION("extends?"),
+        COMPOSITION("composes"),
+        EXTENSION("extends"),
         IMPLEMENTATION("implements"),
         DEPENDENCY("depends on"),
-        ASSOCIATION("associates?");
+        ASSOCIATION("associates with");
 
         private final String verb;
 
@@ -23,7 +21,6 @@ public class Relationship {
     }
 
     private ClassBox from;
-
     //Aggregation, Composition, extension, etc
     private RelationshipType type;
 
@@ -72,12 +69,12 @@ public class Relationship {
      */
     @Override
     public String toString(){
-        return this.type.toString() + " " + this.from.getName();
+        return this.type.verb + " " + this.getFrom().getName();
     }
 
     //Getters and setters are self-explanatory
     public ClassBox getFrom() {
-        return from;
+        return this.from;
     }
 
     public String getType() {

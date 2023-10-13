@@ -6,7 +6,7 @@ public class Main {
         System.out.println("Welcome to Gourmet Java's UML Editor!");
         Scanner kb = new Scanner(System.in);
         String input = "";
-        while (!input.equals("15")) {
+        while (!input.equals("7")) {
             m.printMenu();
             input = kb.nextLine();
             m.menu(input);
