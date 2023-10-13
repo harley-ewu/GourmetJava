@@ -79,7 +79,7 @@ public class ClassBox {
     public void deleteRelationship(ClassBox otherClass){
         Relationship r = null;
         for (Relationship relationship : this.relationships) {
-            if (relationship.getTo().equals(otherClass)) {
+            if (relationship.getFrom().equals(otherClass)) {
                 r = relationship;
             }
         }
@@ -93,7 +93,7 @@ public class ClassBox {
 
     public void listRelationships(){
         for (Relationship rel : this.relationships){
-            System.out.println(rel.toString());
+            System.out.println(this.name+" "+rel.toString());
         }
     }
 

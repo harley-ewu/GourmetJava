@@ -187,7 +187,7 @@ public class UserInterface {
                 for(ClassBox otherClass: this.createdClasses){
                     if(!(otherClass.equals(clas))) {
                         for (Relationship r : otherClass.getRelationships()) {
-                            if (r.getTo().equals(clas)) {
+                            if (r.getFrom().equals(clas)) {
                                 otherClass.deleteRelationship(clas);
                             }
                         }
@@ -226,9 +226,9 @@ public class UserInterface {
          }
     }
     public void addRelationship(){
-        System.out.println("What is the index of the first class you want to have a relationship? (The from class)");
+        System.out.println("What is the index of the first class you want to have a relationship? (The lower/to class, e.g this implements the other class)");
         int index1 = Integer.parseInt(kb.nextLine());
-        System.out.println("What is the index of the second class you want to have a relationship?(The to class)");
+        System.out.println("What is the index of the second class you want to have a relationship?(The higher/from class, e.g the other class implements this)");
         int index2 = Integer.parseInt(kb.nextLine());
         Relationship.printRelationshipTypes();
         System.out.println("Please select an option for the relationship type by number");
@@ -337,21 +337,23 @@ public class UserInterface {
             int input = Integer.parseInt(kb.nextLine());
             // may have indexing errors
 
-            if(createdClasses.size() <= input && input >= 1){
+            if(input>this.createdClasses.size() || input < 1){
                 System.out.println("That is not a valid input. Please try again");
             }
+            else {
 
-            ClassBox cb = createdClasses.get(input-1); // may need to sort out later depending on indexing
-            listAttributes(cb);
+                ClassBox cb = createdClasses.get(input - 1); // may need to sort out later depending on indexing
+                listAttributes(cb);
 
-            System.out.println("Type the name of the attribute you want to rename");
-            String attributeChoice = kb.nextLine().toLowerCase();
+                System.out.println("Type the name of the attribute you want to rename");
+                String attributeChoice = kb.nextLine().toLowerCase();
 
-            System.out.println("What would you like to rename the attribute to?");
-            String newName = kb.nextLine().toLowerCase();
-            
-            cb.renameAttribute(attributeChoice, newName);
-            System.out.println("Attribute renamed!");
+                System.out.println("What would you like to rename the attribute to?");
+                String newName = kb.nextLine().toLowerCase();
+
+                cb.renameAttribute(attributeChoice, newName);
+                System.out.println("Attribute renamed!");
+            }
         }
 
     }
@@ -382,6 +384,7 @@ public class UserInterface {
     }
 
     public void listRelationships(){
+        System.out.println("Current Relationships");
         for(ClassBox cb : createdClasses){
             cb.listRelationships();
         }
