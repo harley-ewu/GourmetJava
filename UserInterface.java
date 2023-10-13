@@ -203,6 +203,9 @@ public class UserInterface {
     public void addAttribute() {
 
         System.out.println("What is the name of the class you would like to add an attribute to?");
+        for(int i = 0; i < createdClasses.size(); i++){
+            System.out.println(i+1 + ".) " + createdClasses.get(i).getName());
+        }
         String className = kb.nextLine().toLowerCase();
         ClassBox temp = null;
         for (int i = 0; i < createdClasses.size(); i++) {
@@ -223,20 +226,28 @@ public class UserInterface {
     // Finds an attribute, checks with the user to verify intent, then deletes the attribute
     public void deleteAttribute() {
         System.out.println("What is the name of the class you'd like to remove an attribute from?");
+        //lists out classNames
+        for(int i = 0; i < createdClasses.size(); i++){
+            System.out.println(i+1 + ".) " + createdClasses.get(i).getName());
+        }
         String className = kb.nextLine().toLowerCase();
         for (int i = 0; i < createdClasses.size(); i++) {
             if (createdClasses.get(i).getName().toLowerCase().equals(className)) {
                 // check if attributes is empty, if not do below
-                LinkedList tempAttList = createdClasses.get(i).getAttributes();
+                LinkedList<Attribute> tempAttList = createdClasses.get(i).getAttributes();
                 if(!(tempAttList==null)) {
                     System.out.println("Which attribute would you like to delete?");
+                    //find attributes using a loop
+                    for(int j = 0; j < tempAttList.size(); j++){
+                        System.out.println(j+1 + ".) " + createdClasses.get(i).getAttributes().get(j).getName());
+                    }
                     // lists attributes
-                    for (int j = 0; j < createdClasses.get(i).getAttributes().size(); i++) {
+                    /*for (int j = 0; j < createdClasses.get(i).getAttributes().size(); i++) {
                         int counter = j + 1;
                         System.out.println(counter + ".) " + createdClasses.get(i).getAttributes().get(j));
-                    }
+                    } */
                     String attribute = kb.nextLine();
-                    // find attribute using loop
+
                     System.out.println("Are you sure you want to delete " + attribute + "? Please enter yes or no.");
                     String answer = kb.nextLine().toLowerCase();
                     //stick the part below in a loop so if an incorrect input is entered, it'll re-prompt
