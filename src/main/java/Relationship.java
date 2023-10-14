@@ -1,3 +1,5 @@
+package src.main.java;
+
 public class Relationship {
     private enum RelationshipType {
         AGGREGATION("aggregates"),

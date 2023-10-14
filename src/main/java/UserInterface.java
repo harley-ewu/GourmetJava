@@ -1,3 +1,5 @@
+package src.main.java;
+
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -475,9 +477,6 @@ public class UserInterface {
     //The load function is used to restore data that was previously saved using the save function
     //Again we only support up to a single save
     public void load(){
-        // Delete current ClassBox's to avoid Stu loading more than once.
-        this.createdClasses.clear();
-
         // Create a File and add a scanner to it to read the data
         File inputFile = new File("SavedFile.json");
         Scanner fileScanner = null;
@@ -486,6 +485,13 @@ public class UserInterface {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        if (!fileScanner.hasNextLine()) {
+            System.out.println("There is no save to load.");
+            return;
+        }
+        // Delete current ClassBox's to avoid Stu loading more than once.
+        this.createdClasses.clear();
+
         //Gson object created to transfer the json to Java objects
         Gson gson = new Gson();
 
