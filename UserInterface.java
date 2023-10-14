@@ -452,10 +452,8 @@ public class UserInterface {
 
         //Set relationships to null to avoid StackOverflow, then write ClassBoxes to file
         for (int i = 0; i < createdClasses.size(); i++) {
-            //for loop to delete all relationships to avoid StackOverflow
-            for (int d = 0; d < createdClasses.get(i).getRelationships().size(); d++) {
-                createdClasses.get(i).getRelationships().remove(0);
-            }
+            //Delete all relationships to avoid StackOverflow
+            createdClasses.get(i).getRelationships().clear();
             //Now that our relationships list is empty, we can safely store each ClassBox in our json file
             gson.toJson(createdClasses.get(i), writer);
             try {
@@ -477,6 +475,9 @@ public class UserInterface {
     //The load function is used to restore data that was previously saved using the save function
     //Again we only support up to a single save
     public void load(){
+        // Delete current ClassBox's to avoid Stu loading more than once.
+        this.createdClasses.clear();
+
         // Create a File and add a scanner to it to read the data
         File inputFile = new File("SavedFile.json");
         Scanner fileScanner = null;
@@ -490,9 +491,9 @@ public class UserInterface {
 
         // Scan in each line containing a ClassBox and create it using our gson object
         while (fileScanner.hasNextLine()) {
-            String loadTest = fileScanner.nextLine();
-            if (loadTest.contains("name") && loadTest.contains("type") && loadTest.contains("attributes")) {
-                this.createdClasses.add(gson.fromJson(loadTest, ClassBox.class));
+            String classboxString = fileScanner.nextLine();
+            if (classboxString.contains("name") && classboxString.contains("type") && classboxString.contains("attributes") && classboxString.contains("relationships")) {
+                this.createdClasses.add(gson.fromJson(classboxString, ClassBox.class));
             }
         }
 
@@ -515,7 +516,7 @@ public class UserInterface {
             inputString = fileScanner.nextLine();
             RelationshipBuilder relB = gson.fromJson(inputString, RelationshipBuilder.class);
 
-            if (inputString.contains("name") && inputString.contains("type") && inputString.contains("attributes")) {
+            if (inputString.contains("name") && inputString.contains("type") && inputString.contains("attributes") && inputString.contains("relationships")) {
                 endOfRelationships = true;
             }
             else {
