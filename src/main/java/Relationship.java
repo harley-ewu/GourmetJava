@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Relationship {
     private enum RelationshipType {
         AGGREGATION("aggregates"),
@@ -63,6 +65,14 @@ public class Relationship {
     }
 
     /**
+     * @return A String array with the names of all the types
+     * NOT FULLY TESTED
+     */
+    public static String[] getRelationshipTypes(){
+        return Arrays.stream(RelationshipType.values()).map(Enum::name).toArray(String[]::new);
+    }
+
+    /**
      * @return a String in the format "[verb] [class name]"<br>
      * Ex: If class1 extends class2, this will only print out "extends class2"<br>
      * It is up to the calling class' object to print its own name
@@ -78,7 +88,11 @@ public class Relationship {
     }
 
     public String getType() {
-        return this.type.toString();
+        return this.type.name();
+    }
+
+    public int getTypeOrdinal(){
+        return this.type.ordinal();
     }
 
 }
