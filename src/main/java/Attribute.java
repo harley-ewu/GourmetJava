@@ -1,6 +1,6 @@
-package src.main.java;
+//package src.main.java;
 
-import java.util.LinkedList;
+// import java.util.LinkedList;
 
 public class Attribute {
     private String name;
