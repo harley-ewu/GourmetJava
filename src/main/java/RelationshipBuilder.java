@@ -1,4 +1,4 @@
-// package src.main.java;
+package src.main.java;
 
 //This class is used as a helper class for save/load methods in UI so that the info
 // for creating relationships is stored in an object that gson can parse into json.
