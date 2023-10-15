@@ -425,21 +425,8 @@ public class UserInterface {
                 }
 
                 // find type index for creation
-                String verb = relationships.get(j).getType();
-                int typeSelection;
-                if (verb.equals("aggregates")) {
-                    typeSelection = 1;
-                } else if (verb.equals("composes")) {
-                    typeSelection = 2;
-                } else if (verb.equals("extends")) {
-                    typeSelection = 3;
-                } else if (verb.equals("implements")) {
-                    typeSelection = 4;
-                } else if (verb.equals("depends on")) {
-                    typeSelection = 5;
-                } else {
-                    typeSelection = 6;
-                }
+                int typeSelection = relationships.get(j).getTypeOrdinal();
+
                 RelationshipBuilder relB = new RelationshipBuilder(i, secondIndex, typeSelection);
 
                 try {
