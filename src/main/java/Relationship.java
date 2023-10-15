@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Relationship {
     private enum RelationshipType {
         AGGREGATION("aggregates"),
@@ -60,6 +62,14 @@ public class Relationship {
         for(int i = 0; i < relations.length; ++i){
             System.out.println((i + 1) + " - " + relations[i].name());
         }
+    }
+
+    /**
+     * @return A String array with the names of all the types
+     * NOT FULLY TESTED
+     */
+    public static String[] getRelationshipTypes(){
+        return Arrays.stream(RelationshipType.values()).map(Enum::name).toArray(String[]::new);
     }
 
     /**
