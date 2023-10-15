@@ -82,7 +82,11 @@ public class Relationship {
     }
 
     public String getType() {
-        return this.type.toString();
+        return this.type.name();
+    }
+
+    public int getTypeOrdinal(){
+        return this.type.ordinal();
     }
 
 }
