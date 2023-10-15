@@ -30,8 +30,18 @@ To run the UML Editor you need to have the most recent Java Virtual Machine inst
 
 This Installation guide will walk you through the process of installing a JVM and Gradle an open-source build automation tool.
 
-1. Open up your browser of choice 
-2. Go to Oracle's [website](https://www.oracle.com/java/technologies/downloads/) to download the most recent version of Java
+**For Windows**
+
+1. Open up your browser of choice. 
+2. Go to Oracle's [website](https://www.oracle.com/java/technologies/downloads/) to download the most recent version of Java for Windows.
+3. Follow Orcale's installation guide for Java.
+4. Go to C:\Program Files\Java\jdk-20\bin or wherever your bin file is located for Java. Copy the path of your bin file.
+5. Open up Window's Start and go to Edit the System Enviroment Variables.
+6. Select Environment Variables &rarr; navigate the System variables window and look for Path and double-click it &rarr; click new &rarr; and then paste the bin path into the the new line &rarr; click okay out of all windows to apply changes.
+7. Open a command prompt
+8. In the console enter `java --version` to check that JVM was properly installed.
+
+
 
 ## Programers: 
 - Rachael D 
