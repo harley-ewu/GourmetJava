@@ -1,3 +1,5 @@
+package src.main.java;
+
 import java.util.Arrays;
 
 public class Relationship {
@@ -91,8 +93,9 @@ public class Relationship {
         return this.type.name();
     }
 
+    //Returns ordinal value + 1
     public int getTypeOrdinal(){
-        return this.type.ordinal();
+        return this.type.ordinal() + 1;
     }
 
 }

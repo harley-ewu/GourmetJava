@@ -1,3 +1,5 @@
+package src.main.java;
+
 import java.util.LinkedList;
 public class ClassBox {
 
@@ -108,11 +110,11 @@ public class ClassBox {
         s.append("Type: ").append(this.type).append("\n");
         s.append("Attributes: \n");
         for(Attribute a: this.attributes){
-            s.append("\t").append(a);
+            s.append("\t").append(a + "\n");
         }
         s.append("Relationships: \n");
         for(Relationship r: this.relationships){
-            s.append("\t").append(this.name).append(r);
+            s.append("\t").append(this.name + " ").append(r + "\n");
         }
         return s.toString();
     }
