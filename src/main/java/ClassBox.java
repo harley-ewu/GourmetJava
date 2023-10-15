@@ -79,18 +79,19 @@ public class ClassBox {
     }
 
     public void deleteRelationship(ClassBox otherClass){
-        Relationship r = null;
-        for (Relationship relationship : this.relationships) {
-            if (relationship.getFrom().equals(otherClass)) {
-                r = relationship;
+        for (Relationship rel : this.relationships) {
+            if (rel.getFrom().equals(otherClass)) {
+                this.relationships.remove(rel);
+                return;
             }
         }
-        if(r==null){
-            System.out.println("Error, relationship not found"); //lol
+        for (Relationship rel : otherClass.relationships) {
+            if (rel.getFrom().equals(this)) {
+                otherClass.relationships.remove(rel);
+                return;
+            }
         }
-        else{
-            this.relationships.remove(r);
-        }
+        System.out.println("Relationship not found");
     }
 
     public void listRelationships(){
