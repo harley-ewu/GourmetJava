@@ -7,6 +7,19 @@
 # BlueJ files
 *.ctxt
 
+#Things to ignore 
+*.xml
+*.snap
+*.prefs
+*.index
+*.xmi
+*.dat
+*.ser
+*.setup
+*.ini
+*.location
+*.lock
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
