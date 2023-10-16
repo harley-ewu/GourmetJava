@@ -44,9 +44,8 @@ This Installation guide will walk you through the process of installing a JVM an
 **For Linux**
 
 1. Open a terminal.
-2. Enter `wget https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.rpm`. Enter `ls` to see if the rpm file is present.
-3. Once files is confirmed enter `sudo rpm -i jdk-21_linux-x64_bin.rpm`.
-4. In the terminal enter `java --version` to check that JVM was properly installed.
+2. Enter `sudo apt install openjdk-19-jre-headless`. Enter `ls` to see if the rpm file is present.
+3. In the terminal enter `java --version` to check that JVM was properly installed.
 
 ### Gradle Installation
 
