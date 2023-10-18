@@ -1,6 +1,8 @@
+package src.main.java;
+
 import java.util.Scanner;
 
-public class main {
+public class Main {
     public static void main(String[] args) {
         UserInterface m = new UserInterface();
         //System.out.println("Welcome to Gourmet Java's UML Editor!");
@@ -12,7 +14,7 @@ public class main {
         System.out.println("Happy editing!");
         Scanner kb = new Scanner(System.in);
         String input = "";
-        while (!input.equals("15")) {
+        while (!input.equals("7")) {
             m.printMenu();
             input = kb.nextLine();
             m.menu(input);

@@ -7,6 +7,19 @@
 # BlueJ files
 *.ctxt
 
+#Things to ignore 
+*.xml
+*.snap
+*.prefs
+*.index
+*.xmi
+*.dat
+*.ser
+*.setup
+*.ini
+*.location
+*.lock
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
@@ -22,3 +35,9 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
