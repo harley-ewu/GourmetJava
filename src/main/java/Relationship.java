@@ -6,10 +6,8 @@ public class Relationship {
     private enum RelationshipType {
         AGGREGATION("aggregates"),
         COMPOSITION("composes"),
-        EXTENSION("extends"),
         IMPLEMENTATION("implements"),
-        DEPENDENCY("depends on"),
-        ASSOCIATION("associates with");
+        REALIZATION("realizes");
 
         private final String verb;
 

@@ -14,12 +14,13 @@ public class Main {
         System.out.println("Happy editing!");
         Scanner kb = new Scanner(System.in);
         String input = "";
-        while (!input.equals("7")) {
+        while (true) {
             m.printMenu();
+            System.out.print("Choice:");
             input = kb.nextLine();
             m.menu(input);
         }
-        System.out.println("Program Closed! Bye!");
+
     }
 
        // This is a test
