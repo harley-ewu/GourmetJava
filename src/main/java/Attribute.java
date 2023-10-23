@@ -4,19 +4,19 @@ import java.util.LinkedList;
 
 public class Attribute implements Comparable<Attribute> {
 
-
     enum ViewType {
         PUBLIC,
         PRIVATE,
         PROTECTED;
     }
-    enum attType{
+    enum AttributeType {
         METHOD,
-        VALUE;
+        VARIABLE;
     }
     private String name;
     //method or value
-    private attType mOV;
+    private AttributeType attributeType;
+    //public, private, protected
     private ViewType view;
     //Stuff like static
     private LinkedList<String> tags;
@@ -25,12 +25,12 @@ public class Attribute implements Comparable<Attribute> {
     //empty/null if value
     private LinkedList<String> params;
 
-    public Attribute(String name, attType mOV, ViewType view, LinkedList<String> tags, String type, LinkedList<String> params) {
+    public Attribute(String name, AttributeType mOV, ViewType view, LinkedList<String> tags, String type, LinkedList<String> params) {
         if(name==null||name.isEmpty()||mOV==null||view==null||type==null||type.isEmpty()){
             throw new IllegalArgumentException("Bad params at Attribute constructor");
         }
         this.name = name;
-        this.mOV = mOV;
+        this.attributeType = mOV;
         this.view = view;
         this.tags = tags;
         this.type = type;
@@ -48,8 +48,8 @@ public class Attribute implements Comparable<Attribute> {
         return this.name;
     }
 
-    public attType getmOV() {
-        return this.mOV;
+    public AttributeType getmOV() {
+        return this.attributeType;
     }
 
     public ViewType getView() {
@@ -91,7 +91,7 @@ public class Attribute implements Comparable<Attribute> {
         }
         n.append(this.type).append(" ");
         n.append(this.name);
-        if(this.mOV.equals(attType.VALUE)){
+        if(this.attributeType.equals(AttributeType.VARIABLE)){
             return n.toString();
         }
         else{

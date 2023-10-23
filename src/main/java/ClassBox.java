@@ -38,15 +38,15 @@ public class ClassBox {
             System.out.println((i+1) + " - " + types[i].name());
         }
     }
-    //public Attribute(String name, attType mOV, ViewType view, LinkedList<String> tags, String type, LinkedList<String> params) {
+
     public void addAttribute(String name, String view, LinkedList<String> tags, String type, LinkedList<String> params){
-        Attribute.attType attType = null;
+        Attribute.AttributeType attType = null;
         view = view.toUpperCase(Locale.ROOT);
         if(params==null||params.isEmpty()){
-            attType = Attribute.attType.VALUE;
+            attType = Attribute.AttributeType.VARIABLE;
         }
         else{
-            attType = Attribute.attType.METHOD;
+            attType = Attribute.AttributeType.METHOD;
         }
         Attribute.ViewType viewT = Attribute.ViewType.valueOf(view);
         this.attributes.add(new Attribute(name, attType, viewT, tags, type, params));
@@ -62,7 +62,7 @@ public class ClassBox {
     }
 
     public void addRelationship(final ClassBox toClass, final int type){
-        Relationship newRel = new Relationship(toClass,type);
+        Relationship newRel = new Relationship(toClass, type);
         this.relationships.add(newRel);
     }
 
@@ -108,11 +108,11 @@ public class ClassBox {
     }
 
     public void sortAttributes(){
-        //make 2 sublists, first is values, second is relationships, then sort the two based on name
+        //make 2 sublists, first is values, second is methods, then sort the two based on name
         LinkedList<Attribute> valList = new LinkedList<>();
         LinkedList<Attribute> metList = new LinkedList<>();
         for(Attribute a: this.attributes){
-            if(a.getmOV().equals(Attribute.attType.VALUE)){
+            if(a.getmOV().equals(Attribute.AttributeType.VARIABLE)){
                 valList.add(a);
             }
             else{

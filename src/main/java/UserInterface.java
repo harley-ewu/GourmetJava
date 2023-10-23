@@ -242,7 +242,7 @@ public class UserInterface {
             listClasses();
             System.out.print("Class Index:");
             int input = Integer.parseInt(kb.nextLine());
-            if(input > 0&&input<=this.createdClasses.size()){
+            if(input > 0 && input<=this.createdClasses.size()){
                 ClassBox clas = createdClasses.get(input-1);
                 for(ClassBox otherClass: this.createdClasses){
                     if(!(otherClass.equals(clas))) {
@@ -275,7 +275,7 @@ public class UserInterface {
             listClasses();
             System.out.print("Class Index:");
             int num = Integer.parseInt(kb.nextLine());
-            if(num > 0&&num<=this.createdClasses.size()){
+            if(num > 0 && num<=this.createdClasses.size()){
                 int index = num-1;
                 System.out.println("What would you like to rename your class?");
                 System.out.print("New Class Name:");
@@ -333,7 +333,7 @@ public class UserInterface {
         if (answer.equalsIgnoreCase("yes")) {
             c1 = this.createdClasses.get(className-1);
             c2 = this.createdClasses.get(className2-1);
-            if(c1==null&&c2==null){
+            if(c1==null && c2==null){
                 System.out.println("Error, classes not found");
             }
             else if(c1==null||c2==null) {
@@ -364,7 +364,7 @@ public class UserInterface {
         System.out.println("What is the index of the class you would like to add an attribute to?");
         System.out.print("Class Index:");
         int ind = Integer.parseInt(kb.nextLine());
-        if(ind < 1||ind>this.createdClasses.size()){
+        if(ind < 1 || ind>this.createdClasses.size()){
             System.out.println("That class does not exist.");
         }
         else {
@@ -381,13 +381,13 @@ public class UserInterface {
             }
             System.out.println("Enter any applicable tags, such as static, seperated by commas(a,b,c)");
             System.out.print("Tags:");
-            String tags = kb.nextLine();
-            String[] tagss = tags.split(",");
-            LinkedList<String> tagsss = new LinkedList<String>(Arrays.asList(tagss));
-            System.out.println("Enter the type (the return type if it is a method, the value type if it is a value");
+            String tagstring = kb.nextLine();
+            String[] tagarray = tagstring.split(",");
+            LinkedList<String> tagll = new LinkedList<String>(Arrays.asList(tagarray));
+            System.out.println("Enter the type (the return type if it is a method, the variable type if it is a variable");
             System.out.print("Type:");
             String type = kb.nextLine();
-            System.out.println("Enter the parameters, seperated by commas, if this is a method (Leave blank for a value)");
+            System.out.println("Enter the parameters, seperated by commas, if this is a method (Leave blank for a variable)");
             System.out.print("Parameters:");
             String params = kb.nextLine();
             LinkedList<String> paramsss = null;
