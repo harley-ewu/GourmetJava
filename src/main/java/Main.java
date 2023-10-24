@@ -14,12 +14,7 @@ public class Main {
         System.out.println("Happy editing!");
         Scanner kb = new Scanner(System.in);
         String input = "";
-        while (true) {
-            m.printMenu();
-            System.out.print("Choice:");
-            input = kb.nextLine();
-            m.menu(input);
-        }
+        m.menu();
 
     }
 

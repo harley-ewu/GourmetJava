@@ -19,155 +19,160 @@ public class UserInterface {
         kb = new Scanner(System.in);
     }
     //recall menu at end if not
-    public void menu(String input){
-        int input2 = 0;
-        //get user input of 1-15
-        //call io method below
-        //io method calls actual method in other classes
-
-        switch (input) {
-            case "1" -> {
-                if(this.createdClasses.isEmpty()){
-                    System.out.println("Nothing to display! Please make a class first");
+    public void menu(){
+        boolean cont = true;
+        while(cont == true) {
+            printMenu();
+            int input2;
+            System.out.print("Choice:");
+            //get user input of 1-15
+            //call io method below
+            //io method calls actual method in other classes
+            int input = Integer.parseInt(kb.nextLine());
+                switch (input) {
+                    case 1:
+                        if (this.createdClasses.isEmpty()) {
+                            System.out.println("Nothing to display! Please make a class first");
+                        } else {
+                            System.out.println("Please choose a number from the options below: ");
+                            System.out.println("1.) Display Classes");
+                            System.out.println("2.) Display Classes Detailed");
+                            System.out.println("3.) Display Class Details");
+                            System.out.println("4.) Display Relationships");
+                            System.out.println("5.) Help");
+                            System.out.println("6.) Back");
+                            System.out.print("Choice:");
+                            input2 = Integer.parseInt(kb.nextLine());
+                            if (input2 == 1) {
+                                listClasses();
+                            } else if (input2 == 2) {
+                                listDetailedClasses();
+                            } else if (input2 == 3) {
+                                listClass();
+                            } else if (input2 == 4) {
+                                listRelationships();
+                            } else if (input2 == 5) {
+                                listHelp();
+                            } else if (input2 == 6) {
+                                return;
+                            } else {
+                                System.out.println("Invalid input, please try again");
+                            }
+                        }
+                        break;
+                    case 2:
+                        System.out.println("Please choose a number from the options below: ");
+                        System.out.println("1.) Add Class");
+                        System.out.println("2.) Remove Class");
+                        System.out.println("3.) Rename Class");
+                        System.out.println("4.) Help");
+                        System.out.println("5.) Back");
+                        System.out.print("Choice:");
+                        input2 = Integer.parseInt(kb.nextLine());
+                        if (input2 == 1) {
+                            addClass();
+                        } else if (input2 == 2) {
+                            deleteClass();
+                        } else if (input2 == 3) {
+                            renameClass();
+                        } else if (input2 == 4) {
+                            classHelp();
+                        } else if (input2 == 5) {
+                            return;
+                        } else {
+                            System.out.println("Invalid input, please try again");
+                        }
+                        break;
+                    case 3:
+                        if (this.createdClasses.isEmpty()) {
+                            System.out.println("Please create a class first");
+                        } else {
+                            System.out.println("Please choose a number from the options below: ");
+                            System.out.println("1.) Add Attribute");
+                            System.out.println("2.) Remove Attribute");
+                            System.out.println("3.) Rename Attribute");
+                            System.out.println("4.) Help");
+                            System.out.println("5.) Back");
+                            System.out.print("Choice:");
+                            input2 = Integer.parseInt(kb.nextLine());
+                            if (input2 == 1) {
+                                addAttribute();
+                            } else if (input2 == 2) {
+                                deleteAttribute();
+                            } else if (input2 == 3) {
+                                renameAttribute();
+                            } else if (input2 == 4) {
+                                attributeHelp();
+                            } else if (input2 == 5) {
+                                return;
+                            } else {
+                                System.out.println("Invalid input, please try again");
+                            }
+                        }
+                        break;
+                    case 4:
+                        if (this.createdClasses.size() < 2) {
+                            System.out.println("Please create 2 classes first");
+                        } else {
+                            System.out.println("Please choose a number from the options below: ");
+                            System.out.println("1.) Add Relationship");
+                            System.out.println("2.) Remove Relationship");
+                            System.out.println("3.) Help");
+                            System.out.println("4.) Back");
+                            System.out.print("Choice:");
+                            input2 = Integer.parseInt(kb.nextLine());
+                            if (input2 == 1) {
+                                addRelationship();
+                            } else if (input2 == 2) {
+                                deleteRelationship();
+                            } else if (input2 == 3) {
+                                relationshipHelp();
+                            } else if (input2 == 4) {
+                                return;
+                            } else {
+                                System.out.println("Invalid input, please try again");
+                            }
+                        }
+                        break;
+                    case 5:
+                        System.out.println("Please choose a number from the options below: ");
+                        System.out.println("1.) Save");
+                        System.out.println("2.) Load");
+                        System.out.println("3.) Help");
+                        System.out.println("4.) Back");
+                        System.out.print("Choice:");
+                        input2 = Integer.parseInt(kb.nextLine());
+                        if (input2 == 1) {
+                            if (this.createdClasses.isEmpty()) {
+                                System.out.println("Nothing to save!");
+                            } else {
+                                save();
+                            }
+                        } else if (input2 == 2) {
+                            load();
+                        } else if (input2 == 3) {
+                            saveLoadHelp();
+                        } else if (input2 == 4) {
+                            return;
+                        } else {
+                            System.out.println("Invalid input, please try again");
+                        }
+                        break;
+                    case 6:
+                        help();
+                        break;
+                    case 7:
+                        System.out.println("Are you sure you want to exit? Type \"yes\" to confirm");
+                        System.out.print("yes/no:");
+                        if (kb.nextLine().equalsIgnoreCase("yes")) {
+                            System.out.println("Program Closed! Bye!");
+                            cont = false;
+                        }
+                        break;
+                    default:
+                        System.out.println("That is not a valid input. Please try again");
+                        break;
                 }
-                else {
-                    System.out.println("Please choose a number from the options below: ");
-                    System.out.println("1.) Display Classes");
-                    System.out.println("2.) Display Classes Detailed");
-                    System.out.println("3.) Display Class Details");
-                    System.out.println("4.) Display Relationships");
-                    System.out.println("5.) Help");
-                    System.out.println("6.) Back");
-                    System.out.print("Choice:");
-                    input2 = Integer.parseInt(kb.nextLine());
-                    if (input2 == 1) {
-                        listClasses();
-                    } else if (input2 == 2) {
-                        listDetailedClasses();
-                    } else if (input2 == 3) {
-                        listClass();
-                    } else if (input2 == 4) {
-                        listRelationships();
-                    } else if(input2 == 5){
-                        listHelp();
-                    } else if (input2 == 6){
-                        return;
-                    } else {
-                        System.out.println("Invalid input, please try again");
-                    }
-                }
-            }
-            case "2" -> {
-                System.out.println("Please choose a number from the options below: ");
-                System.out.println("1.) Add Class");
-                System.out.println("2.) Remove Class");
-                System.out.println("3.) Rename Class");
-                System.out.println("4.) Help");
-                System.out.println("5.) Back");
-                System.out.print("Choice:");
-                input2 = Integer.parseInt(kb.nextLine());
-                if (input2 == 1) {
-                    addClass();
-                } else if (input2 == 2) {
-                    deleteClass();
-                } else if (input2 == 3) {
-                    renameClass();
-                } else if (input2 == 4) {
-                    classHelp();
-                } else if(input2 == 5) {
-                    return;
-                } else{
-                    System.out.println("Invalid input, please try again");
-                }
-            }
-            case "3" -> {
-                if (this.createdClasses.isEmpty()) {
-                    System.out.println("Please create a class first");
-                } else {
-                    System.out.println("Please choose a number from the options below: ");
-                    System.out.println("1.) Add Attribute");
-                    System.out.println("2.) Remove Attribute");
-                    System.out.println("3.) Rename Attribute");
-                    System.out.println("4.) Help");
-                    System.out.println("5.) Back");
-                    System.out.print("Choice:");
-                    input2 = Integer.parseInt(kb.nextLine());
-                    if (input2 == 1) {
-                        addAttribute();
-                    } else if (input2 == 2) {
-                        deleteAttribute();
-                    } else if (input2 == 3) {
-                        renameAttribute();
-                    } else if (input2 == 4) {
-                        attributeHelp();
-                    } else if(input2==5){
-                        return;
-                    } else{
-                        System.out.println("Invalid input, please try again");
-                    }
-                }
-            }
-            case "4" -> {
-                if (this.createdClasses.size()<2) {
-                    System.out.println("Please create 2 classes first");
-                } else {
-                    System.out.println("Please choose a number from the options below: ");
-                    System.out.println("1.) Add Relationship");
-                    System.out.println("2.) Remove Relationship");
-                    System.out.println("3.) Help");
-                    System.out.println("4.) Back");
-                    System.out.print("Choice:");
-                    input2 = Integer.parseInt(kb.nextLine());
-                    if (input2 == 1) {
-                        addRelationship();
-                    } else if (input2 == 2) {
-                        deleteRelationship();
-                    } else if (input2 == 3) {
-                        relationshipHelp();
-                    } else if(input2 == 4){
-                        return;
-                    } else {
-                        System.out.println("Invalid input, please try again");
-                    }
-                }
-            }
-            case "5" -> {
-                System.out.println("Please choose a number from the options below: ");
-                System.out.println("1.) Save");
-                System.out.println("2.) Load");
-                System.out.println("3.) Help");
-                System.out.println("4.) Back");
-                System.out.print("Choice:");
-                input2 = Integer.parseInt(kb.nextLine());
-                if (input2 == 1) {
-                    if (this.createdClasses.isEmpty()) {
-                        System.out.println("Nothing to save!");
-                    } else {
-                        save();
-                    }
-                } else if (input2 == 2) {
-                    load();
-                } else if (input2 == 3) {
-                    saveLoadHelp();
-                } else if(input2 == 4){
-                    return;
-                } else {
-                    System.out.println("Invalid input, please try again");
-                }
-            }
-            case "6" -> help();
-            case "7" -> {
-                System.out.println("Are you sure you want to exit? Type \"yes\" to confirm");
-                System.out.print("yes/no:");
-                if(kb.nextLine().equalsIgnoreCase("yes")) {
-                    System.out.println("Program Closed! Bye!");
-                    exit(0);
-                }
-                else{
-                    return;
-                }
-            }
-            default -> System.out.println("That is not a valid input. Please try again");
         }
     }
 
@@ -396,7 +401,7 @@ public class UserInterface {
                 paramsss = new LinkedList<String>(Arrays.asList(paramss));
             }
             try {
-                c.addAttribute(attributeName, view, tagsss, type, paramsss);
+                c.addAttribute(attributeName, view, tagll, type, paramsss);
                 System.out.println(attributeName + " has been added to " + c.getName());
             }
             catch (Exception e){
