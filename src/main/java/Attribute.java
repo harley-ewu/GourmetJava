@@ -11,7 +11,7 @@ public class Attribute implements Comparable<Attribute> {
     }
     enum AttributeType {
         METHOD,
-        VARIABLE;
+        FIELD;
     }
     private String name;
     //method or value
@@ -19,7 +19,7 @@ public class Attribute implements Comparable<Attribute> {
     //public, private, protected
     private ViewType view;
     //Stuff like static
-    private LinkedList<String> tags;
+    private LinkedList<String> modifiers;
     //Return type if method, value type if value
     private String type;
     //empty/null if value
@@ -32,7 +32,7 @@ public class Attribute implements Comparable<Attribute> {
         this.name = name;
         this.attributeType = mOV;
         this.view = view;
-        this.tags = tags;
+        this.modifiers = tags;
         this.type = type;
         this.params = params;
     }
@@ -56,8 +56,8 @@ public class Attribute implements Comparable<Attribute> {
         return this.view;
     }
 
-    public LinkedList<String> getTags() {
-        return this.tags;
+    public LinkedList<String> getModifiers() {
+        return this.modifiers;
     }
 
     public String getType() {
@@ -70,6 +70,12 @@ public class Attribute implements Comparable<Attribute> {
 
     @Override
     public int compareTo(Attribute a){
+        if(this.attributeType.equals(AttributeType.FIELD) && a.attributeType.equals(AttributeType.METHOD)){
+            return 1;
+        }
+        else if(this.attributeType.equals(AttributeType.METHOD) && a.attributeType.equals(AttributeType.FIELD)){
+            return -1;
+        }
         return this.name.compareTo(a.name);
     }
 
@@ -84,14 +90,14 @@ public class Attribute implements Comparable<Attribute> {
     @Override
     public String toString(){
         StringBuilder n = new StringBuilder(this.view.toString() + " ");
-        if(!(this.tags==null||this.tags.isEmpty())){
-            for (String s : this.tags) {
+        if(!(this.modifiers ==null||this.modifiers.isEmpty())){
+            for (String s : this.modifiers) {
                 n.append(s).append(" ");
             }
         }
         n.append(this.type).append(" ");
         n.append(this.name);
-        if(this.attributeType.equals(AttributeType.VARIABLE)){
+        if(this.attributeType.equals(AttributeType.FIELD)){
             return n.toString();
         }
         else{

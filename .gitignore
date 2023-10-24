@@ -41,3 +41,4 @@ replay_pid*
 
 # Ignore Gradle build output directory
 build
+/.idea/

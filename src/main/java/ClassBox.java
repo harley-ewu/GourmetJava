@@ -43,7 +43,7 @@ public class ClassBox {
         Attribute.AttributeType attType = null;
         view = view.toUpperCase(Locale.ROOT);
         if(params==null||params.isEmpty()){
-            attType = Attribute.AttributeType.VARIABLE;
+            attType = Attribute.AttributeType.FIELD;
         }
         else{
             attType = Attribute.AttributeType.METHOD;
@@ -108,23 +108,7 @@ public class ClassBox {
     }
 
     public void sortAttributes(){
-        //make 2 sublists, first is values, second is methods, then sort the two based on name
-        LinkedList<Attribute> valList = new LinkedList<>();
-        LinkedList<Attribute> metList = new LinkedList<>();
-        for(Attribute a: this.attributes){
-            if(a.getmOV().equals(Attribute.AttributeType.VARIABLE)){
-                valList.add(a);
-            }
-            else{
-                metList.add(a);
-            }
-        }
-        Collections.sort(valList);
-        Collections.sort(metList);
-        LinkedList<Attribute> sortedList = new LinkedList<>();
-        sortedList.addAll(valList);
-        sortedList.addAll(metList);
-        this.attributes = sortedList;
+        Collections.sort(this.attributes);
     }
 
     public String getName() {

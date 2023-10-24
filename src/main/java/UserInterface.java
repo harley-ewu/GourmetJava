@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-import static java.lang.System.exit;
 
 public class UserInterface {
     private final ArrayList<ClassBox> createdClasses;
@@ -21,7 +20,7 @@ public class UserInterface {
     //recall menu at end if not
     public void menu(){
         boolean cont = true;
-        while(cont == true) {
+        while(cont) {
             printMenu();
             int input2;
             System.out.print("Choice:");
@@ -384,11 +383,11 @@ public class UserInterface {
                 System.out.println("Invalid view");
                 return;
             }
-            System.out.println("Enter any applicable tags, such as static, seperated by commas(a,b,c)");
+            System.out.println("Enter any applicable modifiers, such as static, seperated by commas(a,b,c)");
             System.out.print("Tags:");
-            String tagstring = kb.nextLine();
-            String[] tagarray = tagstring.split(",");
-            LinkedList<String> tagll = new LinkedList<String>(Arrays.asList(tagarray));
+            String modstring = kb.nextLine();
+            String[] modarray = modstring.split(",");
+            LinkedList<String> modll = new LinkedList<String>(Arrays.asList(modarray));
             System.out.println("Enter the type (the return type if it is a method, the variable type if it is a variable");
             System.out.print("Type:");
             String type = kb.nextLine();
@@ -401,7 +400,7 @@ public class UserInterface {
                 paramsss = new LinkedList<String>(Arrays.asList(paramss));
             }
             try {
-                c.addAttribute(attributeName, view, tagll, type, paramsss);
+                c.addAttribute(attributeName, view, modll, type, paramsss);
                 System.out.println(attributeName + " has been added to " + c.getName());
             }
             catch (Exception e){
