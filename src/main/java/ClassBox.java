@@ -1,6 +1,5 @@
 package src.main.java;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Locale;
 
@@ -17,12 +16,11 @@ public class ClassBox {
     //Class, Interface, Enum, etc
     private final ClassType type;
     //Way to sort fields first, methods last?
-    private LinkedList<Attribute> attributes;
     private final LinkedList<Relationship> relationships;
 
-    private final LinkedList<Methods> methods;
+    private final LinkedList<Method> methods;
 
-    private final LinkedList<Fields> fields;
+    private final LinkedList<Field> fields;
 
     public ClassBox(String name, int type) {
         if(name==null||name.isEmpty()||type<1||type>5) {
@@ -30,7 +28,6 @@ public class ClassBox {
         }
         else {
             this.name = name;
-            this.attributes = new LinkedList<>();
             this.relationships = new LinkedList<>();
             this.type = ClassBox.ClassType.values()[type - 1];
             this.methods = new LinkedList<>();
@@ -45,22 +42,21 @@ public class ClassBox {
         }
     }
 
-    public void addAttribute(String name, String view, LinkedList<String> tags, String type, LinkedList<String> params){
-        Attribute.AttributeType attType = null;
-        view = view.toUpperCase(Locale.ROOT);
-        if(params==null||params.isEmpty()){
-            attType = Attribute.AttributeType.FIELD;
-        }
-        else{
-            attType = Attribute.AttributeType.METHOD;
-        }
-        Attribute.ViewType viewT = Attribute.ViewType.valueOf(view);
-        this.attributes.add(new Attribute(name, attType, viewT, tags, type, params));
+    public void addMethod(){
+        //call the constructor and add to list
+    }
 
+    public void addField(){
+        //call the constructor and add to list
     }
 
     public void deleteAttribute(Attribute a){
-        this.attributes.remove(a);
+        if(a.getClass().getSimpleName().equals("Method")){
+            this.methods.remove((Method) a);
+        }
+        else{
+            this.fields.remove((Field) a);
+        }
     }
 
     public void renameAttribute(Attribute att, String newName){
@@ -106,8 +102,12 @@ public class ClassBox {
         StringBuilder s = new StringBuilder();
         s.append("Class: ").append(this.name).append("\n");
         s.append("\tType: ").append(this.type).append("\n");
-        s.append("\tAttributes: \n");
-        for(Attribute a: this.attributes){
+        s.append("\tFields: \n");
+        for(Field a: this.fields){
+            s.append("\t\t").append(a).append("\n");
+        }
+        s.append("\tMethods: \n");
+        for(Method a: this.methods){
             s.append("\t\t").append(a).append("\n");
         }
         s.append("\tRelationships: \n");
@@ -115,10 +115,6 @@ public class ClassBox {
             s.append("\t\t").append(this.name).append(" ").append(r).append("\n");
         }
         return s.toString();
-    }
-
-    public void sortAttributes(){
-        Collections.sort(this.attributes);
     }
 
     public String getName() {
@@ -129,6 +125,11 @@ public class ClassBox {
         return this.relationships;
     }
 
-    public LinkedList<Attribute> getAttributes() {return this.attributes;}
+    public LinkedList<Method> getMethods() {
+        return methods;
+    }
 
+    public LinkedList<Field> getFields() {
+        return fields;
+    }
 }

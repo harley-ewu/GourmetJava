@@ -363,6 +363,7 @@ public class Controller {
     } // End of deleteRelationship
 
     //Adds an attribute to a given class
+    //NEW: ask for field or method, do io based on each, pass fields to classbox add
     public static void addAttribute() {
         listClasses();
         System.out.println("What is the index of the class you would like to add an attribute to?");
@@ -411,6 +412,7 @@ public class Controller {
 
 
     // Finds an attribute, checks with the user to verify intent, then deletes the attribute
+    //NEW - search both class lists on name, if in method twice, ask for params
     public static void deleteAttribute() {
         listClasses();
         System.out.println("What is the index of the class you'd like to remove an attribute from?");
