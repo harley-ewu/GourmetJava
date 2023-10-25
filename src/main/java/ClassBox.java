@@ -20,6 +20,10 @@ public class ClassBox {
     private LinkedList<Attribute> attributes;
     private final LinkedList<Relationship> relationships;
 
+    private final LinkedList<Methods> methods;
+
+    private final LinkedList<Fields> fields;
+
     public ClassBox(String name, int type) {
         if(name==null||name.isEmpty()||type<1||type>5) {
             throw new IllegalArgumentException("Bad params at ClassBox constructor");
@@ -29,6 +33,8 @@ public class ClassBox {
             this.attributes = new LinkedList<>();
             this.relationships = new LinkedList<>();
             this.type = ClassBox.ClassType.values()[type - 1];
+            this.methods = new LinkedList<>();
+            this.fields = new LinkedList<>();
         }
     }
 
@@ -82,16 +88,20 @@ public class ClassBox {
         throw new IllegalArgumentException("Relationship not found");
     }
 
-    public void listRelationships(){
-        for (Relationship rel : this.relationships){
-            System.out.println(this.name+" "+rel.toString());
+    public String[] listRelationships(){
+        String[] rels = new String[this.relationships.size()];
+        for(int i = 0; i < rels.length; ++i){
+            rels[i] = this.relationships.get(i).toString();
         }
+        return rels;
     }
 
     public void renameClass(String name){
         this.name  = name;
     }
     //For list class details
+
+    @Override
     public String toString(){
         StringBuilder s = new StringBuilder();
         s.append("Class: ").append(this.name).append("\n");
