@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        UserInterface m = new UserInterface();
         //System.out.println("Welcome to Gourmet Java's UML Editor!");
         System.out.println("Welcome to Gourmet Java's UML Editor!");
         System.out.println("Let's get started!");
@@ -12,10 +11,7 @@ public class Main {
         System.out.println("When you see an option you want, select the corresponding number and hit the enter key.");
         System.out.println("Answer the prompts that follow, hitting enter after each response, and we'll take care of the rest!");
         System.out.println("Happy editing!");
-        Scanner kb = new Scanner(System.in);
-        String input = "";
-        m.menu();
-
+        Controller.menu();
     }
 
        // This is a test

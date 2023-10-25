@@ -9,16 +9,16 @@ import java.io.IOException;
 import java.util.*;
 
 
-public class UserInterface {
-    private final ArrayList<ClassBox> createdClasses;
-    private final Scanner kb;
+public class Controller {
+    private final static ArrayList<ClassBox> createdClasses = new ArrayList<>();
+    private final static Scanner kb = new Scanner(System.in);
     //Display all program options, choose from list, call other method based on choice
-    public UserInterface(){
-        createdClasses = new ArrayList<>();
-        kb = new Scanner(System.in);
+    public Controller(){
+        //createdClasses = new ArrayList<>();
+       // kb = new Scanner(System.in);
     }
     //recall menu at end if not
-    public void menu(){
+    public static void menu(){
         boolean cont = true;
         while(cont) {
             printMenu();
@@ -30,7 +30,7 @@ public class UserInterface {
             int input = Integer.parseInt(kb.nextLine());
                 switch (input) {
                     case 1:
-                        if (this.createdClasses.isEmpty()) {
+                        if (createdClasses.isEmpty()) {
                             System.out.println("Nothing to display! Please make a class first");
                         } else {
                             System.out.println("Please choose a number from the options below: ");
@@ -43,7 +43,7 @@ public class UserInterface {
                             System.out.print("Choice:");
                             input2 = Integer.parseInt(kb.nextLine());
                             if (input2 == 1) {
-                                listClasses();
+                               listClasses();
                             } else if (input2 == 2) {
                                 listDetailedClasses();
                             } else if (input2 == 3) {
@@ -83,7 +83,7 @@ public class UserInterface {
                         }
                         break;
                     case 3:
-                        if (this.createdClasses.isEmpty()) {
+                        if (createdClasses.isEmpty()) {
                             System.out.println("Please create a class first");
                         } else {
                             System.out.println("Please choose a number from the options below: ");
@@ -110,7 +110,7 @@ public class UserInterface {
                         }
                         break;
                     case 4:
-                        if (this.createdClasses.size() < 2) {
+                        if (createdClasses.size() < 2) {
                             System.out.println("Please create 2 classes first");
                         } else {
                             System.out.println("Please choose a number from the options below: ");
@@ -142,7 +142,7 @@ public class UserInterface {
                         System.out.print("Choice:");
                         input2 = Integer.parseInt(kb.nextLine());
                         if (input2 == 1) {
-                            if (this.createdClasses.isEmpty()) {
+                            if (createdClasses.isEmpty()) {
                                 System.out.println("Nothing to save!");
                             } else {
                                 save();
@@ -177,7 +177,7 @@ public class UserInterface {
 
     // PrintMenu will display the menu options and prompt the user to choose a
     // corresponding number on the menu
-    public void printMenu() {
+    public static void printMenu() {
         System.out.println("\nPlease choose a number from the following options below");
         System.out.println("1.) List Display (Classes, Class details, Relationships)");
         System.out.println("2.) Class Options (Add, Delete, Rename)");
@@ -192,12 +192,12 @@ public class UserInterface {
     // Rachael
     // Allows the user to name their class, then adds it to the list of created
     // classes
-    public void addClass() {
+    public static void addClass() {
         System.out.println("What would you like to name your class?");
         System.out.print("Class Name:");
         String name = kb.nextLine();
         boolean copy = false;
-        for(ClassBox c: this.createdClasses){
+        for(ClassBox c: createdClasses){
             if (name.equalsIgnoreCase(c.getName())) {
                 copy = true;
                 break;
@@ -237,7 +237,7 @@ public class UserInterface {
     // Rachael
     // Takes in the index of the item user wants removed from the list and removes
     // it
-    public void deleteClass() {
+    public static void deleteClass() {
         if (createdClasses.isEmpty()) {
             System.out.println("Nothing to delete!");
         }
@@ -246,9 +246,9 @@ public class UserInterface {
             listClasses();
             System.out.print("Class Index:");
             int input = Integer.parseInt(kb.nextLine());
-            if(input > 0 && input<=this.createdClasses.size()){
+            if(input > 0 && input<=createdClasses.size()){
                 ClassBox clas = createdClasses.get(input-1);
-                for(ClassBox otherClass: this.createdClasses){
+                for(ClassBox otherClass: createdClasses){
                     if(!(otherClass.equals(clas))) {
                         for (Relationship r : otherClass.getRelationships()) {
                             if (r.getFrom().equals(clas)) {
@@ -257,7 +257,7 @@ public class UserInterface {
                         }
                     }
                 }
-                this.createdClasses.remove(clas);
+                createdClasses.remove(clas);
                 System.out.println("Class deleted");
             }
             else{
@@ -270,7 +270,7 @@ public class UserInterface {
     // Rachael
     // Takes in the index of the item they want renamed, then asks them to type in a
     // new name
-    public void renameClass() {
+    public static void renameClass() {
         if (createdClasses.isEmpty()) {
             System.out.println("Nothing to rename!");
          }
@@ -279,7 +279,7 @@ public class UserInterface {
             listClasses();
             System.out.print("Class Index:");
             int num = Integer.parseInt(kb.nextLine());
-            if(num > 0 && num<=this.createdClasses.size()){
+            if(num > 0 && num<=createdClasses.size()){
                 int index = num-1;
                 System.out.println("What would you like to rename your class?");
                 System.out.print("New Class Name:");
@@ -293,7 +293,7 @@ public class UserInterface {
             }
          }
     }
-    public void addRelationship(){
+    public static void addRelationship(){
         listClasses();
         System.out.println("What is the index of the first class you want to have a relationship? (The lower/to class, e.g this implements the other class)");
         System.out.print("Class 1 Index:");
@@ -321,7 +321,7 @@ public class UserInterface {
 
 
     // Deletes a relationship between two classes while prompting the user to verify they wish to delete along the way
-    public void deleteRelationship() {
+    public static void deleteRelationship() {
         // Add an else for if one of the names isn't found
         ClassBox c1 = null, c2 = null;
         listClasses();
@@ -335,8 +335,8 @@ public class UserInterface {
         System.out.print("yes/no:");
         String answer = kb.nextLine();
         if (answer.equalsIgnoreCase("yes")) {
-            c1 = this.createdClasses.get(className-1);
-            c2 = this.createdClasses.get(className2-1);
+            c1 = createdClasses.get(className-1);
+            c2 = createdClasses.get(className2-1);
             if(c1==null && c2==null){
                 System.out.println("Error, classes not found");
             }
@@ -363,16 +363,17 @@ public class UserInterface {
     } // End of deleteRelationship
 
     //Adds an attribute to a given class
-    public void addAttribute() {
+    //NEW: ask for field or method, do io based on each, pass fields to classbox add
+    public static void addAttribute() {
         listClasses();
         System.out.println("What is the index of the class you would like to add an attribute to?");
         System.out.print("Class Index:");
         int ind = Integer.parseInt(kb.nextLine());
-        if(ind < 1 || ind>this.createdClasses.size()){
+        if(ind < 1 || ind>createdClasses.size()){
             System.out.println("That class does not exist.");
         }
         else {
-            ClassBox c = this.createdClasses.get(ind - 1);
+            ClassBox c = createdClasses.get(ind - 1);
             System.out.println("What would you like to call your attribute?");
             System.out.print("Attribute name:");
             String attributeName = kb.nextLine();
@@ -411,12 +412,13 @@ public class UserInterface {
 
 
     // Finds an attribute, checks with the user to verify intent, then deletes the attribute
-    public void deleteAttribute() {
+    //NEW - search both class lists on name, if in method twice, ask for params
+    public static void deleteAttribute() {
         listClasses();
         System.out.println("What is the index of the class you'd like to remove an attribute from?");
         System.out.print("Class Index:");
         int ind = Integer.parseInt(kb.nextLine());
-        ClassBox c = this.createdClasses.get(ind-1);
+        ClassBox c = createdClasses.get(ind-1);
         LinkedList<Attribute> attList = c.getAttributes();
         if(!(attList.isEmpty())) {
             System.out.println("Which attribute would you like to delete?");
@@ -448,7 +450,7 @@ public class UserInterface {
         }
     }
 
-    public void renameAttribute() {
+    public static void renameAttribute() {
 
         if(createdClasses.isEmpty()){
             System.out.println("Nothing to rename!");
@@ -460,7 +462,7 @@ public class UserInterface {
             System.out.println("What is the index of the class you'd like to rename an attribute from?");
             System.out.print("Class Index:");
             int ind = Integer.parseInt(kb.nextLine());
-            ClassBox c = this.createdClasses.get(ind-1);
+            ClassBox c = createdClasses.get(ind-1);
             LinkedList<Attribute> attList = c.getAttributes();
             if(!(attList.isEmpty())) {
                 System.out.println("Which attribute would you like to rename?");
@@ -489,7 +491,7 @@ public class UserInterface {
 
     // The save method takes the current state of the program and saves it into a .json file
     // Currently only a single save is supported
-    public void save(){
+    public static void save(){
         //Create a gson object that will take java objects and translate them to json
         Gson gson = new Gson();
         // Create a FileWriter that will write the converted Java to SavedFile.json
@@ -558,7 +560,7 @@ public class UserInterface {
 
     //The load function is used to restore data that was previously saved using the save function
     //Again we only support up to a single save
-    public void load(){
+    public static void load(){
         // Create a File and add a scanner to it to read the data
         File inputFile = new File("SavedFile.json");
         Scanner fileScanner = null;
@@ -572,7 +574,7 @@ public class UserInterface {
             return;
         }
         // Delete current ClassBox's to avoid Stu loading more than once.
-        this.createdClasses.clear();
+        createdClasses.clear();
 
         //Gson object created to transfer the json to Java objects
         Gson gson = new Gson();
@@ -581,7 +583,7 @@ public class UserInterface {
         while (fileScanner.hasNextLine()) {
             String classboxString = fileScanner.nextLine();
             if (classboxString.contains("name") && classboxString.contains("type") && classboxString.contains("attributes") && classboxString.contains("relationships")) {
-                this.createdClasses.add(gson.fromJson(classboxString, ClassBox.class));
+                createdClasses.add(gson.fromJson(classboxString, ClassBox.class));
             }
         }
 
@@ -621,45 +623,55 @@ public class UserInterface {
         System.out.println("Your previous save has been loaded!");
     }
 
-    public void listClasses() {
-        System.out.println("Current Class list");
+
+
+    public static String[] listClasses() {
+        //System.out.println("Current Class list");
+        String[] classes = new String[createdClasses.size()];
         for (int i = 0; i < createdClasses.size(); i++) {
-            System.out.println(i + 1 + " . " + createdClasses.get(i).getName() + " ");
+            classes[i] = createdClasses.get(i).getName();
         }
+        return classes;
     }
 
-    public void listDetailedClasses(){
-        System.out.println("Current Class list");
+    //Returns a list of Strings, each String holding the detailed info for a CreatedClass
+    public static String[] listDetailedClasses(){
+        String[] classDetails = new String[createdClasses.size()];
         for(int i = 0; i < createdClasses.size(); i++){
-            System.out.println(i+1 +"."+ createdClasses.get(i).toString());
+            classDetails[i] = createdClasses.get(i).toString();
         }
+        return classDetails;
     }
 
-    public void listAttributes(ClassBox cb){
-        System.out.println("Current Attribute list");
-        LinkedList<Attribute> attributes = cb.getAttributes();
-        for(int i = 0; i < attributes.size(); i++){
-            System.out.println(i+1 + " . " + attributes.get(i).getName() + " ");
+    //What are attributes?
+    public static String[] listAttributes(ClassBox cb){
+        if(cb == null) {
+            throw new IllegalArgumentException("null ClassBox object passed to listAttributes");
         }
+        return cb.getAttributes();
     }
 
-    public void listRelationships(){
-        System.out.println("Current Relationships");
-        for(ClassBox cb : createdClasses){
-            cb.listRelationships();
+
+    //Returns an array of String arrays
+    //We have a list of createdClass objects, and each createdClass object has a list of relationships
+    public static String[][] listRelationships(){
+        String[][] rels = new String[createdClasses.size()][];
+        for(int i= 0; i < createdClasses.size(); ++i){
+            rels[i] = createdClasses.get(i).listRelationships();
         }
+        return rels;
     }
 
     // Allows the user to choose what Classbox item they want to see in detail
     // Rachael
     // Takes input from user on what index from the list they want to see then calls
     // a toString for that object
-    public void listClass() {
+    public static String[] listClass() {
         System.out.println("What index do you want to see?");
         listClasses();
         System.out.print("Class Index:");
         int input = Integer.parseInt(kb.nextLine());
-        if(input > 0&&input<=this.createdClasses.size()){
+        if(input > 0&&input<=createdClasses.size()){
             System.out.println(createdClasses.get(input -1).toString());
         }
         else{
@@ -667,7 +679,7 @@ public class UserInterface {
         }
 
     }
-    public void listHelp(){
+    public static String[] listHelp(){
         System.out.println("1.) List Options.");
         System.out.println("These options are listing options. They will lead you to the options where you can list classes, list class details, and list relationships.");
         System.out.println("The options are as listed below:");
@@ -685,7 +697,7 @@ public class UserInterface {
         System.out.println("This command shows all created classes with their index.");
         System.out.println("It asks you to enter the index of the class you want to see. It will then show you all the elements associated with that class, such as type, attributes, and relationships.");
     }
-    public void classHelp(){
+    public static String[] classHelp(){
         System.out.println("2.) Class Options.");
         System.out.println("These options are related to classes. They will give you the option to create, delete, and rename classes.");
         System.out.println("The options are as listed below:");
@@ -699,7 +711,7 @@ public class UserInterface {
         System.out.println("3.) Rename a class");
         System.out.println("This command will ask for an index of the class you would like to rename. It will then ask you for the new name and replace the old name associated with the class.");
     }
-    public void attributeHelp(){
+    public static String[] attributeHelp(){
         System.out.println("3.) Attribute Options.");
         System.out.println("These options are related to class attributes. They will allow you to create, delete, and rename attributes associated with classes.");
         System.out.println("The options are as listed below:");
@@ -715,7 +727,7 @@ public class UserInterface {
         System.out.println("This command asks for the name of the class you want to rename the attribute from. It will then ask about the attribute you want to rename.");
         System.out.println("It will then prompt you for the new name and rename the attribute with the value you enter." + "\n");
     }
-    public void relationshipHelp(){
+    public static String[] relationshipHelp(){
         System.out.println("4.) Relationship Options.");
         System.out.println("These options are related to relationships between classes.");
         System.out.println("The options are as listed below:");
@@ -729,7 +741,7 @@ public class UserInterface {
         System.out.println("That relationship will then be removed from the two classes that it was associated with." + "\n");
 
     }
-    public void saveLoadHelp(){
+    public static String[] saveLoadHelp(){
         System.out.println("5.) Save/Load.");
         System.out.println("These commands will aid in saving current projects and loading previous ones.");
         System.out.println("The options are as listed below:");
@@ -741,7 +753,7 @@ public class UserInterface {
         System.out.println("This command will load a previously saved file with information about classes, relationships, attributes, and details.");
         System.out.println("It will bring in previously created classes and class information for you to continue to edit.");
     }
-    public void help() {
+    public static String[] help() {
         System.out.println("This program is a UML Editor. It lets you create, manipulate, connect, and edit classes for your program.");
          System.out.println("This help menu will walk you through each command step by step.");
 
