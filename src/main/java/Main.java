@@ -14,12 +14,8 @@ public class Main {
         System.out.println("Happy editing!");
         Scanner kb = new Scanner(System.in);
         String input = "";
-        while (!input.equals("7")) {
-            m.printMenu();
-            input = kb.nextLine();
-            m.menu(input);
-        }
-        System.out.println("Program Closed! Bye!");
+        m.menu();
+
     }
 
        // This is a test
