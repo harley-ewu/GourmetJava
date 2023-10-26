@@ -4,12 +4,13 @@ plugins{
 
 jar{
     manifest{
-        attributes('Main-Class': 'src.main.java.Main')
+        attributes('Main-Class': 'Main')
     }
 }
 
 dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
+    testImplementation group: 'junit', name: 'junit', version: '4.13.2'
 }
 
 repositories {
