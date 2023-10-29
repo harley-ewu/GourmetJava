@@ -13,10 +13,29 @@ public class Method extends Attribute{
         this.paramTypes = params;
         this.returnType = type;
     }
-        /*
 
-        tostring for GUI
-        tostring for CLI
-     */
+    @Override
+    public boolean equalTo(Attribute another) {
+        if (another instanceof Method) {
+            Method other = (Method) another;
+            if (this.getName().equals(other.getName()) && this.paramTypes.equals(other.paramTypes)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // to string for CLI    
+    @Override
+    public String CLIToString() {
+        return super.toString() +  "Parameter Types: " + paramTypes.toString() + "Return Type: " + returnType;
+    }
+
+    @Override
+    public String GUIToString() {
+        throw new UnsupportedOperationException("Unimplemented method 'GUIToString'");
+
+        return "tempString fix this";
+    }
 
 }
