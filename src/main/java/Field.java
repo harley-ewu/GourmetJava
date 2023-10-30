@@ -10,4 +10,25 @@ public class Field extends Attribute{
         this.type = type;
     }
 
+    @Override
+    public String CLIToString() {
+        return super.getName() + " " + super.getView() + " " + super.getModifiers() + " " + type;
+    }
+
+    @Override
+    public String GUIToString() {
+        throw new UnsupportedOperationException("Unimplemented method 'GUIToString'");
+    }
+
+    @Override
+    boolean equalTo(Attribute another) {
+        if (another instanceof Field) {
+            Field other = (Field) another;
+            if (this.getName().equals(other.getName()) && this.type.equals(other.type)) {
+                return true;
+            }
+        }
+        return false;
+    }    
+
 }
