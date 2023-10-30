@@ -1,5 +1,6 @@
 package src.main.java;
 
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.Locale;
 
@@ -18,7 +19,7 @@ public class ClassBox {
     //Way to sort fields first, methods last?
     private final LinkedList<Relationship> relationships;
 
-    private final LinkedList<Method> methods;
+    private final LinkedList<Methods> methods;
 
     private final LinkedList<Field> fields;
 
@@ -42,17 +43,21 @@ public class ClassBox {
         }
     }
 
-    public void addMethod(){
+    public void addMethod(String name, Visibility view, LinkedList<String> tags, String type, LinkedList<String> params){
         //call the constructor and add to list
+        Methods newMethod = new Methods(name, view, tags, type, params);
+        this.methods.add(newMethod);        
     }
 
-    public void addField(){
+    public void addField(String name, Visibility view, LinkedList<String> tags, String type){
         //call the constructor and add to list
+        Field newField = new Field(name, view, tags, type);
+        this.fields.add(newField);
     }
 
     public void deleteAttribute(Attribute a){
         if(a.getClass().getSimpleName().equals("Method")){
-            this.methods.remove((Method) a);
+            this.methods.remove((Methods) a);
         }
         else{
             this.fields.remove((Field) a);

@@ -33,10 +33,23 @@ public abstract class Attribute implements Comparable<Attribute> {
         this.name = newName;
     }
 
+    public void setView(Visibility newView) {
+        if (newView == null) {
+            throw new IllegalArgumentException("Bad view at attribute setView");
+        }
+        this.view = newView;
+    }
+
+    public void setModifiers(LinkedList<String> newModifiers) {
+        if (newModifiers == null) {
+            throw new IllegalArgumentException("Bad modifiers at attribute setModifiers");
+        }
+        this.modifiers = newModifiers;
+    }
+
     public String getName() {
         return this.name;
     }
-
 
     public Visibility getView() {
         return this.view;
@@ -45,7 +58,6 @@ public abstract class Attribute implements Comparable<Attribute> {
     public LinkedList<String> getModifiers() {
         return this.modifiers;
     }
-
 
     @Override
     public int compareTo(Attribute a) {
