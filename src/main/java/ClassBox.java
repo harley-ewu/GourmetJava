@@ -1,8 +1,7 @@
-//package src.main.java;
+package src.main.java;
 
 import java.lang.reflect.Method;
 import java.util.LinkedList;
-import java.util.Locale;
 
 public class ClassBox {
 
@@ -112,7 +111,7 @@ public class ClassBox {
             s.append("\t\t").append(a).append("\n");
         }
         s.append("\tMethods: \n");
-        for(Method a: this.methods){
+        for(Methods a: this.methods){
             s.append("\t\t").append(a).append("\n");
         }
         s.append("\tRelationships: \n");
@@ -130,7 +129,7 @@ public class ClassBox {
         return this.relationships;
     }
 
-    public LinkedList<Method> getMethods() {
+    public LinkedList<Methods> getMethods() {
         return methods;
     }
 

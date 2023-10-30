@@ -1,4 +1,4 @@
-//package src.main.java;
+package src.main.java;
 
 import com.google.gson.Gson;
 
@@ -71,11 +71,11 @@ public class Controller {
                     System.out.print("Choice:");
                     input2 = Integer.parseInt(kb.nextLine());
                     if (input2 == 1) {
-                        addClass();
+                        //addClass();
                     } else if (input2 == 2) {
-                        deleteClass();
+                        //deleteClass();
                     } else if (input2 == 3) {
-                        renameClass();
+                        //renameClass();
                     } else if (input2 == 4) {
                         classHelp();
                     } else if (input2 == 5) {
@@ -123,9 +123,9 @@ public class Controller {
                         System.out.print("Choice:");
                         input2 = Integer.parseInt(kb.nextLine());
                         if (input2 == 1) {
-                            addRelationship();
+                            //addRelationship();
                         } else if (input2 == 2) {
-                            deleteRelationship();
+                            //deleteRelationship();
                         } else if (input2 == 3) {
                             relationshipHelp();
                         } else if (input2 == 4) {
@@ -316,6 +316,7 @@ public class Controller {
     // NEW: ask for field or method, do io based on each, pass fields to classbox
     // add
     public static void addAttribute() {
+        /*
         listClasses();
         System.out.println("What is the index of the class you would like to add an attribute to?");
         System.out.print("Class Index:");
@@ -359,12 +360,15 @@ public class Controller {
                 System.out.println("Bad inputs, no attribute created");
             }
         }
+
+         */
     }// end addAttribute
 
     // Finds an attribute, checks with the user to verify intent, then deletes the
     // attribute
     // NEW - search both class lists on name, if in method twice, ask for params
     public static void deleteAttribute() {
+        /*
         listClasses();
         System.out.println("What is the index of the class you'd like to remove an attribute from?");
         System.out.print("Class Index:");
@@ -400,9 +404,12 @@ public class Controller {
         } else {
             System.out.println("No attributes found for class " + c.getName());
         }
+
+         */
     }
 
     public static void renameAttribute() {
+        /*
 
         if (createdClasses.isEmpty()) {
             System.out.println("Nothing to rename!");
@@ -437,6 +444,8 @@ public class Controller {
             }
         }
 
+
+         */
     }
 
     // The save method takes the current state of the program and saves it into a
@@ -605,7 +614,8 @@ public class Controller {
         if (cb == null) {
             throw new IllegalArgumentException("null ClassBox object passed to listAttributes");
         }
-        return cb.getAttributes();
+        //return cb.getAttributes();
+        return null;
     }
 
     // Returns an array of String arrays
@@ -633,10 +643,11 @@ public class Controller {
         } else {
             System.out.println("Invalid input. Try again");
         }
-
+        return null;
     }
 
     public static String[] listHelp() {
+        /*
         System.out.println("1.) List Options.");
         System.out.println(
                 "These options are listing options. They will lead you to the options where you can list classes, list class details, and list relationships.");
@@ -657,9 +668,13 @@ public class Controller {
         System.out.println("This command shows all created classes with their index.");
         System.out.println(
                 "It asks you to enter the index of the class you want to see. It will then show you all the elements associated with that class, such as type, attributes, and relationships.");
+        */
+        return null;
     }
 
+
     public static String[] classHelp() {
+        /*
         System.out.println("2.) Class Options.");
         System.out.println(
                 "These options are related to classes. They will give you the option to create, delete, and rename classes.");
@@ -676,9 +691,13 @@ public class Controller {
         System.out.println("3.) Rename a class");
         System.out.println(
                 "This command will ask for an index of the class you would like to rename. It will then ask you for the new name and replace the old name associated with the class.");
+
+         */
+        return null;
     }
 
     public static String[] attributeHelp() {
+        /*
         System.out.println("3.) Attribute Options.");
         System.out.println(
                 "These options are related to class attributes. They will allow you to create, delete, and rename attributes associated with classes.");
@@ -698,9 +717,13 @@ public class Controller {
                 "This command asks for the name of the class you want to rename the attribute from. It will then ask about the attribute you want to rename.");
         System.out.println(
                 "It will then prompt you for the new name and rename the attribute with the value you enter." + "\n");
+
+         */
+        return null;
     }
 
     public static String[] relationshipHelp() {
+        /*
         System.out.println("4.) Relationship Options.");
         System.out.println("These options are related to relationships between classes.");
         System.out.println("The options are as listed below:");
@@ -718,9 +741,13 @@ public class Controller {
         System.out.println(
                 "That relationship will then be removed from the two classes that it was associated with." + "\n");
 
+         */
+        return null;
+
     }
 
     public static String[] saveLoadHelp() {
+        /*
         System.out.println("5.) Save/Load.");
         System.out.println("These commands will aid in saving current projects and loading previous ones.");
         System.out.println("The options are as listed below:");
@@ -734,9 +761,12 @@ public class Controller {
                 "This command will load a previously saved file with information about classes, relationships, attributes, and details.");
         System.out.println(
                 "It will bring in previously created classes and class information for you to continue to edit.");
+                */
+         return null;
     }
 
     public static String[] help() {
+        /*
         System.out.println(
                 "This program is a UML Editor. It lets you create, manipulate, connect, and edit classes for your program.");
         System.out.println("This help menu will walk you through each command step by step.");
@@ -783,7 +813,8 @@ public class Controller {
         System.out.println("This command closes the program." + "\n");
 
         System.out.println("Thank you for reading and happy editing!");
-
+        */
+        return null;
     }
 
     // confirm?
