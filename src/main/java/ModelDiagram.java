@@ -26,27 +26,33 @@ public class ModelDiagram implements Comparable<ClassBox> {
         return null;
     }
 
-    public static boolean addClass(final String className, final String type) {
-        if (findClassBox("className") == null) {
-            //class does not exist
-        }
-        return false;
+    public static boolean addClass(final String name, final String type) {
+        if(name == null || type == null || name.isEmpty() || type.isEmpty())
+            throw new IllegalArgumentException("bad param passed to ModelDiagram.addClass");
+
+        ClassBox newBox = findClassBox(name);
+        if (newBox != null)
+            return false;
+
+        createdClasses.add(new ClassBox(name, type));
+        return true;
     }
 
     public static boolean deleteClass(final String name) {
-        if (name == null || name.isEmpty()){
+        if (name == null || name.isEmpty())
             throw new IllegalArgumentException("bad String name passed to ModelDiagram.deleteClass");
-        }
+
         ClassBox targetBox = findClassBox(name);
-        if(targetBox == null)
+        if (targetBox == null)
             return false;
+
         createdClasses.remove(targetBox);
         return true;
     }
 
     public static String[] listClasses() {
         String[] list = new String[createdClasses.size()];
-        for(int i = 0; i < createdClasses.size(); ++i){
+        for (int i = 0; i < createdClasses.size(); ++i) {
             list[i] = createdClasses.get(i).getName();
         }
         return list;
@@ -58,46 +64,92 @@ public class ModelDiagram implements Comparable<ClassBox> {
     }
 
     public static String[] listClassAttributes(final String cb) {
-        ClassBox crap = findClassBox(cb);
+
         return null;
     }
 
     public static boolean renameClass(final String originalName, final String newName) {
+        if (originalName == null || newName == null || originalName.isEmpty() || newName.isEmpty())
+            throw new IllegalArgumentException("bad param passed to ModelDiagram.renameClass");
 
-        return false;
+        ClassBox newBox = findClassBox(newName);
+        if (newBox != null)
+            return false;
+
+        ClassBox originalBox = findClassBox(originalName);
+        if (originalBox == null)
+            return false;
+
+        return originalBox.rename(newName);
     }
 
+
+    //does not handle which class is the parent or child
     public static boolean addRelationship(final String cb1, final String cb2, final String type) {
-        return false;
+        if (cb1 == null || cb2 == null || type == null || cb1.isEmpty() || cb2.isEmpty() || type.isEmpty())
+            throw new IllegalArgumentException("bad param passed to ModelDiagram.addRelationship");
+
+        ClassBox box1 = findClassBox(cb1);
+        ClassBox box2 = findClassBox(cb2);
+        if (box1 == null || box2 == null)
+            return false;
+
+        //check if relationship between boxes exist within ClassBox
+
+        return box1.addRelationship(box2, Integer.parseInt(type));
+
     }
 
     public static boolean deleteRelationship(final String cb1, final String cb2) {
-        return false;
+        if (cb1 == null || cb2 == null || cb1.isEmpty() || cb2.isEmpty())
+            throw new IllegalArgumentException("bad param passed to ModelDiagram.deleteRelationship");
+
+        ClassBox box1 = findClassBox(cb1);
+        ClassBox box2 = findClassBox(cb2);
+        if (box1 == null || box2 == null)
+            return false;
+
+        return ClassBox.deleteRelationship(box1, box2);
 
     }
 
     public static String[][] listRelationships() {
-        return null;
+        return ClassBox.listRelationships();
     }
 
     public static String[] listClass(final String name) {
-        return null;
+        if(name == null || name.isEmpty())
+            throw new IllegalArgumentException("bad param passed to ModelDiagram.listClass");
+
+        return ClassBox.listClass();
     }
 
+
+    //might not need this/Comparable because ClassBox objects should not be visible outside of ModelDiagram/ClassBox
     @Override
-    public int compareTo(final ClassBox o) {
+    public int compareTo(final ClassBox cb) {
         return 0;
     }
 
+    //might not need this, idk what it would be
     @Override
     public String toString() {
         return null;
     }
 
-    public static boolean equals(final String o1, final String o2) {
-        return false;
+    public static boolean equals(final String cb1, final String cb2) {
+        if (cb1 == null || cb2 == null || cb1.isEmpty() || cb2.isEmpty())
+            throw new IllegalArgumentException("bad param passed to ModelDiagram.deleteRelationship");
+
+        ClassBox box1 = findClassBox(cb1);
+        ClassBox box2 = findClassBox(cb2);
+        if (box1 == null || box2 == null)
+            return false;
+
+        return ClassBox.compare(box1, box2);
     }
 
+    //might not need this, idk what it would be used for where Strings cannot be used
     private static boolean equals(final ClassBox o1, final ClassBox o2) {
         return false;
     }
