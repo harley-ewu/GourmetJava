@@ -34,13 +34,22 @@ public class ModelDiagram implements Comparable<ClassBox> {
     }
 
     public static boolean deleteClass(final String name) {
-
-        return false;
+        if (name == null || name.isEmpty()){
+            throw new IllegalArgumentException("bad String name passed to ModelDiagram.deleteClass");
+        }
+        ClassBox targetBox = findClassBox(name);
+        if(targetBox == null)
+            return false;
+        createdClasses.remove(targetBox);
+        return true;
     }
 
     public static String[] listClasses() {
-
-        return null;
+        String[] list = new String[createdClasses.size()];
+        for(int i = 0; i < createdClasses.size(); ++i){
+            list[i] = createdClasses.get(i).getName();
+        }
+        return list;
     }
 
     public static String[] listDetailedClasses() {
