@@ -1,4 +1,4 @@
-//package src.main.java;
+package src.main.java;
 
 import com.google.gson.Gson;
 
@@ -71,11 +71,11 @@ public class Controller {
                     System.out.print("Choice:");
                     input2 = Integer.parseInt(kb.nextLine());
                     if (input2 == 1) {
-                        addClass();
+                        //addClass();
                     } else if (input2 == 2) {
-                        deleteClass();
+                        //deleteClass();
                     } else if (input2 == 3) {
-                        renameClass();
+                        //renameClass();
                     } else if (input2 == 4) {
                         classHelp();
                     } else if (input2 == 5) {
@@ -123,9 +123,9 @@ public class Controller {
                         System.out.print("Choice:");
                         input2 = Integer.parseInt(kb.nextLine());
                         if (input2 == 1) {
-                            addRelationship();
+                            //addRelationship();
                         } else if (input2 == 2) {
-                            deleteRelationship();
+                            //deleteRelationship();
                         } else if (input2 == 3) {
                             relationshipHelp();
                         } else if (input2 == 4) {
@@ -277,7 +277,7 @@ public class Controller {
             return false;
 
         } else {
-            
+
             try {
                 createdClasses.get(index1 - 1).addRelationship(createdClasses.get(index2 - 1), type);
                 return true;
@@ -292,7 +292,7 @@ public class Controller {
     public static boolean deleteRelationship(int classIndex, int classIndex2, String answer) {
         // Add an else for if one of the names isn't found
         ClassBox c1 = null, c2 = null;
-        
+
         if (answer.equalsIgnoreCase("yes")) {
             c1 = createdClasses.get(classIndex - 1);
             c2 = createdClasses.get(classIndex2 - 1);
@@ -316,6 +316,7 @@ public class Controller {
     // NEW: ask for field or method, do io based on each, pass fields to classbox
     // add
     public static void addAttribute() {
+        /*
         listClasses();
         System.out.println("What is the index of the class you would like to add an attribute to?");
         System.out.print("Class Index:");
@@ -359,12 +360,15 @@ public class Controller {
                 System.out.println("Bad inputs, no attribute created");
             }
         }
+
+         */
     }// end addAttribute
 
     // Finds an attribute, checks with the user to verify intent, then deletes the
     // attribute
     // NEW - search both class lists on name, if in method twice, ask for params
     public static void deleteAttribute() {
+        /*
         listClasses();
         System.out.println("What is the index of the class you'd like to remove an attribute from?");
         System.out.print("Class Index:");
@@ -400,9 +404,12 @@ public class Controller {
         } else {
             System.out.println("No attributes found for class " + c.getName());
         }
+
+         */
     }
 
     public static void renameAttribute() {
+        /*
 
         if (createdClasses.isEmpty()) {
             System.out.println("Nothing to rename!");
@@ -437,6 +444,8 @@ public class Controller {
             }
         }
 
+
+         */
     }
 
     // The save method takes the current state of the program and saves it into a
@@ -605,7 +614,8 @@ public class Controller {
         if (cb == null) {
             throw new IllegalArgumentException("null ClassBox object passed to listAttributes");
         }
-        return cb.getAttributes();
+        //return cb.getAttributes();
+        return null;
     }
 
     // Returns an array of String arrays
@@ -633,157 +643,107 @@ public class Controller {
         } else {
             System.out.println("Invalid input. Try again");
         }
-
+        return null;
     }
 
     public static String[] listHelp() {
-        System.out.println("1.) List Options.");
-        System.out.println(
-                "These options are listing options. They will lead you to the options where you can list classes, list class details, and list relationships.");
-        System.out.println("The options are as listed below:");
-        System.out.println("");
-        System.out.println("1.) List Classes");
-        System.out.println("This command will display all created classes with their name.");
-        System.out.println("");
-        System.out.println("2.) List Classes Detailed");
-        System.out.println(
-                "This command will display all created classes with all of their elements, as in class details");
-        System.out.println();
-        System.out.println("3.) List relationships.");
-        System.out.println(
-                "This command will display relationships between classes as well as the type of relationships.");
-        System.out.println("");
-        System.out.println("4.) List class details.");
-        System.out.println("This command shows all created classes with their index.");
-        System.out.println(
-                "It asks you to enter the index of the class you want to see. It will then show you all the elements associated with that class, such as type, attributes, and relationships.");
+        return new String[]{"1.) List Options.",
+                "These options are listing options. They will lead you to the options where you can list classes, list class details, and list relationships.",
+                "The options are as listed below:",
+                "1.) List Classes",
+                "This command will display all created classes with their name.",
+                "2.) List Classes Detailed",
+                "This command will display all created classes with all of their elements, as in class details",
+                "3.) List relationships.",
+                "This command will display relationships between classes as well as the type of relationships.",
+                "4.) List class details.",
+                "This command shows all created classes with their index.",
+                "It asks you to enter the index of the class you want to see. It will then show you all the elements associated with that class, such as type, attributes, and relationships.",
+        };
     }
 
+
     public static String[] classHelp() {
-        System.out.println("2.) Class Options.");
-        System.out.println(
-                "These options are related to classes. They will give you the option to create, delete, and rename classes.");
-        System.out.println("The options are as listed below:");
-        System.out.println("");
-        System.out.println("1.) Create a class.");
-        System.out.println(
-                "This option will allow you to create a class. It will prompt you to name the class and choose the type from a list.");
-        System.out.println("");
-        System.out.println("2.) Delete a class");
-        System.out.println(
-                "This command deletes a previously created class. It will ask you for the index of the class you want to delete and remove it from created classes.");
-        System.out.println("");
-        System.out.println("3.) Rename a class");
-        System.out.println(
-                "This command will ask for an index of the class you would like to rename. It will then ask you for the new name and replace the old name associated with the class.");
+        return new String[]{"2.) Class Options.",
+                "These options are related to classes. They will give you the option to create, delete, and rename classes.",
+                "The options are as listed below:",
+                "1.) Create a class.",
+                "This option will allow you to create a class. It will prompt you to name the class and choose the type from a list.",
+                "2.) Delete a class",
+                "This command deletes a previously created class. It will ask you for the index of the class you want to delete and remove it from created classes.",
+                "3.) Rename a class",
+                "This command will ask for an index of the class you would like to rename. It will then ask you for the new name and replace the old name associated with the class.",
+        };
     }
 
     public static String[] attributeHelp() {
-        System.out.println("3.) Attribute Options.");
-        System.out.println(
-                "These options are related to class attributes. They will allow you to create, delete, and rename attributes associated with classes.");
-        System.out.println("The options are as listed below:");
-        System.out.println("");
-        System.out.println("1.) Add an attribute.");
-        System.out.println(
-                "This command asks for the name of the class you want to add the attribute to. It will then ask about the attribute you want to add to the class.");
-        System.out.println("");
-        System.out.println("2.) Delete an attribute.");
-        System.out.println(
-                "This command asks for the name of the class you want to remove the attribute from. It will then ask about the attribute you want to remove.");
-        System.out.println("It will delete the attribute you selected from that class.");
-        System.out.println("");
-        System.out.println("3.) Rename an attribute.");
-        System.out.println(
-                "This command asks for the name of the class you want to rename the attribute from. It will then ask about the attribute you want to rename.");
-        System.out.println(
-                "It will then prompt you for the new name and rename the attribute with the value you enter." + "\n");
+        return new String[]{"3.) Attribute Options.",
+                "These options are related to class attributes. They will allow you to create, delete, and rename attributes associated with classes.",
+                "The options are as listed below:",
+                "1.) Add an attribute.",
+                "This command asks for the name of the class you want to add the attribute to. It will then ask about the attribute you want to add to the class.",
+                "2.) Delete an attribute.",
+                "This command asks for the name of the class you want to remove the attribute from. It will then ask about the attribute you want to remove.",
+                "It will delete the attribute you selected from that class.",
+                "3.) Rename an attribute.",
+                "This command asks for the name of the class you want to rename the attribute from. It will then ask about the attribute you want to rename.",
+                "It will then prompt you for the new name and rename the attribute with the value you enter."
+        };
     }
 
     public static String[] relationshipHelp() {
-        System.out.println("4.) Relationship Options.");
-        System.out.println("These options are related to relationships between classes.");
-        System.out.println("The options are as listed below:");
-        System.out.println("");
-        System.out.println("1.) Add a relationship.");
-        System.out.println(
-                "This command will add a relationship between two specified classes. It will ask for the indexes/names of the two classes.");
-        System.out.println(
-                "It will then ask you about the type of relationship between the two classes. That type of relationship will be created between the two classes."
-                        + "\n");
-        System.out.println("");
-        System.out.println("2.) Delete a relationship.");
-        System.out.println(
-                "This command deletes a previously created relationship. It will display a list of created relationships and then ask which of those you would like to delete.");
-        System.out.println(
-                "That relationship will then be removed from the two classes that it was associated with." + "\n");
-
+        return new String[]{"4.) Relationship Options.",
+                "These options are related to relationships between classes.",
+                "The options are as listed below:",
+                "1.) Add a relationship.",
+                "This command will add a relationship between two specified classes. It will ask for the indexes/names of the two classes.",
+                "It will then ask you about the type of relationship between the two classes. That type of relationship will be created between the two classes.",
+                "2.) Delete a relationship.",
+                "This command deletes a previously created relationship. It will display a list of created relationships and then ask which of those you would like to delete.",
+                "That relationship will then be removed from the two classes that it was associated with."
+        };
     }
 
     public static String[] saveLoadHelp() {
-        System.out.println("5.) Save/Load.");
-        System.out.println("These commands will aid in saving current projects and loading previous ones.");
-        System.out.println("The options are as listed below:");
-        System.out.println("");
-        System.out.println("1.) Save");
-        System.out.println(
-                "This command will save the current classes, attributes and relationships to a file that can be loaded in a later session.");
-        System.out.println("");
-        System.out.println("2.) Load");
-        System.out.println(
-                "This command will load a previously saved file with information about classes, relationships, attributes, and details.");
-        System.out.println(
-                "It will bring in previously created classes and class information for you to continue to edit.");
+        return new String[]{"5.) Save/Load.",
+                "These commands will aid in saving current projects and loading previous ones.",
+                "The options are as listed below:",
+                "1.) Save",
+                "This command will save the current classes, attributes and relationships to a file that can be loaded in a later session.",
+                "2.) Load",
+                "This command will load a previously saved file with information about classes, relationships, attributes, and details.",
+                "It will bring in previously created classes and class information for you to continue to edit."
+        };
     }
 
-    public static String[] help() {
-        System.out.println(
-                "This program is a UML Editor. It lets you create, manipulate, connect, and edit classes for your program.");
-        System.out.println("This help menu will walk you through each command step by step.");
-
-        System.out.println("Press enter to continue.");
-        kb.nextLine();
-
-        listHelp();
-
-        System.out.println("");
-        System.out.println("Press enter to see more options.");
-        kb.nextLine();
-
-        classHelp();
-
-        System.out.println("");
-        System.out.println("Press enter to see more options.");
-        kb.nextLine();
-
-        attributeHelp();
-
-        System.out.println("");
-        System.out.println("Press enter to see more options.");
-        kb.nextLine();
-
-        relationshipHelp();
-
-        System.out.println("");
-        System.out.println("Press enter to see more options.");
-        kb.nextLine();
-
-        saveLoadHelp();
-
-        System.out.println("");
-        System.out.println("Press enter to see more options.");
-        kb.nextLine();
-
-        System.out.println("6.) Help.");
-        System.out.println(
-                "This command displays this help menu with descriptions about each command. You can bring this list up anytime the menu resets."
-                        + "\n");
-
-        System.out.println("7.) Exit.");
-        System.out.println("This command closes the program." + "\n");
-
-        System.out.println("Thank you for reading and happy editing!");
-
+    /*
+        Because this is split up with enter spaces, should this be returned as an array of string arrays?
+        THIS IS A LITTLE GROSS AND I WANT MORE INPUT ON HOW TO IMPLEMENT THIS
+            -David
+     */
+    public static String[][] help() {
+        return new String[][]{
+                {                   //array 1
+                        "This program is a UML Editor. It lets you create, manipulate, connect, and edit classes for your program.",
+                        "This help menu will walk you through each command step by step."
+                },
+                listHelp(),         //array 2
+                classHelp(),        //array 3
+                attributeHelp(),    //array 4
+                relationshipHelp(), //array 5
+                saveLoadHelp(),     //array 6
+                {                   //array 7
+                        "6.) Help.",
+                        "This command displays this help menu with descriptions about each command. You can bring this list up anytime the menu resets."
+                },
+                {                   //array 8
+                        "7.) Exit.",
+                        "This command closes the program."
+                },
+                {                   //array 9
+                        "Thank you for reading and happy editing!"
+                }
+        };
     }
 
     // confirm?
