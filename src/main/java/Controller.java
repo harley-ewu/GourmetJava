@@ -172,19 +172,6 @@ public class Controller {
         }
     }
 
-    // PrintMenu will display the menu options and prompt the user to choose a
-    // corresponding number on the menu
-    public static void printMenu() {
-        System.out.println("\nPlease choose a number from the following options below");
-        System.out.println("1.) List Display (Classes, Class details, Relationships)");
-        System.out.println("2.) Class Options (Add, Delete, Rename)");
-        System.out.println("3.) Attribute Options (Add, Delete, Rename)");
-        System.out.println("4.) Relationship Options (Add, Delete)");
-        System.out.println("5.) Save/Load");
-        System.out.println("6.) Help");
-        System.out.println("7.) Exit");
-    }
-
     // Creates a new Classbox object and adds to to the arraylist createdClasses
     // Rachael
     // Allows the user to name their class, then adds it to the list of created
@@ -197,87 +184,26 @@ public class Controller {
     // Rachael
     // Takes in the index of the item user wants removed from the list and removes
     // it
-    public static boolean deleteClass(int input) {
-        return ModelDiagram.deleteClass("test");
-        if (createdClasses.isEmpty()) {
-            return false;
-        } else {
-            if (input > 0 && input <= createdClasses.size()) {
-                ClassBox clas = createdClasses.get(input - 1);
-                for (ClassBox otherClass : createdClasses) {
-                    if (!(otherClass.equals(clas))) {
-                        for (Relationship r : otherClass.getRelationships()) {
-                            if (r.getFrom().equals(clas)) {
-                                otherClass.deleteRelationship(clas);
-                            }
-                        }
-                    }
-                }
-                createdClasses.remove(clas);
-                return true;
-            } else {
-                return false;
-            }
-        }
+    public static boolean deleteClass(final String name) {
+        return ModelDiagram.deleteClass(name);
     }
 
     // Renames a classbox item that has already been created
     // Rachael
     // Takes in the index of the item they want renamed, then asks them to type in a
     // new name
-    public static boolean renameClass(int num, String name) {
-        if (createdClasses.isEmpty()) {
-            return false;
-        } else {
-            if (num > 0 && num <= createdClasses.size()) {
-                int index = num - 1;
-                createdClasses.get(index).renameClass(name);
-
-                listClasses();
-                return true;
-            } else {
-                return false;
-            }
-        }
+    public static boolean renameClass(final String originalName, final String newName) {
+        return ModelDiagram.renameClass(originalName, newName);
     }
 
-    public static boolean addRelationship(int index1, int index2, int type) {
-        if (index1 < 1 || index2 < 1 || index1 > createdClasses.size() || index2 > createdClasses.size()) {
-            return false;
-
-        } else {
-
-            try {
-                createdClasses.get(index1 - 1).addRelationship(createdClasses.get(index2 - 1), type);
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
-        }
+    public static boolean addRelationship(final String cb1, final String cb2, final String type) {
+        return ModelDiagram.addRelationship(cb1, cb2, type);
     }
 
     // Deletes a relationship between two classes while prompting the user to verify
     // they wish to delete along the way
-    public static boolean deleteRelationship(int classIndex, int classIndex2, String answer) {
-        // Add an else for if one of the names isn't found
-        ClassBox c1 = null, c2 = null;
-
-        if (answer.equalsIgnoreCase("yes")) {
-            c1 = createdClasses.get(classIndex - 1);
-            c2 = createdClasses.get(classIndex2 - 1);
-            if (c1 == null || c2 == null) {
-                return false;
-            } else {
-                try {
-                    c1.deleteRelationship(c2);
-                    return true;
-                } catch (Exception e) {
-                    return false;
-                }
-            }
-        } else {
-            return false;
-        }
+    public static boolean deleteRelationship(final String cb1, final String cb2) {
+        return ModelDiagram.deleteRelationship(cb1, cb2);
 
     } // End of deleteRelationship
 
@@ -443,92 +369,16 @@ public class Controller {
         System.out.println("Your progress has been saved!");
     }
 
-    // The load function is used to restore data that was previously saved using the
-    // save function
-    // Again we only support up to a single save
-    public static void load() {
-        // Create a File and add a scanner to it to read the data
-        File inputFile = new File("SavedFile.json");
-        Scanner fileScanner = null;
-        try {
-            fileScanner = new Scanner(inputFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (!fileScanner.hasNextLine()) {
-            System.out.println("There is no save to load.");
-            return;
-        }
-        // Delete current ClassBox's to avoid Stu loading more than once.
-        createdClasses.clear();
-
-        // Gson object created to transfer the json to Java objects
-        Gson gson = new Gson();
-
-        // Scan in each line containing a ClassBox and create it using our gson object
-        while (fileScanner.hasNextLine()) {
-            String classboxString = fileScanner.nextLine();
-            if (classboxString.contains("name") && classboxString.contains("type")
-                    && classboxString.contains("attributes") && classboxString.contains("relationships")) {
-                createdClasses.add(gson.fromJson(classboxString, ClassBox.class));
-            }
-        }
-
-        fileScanner.close();
-        // Reopen our scanner to fetch the Relationship data
-        try {
-            fileScanner = new Scanner(inputFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        // Create the relationships between classes to finish restoring the save state
-        String inputString = "";
-        int firstIndex = -1;
-        int secondIndex = -1;
-        int type = -1;
-        boolean endOfRelationships = false;
-
-        while (!endOfRelationships) {
-            inputString = fileScanner.nextLine();
-            RelationshipBuilder relB = gson.fromJson(inputString, RelationshipBuilder.class);
-
-            if (inputString.contains("name") && inputString.contains("type") && inputString.contains("attributes")
-                    && inputString.contains("relationships")) {
-                endOfRelationships = true;
-            } else {
-                firstIndex = relB.getFirstIndex();
-                secondIndex = relB.getSecondIndex();
-                type = relB.getRelationshipType();
-                ClassBox class1 = createdClasses.get(firstIndex);
-                ClassBox class2 = createdClasses.get(secondIndex);
-
-                class1.addRelationship(class2, type);
-            }
-        }
-        fileScanner.close();
-        System.out.println("Your previous save has been loaded!");
-    }
+   
 
     public static String[] listClasses() {
         return ModelDiagram.listClasses();
-        // System.out.println("Current Class list");
-        String[] classes = new String[createdClasses.size()];
-        for (int i = 0; i < createdClasses.size(); i++) {
-            classes[i] = createdClasses.get(i).getName();
-        }
-        return classes;
     }
 
     // Returns a list of Strings, each String holding the detailed info for a
     // CreatedClass
     public static String[] listDetailedClasses() {
         return ModelDiagram.listDetailedClasses();
-        String[] classDetails = new String[createdClasses.size()];
-        for (int i = 0; i < createdClasses.size(); i++) {
-            classDetails[i] = createdClasses.get(i).toString();
-        }
-        return classDetails;
     }
 
     // What are attributes?
@@ -540,28 +390,15 @@ public class Controller {
     // We have a list of createdClass objects, and each createdClass object has a
     // list of relationships
     public static String[][] listRelationships() {
-        String[][] rels = new String[createdClasses.size()][];
-        for (int i = 0; i < createdClasses.size(); ++i) {
-            rels[i] = createdClasses.get(i).listRelationships();
-        }
-        return rels;
+        return ModelDiagram.listRelationships();
     }
 
     // Allows the user to choose what Classbox item they want to see in detail
     // Rachael
     // Takes input from user on what index from the list they want to see then calls
     // a toString for that object
-    public static String[] listClass() {
-        System.out.println("What index do you want to see?");
-        listClasses();
-        System.out.print("Class Index:");
-        int input = Integer.parseInt(kb.nextLine());
-        if (input > 0 && input <= createdClasses.size()) {
-            System.out.println(createdClasses.get(input - 1).toString());
-        } else {
-            System.out.println("Invalid input. Try again");
-        }
-        return null;
+    public static String[] listClass(final String name) {
+        return ModelDiagram.listClass(name);
     }
 
     public static String[] listHelp() {
@@ -664,6 +501,20 @@ public class Controller {
         };
     }
 
-    // confirm?
+    // PrintMenu will display the menu options and prompt the user to choose a
+    // corresponding number on the menu
+    public static String[] printMenu() {
+        return new String[]{
+                "Please choose a number from the following options below",
+                "1.) List Display (Classes, Class details, Relationships)",
+                "2.) Class Options (Add, Delete, Rename)",
+                "3.) Attribute Options (Add, Delete, Rename)",
+                "4.) Relationship Options (Add, Delete)",
+                "5.) Save/Load",
+                "6.) Help",
+                "7.) Exit"
+        };
+    }
+
 
 }
