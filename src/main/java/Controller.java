@@ -9,12 +9,11 @@ import java.io.IOException;
 import java.util.*;
 
 public class Controller {
-    private final static ArrayList<ClassBox> createdClasses = new ArrayList<>();
-    private final static Scanner kb = new Scanner(System.in);
+
 
     // Display all program options, choose from list, call other method based on
     // choice
-    public Controller() {
+    private Controller() {
         // createdClasses = new ArrayList<>();
         // kb = new Scanner(System.in);
     }
@@ -71,9 +70,9 @@ public class Controller {
                     System.out.print("Choice:");
                     input2 = Integer.parseInt(kb.nextLine());
                     if (input2 == 1) {
-                        //addClass();
+                        Controller.addClass("test","test2");
                     } else if (input2 == 2) {
-                        //deleteClass();
+                        Controller.deleteClass("name");
                     } else if (input2 == 3) {
                         //renameClass();
                     } else if (input2 == 4) {
@@ -144,11 +143,7 @@ public class Controller {
                     System.out.print("Choice:");
                     input2 = Integer.parseInt(kb.nextLine());
                     if (input2 == 1) {
-                        if (createdClasses.isEmpty()) {
-                            System.out.println("Nothing to save!");
-                        } else {
-                            save();
-                        }
+                        ModelDiagram.save();
                     } else if (input2 == 2) {
                         load();
                     } else if (input2 == 3) {
@@ -194,35 +189,8 @@ public class Controller {
     // Rachael
     // Allows the user to name their class, then adds it to the list of created
     // classes
-    public static boolean addClass(String name, String type) {
-        boolean copy = false;
-        for (ClassBox c : createdClasses) {
-            if (name.equalsIgnoreCase(c.getName())) {
-                copy = true;
-                break;
-            }
-        }
-        if (copy) {
-            return false;
-        } else {
-
-            int result = 0;
-
-            try {
-                result = Integer.parseInt(type);
-            } catch (Exception e) {
-                System.out.print("Input is not valid. Please try again.");
-                return false;
-            }
-            try {
-                ClassBox newClass = new ClassBox(name, result);
-                createdClasses.add(newClass);
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
-        }
-
+    public static boolean addClass(final String name, final String type) {
+        return ModelDiagram.addClass(name, type);
     }
 
     // Removes class from createdClasses
@@ -230,6 +198,7 @@ public class Controller {
     // Takes in the index of the item user wants removed from the list and removes
     // it
     public static boolean deleteClass(int input) {
+        return ModelDiagram.deleteClass("test");
         if (createdClasses.isEmpty()) {
             return false;
         } else {
@@ -448,56 +417,7 @@ public class Controller {
          */
     }
 
-    // The save method takes the current state of the program and saves it into a
-    // .json file
-    // Currently only a single save is supported
-    public static void save() {
-        // Create a gson object that will take java objects and translate them to json
-        Gson gson = new Gson();
-        // Create a FileWriter that will write the converted Java to SavedFile.json
-        FileWriter writer = null;
-        try {
-            writer = new FileWriter("SavedFile.json");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        // Get relationship info ie : (index of first class), (index of second class),
-        // (RelationshipType)
-        for (int i = 0; i < createdClasses.size(); i++) {
-            // need to store index of first ClassBox and index of second classBox to create
-            // a relationship
-            // index of first class will be i
-
-            // With this for loop we are going to write each relationship to the file so
-            // that we can recreate
-            // them in the load method
-            LinkedList<Relationship> relationships = createdClasses.get(i).getRelationships();
-            for (int j = 0; j < relationships.size(); j++) {
-
-                // Find second index
-                int secondIndex = -1;
-                for (int p = 0; p < createdClasses.size(); p++) {
-                    if (createdClasses.get(p).getName().equals(relationships.get(j).getFrom().getName())) {
-                        secondIndex = p;
-                        p = createdClasses.size();
-                    }
-                }
-
-                // find type index for creation
-                int typeSelection = relationships.get(j).getTypeOrdinal();
-
-                RelationshipBuilder relB = new RelationshipBuilder(i, secondIndex, typeSelection);
-
-                try {
-                    writer.append(gson.toJson(relB));
-                    writer.flush();
-                    writer.append("\n");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
 
         // Set relationships to null to avoid StackOverflow, then write ClassBoxes to
         // file
@@ -591,6 +511,7 @@ public class Controller {
     }
 
     public static String[] listClasses() {
+        return ModelDiagram.listClasses();
         // System.out.println("Current Class list");
         String[] classes = new String[createdClasses.size()];
         for (int i = 0; i < createdClasses.size(); i++) {
@@ -602,6 +523,7 @@ public class Controller {
     // Returns a list of Strings, each String holding the detailed info for a
     // CreatedClass
     public static String[] listDetailedClasses() {
+        return ModelDiagram.listDetailedClasses();
         String[] classDetails = new String[createdClasses.size()];
         for (int i = 0; i < createdClasses.size(); i++) {
             classDetails[i] = createdClasses.get(i).toString();
@@ -610,12 +532,8 @@ public class Controller {
     }
 
     // What are attributes?
-    public static String[] listAttributes(ClassBox cb) {
-        if (cb == null) {
-            throw new IllegalArgumentException("null ClassBox object passed to listAttributes");
-        }
-        //return cb.getAttributes();
-        return null;
+    public static String[] listClassAttributes(final String cb) {
+        return ModelDiagram.listClassAttributes(cb);
     }
 
     // Returns an array of String arrays

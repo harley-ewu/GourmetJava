@@ -5,6 +5,13 @@ import java.util.LinkedList;
 
 public class ClassBox {
 
+    public boolean equals(final ClassBox cb){
+        return this.equals(cb.getName());
+    }
+
+    public boolean equals(final String name){
+        return this.getName().equalsIgnoreCase(name);
+    }
 
     private enum ClassType {
 
