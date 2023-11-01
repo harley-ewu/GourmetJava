@@ -1,9 +1,12 @@
-//package src.main.java;
+package src.main.java;
     // Java program to construct
 // Menu bar to add menu items
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 public class GUI extends JFrame implements ActionListener{
     // Creates a dropdown style menu framework at the top of the frame
     static JMenuBar mainMenu;
@@ -18,7 +21,7 @@ public class GUI extends JFrame implements ActionListener{
     //creates a frame to be the main, base window to hold the entirety of the GUI
     static JFrame guiWindow;
 
-    //public static void startGUIMenu(){
+    //public static void startGUIMenu(ArrayList<ClassBox> cc){
     public static void main(String[] args){
         GUI m = new GUI();
 
@@ -83,10 +86,10 @@ public class GUI extends JFrame implements ActionListener{
         guiWindow.setJMenuBar(mainMenu);
 
         // set the size of the frame
-        g.setSize(1000, 800);
-        g.setPreferredSize(new Dimension(1000, 800));
-        g.setResizable(false);
-        g.setVisible(true);
+        guiWindow.setSize(1000, 800);
+        guiWindow.setPreferredSize(new Dimension(1000, 800));
+        guiWindow.setResizable(false);
+        guiWindow.setVisible(true);
         m.pack();
         ArrayList<ClassBox> cc = new ArrayList<>();
         ClassBox c1 = new ClassBox("tim", 1);
@@ -101,7 +104,7 @@ public class GUI extends JFrame implements ActionListener{
             cc.add(c1);
             cc.add(c2);
         //}
-        displayGUI(g, cc);
+        displayGUI(guiWindow, cc);
     }
     public void actionPerformed(ActionEvent e){
         String s = e.getActionCommand();
@@ -109,9 +112,9 @@ public class GUI extends JFrame implements ActionListener{
             //I/o, then call method
         }
     }
-    public void displayGUI(){
-        System.out.println(this.getContentPane().getSize().getWidth());
-        System.out.println(this.getContentPane().getSize().getHeight());
+    public static void displayGUI(JFrame guiWindow, ArrayList<ClassBox> cc){
+        guiWindow.add(new ShapeDrawing(cc));
+        guiWindow.setVisible(true);
     }
     public static class ShapeDrawing extends JComponent{
         ArrayList<ClassBox> cc;
