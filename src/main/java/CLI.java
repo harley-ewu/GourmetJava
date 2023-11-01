@@ -1,4 +1,4 @@
-//package src.main.java;
+package src.main.java;
 
 //The "view" when the program is in command line interface (CLI) mode
 
@@ -33,7 +33,7 @@ public class CLI {
                         System.out.print("Choice:");
                         input2 = Integer.parseInt(kb.nextLine());
                         if (input2 == 1) {
-                            Controller.listClasses();
+                            listClasses();
                         } else if (input2 == 2) {
                             Controller.listDetailedClasses();
                         } else if (input2 == 3) {
@@ -59,7 +59,7 @@ public class CLI {
                     System.out.print("Choice:");
                     input2 = Integer.parseInt(kb.nextLine());
                     if (input2 == 1) {
-                        Controller.addClass("test","test2");
+                        addClass();
                     } else if (input2 == 2) {
                         Controller.deleteClass("name");
                     } else if (input2 == 3) {
@@ -167,7 +167,7 @@ public class CLI {
     // to the controller
     // The controller will return true or false based on whether or not the class
     // was created
-    public void addClass() {
+    public static void addClass() {
         System.out.println("What would you like to name your class?");
         System.out.print("Class Name:");
         String name = kb.nextLine();
@@ -270,6 +270,12 @@ public class CLI {
             System.out.println("Relationship created!");
         } else {
             System.out.println("Bad inputs for relationship, deletion cancelled.");
+        }
+    }
+    public static void listClasses(){
+        String list[] = Controller.listClasses();
+        for(int i=0; i < list.length; i++){
+            System.out.println(i++ + ". " + list[i]);
         }
     }
 

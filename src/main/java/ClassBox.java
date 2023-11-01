@@ -1,4 +1,4 @@
-//package src.main.java;
+package src.main.java;
 
 import java.lang.reflect.Method;
 import java.util.LinkedList;
