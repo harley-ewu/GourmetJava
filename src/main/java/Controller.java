@@ -62,6 +62,16 @@ public class Controller {
 
     } // End of deleteRelationship
 
+    // className is the name of the class you want to add a method to
+    public static boolean addMethod(String className, String name, Visibility view, String type, LinkedList<String> params) {
+        return ModelDiagram.addMethod(className, name, view, type, params);
+    }
+
+    // className is the name of the class you want to add a field to
+    public static boolean addField(String className, String name, Visibility view, String type) {
+        return ModelDiagram.addField(className, name, view, type);
+    }
+
     // Adds an attribute to a given class
     // NEW: ask for field or method, do io based on each, pass fields to classbox
     // add
