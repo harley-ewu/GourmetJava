@@ -104,6 +104,26 @@ public class ModelDiagram {
         }
     }
 
+    public static boolean renameMethod(String className, String methodName, String newMethodName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        }
+        else {
+            return target.renameMethod(methodName, newMethodName);
+        }
+    }
+
+    public static boolean renameField(String className, String fieldName, String newFieldName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        }
+        else {
+            return target.renameField(fieldName, newFieldName);
+        }
+    }
+
     public static String[] listClasses() {
         String[] list = new String[createdClasses.size()];
         for (int i = 0; i < createdClasses.size(); ++i) {
