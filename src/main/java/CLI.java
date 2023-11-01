@@ -11,7 +11,6 @@ public class CLI {
     public static void menu() {
         boolean cont = true;
         while (cont) {
-            Controller.printMenu();
             int input2;
             System.out.print("Choice:");
             // get user input of 1-15
@@ -23,17 +22,10 @@ public class CLI {
                     if(false){
                         System.out.println("Nothing to display! Please make a class first");
                     } else {
-                        System.out.println("Please choose a number from the options below: ");
-                        System.out.println("1.) Display Classes");
-                        System.out.println("2.) Display Classes Detailed");
-                        System.out.println("3.) Display Class Details");
-                        System.out.println("4.) Display Relationships");
-                        System.out.println("5.) Help");
-                        System.out.println("6.) Back");
-                        System.out.print("Choice:");
+                        printStringList(Controller.printMenu());
                         input2 = Integer.parseInt(kb.nextLine());
                         if (input2 == 1) {
-                            listClasses();
+                            printStringList(Controller.listClasses());
                         } else if (input2 == 2) {
                             Controller.listAllClassDetails();
                         } else if (input2 == 3) {
@@ -276,6 +268,12 @@ public class CLI {
         String list[] = Controller.listClasses();
         for(int i=0; i < list.length; i++){
             System.out.println(i++ + ". " + list[i]);
+        }
+    }
+
+    public static void printStringList(final String[] list){
+        for(String s : list){
+            System.out.println(s);
         }
     }
 
