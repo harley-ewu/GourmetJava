@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 // This is the class representing all data within the model
-public class ModelDiagram implements Comparable<ClassBox> {
+public class ModelDiagram {
 
     private final static ArrayList<ClassBox> createdClasses = new ArrayList<>();
     // Created classes will now be stored here
@@ -90,7 +90,8 @@ public class ModelDiagram implements Comparable<ClassBox> {
         if (originalBox == null)
             return false;
 
-        return originalBox.rename(newName);
+        originalBox.rename(newName);
+        return true;
     }
 
 
@@ -109,7 +110,6 @@ public class ModelDiagram implements Comparable<ClassBox> {
         //check if relationship between boxes exist within ClassBox
 
         return box1.addRelationship(box2, type);
-
     }
 
     //returns true if a relationship between the classes was deleted
@@ -135,6 +135,7 @@ public class ModelDiagram implements Comparable<ClassBox> {
         return list;
     }
 
+    //How do we want to handle the class details?
     public static String[] listClass(final String name) {
         if(name == null || name.isEmpty())
             throw new IllegalArgumentException("bad param passed to ModelDiagram.listClass");
@@ -143,41 +144,7 @@ public class ModelDiagram implements Comparable<ClassBox> {
         if(box == null)
             return null;
 
-        return box.listDetails();
-    }
-
-
-    //might not need this/Comparable because ClassBox objects should not be visible outside of ModelDiagram/ClassBox
-    @Override
-    public int compareTo(final ClassBox cb) {
-        return 0;
-    }
-
-    //might not need this, idk what it would be
-    @Override
-    public String toString() {
         return null;
-    }
-
-
-    //returns true if the ClassBox objects with the given names are equivalent
-    //I do not see how this is useful at all -David
-    public static boolean equals(final String cb1, final String cb2) {
-        if (cb1 == null || cb2 == null || cb1.isEmpty() || cb2.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.deleteRelationship");
-
-        ClassBox box1 = findClassBox(cb1);
-        ClassBox box2 = findClassBox(cb2);
-        if (box1 == null || box2 == null)
-            return false;
-
-        //return ClassBox.compare(box1, box2);
-        return false;
-    }
-
-    //might not need this, idk what it would be used for where Strings cannot be used
-    private static boolean equals(final ClassBox o1, final ClassBox o2) {
-        return false;
     }
 
     // The save method takes the current state of the program and saves it into a
@@ -230,6 +197,29 @@ public class ModelDiagram implements Comparable<ClassBox> {
                 }
             }
         }
+
+        // Set relationships to null to avoid StackOverflow, then write ClassBoxes to
+        // file
+        for (int i = 0; i < createdClasses.size(); i++) {
+            // Delete all relationships to avoid StackOverflow
+            createdClasses.get(i).getRelationships().clear();
+            // Now that our relationships list is empty, we can safely store each ClassBox
+            // in our json file
+            gson.toJson(createdClasses.get(i), writer);
+            try {
+                writer.flush();
+                writer.append("\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Your progress has been saved!");
     }
 
     // The load function is used to restore data that was previously saved using the

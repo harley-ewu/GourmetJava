@@ -19,165 +19,15 @@ public class Controller {
     }
 
     // recall menu at end if not
-    public static void menu() {
-        boolean cont = true;
-        while (cont) {
-            printMenu();
-            int input2;
-            System.out.print("Choice:");
-            // get user input of 1-15
-            // call io method below
-            // io method calls actual method in other classes
-            int input = Integer.parseInt(kb.nextLine());
-            switch (input) {
-                case 1:
-                    if (createdClasses.isEmpty()) {
-                        System.out.println("Nothing to display! Please make a class first");
-                    } else {
-                        System.out.println("Please choose a number from the options below: ");
-                        System.out.println("1.) Display Classes");
-                        System.out.println("2.) Display Classes Detailed");
-                        System.out.println("3.) Display Class Details");
-                        System.out.println("4.) Display Relationships");
-                        System.out.println("5.) Help");
-                        System.out.println("6.) Back");
-                        System.out.print("Choice:");
-                        input2 = Integer.parseInt(kb.nextLine());
-                        if (input2 == 1) {
-                            listClasses();
-                        } else if (input2 == 2) {
-                            listDetailedClasses();
-                        } else if (input2 == 3) {
-                            listClass();
-                        } else if (input2 == 4) {
-                            listRelationships();
-                        } else if (input2 == 5) {
-                            listHelp();
-                        } else if (input2 == 6) {
-                            return;
-                        } else {
-                            System.out.println("Invalid input, please try again");
-                        }
-                    }
-                    break;
-                case 2:
-                    System.out.println("Please choose a number from the options below: ");
-                    System.out.println("1.) Add Class");
-                    System.out.println("2.) Remove Class");
-                    System.out.println("3.) Rename Class");
-                    System.out.println("4.) Help");
-                    System.out.println("5.) Back");
-                    System.out.print("Choice:");
-                    input2 = Integer.parseInt(kb.nextLine());
-                    if (input2 == 1) {
-                        Controller.addClass("test","test2");
-                    } else if (input2 == 2) {
-                        Controller.deleteClass("name");
-                    } else if (input2 == 3) {
-                        //renameClass();
-                    } else if (input2 == 4) {
-                        classHelp();
-                    } else if (input2 == 5) {
-                        return;
-                    } else {
-                        System.out.println("Invalid input, please try again");
-                    }
-                    break;
-                case 3:
-                    if (createdClasses.isEmpty()) {
-                        System.out.println("Please create a class first");
-                    } else {
-                        System.out.println("Please choose a number from the options below: ");
-                        System.out.println("1.) Add Attribute");
-                        System.out.println("2.) Remove Attribute");
-                        System.out.println("3.) Rename Attribute");
-                        System.out.println("4.) Help");
-                        System.out.println("5.) Back");
-                        System.out.print("Choice:");
-                        input2 = Integer.parseInt(kb.nextLine());
-                        if (input2 == 1) {
-                            addAttribute();
-                        } else if (input2 == 2) {
-                            deleteAttribute();
-                        } else if (input2 == 3) {
-                            renameAttribute();
-                        } else if (input2 == 4) {
-                            attributeHelp();
-                        } else if (input2 == 5) {
-                            return;
-                        } else {
-                            System.out.println("Invalid input, please try again");
-                        }
-                    }
-                    break;
-                case 4:
-                    if (createdClasses.size() < 2) {
-                        System.out.println("Please create 2 classes first");
-                    } else {
-                        System.out.println("Please choose a number from the options below: ");
-                        System.out.println("1.) Add Relationship");
-                        System.out.println("2.) Remove Relationship");
-                        System.out.println("3.) Help");
-                        System.out.println("4.) Back");
-                        System.out.print("Choice:");
-                        input2 = Integer.parseInt(kb.nextLine());
-                        if (input2 == 1) {
-                            //addRelationship();
-                        } else if (input2 == 2) {
-                            //deleteRelationship();
-                        } else if (input2 == 3) {
-                            relationshipHelp();
-                        } else if (input2 == 4) {
-                            return;
-                        } else {
-                            System.out.println("Invalid input, please try again");
-                        }
-                    }
-                    break;
-                case 5:
-                    System.out.println("Please choose a number from the options below: ");
-                    System.out.println("1.) Save");
-                    System.out.println("2.) Load");
-                    System.out.println("3.) Help");
-                    System.out.println("4.) Back");
-                    System.out.print("Choice:");
-                    input2 = Integer.parseInt(kb.nextLine());
-                    if (input2 == 1) {
-                        ModelDiagram.save();
-                    } else if (input2 == 2) {
-                        ModelDiagram.load();
-                    } else if (input2 == 3) {
-                        saveLoadHelp();
-                    } else if (input2 == 4) {
-                        return;
-                    } else {
-                        System.out.println("Invalid input, please try again");
-                    }
-                    break;
-                case 6:
-                    help();
-                    break;
-                case 7:
-                    System.out.println("Are you sure you want to exit? Type \"yes\" to confirm");
-                    System.out.print("yes/no:");
-                    if (kb.nextLine().equalsIgnoreCase("yes")) {
-                        System.out.println("Program Closed! Bye!");
-                        cont = false;
-                    }
-                    break;
-                default:
-                    System.out.println("That is not a valid input. Please try again");
-                    break;
-            }
-        }
-    }
+
 
     // Creates a new Classbox object and adds to to the arraylist createdClasses
     // Rachael
     // Allows the user to name their class, then adds it to the list of created
     // classes
     public static boolean addClass(final String name, final String type) {
-        return ModelDiagram.addClass(name, type);
+        //return ModelDiagram.addClass(name, type);
+        return false;
     }
 
     // Removes class from createdClasses
@@ -197,7 +47,8 @@ public class Controller {
     }
 
     public static boolean addRelationship(final String cb1, final String cb2, final String type) {
-        return ModelDiagram.addRelationship(cb1, cb2, type);
+        //return ModelDiagram.addRelationship(cb1, cb2, type);
+        return false;
     }
 
     // Deletes a relationship between two classes while prompting the user to verify
@@ -338,32 +189,8 @@ public class Controller {
                 System.out.println("No attributes found for class " + c.getName());
             }
         }
+        */
 
-
-         */
-
-        // Set relationships to null to avoid StackOverflow, then write ClassBoxes to
-        // file
-        for (int i = 0; i < createdClasses.size(); i++) {
-            // Delete all relationships to avoid StackOverflow
-            createdClasses.get(i).getRelationships().clear();
-            // Now that our relationships list is empty, we can safely store each ClassBox
-            // in our json file
-            gson.toJson(createdClasses.get(i), writer);
-            try {
-                writer.flush();
-                writer.append("\n");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try {
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Your progress has been saved!");
     }
 
    

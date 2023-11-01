@@ -11,7 +11,7 @@ public class Main {
         System.out.println("When you see an option you want, select the corresponding number and hit the enter key.");
         System.out.println("Answer the prompts that follow, hitting enter after each response, and we'll take care of the rest!");
         System.out.println("Happy editing!");
-        Controller.menu();
+        CLI.menu();
     }
 
        // This is a test

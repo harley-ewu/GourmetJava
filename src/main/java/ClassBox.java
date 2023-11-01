@@ -10,7 +10,7 @@ public class ClassBox {
     }
 
     public boolean equals(final String name){
-        return this.getName().equalsIgnoreCase(name);
+        return this.getName().equals(name);
     }
 
     private enum ClassType {
@@ -74,25 +74,44 @@ public class ClassBox {
         att.setName(newName);
     }
 
-    public void addRelationship(final ClassBox toClass, final int type){
-        Relationship newRel = new Relationship(toClass, type);
-        this.relationships.add(newRel);
+
+    public static Relationship findRelationship(final ClassBox cb1, final ClassBox cb2){
+        for (Relationship rel : cb1.relationships) {
+            if (rel.getFrom().equals(cb2)) {
+                return rel;
+            }
+        }
+        for (Relationship rel : cb2.relationships) {
+            if (rel.getFrom().equals(cb1)) {
+                return rel;
+            }
+        }
+        return null;
+    }
+    //Needs to check for existing Relationship between ClassBox objects
+    //Returns true if a relationship was added
+    //ClassBox objects are guaranteed to not be null by the caller
+    public boolean addRelationship(final ClassBox toClass, final int type){
+        this.relationships.add(new Relationship(toClass, type));
+        return true;
     }
 
-    public void deleteRelationship(ClassBox otherClass){
-        for (Relationship rel : this.relationships) {
-            if (rel.getFrom().equals(otherClass)) {
-                this.relationships.remove(rel);
-                return;
+    //returns true only if a Relationship was deleted
+    //returns false if no Relationship was deleted or it did not exist
+    public static boolean deleteRelationship(final ClassBox cb1, final ClassBox cb2){
+        for (Relationship rel : cb1.relationships) {
+            if (rel.getFrom().equals(cb2)) {
+                cb1.relationships.remove(rel);
+                return true;
             }
         }
-        for (Relationship rel : otherClass.relationships) {
-            if (rel.getFrom().equals(this)) {
-                otherClass.relationships.remove(rel);
-                return;
+        for (Relationship rel : cb2.relationships) {
+            if (rel.getFrom().equals(cb1)) {
+                cb2.relationships.remove(rel);
+                return true;
             }
         }
-        throw new IllegalArgumentException("Relationship not found");
+        return false;
     }
 
     public String[] listRelationships(){
@@ -103,7 +122,7 @@ public class ClassBox {
         return rels;
     }
 
-    public void renameClass(String name){
+    public void rename(final String name){
         this.name  = name;
     }
     //For list class details
@@ -127,6 +146,7 @@ public class ClassBox {
         }
         return s.toString();
     }
+
 
     public String getName() {
         return this.name;
