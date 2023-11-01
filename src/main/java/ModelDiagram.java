@@ -170,12 +170,12 @@ public class ModelDiagram {
     // This method finds classBox within createdClasses
     // If not found returns false
     // Else adds method to the classBox and returns true
-    public static boolean addMethod(String className, String name, Visibility view, LinkedList<String> tags, String type, LinkedList<String> params) {
+    public static boolean addMethod(String className, String name, Visibility view, String type, LinkedList<String> params) {
         ClassBox target = findClassBox(className);
         if (target == null) {
             return false;
         } else {
-            target.addMethod(name, view, tags, type, params);
+            target.addMethod(name, view, type, params);
             return true;
         }
     }
@@ -183,12 +183,12 @@ public class ModelDiagram {
     // This method finds classBox within createdClasses
     // If not found returns false
     // Else adds field to the classBox and returns true
-    public static boolean addField(String className, String name, Visibility view, LinkedList<String> tags, String type) {
+    public static boolean addField(String className, String name, Visibility view, String type) {
         ClassBox target = findClassBox(className);
         if (target == null) {
             return false;
         } else {
-            target.addField(name, view, tags, type);
+            target.addField(name, view, type);
             return true;
         }
     }
