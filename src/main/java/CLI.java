@@ -27,13 +27,13 @@ public class CLI {
                         if (input2 == 1) {
                             printStringList(Controller.listClasses());
                         } else if (input2 == 2) {
-                            Controller.listAllClassDetails();
+                            printStringList(Controller.listAllClassDetails());
                         } else if (input2 == 3) {
-                            Controller.listClassDetails("Placeholder");
+                            CLI.listClassDetails();
                         } else if (input2 == 4) {
-                            Controller.listRelationships();
+                            Controller.listRelationships();//Still needs some work.
                         } else if (input2 == 5) {
-                            Controller.listHelp();
+                            CLI.printStringList(Controller.listHelp());
                         } else if (input2 == 6) {
                             return;
                         } else {
@@ -264,13 +264,15 @@ public class CLI {
             System.out.println("Bad inputs for relationship, deletion cancelled.");
         }
     }
-    public static void listClasses(){
-        String list[] = Controller.listClasses();
-        for(int i=0; i < list.length; i++){
-            System.out.println(i++ + ". " + list[i]);
-        }
+    public static void listClassDetails(){
+        System.out.println("What is the name of the class you want see?");
+        System.out.println("Class name: ");
+        String input = kb.nextLine();
+        printStringList(Controller.listClassDetails(input));
     }
 
+    //This method takes in an arraylist of strings and is able to print it out line after line.
+    //This method is used for many other methods that return String arrays full of data
     public static void printStringList(final String[] list){
         for(String s : list){
             System.out.println(s);
