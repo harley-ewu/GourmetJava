@@ -348,4 +348,7 @@ public class Controller {
     }
 
 
+    public static int getCreatedClassesSize() {
+        return ModelDiagram.getCreatedClassesSize();
+    }
 }
