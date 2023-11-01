@@ -94,6 +94,26 @@ public class ClassBox {
         att.setName(newName);
     }
 
+    public boolean renameMethod(String methodName, String newMethodName) {
+        for (int i = 0; i < methods.size(); i++) {
+            if (methods.get(i).getName().equals(methodName)) {
+                methods.get(i).setName(newMethodName);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean renameField(String fieldName, String newFieldName) {
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).getName().equals(fieldName)) {
+                fields.get(i).setName(newFieldName);
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public static Relationship findRelationship(final ClassBox cb1, final ClassBox cb2) {
         for (Relationship rel : cb1.relationships) {

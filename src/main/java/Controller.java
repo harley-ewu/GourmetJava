@@ -179,6 +179,14 @@ public class Controller {
         return ModelDiagram.deleteField(className, methodName);
     }
 
+    public static boolean renameMethod(String className, String methodName, String newMethodName) {
+        return ModelDiagram.renameMethod(className, methodName, newMethodName);
+    }
+
+    public static boolean renameField(String className, String fieldName, String newFieldName) {
+        return ModelDiagram.renameField(className, fieldName, newFieldName);
+    }
+
     public static void renameAttribute() {
         /*
 
