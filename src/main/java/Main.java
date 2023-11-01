@@ -1,7 +1,5 @@
 package src.main.java;
 
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
         //System.out.println("Welcome to Gourmet Java's UML Editor!");
@@ -13,7 +11,6 @@ public class Main {
         System.out.println("Happy editing!");
         CLI.menu();
     }
-
-       // This is a test
+    
 
 }
