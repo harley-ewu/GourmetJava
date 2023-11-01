@@ -335,8 +335,6 @@ public class ModelDiagram {
         }
         fileScanner.close();
         System.out.println("Your previous save has been loaded!");
-
-
     }
 
     /*Methods needed to be implemented
