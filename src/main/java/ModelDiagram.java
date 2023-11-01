@@ -22,7 +22,7 @@ public class ModelDiagram {
     //returns the ClassBox object if it exists, or null otherwise
     private static ClassBox findClassBox(final String name) {
         for (ClassBox cb : createdClasses) {
-            if (cb.equals("name"))
+            if (cb.equals(name))
                 return cb;
         }
         return null;
@@ -56,6 +56,26 @@ public class ModelDiagram {
 
         createdClasses.remove(targetBox);
         return true;
+    }
+
+    public static boolean deleteMethod(String className, String methodName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        }
+        else {
+            return target.deleteMethod(methodName);
+        }
+    }
+
+    public static boolean deleteField(String className, String fieldName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        }
+        else {
+            return target.deleteField(fieldName);
+        }
     }
 
     public static String[] listClasses() {
