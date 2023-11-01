@@ -1,14 +1,9 @@
-//package src.main.java;
-
-
-//The "view" when the program is in GUI mode
-public class GUI {
-    /*
+package src.main.java;
     // Java program to construct
 // Menu bar to add menu items
 import javax.swing.*;
 import java.awt.event.*;
-public class menu extends JFrame implements ActionListener{
+public class GUI extends JFrame implements ActionListener{
     // menubar
     static JMenuBar mb;
 
@@ -24,8 +19,8 @@ public class menu extends JFrame implements ActionListener{
 
     static JLabel l;
 
-    public static void main(String[] args){
-        menu m = new menu();
+    public static void startGUIMenu(){
+        GUI m = new GUI();
         // create a frame
         g = new JFrame("Menu demo");
 
@@ -101,6 +96,4 @@ public class menu extends JFrame implements ActionListener{
             //I/o, then call method
         }
     }
-}
-     */
 }
