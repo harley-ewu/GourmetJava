@@ -86,7 +86,7 @@ public class ModelDiagram {
         return list;
     }
 
-    public static String[] listDetailedClasses() {
+    public static String[] listAllClassDetails() {
 
         return null;
     }
@@ -156,7 +156,7 @@ public class ModelDiagram {
     }
 
     //How do we want to handle the class details?
-    public static String[] listClass(final String name) {
+    public static String[] listClassDetails(final String name) {
         if(name == null || name.isEmpty())
             throw new IllegalArgumentException("bad param passed to ModelDiagram.listClass");
 
