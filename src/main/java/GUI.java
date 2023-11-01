@@ -2,6 +2,7 @@ package src.main.java;
     // Java program to construct
 // Menu bar to add menu items
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 public class GUI extends JFrame implements ActionListener{
     // menubar
@@ -17,17 +18,14 @@ public class GUI extends JFrame implements ActionListener{
     // create a frame
     static JFrame g;
 
-    static JLabel l;
-
-    public static void startGUIMenu(){
+    //public static void startGUIMenu(){
+    public static void main(String[] args){
         GUI m = new GUI();
         // create a frame
         g = new JFrame("Menu demo");
 
         // create a menubar
         mb = new JMenuBar();
-
-        l = new JLabel("None");
 
         a = new JMenu("Display");
         a1 = new JMenuItem("Display");
@@ -79,21 +77,24 @@ public class GUI extends JFrame implements ActionListener{
         mb.add(e);
         mb.add(f);
 
-
-
         // add menubar to frame
         g.setJMenuBar(mb);
 
-        g.add(l);
-
         // set the size of the frame
-        g.setSize(500, 500);
+        g.setSize(1000, 800);
+        g.setPreferredSize(new Dimension(1000, 800));
+        g.setResizable(false);
         g.setVisible(true);
+        m.displayGUI();
     }
     public void actionPerformed(ActionEvent e){
         String s = e.getActionCommand();
         if(s.equals("Add Class")){
             //I/o, then call method
         }
+    }
+    public void displayGUI(){
+        System.out.println(this.getContentPane().getSize().getWidth());
+        System.out.println(this.getContentPane().getSize().getHeight());
     }
 }
