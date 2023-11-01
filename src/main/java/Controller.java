@@ -177,7 +177,8 @@ public class Controller {
     // Allows the user to name their class, then adds it to the list of created
     // classes
     public static boolean addClass(final String name, final String type) {
-        return ModelDiagram.addClass(name, type);
+        //return ModelDiagram.addClass(name, type);
+        return false;
     }
 
     // Removes class from createdClasses
@@ -197,7 +198,8 @@ public class Controller {
     }
 
     public static boolean addRelationship(final String cb1, final String cb2, final String type) {
-        return ModelDiagram.addRelationship(cb1, cb2, type);
+        //return ModelDiagram.addRelationship(cb1, cb2, type);
+        return false;
     }
 
     // Deletes a relationship between two classes while prompting the user to verify
@@ -338,32 +340,8 @@ public class Controller {
                 System.out.println("No attributes found for class " + c.getName());
             }
         }
+        */
 
-
-         */
-
-        // Set relationships to null to avoid StackOverflow, then write ClassBoxes to
-        // file
-        for (int i = 0; i < createdClasses.size(); i++) {
-            // Delete all relationships to avoid StackOverflow
-            createdClasses.get(i).getRelationships().clear();
-            // Now that our relationships list is empty, we can safely store each ClassBox
-            // in our json file
-            gson.toJson(createdClasses.get(i), writer);
-            try {
-                writer.flush();
-                writer.append("\n");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try {
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Your progress has been saved!");
     }
 
    

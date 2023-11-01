@@ -197,6 +197,29 @@ public class ModelDiagram {
                 }
             }
         }
+
+        // Set relationships to null to avoid StackOverflow, then write ClassBoxes to
+        // file
+        for (int i = 0; i < createdClasses.size(); i++) {
+            // Delete all relationships to avoid StackOverflow
+            createdClasses.get(i).getRelationships().clear();
+            // Now that our relationships list is empty, we can safely store each ClassBox
+            // in our json file
+            gson.toJson(createdClasses.get(i), writer);
+            try {
+                writer.flush();
+                writer.append("\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Your progress has been saved!");
     }
 
     // The load function is used to restore data that was previously saved using the
