@@ -19,7 +19,7 @@ public class CLI {
             int input = Integer.parseInt(kb.nextLine());
             switch (input) {
                 case 1:
-                    if(false){
+                    if(Controller.getCreatedClassesSize() == 0){
                         System.out.println("Nothing to display! Please make a class first");
                     } else {
                         printStringList(Controller.printMenu());
@@ -167,7 +167,7 @@ public class CLI {
 
         ClassBox.printClassTypes();
 
-        String type = kb.nextLine();
+        int type = Integer.parseInt(kb.nextLine());
         //Test to see if adding was sucessful
         if (Controller.addClass(name, type)) {
             System.out.println("Class created!");
@@ -278,5 +278,7 @@ public class CLI {
             System.out.println(s);
         }
     }
+    
+
 
 }

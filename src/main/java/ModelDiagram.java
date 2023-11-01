@@ -309,6 +309,10 @@ public class ModelDiagram {
         System.out.println("Your previous save has been loaded!");
     }
 
+    public static int getCreatedClassesSize() {
+        return createdClasses.size();
+    }
+
     /*Methods needed to be implemented
         - addClass
         - deleteClass
