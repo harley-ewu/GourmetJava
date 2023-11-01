@@ -5,11 +5,11 @@ import java.util.LinkedList;
 
 public class ClassBox {
 
-    public boolean equals(final ClassBox cb){
+    public boolean equals(final ClassBox cb) {
         return this.equals(cb.getName());
     }
 
-    public boolean equals(final String name){
+    public boolean equals(final String name) {
         return this.getName().equals(name);
     }
 
@@ -18,6 +18,7 @@ public class ClassBox {
         CLASS, INTERFACE, RECORD, ENUM, ANNOTATION;
 
     }
+
     private String name;
     //Possibly change to enum later?
     //Class, Interface, Enum, etc
@@ -30,22 +31,20 @@ public class ClassBox {
     private final LinkedList<Field> fields;
 
     public ClassBox(String name, int type) {
-        if(name==null||name.isEmpty()||type<1||type>5) {
+        if (name == null || name.isEmpty() || type < 1 || type > ClassType.values().length)
             throw new IllegalArgumentException("Bad params at ClassBox constructor");
-        }
-        else {
-            this.name = name;
-            this.relationships = new LinkedList<>();
-            this.type = ClassBox.ClassType.values()[type - 1];
-            this.methods = new LinkedList<>();
-            this.fields = new LinkedList<>();
-        }
+
+        this.name = name;
+        this.relationships = new LinkedList<>();
+        this.type = ClassBox.ClassType.values()[type - 1];
+        this.methods = new LinkedList<>();
+        this.fields = new LinkedList<>();
     }
 
-    public static void printClassTypes(){
+    public static void printClassTypes() {
         ClassBox.ClassType[] types = ClassBox.ClassType.values();
-        for(int i = 0; i < 5; ++i){
-            System.out.println((i+1) + " - " + types[i].name());
+        for (int i = 0; i < 5; ++i) {
+            System.out.println((i + 1) + " - " + types[i].name());
         }
     }
 
@@ -61,21 +60,42 @@ public class ClassBox {
         this.fields.add(newField);
     }
 
-    public void deleteAttribute(Attribute a){
-        if(a.getClass().getSimpleName().equals("Method")){
+    public void deleteAttribute(Attribute a) {
+        if (a.getClass().getSimpleName().equals("Method")) {
             this.methods.remove((Methods) a);
-        }
-        else{
+        } else {
             this.fields.remove((Field) a);
         }
     }
 
-    public void renameAttribute(Attribute att, String newName){
+    public boolean deleteField(String name) {
+        //Find the field with the name
+        //remove that field from the list
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).getName().equals(name)) {
+                fields.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteMethod(String name/*, LinkedList<String> params*/) {
+        for (int i = 0; i < fields.size(); i++) {
+            if (methods.get(i).getName().equals(name)) {
+                methods.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void renameAttribute(Attribute att, String newName) {
         att.setName(newName);
     }
 
 
-    public static Relationship findRelationship(final ClassBox cb1, final ClassBox cb2){
+    public static Relationship findRelationship(final ClassBox cb1, final ClassBox cb2) {
         for (Relationship rel : cb1.relationships) {
             if (rel.getFrom().equals(cb2)) {
                 return rel;
@@ -88,17 +108,18 @@ public class ClassBox {
         }
         return null;
     }
+
     //Needs to check for existing Relationship between ClassBox objects
     //Returns true if a relationship was added
     //ClassBox objects are guaranteed to not be null by the caller
-    public boolean addRelationship(final ClassBox toClass, final int type){
+    public boolean addRelationship(final ClassBox toClass, final int type) {
         this.relationships.add(new Relationship(toClass, type));
         return true;
     }
 
     //returns true only if a Relationship was deleted
     //returns false if no Relationship was deleted or it did not exist
-    public static boolean deleteRelationship(final ClassBox cb1, final ClassBox cb2){
+    public static boolean deleteRelationship(final ClassBox cb1, final ClassBox cb2) {
         for (Relationship rel : cb1.relationships) {
             if (rel.getFrom().equals(cb2)) {
                 cb1.relationships.remove(rel);
@@ -114,25 +135,26 @@ public class ClassBox {
         return false;
     }
 
-    public String[] listRelationships(){
+    public String[] listRelationships() {
         String[] rels = new String[this.relationships.size()];
-        for(int i = 0; i < rels.length; ++i){
+        for (int i = 0; i < rels.length; ++i) {
             rels[i] = this.relationships.get(i).toString();
         }
         return rels;
     }
 
-    public void rename(final String name){
-        this.name  = name;
+    public void rename(final String name) {
+        this.name = name;
     }
     //For list class details
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("Class: ").append(this.name).append("\n");
         s.append("\tType: ").append(this.type).append("\n");
         s.append("\tFields: \n");
+
         for(Field a: this.fields){
             s.append("\t\t").append(a.CLIToString()).append("\n");
         }
@@ -141,7 +163,7 @@ public class ClassBox {
             s.append("\t\t").append(a.CLIToString()).append("\n");
         }
         s.append("\tRelationships: \n");
-        for(Relationship r: this.relationships){
+        for (Relationship r : this.relationships) {
             s.append("\t\t").append(this.name).append(" ").append(r).append("\n");
         }
         return s.toString();

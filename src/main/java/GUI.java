@@ -1,5 +1,6 @@
 package src.main.java;
-    // Java program to construct
+
+// Java program to construct
 // Menu bar to add menu items
 import javax.swing.*;
 import java.awt.*;

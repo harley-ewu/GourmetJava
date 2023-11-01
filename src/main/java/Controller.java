@@ -30,6 +30,10 @@ public class Controller {
         return false;
     }
 
+    public static boolean addClass(final String name, final int type) {
+        return ModelDiagram.addClass(name, type);
+    }
+
     // Removes class from createdClasses
     // Rachael
     // Takes in the index of the item user wants removed from the list and removes
@@ -152,6 +156,17 @@ public class Controller {
         }
 
          */
+    }
+
+    //deletes method based on className and methodName
+    //Needs params eventually to differentiate overloaded methods
+    public static boolean deleteMethod(String className, String methodName/*, LinkedList params*/) {
+        return ModelDiagram.deleteMethod(className, methodName);
+    }
+
+    //deletes field based on className and methodName
+    public static boolean deleteField(String className, String methodName) {
+        return ModelDiagram.deleteField(className, methodName);
     }
 
     public static void renameAttribute() {
