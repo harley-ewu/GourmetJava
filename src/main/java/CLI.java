@@ -25,7 +25,7 @@ public class CLI {
                         printStringList(Controller.printMenu());
                         input2 = Integer.parseInt(kb.nextLine());
                         if (input2 == 1) {
-                            printStringList(Controller.listClasses());
+                            CLI.listClasses();
                         } else if (input2 == 2) {
                             printStringList(Controller.listAllClassDetails());
                         } else if (input2 == 3) {
@@ -278,7 +278,15 @@ public class CLI {
             System.out.println(s);
         }
     }
-    
+    public static void listClasses(){
+        int counter = 1;
+        String[] list = Controller.listClasses();
+        for(String s : list){
+            System.out.println(counter + ". " + s);
+            counter++;
+        }
+    }
+
 
 
 }
