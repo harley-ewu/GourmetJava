@@ -33,7 +33,7 @@ public class CLI {
                         System.out.print("Choice:");
                         input2 = Integer.parseInt(kb.nextLine());
                         if (input2 == 1) {
-                            listClasses();
+                            CLI.listClasses();
                         } else if (input2 == 2) {
                             Controller.listAllClassDetails();
                         } else if (input2 == 3) {
@@ -59,9 +59,9 @@ public class CLI {
                     System.out.print("Choice:");
                     input2 = Integer.parseInt(kb.nextLine());
                     if (input2 == 1) {
-                        addClass();
+                        CLI.addClass();
                     } else if (input2 == 2) {
-                        Controller.deleteClass("name");
+                        CLI.deleteClass();
                     } else if (input2 == 3) {
                         //renameClass();
                     } else if (input2 == 4) {
@@ -188,7 +188,7 @@ public class CLI {
     // to the controller
     // The controller will return true or false based on whether or not the class
     // was deleted
-    public void deleteClass() {
+    public static void deleteClass() {
         System.out.println("What index do you want to remove?");
         Controller.listClasses();
         System.out.print("Class Index:");
@@ -272,11 +272,4 @@ public class CLI {
             System.out.println("Bad inputs for relationship, deletion cancelled.");
         }
     }
-    public static void listClasses(){
-        String list[] = Controller.listClasses();
-        for(int i=0; i < list.length; i++){
-            System.out.println(i++ + ". " + list[i]);
-        }
-    }
-
 }
