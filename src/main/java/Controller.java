@@ -30,6 +30,10 @@ public class Controller {
         return false;
     }
 
+    public static boolean addClass(final String name, final int type) {
+        return ModelDiagram.addClass(name, type);
+    }
+
     // Removes class from createdClasses
     // Rachael
     // Takes in the index of the item user wants removed from the list and removes

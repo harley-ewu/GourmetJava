@@ -22,7 +22,7 @@ public class ModelDiagram {
     //returns the ClassBox object if it exists, or null otherwise
     private static ClassBox findClassBox(final String name) {
         for (ClassBox cb : createdClasses) {
-            if (cb.equals("name"))
+            if (cb.equals(name))
                 return cb;
         }
         return null;
