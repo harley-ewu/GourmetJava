@@ -31,7 +31,10 @@ public class CLI {
                         } else if (input2 == 3) {
                             CLI.listClassDetails();
                         } else if (input2 == 4) {
-                            Controller.listRelationships();//Still needs some work.
+                            for(String[] list : Controller.listRelationships()){
+                                printStringList(list);
+                            }
+
                         } else if (input2 == 5) {
                             CLI.printStringList(Controller.listHelp());
                         } else if (input2 == 6) {
