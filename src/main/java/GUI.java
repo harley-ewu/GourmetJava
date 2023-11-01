@@ -1,4 +1,4 @@
-package src.main.java;
+//package src.main.java;
     // Java program to construct
 // Menu bar to add menu items
 import javax.swing.*;
