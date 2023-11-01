@@ -58,6 +58,32 @@ public class ModelDiagram {
         return true;
     }
 
+    // This method finds classBox within createdClasses
+    // If not found returns false
+    // Else adds method to the classBox and returns true
+    public static boolean addMethod(String className, String name, Visibility view, String type, LinkedList<String> params) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        } else {
+            target.addMethod(name, view, type, params);
+            return true;
+        }
+    }
+
+    // This method finds classBox within createdClasses
+    // If not found returns false
+    // Else adds field to the classBox and returns true
+    public static boolean addField(String className, String name, Visibility view, String type) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        } else {
+            target.addField(name, view, type);
+            return true;
+        }
+    }
+
     public static boolean deleteMethod(String className, String methodName) {
         ClassBox target = findClassBox(className);
         if (target == null) {
@@ -75,6 +101,26 @@ public class ModelDiagram {
         }
         else {
             return target.deleteField(fieldName);
+        }
+    }
+
+    public static boolean renameMethod(String className, String methodName, String newMethodName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        }
+        else {
+            return target.renameMethod(methodName, newMethodName);
+        }
+    }
+
+    public static boolean renameField(String className, String fieldName, String newFieldName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        }
+        else {
+            return target.renameField(fieldName, newFieldName);
         }
     }
 
@@ -167,6 +213,26 @@ public class ModelDiagram {
         return null;
     }
 
+    //returns true if the ClassBox objects with the given names are equivalent
+    //I do not see how this is useful at all -David
+    public static boolean equals(final String cb1, final String cb2) {
+        if (cb1 == null || cb2 == null || cb1.isEmpty() || cb2.isEmpty())
+            throw new IllegalArgumentException("bad param passed to ModelDiagram.deleteRelationship");
+
+        ClassBox box1 = findClassBox(cb1);
+        ClassBox box2 = findClassBox(cb2);
+        if (box1 == null || box2 == null)
+            return false;
+
+        //return ClassBox.compare(box1, box2);
+        return false;
+    }
+
+    //might not need this, idk what it would be used for where Strings cannot be used
+    private static boolean equals(final ClassBox o1, final ClassBox o2) {
+        return false;
+    }
+
     // The save method takes the current state of the program and saves it into a
     // .json file
     // Currently only a single save is supported
@@ -216,6 +282,8 @@ public class ModelDiagram {
                     e.printStackTrace();
                 }
             }
+
+
         }
 
         // Set relationships to null to avoid StackOverflow, then write ClassBoxes to

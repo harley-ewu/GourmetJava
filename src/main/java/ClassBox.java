@@ -1,6 +1,5 @@
 package src.main.java;
 
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 
 public class ClassBox {
@@ -48,15 +47,15 @@ public class ClassBox {
         }
     }
 
-    public void addMethod(String name, Visibility view, LinkedList<String> tags, String type, LinkedList<String> params) {
+    public void addMethod(String name, Visibility view, String type, LinkedList<String> params){
         //call the constructor and add to list
-        Methods newMethod = new Methods(name, view, tags, type, params);
-        this.methods.add(newMethod);
+        Methods newMethod = new Methods(name, view, type, params);
+        this.methods.add(newMethod);        
     }
 
-    public void addField(String name, Visibility view, LinkedList<String> tags, String type) {
+    public void addField(String name, Visibility view, String type){
         //call the constructor and add to list
-        Field newField = new Field(name, view, tags, type);
+        Field newField = new Field(name, view, type);
         this.fields.add(newField);
     }
 
@@ -92,6 +91,26 @@ public class ClassBox {
 
     public void renameAttribute(Attribute att, String newName) {
         att.setName(newName);
+    }
+
+    public boolean renameMethod(String methodName, String newMethodName) {
+        for (int i = 0; i < methods.size(); i++) {
+            if (methods.get(i).getName().equals(methodName)) {
+                methods.get(i).setName(newMethodName);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean renameField(String fieldName, String newFieldName) {
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).getName().equals(fieldName)) {
+                fields.get(i).setName(newFieldName);
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -154,12 +173,13 @@ public class ClassBox {
         s.append("Class: ").append(this.name).append("\n");
         s.append("\tType: ").append(this.type).append("\n");
         s.append("\tFields: \n");
-        for (Field a : this.fields) {
-            s.append("\t\t").append(a).append("\n");
+
+        for(Field a: this.fields){
+            s.append("\t\t").append(a.CLIToString()).append("\n");
         }
         s.append("\tMethods: \n");
-        for (Methods a : this.methods) {
-            s.append("\t\t").append(a).append("\n");
+        for(Methods a: this.methods){
+            s.append("\t\t").append(a.CLIToString()).append("\n");
         }
         s.append("\tRelationships: \n");
         for (Relationship r : this.relationships) {

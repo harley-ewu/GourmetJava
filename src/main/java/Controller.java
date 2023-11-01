@@ -1,5 +1,8 @@
 package src.main.java;
 
+import java.util.*;
+
+
 public class Controller {
 
 
@@ -53,6 +56,16 @@ public class Controller {
         return ModelDiagram.deleteRelationship(cb1, cb2);
 
     } // End of deleteRelationship
+
+    // className is the name of the class you want to add a method to
+    public static boolean addMethod(String className, String name, Visibility view, String type, LinkedList<String> params) {
+        return ModelDiagram.addMethod(className, name, view, type, params);
+    }
+
+    // className is the name of the class you want to add a field to
+    public static boolean addField(String className, String name, Visibility view, String type) {
+        return ModelDiagram.addField(className, name, view, type);
+    }
 
     // Adds an attribute to a given class
     // NEW: ask for field or method, do io based on each, pass fields to classbox
@@ -159,6 +172,14 @@ public class Controller {
     //deletes field based on className and methodName
     public static boolean deleteField(String className, String methodName) {
         return ModelDiagram.deleteField(className, methodName);
+    }
+
+    public static boolean renameMethod(String className, String methodName, String newMethodName) {
+        return ModelDiagram.renameMethod(className, methodName, newMethodName);
+    }
+
+    public static boolean renameField(String className, String fieldName, String newFieldName) {
+        return ModelDiagram.renameField(className, fieldName, newFieldName);
     }
 
     public static void renameAttribute() {
