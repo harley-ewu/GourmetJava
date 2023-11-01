@@ -147,6 +147,47 @@ public class ModelDiagram {
         return null;
     }
 
+    //returns true if the ClassBox objects with the given names are equivalent
+    //I do not see how this is useful at all -David
+    public static boolean equals(final String cb1, final String cb2) {
+        if (cb1 == null || cb2 == null || cb1.isEmpty() || cb2.isEmpty())
+            throw new IllegalArgumentException("bad param passed to ModelDiagram.deleteRelationship");
+
+        ClassBox box1 = findClassBox(cb1);
+        ClassBox box2 = findClassBox(cb2);
+        if (box1 == null || box2 == null)
+            return false;
+
+        //return ClassBox.compare(box1, box2);
+        return false;
+    }
+
+    //might not need this, idk what it would be used for where Strings cannot be used
+    private static boolean equals(final ClassBox o1, final ClassBox o2) {
+        return false;
+    }
+
+    private static boolean addMethod(String className, String name, Visibility view, LinkedList<String> tags, String type, LinkedList<String> params) {
+        // Find className
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        } else {
+            target.addMethod(name, view, tags, type, params);
+            return true;
+        }
+    }
+
+    private static boolean addField(String className, String name, Visibility view, LinkedList<String> tags, String type) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        } else {
+            target.addField(name, view, tags, type);
+            return true;
+        }
+    }
+
     // The save method takes the current state of the program and saves it into a
     // .json file
     // Currently only a single save is supported
@@ -196,6 +237,8 @@ public class ModelDiagram {
                     e.printStackTrace();
                 }
             }
+
+
         }
 
         // Set relationships to null to avoid StackOverflow, then write ClassBoxes to
@@ -287,6 +330,8 @@ public class ModelDiagram {
         }
         fileScanner.close();
         System.out.println("Your previous save has been loaded!");
+
+
     }
 
     /*Methods needed to be implemented
