@@ -11,7 +11,6 @@ public class CLI {
     public static void menu() {
         boolean cont = true;
         while (cont) {
-            Controller.printMenu();
             int input2;
             System.out.print("Choice:");
             // get user input of 1-15
@@ -20,28 +19,24 @@ public class CLI {
             int input = Integer.parseInt(kb.nextLine());
             switch (input) {
                 case 1:
-                    if(false){
+                    if(Controller.getCreatedClassesSize() == 0){
                         System.out.println("Nothing to display! Please make a class first");
                     } else {
-                        System.out.println("Please choose a number from the options below: ");
-                        System.out.println("1.) Display Classes");
-                        System.out.println("2.) Display Classes Detailed");
-                        System.out.println("3.) Display Class Details");
-                        System.out.println("4.) Display Relationships");
-                        System.out.println("5.) Help");
-                        System.out.println("6.) Back");
-                        System.out.print("Choice:");
+                        printStringList(Controller.printMenu());
                         input2 = Integer.parseInt(kb.nextLine());
                         if (input2 == 1) {
-                            listClasses();
+                            CLI.listClasses();
                         } else if (input2 == 2) {
-                            Controller.listDetailedClasses();
+                            printStringList(Controller.listAllClassDetails());
                         } else if (input2 == 3) {
-                            Controller.listClass("Placeholder");
+                            CLI.listClassDetails();
                         } else if (input2 == 4) {
-                            Controller.listRelationships();
+                            for(String[] list : Controller.listRelationships()){
+                                printStringList(list);
+                            }
+
                         } else if (input2 == 5) {
-                            Controller.listHelp();
+                            CLI.printStringList(Controller.listHelp());
                         } else if (input2 == 6) {
                             return;
                         } else {
@@ -175,7 +170,7 @@ public class CLI {
 
         ClassBox.printClassTypes();
 
-        String type = kb.nextLine();
+        int type = Integer.parseInt(kb.nextLine());
         //Test to see if adding was sucessful
         if (Controller.addClass(name, type)) {
             System.out.println("Class created!");
@@ -272,11 +267,29 @@ public class CLI {
             System.out.println("Bad inputs for relationship, deletion cancelled.");
         }
     }
-    public static void listClasses(){
-        String list[] = Controller.listClasses();
-        for(int i=0; i < list.length; i++){
-            System.out.println(i++ + ". " + list[i]);
+    public static void listClassDetails(){
+        System.out.println("What is the name of the class you want see?");
+        System.out.println("Class name: ");
+        String input = kb.nextLine();
+        printStringList(Controller.listClassDetails(input));
+    }
+
+    //This method takes in an arraylist of strings and is able to print it out line after line.
+    //This method is used for many other methods that return String arrays full of data
+    public static void printStringList(final String[] list){
+        for(String s : list){
+            System.out.println(s);
         }
     }
+    public static void listClasses(){
+        int counter = 1;
+        String[] list = Controller.listClasses();
+        for(String s : list){
+            System.out.println(counter + ". " + s);
+            counter++;
+        }
+    }
+
+
 
 }

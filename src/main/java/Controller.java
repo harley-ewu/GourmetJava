@@ -2,6 +2,7 @@ package src.main.java;
 
 import java.util.*;
 
+
 public class Controller {
 
 
@@ -228,8 +229,8 @@ public class Controller {
 
     // Returns a list of Strings, each String holding the detailed info for a
     // CreatedClass
-    public static String[] listDetailedClasses() {
-        return ModelDiagram.listDetailedClasses();
+    public static String[] listAllClassDetails() {
+        return ModelDiagram.listAllClassDetails();
     }
 
     // What are attributes?
@@ -248,8 +249,8 @@ public class Controller {
     // Rachael
     // Takes input from user on what index from the list they want to see then calls
     // a toString for that object
-    public static String[] listClass(final String name) {
-        return ModelDiagram.listClass(name);
+    public static String[] listClassDetails(final String name) {
+        return ModelDiagram.listClassDetails(name);
     }
 
     public static String[] listHelp() {
@@ -368,4 +369,7 @@ public class Controller {
     }
 
 
+    public static int getCreatedClassesSize() {
+        return ModelDiagram.getCreatedClassesSize();
+    }
 }

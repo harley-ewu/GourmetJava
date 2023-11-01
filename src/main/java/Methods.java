@@ -10,6 +10,7 @@ public class Methods extends Attribute{
 
     public Methods(String name, Visibility view, String type, LinkedList<String> params) {
         super(name, view);
+
         this.paramTypes = params;
         this.returnType = type;
     }
