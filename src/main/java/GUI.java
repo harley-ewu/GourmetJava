@@ -1,14 +1,14 @@
-//package src.main.java;
+package src.main.java;
 
-
-//The "view" when the program is in GUI mode
-public class GUI {
-    /*
-    // Java program to construct
+// Java program to construct
 // Menu bar to add menu items
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
-public class menu extends JFrame implements ActionListener{
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+public class GUI extends JFrame implements ActionListener{
     // menubar
     static JMenuBar mb;
 
@@ -22,17 +22,14 @@ public class menu extends JFrame implements ActionListener{
     // create a frame
     static JFrame g;
 
-    static JLabel l;
-
+    //public static void startGUIMenu(){
     public static void main(String[] args){
-        menu m = new menu();
+        GUI m = new GUI();
         // create a frame
         g = new JFrame("Menu demo");
 
         // create a menubar
         mb = new JMenuBar();
-
-        l = new JLabel("None");
 
         a = new JMenu("Display");
         a1 = new JMenuItem("Display");
@@ -84,16 +81,26 @@ public class menu extends JFrame implements ActionListener{
         mb.add(e);
         mb.add(f);
 
-
-
         // add menubar to frame
         g.setJMenuBar(mb);
 
-        g.add(l);
-
         // set the size of the frame
-        g.setSize(500, 500);
+        g.setSize(1000, 800);
+        g.setPreferredSize(new Dimension(1000, 800));
+        g.setResizable(false);
         g.setVisible(true);
+        m.pack();
+        ArrayList<ClassBox> cc = new ArrayList<>();
+        ClassBox c1 = new ClassBox("tim", 1);
+        ClassBox c2 = new ClassBox("dave", 2);
+        LinkedList<String> params = new LinkedList<>();
+        params.add("String");
+        params.add("int");
+        c1.addField("name", Visibility.PROTECTED,"String");
+        c1.addMethod("toString", Visibility.PUBLIC,"String", params);
+        cc.add(c1);
+        cc.add(c2);
+        displayGUI(g, cc);
     }
     public void actionPerformed(ActionEvent e){
         String s = e.getActionCommand();
@@ -101,6 +108,47 @@ public class menu extends JFrame implements ActionListener{
             //I/o, then call method
         }
     }
-}
-     */
+    public static void displayGUI(JFrame j, ArrayList<ClassBox> createdClasses){
+        j.getContentPane().add(new ShapeDrawing(createdClasses));
+        j.setVisible(true);
+    }
+    public static class ShapeDrawing extends JComponent{
+        ArrayList<ClassBox> cc;
+        public ShapeDrawing(ArrayList<ClassBox> cc){
+            super();
+            this.cc = cc;
+        }
+        public void paint(Graphics g){
+            Graphics2D g2 = (Graphics2D) g;
+            drawClass(cc.get(0), 300, 400, g2);
+            drawClass(cc.get(1), 600, 400, g2);
+        }
+        public void drawClass(ClassBox c, int x, int y, Graphics2D g2){
+            int height = 15*(c.getFields().size()+c.getMethods().size()+2);
+            int width = c.getName().length();
+            for(int i = 0; i<c.getFields().size();i++){
+                if(c.getFields().get(i).GUIToString().length() > width){
+                    width = c.getFields().get(i).GUIToString().length();
+                }
+            }
+            for(int i = 0; i<c.getMethods().size();i++){
+                if(c.getMethods().get(i).GUIToString().length() > width){
+                    width = c.getMethods().get(i).GUIToString().length();
+                }
+            }
+            width*=8;
+            g2.drawRect(x,y,width,height);
+            g2.drawString(c.getName(), x+5, y+15);
+            g2.drawLine(x,y+15,x+width, y+15);
+            y = y+30;
+            for(int i=0;i<c.getFields().size();i++){
+                g2.drawString(c.getFields().get(i).GUIToString(), x+10, y);
+                y+=15;
+            }
+            for(int i=0;i<c.getMethods().size();i++){
+                g2.drawString(c.getMethods().get(i).GUIToString(), x+10, y);
+                y+=15;
+            }
+        }
+    }
 }

@@ -168,6 +168,17 @@ public class Controller {
          */
     }
 
+    //deletes method based on className and methodName
+    //Needs params eventually to differentiate overloaded methods
+    public static boolean deleteMethod(String className, String methodName/*, LinkedList params*/) {
+        return ModelDiagram.deleteMethod(className, methodName);
+    }
+
+    //deletes field based on className and methodName
+    public static boolean deleteField(String className, String methodName) {
+        return ModelDiagram.deleteField(className, methodName);
+    }
+
     public static void renameAttribute() {
         /*
 
