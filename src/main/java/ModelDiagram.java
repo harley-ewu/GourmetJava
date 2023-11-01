@@ -58,6 +58,32 @@ public class ModelDiagram {
         return true;
     }
 
+    // This method finds classBox within createdClasses
+    // If not found returns false
+    // Else adds method to the classBox and returns true
+    public static boolean addMethod(String className, String name, Visibility view, String type, LinkedList<String> params) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        } else {
+            target.addMethod(name, view, type, params);
+            return true;
+        }
+    }
+
+    // This method finds classBox within createdClasses
+    // If not found returns false
+    // Else adds field to the classBox and returns true
+    public static boolean addField(String className, String name, Visibility view, String type) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        } else {
+            target.addField(name, view, type);
+            return true;
+        }
+    }
+
     public static boolean deleteMethod(String className, String methodName) {
         ClassBox target = findClassBox(className);
         if (target == null) {
@@ -185,32 +211,6 @@ public class ModelDiagram {
     //might not need this, idk what it would be used for where Strings cannot be used
     private static boolean equals(final ClassBox o1, final ClassBox o2) {
         return false;
-    }
-
-    // This method finds classBox within createdClasses
-    // If not found returns false
-    // Else adds method to the classBox and returns true
-    public static boolean addMethod(String className, String name, Visibility view, String type, LinkedList<String> params) {
-        ClassBox target = findClassBox(className);
-        if (target == null) {
-            return false;
-        } else {
-            target.addMethod(name, view, type, params);
-            return true;
-        }
-    }
-
-    // This method finds classBox within createdClasses
-    // If not found returns false
-    // Else adds field to the classBox and returns true
-    public static boolean addField(String className, String name, Visibility view, String type) {
-        ClassBox target = findClassBox(className);
-        if (target == null) {
-            return false;
-        } else {
-            target.addField(name, view, type);
-            return true;
-        }
     }
 
     // The save method takes the current state of the program and saves it into a
