@@ -5,86 +5,88 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 public class GUI extends JFrame implements ActionListener{
-    // menubar
-    static JMenuBar mb;
+    // Creates a dropdown style menu framework at the top of the frame
+    static JMenuBar mainMenu;
 
-    // JMenu
-    static JMenu a,b,c,d,e,f;
+    // Creates individual dropdown menus for each category within the overall menu
+    static JMenu displayDropdown,classDropdown,attributeDropdown,relationshipDropdown,saveLoadDropdown,helpDropdown;
 
-    // Menu items
-    static JMenuItem a1,b1,b2,b3,c1,c2,c3,d1,d2,e1,e2,f1;
+    // Individual menu items/buttons under their individual category menus
+    static JMenuItem display,addClass,deleteClass,renameClass,addAtt,delAtt,renameAtt,addRelation,delRelation,save,load,help;
 
 
-    // create a frame
-    static JFrame g;
+    //creates a frame to be the main, base window to hold the entirety of the GUI
+    static JFrame guiWindow;
 
     //public static void startGUIMenu(){
     public static void main(String[] args){
         GUI m = new GUI();
-        // create a frame
-        g = new JFrame("Menu demo");
+
+        guiWindow = new JFrame("UML Editor");
 
         // create a menubar
-        mb = new JMenuBar();
+        mainMenu = new JMenuBar();
 
-        a = new JMenu("Display");
-        a1 = new JMenuItem("Display");
-        a1.addActionListener(m);
-        a.add(a1);
-        b = new JMenu("Class");
-        b1 = new JMenuItem("Add Class");
-        b2 = new JMenuItem("Delete Class");
-        b3 = new JMenuItem("Rename Class");
-        b1.addActionListener(m);
-        b2.addActionListener(m);
-        b3.addActionListener(m);
-        b.add(b1);
-        b.add(b2);
-        b.add(b3);
-        c = new JMenu("Attribute");
-        c1 = new JMenuItem("Add Class");
-        c2 = new JMenuItem("Delete Class");
-        c3 = new JMenuItem("Rename Class");
-        c1.addActionListener(m);
-        c2.addActionListener(m);
-        c3.addActionListener(m);
-        c.add(c1);
-        c.add(c2);
-        c.add(c3);
-        d = new JMenu("Relationship");
-        d1 = new JMenuItem("Add Relationship");
-        d2 = new JMenuItem("Delete Relationship");
-        d1.addActionListener(m);
-        d2.addActionListener(m);
-        d.add(d1);
-        d.add(d2);
-        e = new JMenu("Save/Load");
-        e1 = new JMenuItem("Save");
-        e2 = new JMenuItem("Load");
-        e1.addActionListener(m);
-        e2.addActionListener(m);
-        e.add(e1);
-        e.add(e2);
-        f = new JMenu("Help");
-        f1 = new JMenuItem("Help");
-        f.add(f1);
-        f1.addActionListener(m);
-        // add menu to menu bar
-        mb.add(a);
-        mb.add(b);
-        mb.add(c);
-        mb.add(d);
-        mb.add(e);
-        mb.add(f);
+        displayDropdown = new JMenu("Display");
+        display = new JMenuItem("Display");
+        display.addActionListener(m);
+        displayDropdown.add(display);
+        classDropdown = new JMenu("Class");
+        addClass = new JMenuItem("Add Class");
+        deleteClass = new JMenuItem("Delete Class");
+        renameClass = new JMenuItem("Rename Class");
+        addClass.addActionListener(m);
+        deleteClass.addActionListener(m);
+        renameClass.addActionListener(m);
+        classDropdown.add(addClass);
+        classDropdown.add(deleteClass);
+        classDropdown.add(renameClass);
+        attributeDropdown = new JMenu("Attribute");
+        addAtt = new JMenuItem("Add Attribute");
+        delAtt = new JMenuItem("Delete Attribute");
+        renameAtt = new JMenuItem("Rename Attribute");
+        addAtt.addActionListener(m);
+        delAtt.addActionListener(m);
+        renameAtt.addActionListener(m);
+        attributeDropdown.add(addAtt);
+        attributeDropdown.add(delAtt);
+        attributeDropdown.add(renameAtt);
+        relationshipDropdown = new JMenu("Relationship");
+        addRelation = new JMenuItem("Add Relationship");
+        delRelation = new JMenuItem("Delete Relationship");
+        addRelation.addActionListener(m);
+        delRelation.addActionListener(m);
+        relationshipDropdown.add(addRelation);
+        relationshipDropdown.add(delRelation);
+        saveLoadDropdown = new JMenu("Save/Load");
+        save = new JMenuItem("Save");
+        load = new JMenuItem("Load");
+        save.addActionListener(m);
+        load.addActionListener(m);
+        saveLoadDropdown.add(save);
+        saveLoadDropdown.add(load);
+        helpDropdown = new JMenu("Help");
+        /*Maybe take out the dropdown part of "help" since there's just one component.
+         that isn't exactly needed to be repeated if we can get around it*/
+        help = new JMenuItem("Help");
+        helpDropdown.add(help);
+        help.addActionListener(m);
+        // add individual dropdown menus to menu bar
+        mainMenu.add(displayDropdown);
+        mainMenu.add(classDropdown);
+        mainMenu.add(attributeDropdown);
+        mainMenu.add(relationshipDropdown);
+        mainMenu.add(saveLoadDropdown);
+        mainMenu.add(helpDropdown);
 
-        // add menubar to frame
-        g.setJMenuBar(mb);
+        // add menubar to our main GUI display frame
+        guiWindow.setJMenuBar(mainMenu);
 
-        // set the size of the frame
-        g.setSize(1000, 800);
-        g.setPreferredSize(new Dimension(1000, 800));
-        g.setResizable(false);
-        g.setVisible(true);
+        // set the size of the main GUI frame
+        guiWindow.setSize(1000, 800);
+        guiWindow.setPreferredSize(new Dimension(1000, 800));
+        guiWindow.setResizable(false);
+        guiWindow.setVisible(true);
         m.displayGUI();
     }
     public void actionPerformed(ActionEvent e){
