@@ -145,7 +145,7 @@ public class Controller {
                     if (input2 == 1) {
                         ModelDiagram.save();
                     } else if (input2 == 2) {
-                        load();
+                        ModelDiagram.load();
                     } else if (input2 == 3) {
                         saveLoadHelp();
                     } else if (input2 == 4) {
@@ -341,9 +341,6 @@ public class Controller {
 
 
          */
-    }
-
-
 
         // Set relationships to null to avoid StackOverflow, then write ClassBoxes to
         // file
