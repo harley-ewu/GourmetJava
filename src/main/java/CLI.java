@@ -35,9 +35,9 @@ public class CLI {
                         if (input2 == 1) {
                             listClasses();
                         } else if (input2 == 2) {
-                            Controller.listDetailedClasses();
+                            Controller.listAllClassDetails();
                         } else if (input2 == 3) {
-                            Controller.listClass("Placeholder");
+                            Controller.listClassDetails("Placeholder");
                         } else if (input2 == 4) {
                             Controller.listRelationships();
                         } else if (input2 == 5) {
