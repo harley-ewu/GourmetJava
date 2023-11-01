@@ -49,15 +49,15 @@ public class ClassBox {
         }
     }
 
-    public void addMethod(String name, Visibility view, LinkedList<String> tags, String type, LinkedList<String> params){
+    public void addMethod(String name, Visibility view, String type, LinkedList<String> params){
         //call the constructor and add to list
-        Methods newMethod = new Methods(name, view, tags, type, params);
+        Methods newMethod = new Methods(name, view, type, params);
         this.methods.add(newMethod);        
     }
 
-    public void addField(String name, Visibility view, LinkedList<String> tags, String type){
+    public void addField(String name, Visibility view, String type){
         //call the constructor and add to list
-        Field newField = new Field(name, view, tags, type);
+        Field newField = new Field(name, view, type);
         this.fields.add(newField);
     }
 
@@ -134,11 +134,11 @@ public class ClassBox {
         s.append("\tType: ").append(this.type).append("\n");
         s.append("\tFields: \n");
         for(Field a: this.fields){
-            s.append("\t\t").append(a).append("\n");
+            s.append("\t\t").append(a.CLIToString()).append("\n");
         }
         s.append("\tMethods: \n");
         for(Methods a: this.methods){
-            s.append("\t\t").append(a).append("\n");
+            s.append("\t\t").append(a.CLIToString()).append("\n");
         }
         s.append("\tRelationships: \n");
         for(Relationship r: this.relationships){

@@ -4,6 +4,9 @@ package src.main.java;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 public class GUI extends JFrame implements ActionListener{
     // menubar
     static JMenuBar mb;
@@ -85,7 +88,18 @@ public class GUI extends JFrame implements ActionListener{
         g.setPreferredSize(new Dimension(1000, 800));
         g.setResizable(false);
         g.setVisible(true);
-        m.displayGUI();
+        m.pack();
+        ArrayList<ClassBox> cc = new ArrayList<>();
+        ClassBox c1 = new ClassBox("tim", 1);
+        ClassBox c2 = new ClassBox("dave", 2);
+        LinkedList<String> params = new LinkedList<>();
+        params.add("String");
+        params.add("int");
+        c1.addField("name", Visibility.PROTECTED,"String");
+        c1.addMethod("toString", Visibility.PUBLIC,"String", params);
+        cc.add(c1);
+        cc.add(c2);
+        displayGUI(g, cc);
     }
     public void actionPerformed(ActionEvent e){
         String s = e.getActionCommand();
@@ -93,8 +107,47 @@ public class GUI extends JFrame implements ActionListener{
             //I/o, then call method
         }
     }
-    public void displayGUI(){
-        System.out.println(this.getContentPane().getSize().getWidth());
-        System.out.println(this.getContentPane().getSize().getHeight());
+    public static void displayGUI(JFrame j, ArrayList<ClassBox> createdClasses){
+        j.getContentPane().add(new ShapeDrawing(createdClasses));
+        j.setVisible(true);
+    }
+    public static class ShapeDrawing extends JComponent{
+        ArrayList<ClassBox> cc;
+        public ShapeDrawing(ArrayList<ClassBox> cc){
+            super();
+            this.cc = cc;
+        }
+        public void paint(Graphics g){
+            Graphics2D g2 = (Graphics2D) g;
+            drawClass(cc.get(0), 300, 400, g2);
+            drawClass(cc.get(1), 600, 400, g2);
+        }
+        public void drawClass(ClassBox c, int x, int y, Graphics2D g2){
+            int height = 15*(c.getFields().size()+c.getMethods().size()+2);
+            int width = c.getName().length();
+            for(int i = 0; i<c.getFields().size();i++){
+                if(c.getFields().get(i).GUIToString().length() > width){
+                    width = c.getFields().get(i).GUIToString().length();
+                }
+            }
+            for(int i = 0; i<c.getMethods().size();i++){
+                if(c.getMethods().get(i).GUIToString().length() > width){
+                    width = c.getMethods().get(i).GUIToString().length();
+                }
+            }
+            width*=8;
+            g2.drawRect(x,y,width,height);
+            g2.drawString(c.getName(), x+5, y+15);
+            g2.drawLine(x,y+15,x+width, y+15);
+            y = y+30;
+            for(int i=0;i<c.getFields().size();i++){
+                g2.drawString(c.getFields().get(i).GUIToString(), x+10, y);
+                y+=15;
+            }
+            for(int i=0;i<c.getMethods().size();i++){
+                g2.drawString(c.getMethods().get(i).GUIToString(), x+10, y);
+                y+=15;
+            }
+        }
     }
 }

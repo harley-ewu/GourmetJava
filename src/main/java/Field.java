@@ -5,19 +5,23 @@ import java.util.LinkedList;
 public class Field extends Attribute{
     //type of field
     private String type;
-    public Field(String name, Visibility view, LinkedList<String> tags, String type) {
-        super(name, view, tags);
+    public Field(String name, Visibility view, String type) {
+        super(name, view);
         this.type = type;
     }
 
     @Override
     public String CLIToString() {
-        return super.getName() + " " + super.getView() + " " + super.getModifiers() + " " + type;
+        StringBuilder s = new StringBuilder(this.getView().name().toLowerCase() + " ");
+        s.append(this.getName());
+        return s.toString();
     }
 
     @Override
     public String GUIToString() {
-        throw new UnsupportedOperationException("Unimplemented method 'GUIToString'");
+        StringBuilder s = new StringBuilder(this.getView().getSymbol() + " ");
+        s.append(this.getName());
+        return s.toString();
     }
 
     @Override

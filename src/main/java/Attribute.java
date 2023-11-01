@@ -12,18 +12,13 @@ public abstract class Attribute implements Comparable<Attribute> {
     private String name;
     //public, private, protected
     private Visibility view;
-    //Stuff like static
-    private LinkedList<String> modifiers;
-    //Return type if method, value type if value
 
-
-    public Attribute(String name, Visibility view, LinkedList<String> tags) {
-        if (name == null || name.isEmpty() || view == null || tags == null) {
+    public Attribute(String name, Visibility view) {
+        if (name == null || name.isEmpty() || view == null) {
             throw new IllegalArgumentException("Bad params at Attribute constructor");
         }
         this.name = name;
         this.view = view;
-        this.modifiers = tags;
     }
 
     public void setName(String newName) {
@@ -40,23 +35,12 @@ public abstract class Attribute implements Comparable<Attribute> {
         this.view = newView;
     }
 
-    public void setModifiers(LinkedList<String> newModifiers) {
-        if (newModifiers == null) {
-            throw new IllegalArgumentException("Bad modifiers at attribute setModifiers");
-        }
-        this.modifiers = newModifiers;
-    }
-
     public String getName() {
         return this.name;
     }
 
     public Visibility getView() {
         return this.view;
-    }
-
-    public LinkedList<String> getModifiers() {
-        return this.modifiers;
     }
 
     @Override
