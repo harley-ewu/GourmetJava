@@ -58,6 +58,26 @@ public class ModelDiagram {
         return true;
     }
 
+    public static boolean deleteMethod(String className, String methodName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        }
+        else {
+            return target.deleteMethod(methodName);
+        }
+    }
+
+    public static boolean deleteField(String className, String fieldName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        }
+        else {
+            return target.deleteField(fieldName);
+        }
+    }
+
     public static String[] listClasses() {
         String[] list = new String[createdClasses.size()];
         for (int i = 0; i < createdClasses.size(); ++i) {

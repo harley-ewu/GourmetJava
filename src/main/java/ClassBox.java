@@ -68,6 +68,28 @@ public class ClassBox {
         }
     }
 
+    public boolean deleteField(String name) {
+        //Find the field with the name
+        //remove that field from the list
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).getName().equals(name)) {
+                fields.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteMethod(String name/*, LinkedList<String> params*/) {
+        for (int i = 0; i < fields.size(); i++) {
+            if (methods.get(i).getName().equals(name)) {
+                methods.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void renameAttribute(Attribute att, String newName) {
         att.setName(newName);
     }
