@@ -45,9 +45,9 @@ public class Controller {
         return ModelDiagram.renameClass(originalName, newName);
     }
 
-    public static boolean addRelationship(final String cb1, final String cb2, final String type) {
-        //return ModelDiagram.addRelationship(cb1, cb2, type);
-        return false;
+    public static boolean addRelationship(final String cb1, final String cb2, final int type) {
+        return ModelDiagram.addRelationship(cb1, cb2, type);
+
     }
 
     // Deletes a relationship between two classes while prompting the user to verify

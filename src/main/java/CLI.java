@@ -12,8 +12,7 @@ public class CLI {
         boolean cont = true;
         while (cont) {
             int input2;
-            System.out.println("1.) Display options");
-            System.out.println("2.) Manipulate classes");
+            CLI.printStringList(Controller.printMenu());
             System.out.print("Choice:");
             // get user input of 1-15
             // call io method below
@@ -62,7 +61,7 @@ public class CLI {
                     } else if (input2 == 3) {
                         CLI.renameClass();
                     } else if (input2 == 4) {
-                        Controller.classHelp();
+                        CLI.printStringList(Controller.classHelp());
                     } else if (input2 == 5) {
                         return;
                     } else {
@@ -89,7 +88,7 @@ public class CLI {
                         } else if (input2 == 3) {
                             Controller.renameAttribute();
                         } else if (input2 == 4) {
-                            Controller.attributeHelp();
+                            CLI.printStringList(Controller.attributeHelp());
                         } else if (input2 == 5) {
                             return;
                         } else {
@@ -110,11 +109,11 @@ public class CLI {
                         System.out.print("Choice:");
                         input2 = Integer.parseInt(kb.nextLine());
                         if (input2 == 1) {
-                            //addRelationship();
+                            CLI.addRelationship();
                         } else if (input2 == 2) {
-                            //deleteRelationship();
+                            CLI.deleteRelationship();
                         } else if (input2 == 3) {
-                            Controller.relationshipHelp();
+                            CLI.printStringList(Controller.relationshipHelp());
                         } else if (input2 == 4) {
                             return;
                         } else {
@@ -135,7 +134,7 @@ public class CLI {
                     } else if (input2 == 2) {
                         ModelDiagram.load();
                     } else if (input2 == 3) {
-                        Controller.saveLoadHelp();
+                        printStringList(Controller.saveLoadHelp());
                     } else if (input2 == 4) {
                         return;
                     } else {
@@ -170,7 +169,7 @@ public class CLI {
         String name = kb.nextLine();
         System.out.println("What is the class's type?");
 
-        ClassBox.printClassTypes();
+        //printStringList(ClassBox.printClassTypes());
 
         int type = Integer.parseInt(kb.nextLine());
         //Test to see if adding was sucessful
@@ -185,6 +184,7 @@ public class CLI {
     // to the controller
     // The controller will return true or false based on whether or not the class
     // was deleted
+
     public static void deleteClass() {
         System.out.println("What index do you want to remove?");
         Controller.listClasses();
@@ -225,15 +225,17 @@ public class CLI {
     // CLI mode and send it to the controller
     // The controller will return true or false based on whether or not the
     // relationship was created
-    public void addRelationship() {
-        Controller.listClasses();
-        System.out.println("What is the index of the first class you want to have a relationship? (The lower/to class, e.g this implements the other class)");
-        System.out.print("Class 1 Index:");
-        int index1 = Integer.parseInt(kb.nextLine());
+    public static void addRelationship() {
 
-        System.out.println("What is the index of the second class you want to have a relationship?(The higher/from class, e.g the other class implements this)");
-        System.out.print("Class 2 Index:");
-        int index2 = Integer.parseInt(kb.nextLine());
+        System.out.println("What is the name of the first class you want to have a relationship? (The lower/to class, e.g this implements the other class)");
+        CLI.printStringList(Controller.listClasses());
+        System.out.print("Class 1 name:");
+        String name1 = kb.nextLine();
+
+        System.out.println("What is the name of the second class you want to have a relationship?(The higher/from class, e.g the other class implements this)");
+        CLI.printStringList(Controller.listClasses());
+        System.out.print("Class 2 name:");
+        String name2 = kb.nextLine();
 
         Relationship.printRelationshipTypes();
         System.out.println("Please select an option for the relationship type by number");
@@ -242,14 +244,14 @@ public class CLI {
 
         //Test to see if adding relationship was sucessful
         //if (Controller.addRelationship(index1, index2, type)) {
-        if(false){
+        if(Controller.addRelationship(name1, name2, type)){
             System.out.println("Relationship created!");
         } else {
             System.out.println("Bad inputs for relationship, creation cancelled");
         }
     }
 
-    public void deleteRelationship() {
+    public static void deleteRelationship() {
         Controller.listClasses();
         System.out.println("What is the index of the first class of this relationship?");
         System.out.print("Class Index:");
@@ -269,6 +271,10 @@ public class CLI {
             System.out.println("Bad inputs for relationship, deletion cancelled.");
         }
     }
+
+
+
+
     public static void listClassDetails(){
         System.out.println("What is the name of the class you want see?");
         System.out.println("Class name: ");
