@@ -12,6 +12,8 @@ public class CLI {
         boolean cont = true;
         while (cont) {
             int input2;
+            System.out.println("1.) Display options");
+            System.out.println("2.) Manipulate classes");
             System.out.print("Choice:");
             // get user input of 1-15
             // call io method below
@@ -54,11 +56,11 @@ public class CLI {
                     System.out.print("Choice:");
                     input2 = Integer.parseInt(kb.nextLine());
                     if (input2 == 1) {
-                        addClass();
+                        CLI.addClass();
                     } else if (input2 == 2) {
-                        Controller.deleteClass("name");
+                        CLI.deleteClass();
                     } else if (input2 == 3) {
-                        //renameClass();
+                        CLI.renameClass();
                     } else if (input2 == 4) {
                         Controller.classHelp();
                     } else if (input2 == 5) {
@@ -69,7 +71,7 @@ public class CLI {
                     break;
                 case 3:
                     //if (createdClasses.isEmpty()) {
-                    if(false){
+                    if(Controller.getCreatedClassesSize() == 0){
                         System.out.println("Please create a class first");
                     } else {
                         System.out.println("Please choose a number from the options below: ");
@@ -97,7 +99,7 @@ public class CLI {
                     break;
                 case 4:
                     //if (createdClasses.size() < 2) {
-                    if(false){
+                    if(Controller.getCreatedClassesSize() < 2){
                         System.out.println("Please create 2 classes first");
                     } else {
                         System.out.println("Please choose a number from the options below: ");
@@ -183,7 +185,7 @@ public class CLI {
     // to the controller
     // The controller will return true or false based on whether or not the class
     // was deleted
-    public void deleteClass() {
+    public static void deleteClass() {
         System.out.println("What index do you want to remove?");
         Controller.listClasses();
         System.out.print("Class Index:");
@@ -201,18 +203,18 @@ public class CLI {
     // mode and send it to the controller
     // The controller will return true or false based on whether or not the class
     // was renamed
-    public void renameClass() {
-        System.out.println("What index do you want to rename?");
-        Controller.listClasses();
-        System.out.print("Class Index:");
-        String num = kb.nextLine();
+    public static void renameClass() {
+        System.out.println("What is the name of the class you want to rename?");
+        CLI.listClasses();
+        System.out.print("Class Name:");
+        String oldName = kb.nextLine();
 
         System.out.println("What would you like to rename your class?");
         System.out.print("New Class Name:");
         String name = kb.nextLine();
 
         //Test to see if rename was sucessful
-        if (Controller.renameClass(num, name)) {
+        if (Controller.renameClass(oldName, name)) {
             System.out.println("Class renamed!");
         } else {
             System.out.println("Bad input was provided. Failed to rename class.");
