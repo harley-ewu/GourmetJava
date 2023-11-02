@@ -124,6 +124,7 @@ public class ModelDiagram {
         }
     }
 
+
     public static String[] listClasses() {
         String[] list = new String[createdClasses.size()];
         for (int i = 0; i < createdClasses.size(); ++i) {
@@ -164,32 +165,33 @@ public class ModelDiagram {
     //does not handle which class is the parent or child
     //returns true if a relationship was added, false otherwise (also returns false if a relationship existed)
     //idk if the type should be an int or a String
-    public static boolean addRelationship(final String cb1, final String cb2, final int type) {
-        if (cb1 == null || cb2 == null || cb1.isEmpty() || cb2.isEmpty())
+    public static boolean addRelationship(final String parentClass, final String childClass, final int type) {
+        if (parentClass == null || childClass == null || parentClass.isEmpty() || childClass.isEmpty())
             throw new IllegalArgumentException("bad param passed to ModelDiagram.addRelationship");
 
-        ClassBox box1 = findClassBox(cb1);
-        ClassBox box2 = findClassBox(cb2);
-        if (box1 == null || box2 == null)
+        ClassBox parent = findClassBox(parentClass);
+        ClassBox child = findClassBox(childClass);
+        if (parent == null || child == null)
             return false;
 
         //check if relationship between boxes exist within ClassBox
 
-        return box1.addRelationship(box2, type);
+        ClassBox.addRelationship(parent, child, type);
+        return true;
     }
 
     //returns true if a relationship between the classes was deleted
     //returns false if the box objects do not exist or if there wasn't a relationship to begin with
-    public static boolean deleteRelationship(final String cb1, final String cb2) {
-        if (cb1 == null || cb2 == null || cb1.isEmpty() || cb2.isEmpty())
+    public static boolean deleteRelationship(final String parentClass, final String childClass) {
+        if (parentClass == null || childClass == null || parentClass.isEmpty() || childClass.isEmpty())
             throw new IllegalArgumentException("bad param passed to ModelDiagram.deleteRelationship");
 
-        ClassBox box1 = findClassBox(cb1);
-        ClassBox box2 = findClassBox(cb2);
-        if (box1 == null || box2 == null)
+        ClassBox parent = findClassBox(parentClass);
+        ClassBox child = findClassBox(childClass);
+        if (parent == null || child == null)
             return false;
 
-        return ClassBox.deleteRelationship(box1, box2);
+        return ClassBox.deleteRelationship(parent, child);
 
     }
 
@@ -233,10 +235,13 @@ public class ModelDiagram {
         return false;
     }
 
+
+
     // The save method takes the current state of the program and saves it into a
     // .json file
     // Currently only a single save is supported
     public static void save() {
+        /*
         // Create a gson object that will take java objects and translate them to json
         Gson gson = new Gson();
         // Create a FileWriter that will write the converted Java to SavedFile.json
@@ -263,7 +268,7 @@ public class ModelDiagram {
                 // Find second index
                 int secondIndex = -1;
                 for (int p = 0; p < createdClasses.size(); p++) {
-                    if (createdClasses.get(p).getName().equals(relationships.get(j).getFrom().getName())) {
+                    if (createdClasses.get(p).getName().equals(relationships.get(j).getOtherClass().getName())) {
                         secondIndex = p;
                         p = createdClasses.size();
                     }
@@ -308,12 +313,14 @@ public class ModelDiagram {
             e.printStackTrace();
         }
         System.out.println("Your progress has been saved!");
+        */
     }
 
     // The load function is used to restore data that was previously saved using the
     // save function
     // Again we only support up to a single save
     public static void load() {
+        /*
         // Create a File and add a scanner to it to read the data
         File inputFile = new File("SavedFile.json");
         Scanner fileScanner = null;
@@ -370,12 +377,16 @@ public class ModelDiagram {
                 ClassBox class1 = createdClasses.get(firstIndex);
                 ClassBox class2 = createdClasses.get(secondIndex);
 
-                class1.addRelationship(class2, type);
+                ClassBox.addRelationship(class1, class2, type);
             }
         }
         fileScanner.close();
         System.out.println("Your previous save has been loaded!");
+        */
+
     }
+
+
 
     public static int getCreatedClassesSize() {
         return createdClasses.size();

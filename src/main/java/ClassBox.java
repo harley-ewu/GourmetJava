@@ -23,21 +23,20 @@ public class ClassBox {
     //Class, Interface, Enum, etc
     private final ClassType type;
     //Way to sort fields first, methods last?
-    private final LinkedList<Relationship> relationships;
+    private final LinkedList<Relationship> parents = new LinkedList<>();
 
-    private final LinkedList<Methods> methods;
+    private final LinkedList<Relationship> children = new LinkedList<>();
 
-    private final LinkedList<Field> fields;
+    private final LinkedList<Methods> methods = new LinkedList<>();
+
+    private final LinkedList<Field> fields = new LinkedList<>();
 
     public ClassBox(String name, int type) {
         if (name == null || name.isEmpty() || type < 1 || type > ClassType.values().length)
             throw new IllegalArgumentException("Bad params at ClassBox constructor");
 
         this.name = name;
-        this.relationships = new LinkedList<>();
         this.type = ClassBox.ClassType.values()[type - 1];
-        this.methods = new LinkedList<>();
-        this.fields = new LinkedList<>();
     }
 
     public static void printClassTypes() {
@@ -115,13 +114,13 @@ public class ClassBox {
 
 
     public static Relationship findRelationship(final ClassBox cb1, final ClassBox cb2) {
-        for (Relationship rel : cb1.relationships) {
-            if (rel.getFrom().equals(cb2)) {
+        for (Relationship rel : cb1.parents) {
+            if (rel.getOtherClass().equals(cb2)) {
                 return rel;
             }
         }
-        for (Relationship rel : cb2.relationships) {
-            if (rel.getFrom().equals(cb1)) {
+        for (Relationship rel : cb1.children) {
+            if (rel.getOtherClass().equals(cb2)) {
                 return rel;
             }
         }
@@ -131,23 +130,30 @@ public class ClassBox {
     //Needs to check for existing Relationship between ClassBox objects
     //Returns true if a relationship was added
     //ClassBox objects are guaranteed to not be null by the caller
-    public boolean addRelationship(final ClassBox toClass, final int type) {
-        this.relationships.add(new Relationship(toClass, type));
-        return true;
+    public static void addRelationship(final ClassBox parentClass, final ClassBox childClass, final int type) {
+            parentClass.children.add(new Relationship(childClass,type));
+            childClass.parents.add(new Relationship(parentClass,type));
+    }
+
+    public static void addRelationship(final ClassBox parentClass, final ClassBox childClass, final String type) {
+        parentClass.children.add(new Relationship(childClass,type));
+        childClass.parents.add(new Relationship(parentClass,type));
     }
 
     //returns true only if a Relationship was deleted
     //returns false if no Relationship was deleted or it did not exist
     public static boolean deleteRelationship(final ClassBox cb1, final ClassBox cb2) {
-        for (Relationship rel : cb1.relationships) {
-            if (rel.getFrom().equals(cb2)) {
-                cb1.relationships.remove(rel);
+        for (Relationship rel : cb1.parents) {
+            if (rel.getOtherClass().equals(cb2)) {
+                cb1.parents.remove(rel);
+                cb2.children.remove(rel);
                 return true;
             }
         }
-        for (Relationship rel : cb2.relationships) {
-            if (rel.getFrom().equals(cb1)) {
-                cb2.relationships.remove(rel);
+        for (Relationship rel : cb1.children) {
+            if (rel.getOtherClass().equals(cb2)) {
+                cb1.children.remove(rel);
+                cb2.parents.remove(rel);
                 return true;
             }
         }
@@ -155,9 +161,9 @@ public class ClassBox {
     }
 
     public String[] listRelationships() {
-        String[] rels = new String[this.relationships.size()];
+        String[] rels = new String[this.parents.size()];
         for (int i = 0; i < rels.length; ++i) {
-            rels[i] = this.relationships.get(i).toString();
+            rels[i] = this.parents.get(i).toString();
         }
         return rels;
     }
@@ -169,32 +175,12 @@ public class ClassBox {
 
     @Override
     public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append("Class: ").append(this.name).append("\n");
-        s.append("\tType: ").append(this.type).append("\n");
-        s.append("\tFields: \n");
-
-        for(Field a: this.fields){
-            s.append("\t\t").append(a.CLIToString()).append("\n");
-        }
-        s.append("\tMethods: \n");
-        for(Methods a: this.methods){
-            s.append("\t\t").append(a.CLIToString()).append("\n");
-        }
-        s.append("\tRelationships: \n");
-        for (Relationship r : this.relationships) {
-            s.append("\t\t").append(this.name).append(" ").append(r).append("\n");
-        }
-        return s.toString();
+        return null;
     }
 
 
     public String getName() {
         return this.name;
-    }
-
-    public LinkedList<Relationship> getRelationships() {
-        return this.relationships;
     }
 
     public LinkedList<Methods> getMethods() {
