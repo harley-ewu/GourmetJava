@@ -52,16 +52,27 @@ public class ClassBox {
     }
 
 
-    public void addMethod(String name, Visibility view, String type, LinkedList<String> params){
+    public boolean addMethod(String name, int view, String type, LinkedList<String> params){
         //call the constructor and add to list
-        Methods newMethod = new Methods(name, view, type, params);
-        this.methods.add(newMethod);        
+        try {
+            Methods newMethod = new Methods(name, view, type, params);
+            this.methods.add(newMethod);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
     }
 
-    public void addField(String name, Visibility view, String type){
+    public boolean addField(String name, int view, String type){
         //call the constructor and add to list
-        Field newField = new Field(name, view, type);
-        this.fields.add(newField);
+        try {
+            Field newField = new Field(name, view, type);
+            this.fields.add(newField);
+            return true;
+        } catch(Exception e){
+            return false;
+        }
+
     }
 
 

@@ -8,7 +8,7 @@ public class Methods extends Attribute {
     //return type
     private final String returnType;
 
-    public Methods(String name, Visibility view, String type, LinkedList<String> params) {
+    public Methods(String name, int view, String type, LinkedList<String> params) {
         super(name, view);
 
         this.paramTypes = params;

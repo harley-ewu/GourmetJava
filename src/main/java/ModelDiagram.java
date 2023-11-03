@@ -61,27 +61,25 @@ public class ModelDiagram {
     // This method finds classBox within createdClasses
     // If not found returns false
     // Else adds method to the classBox and returns true
-    public static boolean addMethod(String className, String name, Visibility view, String type, LinkedList<String> params) {
+    public static boolean addMethod(String className, String name, int view, String returnType, LinkedList<String> params) {
         ClassBox target = findClassBox(className);
-        if (target == null) {
+        if (target == null)
             return false;
-        } else {
-            target.addMethod(name, view, type, params);
-            return true;
-        }
+
+        return target.addMethod(name, view, returnType, params);
+
     }
 
     // This method finds classBox within createdClasses
     // If not found returns false
     // Else adds field to the classBox and returns true
-    public static boolean addField(String className, String name, Visibility view, String type) {
+    public static boolean addField(String className, String name, int view, String type) {
         ClassBox target = findClassBox(className);
-        if (target == null) {
+        if (target == null)
             return false;
-        } else {
-            target.addField(name, view, type);
-            return true;
-        }
+
+        return target.addField(name, view, type);
+
     }
 
     public static boolean addParam(String className, String methodName, String paramName) {
@@ -116,8 +114,7 @@ public class ModelDiagram {
         ClassBox target = findClassBox(className);
         if (target == null) {
             return false;
-        }
-        else {
+        } else {
             return target.deleteParam(methodName, paramName);
         }
     }
@@ -144,8 +141,7 @@ public class ModelDiagram {
         ClassBox target = findClassBox(className);
         if (target == null) {
             return false;
-        }
-        else {
+        } else {
             return target.renameParam(methodName, paramName);
         }
     }
@@ -217,7 +213,7 @@ public class ModelDiagram {
             return false;
 
         Relationship relationship = ClassBox.findRelationship(parent, child);
-        if(relationship != null)
+        if (relationship != null)
             return false;
 
         ClassBox.addRelationship(parent, child, type);
@@ -236,7 +232,7 @@ public class ModelDiagram {
             return false;
 
         Relationship relationship = ClassBox.findRelationship(parent, child);
-        if(relationship == null)
+        if (relationship == null)
             return false;
 
         ClassBox.deleteRelationship(parent, child);

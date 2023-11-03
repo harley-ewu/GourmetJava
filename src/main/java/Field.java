@@ -1,11 +1,10 @@
 package src.main.java;
 
-import java.util.LinkedList;
 
 public class Field extends Attribute{
     //type of field
     private final String type;
-    public Field(String name, Visibility view, String type) {
+    public Field(String name, int view, String type) {
         super(name, view);
         this.type = type;
     }

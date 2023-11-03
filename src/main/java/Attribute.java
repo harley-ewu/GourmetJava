@@ -22,6 +22,15 @@ public abstract class Attribute implements Comparable<Attribute> {
         this.view = view;
     }
 
+    public Attribute(final String name, final int viewType) {
+        if (name == null || name.isEmpty() || viewType < 1 || viewType > Visibility.values().length)
+            throw new IllegalArgumentException("Bad params at Attribute constructor");
+
+        this.name = name;
+        this.view = Visibility.values()[viewType];
+
+    }
+
     public void setName(String newName) {
         if (newName == null || newName.isEmpty()) {
             throw new IllegalArgumentException("Bad name at attribute setName");
@@ -49,7 +58,7 @@ public abstract class Attribute implements Comparable<Attribute> {
         return this.name.compareTo(a.name);
     }
 
-    public static String[] listAttributeTypes(){
+    public static String[] listAttributeTypes() {
         return Arrays.stream(AttributeType.values()).map(Enum::name).toArray(String[]::new);
     }
 
@@ -58,14 +67,16 @@ public abstract class Attribute implements Comparable<Attribute> {
     Ex: "+myMethod"
      */
     @Override
-    public String toString(){
+    public String toString() {
         return this.view.getSymbol() + this.name;
     }
 
     //compare by name if field, by name and params if method
     abstract boolean equalTo(Attribute another);
+
     //will have symbols for view
     abstract public String GUIToString();
+
     //view as word
     abstract public String CLIToString();
 }
