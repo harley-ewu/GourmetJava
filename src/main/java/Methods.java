@@ -22,6 +22,16 @@ public class Methods extends Attribute{
         this.paramTypes = newParamTypes;
     }
 
+    public boolean renameParam(String paramName) {
+        for (int i = 0; i < paramTypes.size(); i++) {
+            if (paramTypes.get(i).equals(paramName)) {
+                paramTypes.set(i, paramName);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public LinkedList<String> getParamTypes() {
         return this.paramTypes;
     }

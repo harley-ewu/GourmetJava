@@ -88,8 +88,13 @@ public class ClassBox {
         return false;
     }
 
-    public void renameAttribute(Attribute att, String newName) {
-        att.setName(newName);
+    public boolean renameParam(String methodName, String paramName) {
+        for (int i = 0; i < fields.size(); i++) {
+            if (methods.get(i).getName().equals(methodName)) {
+                return methods.get(i).renameParam(paramName);
+            }
+        }
+        return false;
     }
 
     public boolean renameMethod(String methodName, String newMethodName) {
