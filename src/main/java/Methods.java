@@ -22,6 +22,10 @@ public class Methods extends Attribute{
         this.paramTypes = newParamTypes;
     }
 
+    public void addParam(String param) {
+        this.paramTypes.add(param);
+    }
+
     public LinkedList<String> getParamTypes() {
         return this.paramTypes;
     }
