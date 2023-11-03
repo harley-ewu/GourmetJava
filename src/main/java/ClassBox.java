@@ -59,6 +59,17 @@ public class ClassBox {
     }
 
 
+    // Adds a new param to a found method, returns false otherwise
+    public boolean addParam(String methodName, String newParamName) {
+        Methods target = findMethod(methodName);
+        if (target != null) {
+            target.addParam(newParamName);
+            return true;
+        }
+        return false;
+    }
+
+
     public void deleteAttribute(Attribute a) {
         if (a.getClass().getSimpleName().equals("Method")) {
             this.methods.remove((Methods) a);
@@ -80,11 +91,20 @@ public class ClassBox {
     }
 
     public boolean deleteMethod(String name/*, LinkedList<String> params*/) {
-        for (int i = 0; i < fields.size(); i++) {
+        for (int i = 0; i < methods.size(); i++) {
             if (methods.get(i).getName().equals(name)) {
                 methods.remove(i);
                 return true;
             }
+        }
+        return false;
+    }
+
+    public boolean deleteParam(String methodName, String paramName) {
+        Methods target = findMethod(methodName);
+        if (target != null) {
+            target.deleteParam(paramName);
+            return true;
         }
         return false;
     }
@@ -124,6 +144,17 @@ public class ClassBox {
         for (Relationship rel : cb1.children) {
             if (rel.getOtherClass().equals(cb2)) {
                 return rel;
+            }
+        }
+        return null;
+    }
+
+    // Helper method that attempts to find a method within the methods list based on name
+    // returns null if not found
+    public Methods findMethod(String methodName) {
+        for (int i = 0; i < methods.size(); i++) {
+            if (methods.get(i).getName().equals(methodName)) {
+                return methods.get(i);
             }
         }
         return null;

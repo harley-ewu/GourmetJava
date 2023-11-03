@@ -84,6 +84,16 @@ public class ModelDiagram {
         }
     }
 
+    public static boolean addParam(String className, String methodName, String paramName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        } else {
+            target.addParam(methodName, paramName);
+            return true;
+        }
+    }
+
     public static boolean deleteMethod(String className, String methodName) {
         ClassBox target = findClassBox(className);
         if (target == null) {
@@ -101,6 +111,16 @@ public class ModelDiagram {
         }
         else {
             return target.deleteField(fieldName);
+        }
+    }
+
+    public static boolean deleteParam(String className, String methodName, String paramName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        }
+        else {
+            return target.deleteParam(methodName, paramName);
         }
     }
 
