@@ -50,7 +50,6 @@ public class Methods extends Attribute {
         return this.paramTypes;
     }
 
-    @Override
     public boolean equalTo(Attribute another) {
         if (another instanceof Methods) {
             Methods other = (Methods) another;

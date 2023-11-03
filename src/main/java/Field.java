@@ -19,12 +19,9 @@ public class Field extends Attribute{
         return this.getView().getSymbol() + " " + this.getName();
     }
 
-    @Override
-    boolean equalTo(Attribute another) {
-        if (another instanceof Field other) {
-            return this.getName().equals(other.getName()) && this.type.equals(other.type);
-        }
-        return false;
+
+    boolean equalTo(Field other) {
+        return this.getName().equals(other.getName()) && this.type.equals(other.type);
     }    
 
     /*

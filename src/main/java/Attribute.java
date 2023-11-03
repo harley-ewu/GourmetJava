@@ -71,9 +71,6 @@ public abstract class Attribute implements Comparable<Attribute> {
         return this.view.getSymbol() + this.name;
     }
 
-    //compare by name if field, by name and params if method
-    abstract boolean equalTo(Attribute another);
-
     //will have symbols for view
     abstract public String GUIToString();
 
