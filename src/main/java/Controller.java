@@ -266,6 +266,23 @@ public class Controller {
         return ModelDiagram.listRelationships();
     }
 
+    public static String[] listClassTypes(){
+        return ClassBox.listClassTypes();
+    }
+
+    public static String[] listAttributeTypes(){
+        return Attribute.listAttributeTypes();
+    }
+
+    public static String[] listVisibilityTypes(){
+        return ClassBox.listVisibilityTypes();
+    }
+
+    public static String[] listRelationshipTypes(){
+        return Relationship.listRelationshipTypes();
+    }
+
+
     // Allows the user to choose what Classbox item they want to see in detail
     // Rachael
     // Takes input from user on what index from the list they want to see then calls
