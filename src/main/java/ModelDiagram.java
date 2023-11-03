@@ -33,7 +33,7 @@ public class ModelDiagram {
     //returns false if a class was not added or a class with the same name already existed
     //throws an exception if the input "type" int was invalid
     public static boolean addClass(final String name, final int type) {
-        if(name == null || name.isEmpty())
+        if (name == null || name.isEmpty())
             throw new IllegalArgumentException("bad param passed to ModelDiagram.addClass");
 
         ClassBox newBox = findClassBox(name);
@@ -98,8 +98,7 @@ public class ModelDiagram {
         ClassBox target = findClassBox(className);
         if (target == null) {
             return false;
-        }
-        else {
+        } else {
             return target.deleteMethod(methodName);
         }
     }
@@ -108,8 +107,7 @@ public class ModelDiagram {
         ClassBox target = findClassBox(className);
         if (target == null) {
             return false;
-        }
-        else {
+        } else {
             return target.deleteField(fieldName);
         }
     }
@@ -128,8 +126,7 @@ public class ModelDiagram {
         ClassBox target = findClassBox(className);
         if (target == null) {
             return false;
-        }
-        else {
+        } else {
             return target.renameMethod(methodName, newMethodName);
         }
     }
@@ -138,8 +135,7 @@ public class ModelDiagram {
         ClassBox target = findClassBox(className);
         if (target == null) {
             return false;
-        }
-        else {
+        } else {
             return target.renameField(fieldName, newFieldName);
         }
     }
@@ -159,6 +155,22 @@ public class ModelDiagram {
         String[] list = new String[createdClasses.size()];
         for (int i = 0; i < createdClasses.size(); ++i) {
             list[i] = createdClasses.get(i).getName();
+        }
+        return list;
+    }
+
+    /*
+        lists the classes in the format:
+            {Class1, Class1 type},
+            {Class2, Class2 types},
+            etc.
+        Made a separate method to not break existing code
+     */
+    public static String[][] listClassesAndTypes() {
+        String[][] list = new String[getCreatedClassesSize()][2];
+        for (int i = 0; i < getCreatedClassesSize(); ++i) {
+            list[i][0] = createdClasses.get(i).getName();
+            list[i][1] = createdClasses.get(i).getType();
         }
         return list;
     }
@@ -235,7 +247,7 @@ public class ModelDiagram {
     //each createdClass's list is stored in a list (list of lists)
     public static String[][] listRelationships() {
         String[][] list = new String[createdClasses.size()][];
-        for(int i = 0; i < createdClasses.size(); ++i){
+        for (int i = 0; i < createdClasses.size(); ++i) {
             list[i] = createdClasses.get(i).listRelationships();
         }
         return list;
@@ -253,36 +265,15 @@ public class ModelDiagram {
         I'm not sure how to handle this -David
      */
     public static String[] listClassDetails(final String name) {
-        if(name == null || name.isEmpty())
+        if (name == null || name.isEmpty())
             throw new IllegalArgumentException("bad param passed to ModelDiagram.listClass");
 
         ClassBox box = findClassBox(name);
-        if(box == null)
+        if (box == null)
             return null;
 
         return null;
     }
-
-    //returns true if the ClassBox objects with the given names are equivalent
-    //I do not see how this is useful at all -David
-    public static boolean equals(final String cb1, final String cb2) {
-        if (cb1 == null || cb2 == null || cb1.isEmpty() || cb2.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.deleteRelationship");
-
-        ClassBox box1 = findClassBox(cb1);
-        ClassBox box2 = findClassBox(cb2);
-        if (box1 == null || box2 == null)
-            return false;
-
-        //return ClassBox.compare(box1, box2);
-        return false;
-    }
-
-    //might not need this, idk what it would be used for where Strings cannot be used
-    private static boolean equals(final ClassBox o1, final ClassBox o2) {
-        return false;
-    }
-
 
 
     // The save method takes the current state of the program and saves it into a
@@ -434,10 +425,52 @@ public class ModelDiagram {
 
     }
 
+    /*
+        Lists the class methods as a list in the format:
+           { [visibility symbol][method name] ([param types]) : [return type] },
+           etc.
+        Returns null if the ClassBox does not exist
+     */
+    public static String[] listClassMethods(final String name) {
+        if (name == null || name.isEmpty())
+            throw new IllegalArgumentException("bad param passed to ModelDiagram.listClassMethods");
 
+        ClassBox box = findClassBox(name);
+        if (box == null)
+            return null;
+
+        return box.listMethods();
+    }
+
+    /*
+        Lists the class methods as a list in the format:
+        { [visibility symbol][field name] : [field type] },
+        etc.
+        Returns null if the ClassBox does not exist
+     */
+    public static String[] listClassFields(final String name) {
+        if (name == null || name.isEmpty())
+            throw new IllegalArgumentException("bad param passed to ModelDiagram.listClassFields");
+
+        ClassBox box = findClassBox(name);
+        if (box == null)
+            return null;
+
+        return box.listFields();
+
+    }
 
     public static int getCreatedClassesSize() {
         return createdClasses.size();
     }
-    
+
+    public static String[] getClassMethods(String className) {
+        return null;
+    }
+
+    public static String[] getClassFields(String name) {
+        return null;
+    }
+
+
 }
