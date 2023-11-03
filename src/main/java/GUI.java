@@ -101,7 +101,7 @@ public class GUI extends JFrame implements ActionListener{
         params.add("int");
         c1.addField("name", Visibility.PROTECTED,"String");
         c1.addMethod("toString", Visibility.PUBLIC,"String", params);
-        c1.addRelationship(c2, 2);
+        //c1.addRelationship(c2, 2);
         //for(int i = 0; i<6; i++){
             cc.add(c1);
             cc.add(c2);
