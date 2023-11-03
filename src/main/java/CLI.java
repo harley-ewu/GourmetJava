@@ -29,7 +29,7 @@ public class CLI {
                         if (input2 == 1) {
                             CLI.listClasses();
                         } else if (input2 == 2) {
-                            //printStringList(Controller.listAllClassDetails());
+                            printStringList(Controller.listAllClassDetails("name")[0]);
                         } else if (input2 == 3) {
                             CLI.listClassDetails();
                         } else if (input2 == 4) {
@@ -77,7 +77,7 @@ public class CLI {
                         } else if (input2 == 2) {
                             CLI.deleteAttribute();
                         } else if (input2 == 3) {
-                            Controller.renameAttribute();
+                            //Controller.renameAttribute();
                         } else if (input2 == 4) {
                             CLI.printStringList(Controller.attributeHelp());
                         } else if (input2 == 5) {

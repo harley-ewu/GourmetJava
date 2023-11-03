@@ -113,8 +113,14 @@ public class Controller {
         return ModelDiagram.listClasses();
     }
 
-    // Returns a list of Strings, each String holding the detailed info for a
-    // CreatedClass
+    /*
+        Returns the details of a class in the format:
+        {
+            { Class name, Type},
+            { List of Methods },
+            { List of Fields }
+        }
+     */
     public static String[][] listAllClassDetails(final String name) {
         return ModelDiagram.listAllClassDetails(name);
     }
