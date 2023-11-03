@@ -80,102 +80,6 @@ public class Controller {
         return ModelDiagram.addParam(className, methodName, paramName);
     }
 
-    // Adds an attribute to a given class
-    // NEW: ask for field or method, do io based on each, pass fields to classbox
-    // add
-    public static void addAttribute() {
-        /*
-        listClasses();
-        System.out.println("What is the index of the class you would like to add an attribute to?");
-        System.out.print("Class Index:");
-        int ind = Integer.parseInt(kb.nextLine());
-        if (ind < 1 || ind > createdClasses.size()) {
-            System.out.println("That class does not exist.");
-        } else {
-            ClassBox c = createdClasses.get(ind - 1);
-            System.out.println("What would you like to call your attribute?");
-            System.out.print("Attribute name:");
-            String attributeName = kb.nextLine();
-            System.out.println("What is the attribute's view? (public, private, or protected)");
-            System.out.print("public/private/protected:");
-            String view = kb.nextLine().trim().toLowerCase(Locale.ROOT);
-            if (!(view.equals("public") || view.equals("private") || view.equals("protected"))) {
-                System.out.println("Invalid view");
-                return;
-            }
-            System.out.println("Enter any applicable modifiers, such as static, seperated by commas(a,b,c)");
-            System.out.print("Tags:");
-            String modstring = kb.nextLine();
-            String[] modarray = modstring.split(",");
-            LinkedList<String> modll = new LinkedList<String>(Arrays.asList(modarray));
-            System.out.println(
-                    "Enter the type (the return type if it is a method, the variable type if it is a variable");
-            System.out.print("Type:");
-            String type = kb.nextLine();
-            System.out.println(
-                    "Enter the parameters, seperated by commas, if this is a method (Leave blank for a variable)");
-            System.out.print("Parameters:");
-            String params = kb.nextLine();
-            LinkedList<String> paramsss = null;
-            if (!params.isEmpty()) {
-                String[] paramss = params.split(",");
-                paramsss = new LinkedList<String>(Arrays.asList(paramss));
-            }
-            try {
-                c.addAttribute(attributeName, view, modll, type, paramsss);
-                System.out.println(attributeName + " has been added to " + c.getName());
-            } catch (Exception e) {
-                System.out.println("Bad inputs, no attribute created");
-            }
-        }
-
-         */
-    }// end addAttribute
-
-    // Finds an attribute, checks with the user to verify intent, then deletes the
-    // attribute
-    // NEW - search both class lists on name, if in method twice, ask for params
-    public static void deleteAttribute() {
-        /*
-        listClasses();
-        System.out.println("What is the index of the class you'd like to remove an attribute from?");
-        System.out.print("Class Index:");
-        int ind = Integer.parseInt(kb.nextLine());
-        ClassBox c = createdClasses.get(ind - 1);
-        LinkedList<Attribute> attList = c.getAttributes();
-        if (!(attList.isEmpty())) {
-            System.out.println("Which attribute would you like to delete?");
-            // find attributes using a loop
-            for (int i = 0; i < attList.size(); i++) {
-                System.out.println(i + 1 + ".)" + attList.get(i).toString());
-            }
-            System.out.print("Attribute Index:");
-            int index = Integer.parseInt(kb.nextLine());
-
-            System.out.println("Are you sure you want to delete " + attList.get(index - 1).getName()
-                    + "? Please enter yes or no.");
-            System.out.print("yes/no:");
-            String answer = kb.nextLine().toLowerCase();
-            // stick the part below in a loop so if an incorrect input is entered, it'll
-            // re-prompt
-            while (!(answer.equals("yes") || answer.equals("no"))) {
-                System.out.println("That is not a valid input. Please enter yes or no.");
-                System.out.print("yes/no:");
-                answer = kb.nextLine().toLowerCase();
-            } // end of while loop checking for valid input
-            if (answer.equals("yes")) {
-                c.deleteAttribute(attList.get(index - 1));
-            } else if (answer.equals("no")) {
-                System.out.println("Canceled");
-            }
-
-        } else {
-            System.out.println("No attributes found for class " + c.getName());
-        }
-
-         */
-    }
-
     //deletes method based on className and methodName
     //Needs params eventually to differentiate overloaded methods
     public static boolean deleteMethod(String className, String methodName/*, LinkedList params*/) {
@@ -203,45 +107,6 @@ public class Controller {
         return ModelDiagram.renameParam(className, methodName, paramName);
     }
 
-    public static void renameAttribute() {
-        /*
-
-        if (createdClasses.isEmpty()) {
-            System.out.println("Nothing to rename!");
-        }
-
-        else {
-
-            listClasses();
-            System.out.println("What is the index of the class you'd like to rename an attribute from?");
-            System.out.print("Class Index:");
-            int ind = Integer.parseInt(kb.nextLine());
-            ClassBox c = createdClasses.get(ind - 1);
-            LinkedList<Attribute> attList = c.getAttributes();
-            if (!(attList.isEmpty())) {
-                System.out.println("Which attribute would you like to rename?");
-                // find attributes using a loop
-                for (int i = 0; i < attList.size(); i++) {
-                    System.out.println(i + 1 + ".)" + attList.get(i).toString());
-                }
-                System.out.println("Attribute Index:");
-                int index = Integer.parseInt(kb.nextLine());
-                System.out.println("What would you like the new name to be?");
-                System.out.print("New Name:");
-                String newName = kb.nextLine();
-                try {
-                    c.renameAttribute(attList.get(index - 1), newName);
-                } catch (Exception e) {
-                    System.out.println("Bad new name, no change done");
-                }
-            } else {
-                System.out.println("No attributes found for class " + c.getName());
-            }
-        }
-        */
-
-    }
-
    
 
     public static String[] listClasses() {
@@ -252,11 +117,6 @@ public class Controller {
     // CreatedClass
     public static String[] listAllClassDetails() {
         return ModelDiagram.listAllClassDetails();
-    }
-
-    // What are attributes?
-    public static String[] listClassAttributes(final String cb) {
-        return ModelDiagram.listClassAttributes(cb);
     }
 
     // Returns an array of String arrays

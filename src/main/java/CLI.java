@@ -330,10 +330,10 @@ public class CLI {
             System.out.print("Class name: ");
             String className = kb.nextLine();
             System.out.println("What is the name of the method you wish to delete?");
-            System.out.print("Field name: ");
+            System.out.print("Method name: ");
             String methodName = kb.nextLine();
 
-            if (Controller.deleteField(className, methodName)) {
+            if (Controller.deleteMethod(className, methodName)) {
                 System.out.println("Method  " + methodName + " removed to class " + className);
             } else {
                 System.out.println("Failed to delete method. Please try again");
