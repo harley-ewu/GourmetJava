@@ -31,29 +31,81 @@ public class GUI extends JFrame implements ActionListener{
         mainMenu = new JMenuBar();
 
         displayDropdown = new JMenu("Display");
-        display = new JMenuItem("Display");
-        display.addActionListener(mainContainer);
+        display = new JMenuItem(new AbstractAction("Display") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(10);
+            }
+        });
+        //display.addActionListener(mainContainer);
         displayDropdown.add(display);
+
+
         classDropdown = new JMenu("Class");
-        addClass = new JMenuItem("Add Class");
-        deleteClass = new JMenuItem("Delete Class");
-        renameClass = new JMenuItem("Rename Class");
-        addClass.addActionListener(mainContainer);
-        deleteClass.addActionListener(mainContainer);
-        renameClass.addActionListener(mainContainer);
+        addClass = new JMenuItem(new AbstractAction("Add Class") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //popup box with user input fields
+                //submit button sends shit to Controller.addClass()
+                //Draw new box (either entire screen refresh or just draw new box)
+                //done
+
+                /* 
+                       maybe test:
+                            popup box that takes one integer (as string)
+                            String -> int
+                            pass that int to System.exit status code
+                 */
+                System.exit(4);
+            }
+        });
+        deleteClass = new JMenuItem(new AbstractAction("Delete Class") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(12);
+            }
+        });
+        renameClass = new JMenuItem(new AbstractAction("Rename Class") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(13);
+            }
+        });
+        //addClass.addActionListener(mainContainer);
+        //deleteClass.addActionListener(mainContainer);
+        //renameClass.addActionListener(mainContainer);
         classDropdown.add(addClass);
         classDropdown.add(deleteClass);
         classDropdown.add(renameClass);
+
+
         attributeDropdown = new JMenu("Attribute");
-        addAtt = new JMenuItem("Add Attribute");
-        delAtt = new JMenuItem("Delete Attribute");
-        renameAtt = new JMenuItem("Rename Attribute");
-        addAtt.addActionListener(mainContainer);
-        delAtt.addActionListener(mainContainer);
-        renameAtt.addActionListener(mainContainer);
+        addAtt = new JMenuItem(new AbstractAction("Add Attribute") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(14);
+            }
+        });
+        delAtt = new JMenuItem(new AbstractAction("Delete Attribute") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(15);
+            }
+        });
+        renameAtt = new JMenuItem(new AbstractAction("Rename Attribute") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(16);
+            }
+        });
+        //addAtt.addActionListener(mainContainer);
+        //delAtt.addActionListener(mainContainer);
+        //renameAtt.addActionListener(mainContainer);
         attributeDropdown.add(addAtt);
         attributeDropdown.add(delAtt);
         attributeDropdown.add(renameAtt);
+
+
         relationshipDropdown = new JMenu("Relationship");
         addRelation = new JMenuItem("Add Relationship");
         delRelation = new JMenuItem("Delete Relationship");
@@ -99,9 +151,11 @@ public class GUI extends JFrame implements ActionListener{
         LinkedList<String> params = new LinkedList<>();
         params.add("String");
         params.add("int");
-        c1.addField("name", Visibility.PROTECTED,"String");
-        c1.addMethod("toString", Visibility.PUBLIC,"String", params);
-        //c1.addRelationship(c2, 2);
+
+        c1.addField("name", 1,"String");
+        c1.addMethod("toString", 1,"String", params);
+        Controller.addRelationship(c1.getName(), c2.getName(), 2);
+
         //for(int i = 0; i<6; i++){
             cc.add(c1);
             cc.add(c2);
@@ -155,11 +209,13 @@ public class GUI extends JFrame implements ActionListener{
             }
             //Prints the line for each relationship
             for (int i = 0; i < createdClasses.size(); i++){
-                for(Relationship r: createdClasses.get(i).getRelationships()){
+                //List relationships was changed to strings instead of relationships
+                for(String r: createdClasses.get(i).listRelationships()){
                     //For each relationship, retrieve the coordinates of each, and draw a line between them
                     int class1XIndex = i * 2; //index of where the coordinates are in the array
                     int class1YIndex = class1XIndex + 1;
-                    int class2 = createdClasses.indexOf(r.getFrom());
+                    //TODO the code below was altered and commented out just to get it to compile
+                    int class2 = 1;   // createdClasses.indexOf(r.getOtherClass());
                     int class2XIndex = class2 * 2;
                     int class2YIndex = class2XIndex + 1;
                     int class1XCoords = coords.get(class1XIndex);
@@ -172,7 +228,9 @@ public class GUI extends JFrame implements ActionListener{
                     g2.drawLine(class1XCoords, class1YCoords, class2XCoords, class2YCoords);
                     //Display the relationship type at the line's midpoint
                     //Finds midpoint and then prints the relationship string. "Aggregates" for example
-                    g2.drawString(r.getType(), ((class1XCoords + class2XCoords)/2), ((class1YCoords + class2YCoords)/2));
+
+                    //TODO below code does not work now as r is not a relationship
+                    //g2.drawString(r.getType(), ((class1XCoords + class2XCoords)/2), ((class1YCoords + class2YCoords)/2));
                 }
             }
         }
@@ -215,6 +273,7 @@ public class GUI extends JFrame implements ActionListener{
             }
         }
     }
+
 }
 
 // make the buttons work
