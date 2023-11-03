@@ -127,22 +127,20 @@ public class GUI extends JFrame implements ActionListener{
         public void paint(Graphics g){
             Graphics2D g2 = (Graphics2D) g;
             //Spacing out based on the number of classes
-            //TODO so n is spacing then. Yeah?
-            int n = createdClasses.size(); //how many classes there are
-            //Spots, e.g 3 classes has 3 spots and 4 spaces between them and outside
+            int numberOfClasses = createdClasses.size();
+            // number of total spaces including class boxes and empty spaces in between
             // If there are 3 classes, it has 3 spots with one classbox space between each box
-            //TODO ...what?? what do you mean spots in relation to spaces?
-            int k = (2 * n) + 1; // number of total spaces including class boxes and empty spaces in between
+            int totalSpace = (2 * numberOfClasses) + 1;
             //Overall width of panel divided by spots
-            int j = 1000/k; //width divided by spots
+            int spaceWidth = 1000/totalSpace;
             //Current x coordinate
-            int curx = j;
+            int curx = spaceWidth;
             //Stores coordinates of each class when printed for relationship printing
             LinkedList<Integer> coords = new LinkedList<>();
             //Goes through all classes and prints them
             //TODO
             //this will stick every other class on an upper row, and the ones in between on a lower row
-            for(int i = 0; i < n; i++){
+            for(int i = 0; i < numberOfClasses; i++){
                 if(i % 2 == 0){
                     drawClass(createdClasses.get(i), curx, 200, g2);
                     coords.add(curx);
@@ -153,7 +151,7 @@ public class GUI extends JFrame implements ActionListener{
                     coords.add(curx);
                     coords.add(400);
                 }
-                curx += (1.5 * j);
+                curx += (1.5 * spaceWidth);
             }
             //Prints the line for each relationship
             for (int i = 0; i < createdClasses.size(); i++){
