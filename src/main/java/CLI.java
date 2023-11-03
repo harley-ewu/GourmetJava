@@ -169,7 +169,7 @@ public class CLI {
         String name = kb.nextLine();
         System.out.println("What is the class's type?");
 
-        printStringList(ClassBox.printClassTypes());
+        printStringList(ClassBox.listClassTypes());
 
         int type = Integer.parseInt(kb.nextLine());
         //Test to see if adding was sucessful
