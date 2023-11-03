@@ -104,6 +104,16 @@ public class ModelDiagram {
         }
     }
 
+    public static boolean deleteParam(String className, String methodName, String paramName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        }
+        else {
+            return target.deleteParam(methodName, paramName);
+        }
+    }
+
     public static boolean renameMethod(String className, String methodName, String newMethodName) {
         ClassBox target = findClassBox(className);
         if (target == null) {
