@@ -73,9 +73,9 @@ public class CLI {
                         System.out.print("Choice:");
                         input2 = Integer.parseInt(kb.nextLine());
                         if (input2 == 1) {
-                            Controller.addAttribute();
+                            CLI.addAttribute();
                         } else if (input2 == 2) {
-                            Controller.deleteAttribute();
+                            CLI.deleteAttribute();
                         } else if (input2 == 3) {
                             Controller.renameAttribute();
                         } else if (input2 == 4) {
@@ -109,11 +109,7 @@ public class CLI {
                     }
                     break;
                 case 5:
-                    System.out.println("Please choose a number from the options below: ");
-                    System.out.println("1.) Save");
-                    System.out.println("2.) Load");
-                    System.out.println("3.) Help");
-                    System.out.println("4.) Back");
+                    printStringList(Controller.subMenu5());
                     System.out.print("Choice:");
                     input2 = Integer.parseInt(kb.nextLine());
                     if (input2 == 1) {
@@ -259,7 +255,7 @@ public class CLI {
         }
     }
 
-    //DOES NOT WORK
+    //Structure complete errors will fix when merged
     public static void addAttribute(){
         System.out.println("Are you wanting to add a field or a method?");
         String input = kb.nextLine();
@@ -267,19 +263,81 @@ public class CLI {
             System.out.println("What class did you want this field associated with?");
             CLI.listClasses();
             System.out.print("Class name: ");
-            String name = kb.nextLine();
+            String className = kb.nextLine();
             System.out.println("What do you want to name this field?");
             System.out.print("Field name: ");
             String fieldname = kb.nextLine();
             System.out.println("What is the visibility of this field?");
             System.out.print("Field visibility: ");
-            String view = kb.nextLine();
+            int view = Integer.parseInt(kb.nextLine());
+            System.out.println("Lastly, what is the data type of this field?");
+            System.out.print("Field name: ");
+            String type = kb.nextLine();
+
+            if(Controller.addField(className, fieldname, view, type)){
+                System.out.println("Field  " + fieldname + " added to class " + className);
+            }else{
+                System.out.println("Failed to add field. Please try again");
+            }
 
 
         }else if(input.equalsIgnoreCase("Method")){
+            System.out.println("What class did you want this method associated with?");
+            CLI.listClasses();
+            System.out.print("Class name: ");
+            String className = kb.nextLine();
+            System.out.println("What do you want to name this method?");
+            System.out.print("Method name: ");
+            String methodName = kb.nextLine();
+            System.out.println("What is the visibility of this method?");
+            System.out.print("Method visibility: ");
+            int view = Integer.parseInt(kb.nextLine());
+            System.out.println("Lastly, what is the return type of this method?");
+            System.out.print("Method return type: ");
+            String type = kb.nextLine();
 
+            if(Controller.addField(className, methodName, view, type)){
+                System.out.println("Field  " + methodName + " added to class " + className);
+            }else{
+                System.out.println("Failed to add field. Please try again");
+            }
         }else{
             System.out.println("Please enter either Field or Method. Please try again");
+        }
+    }
+    public static void deleteAttribute() {
+        System.out.println("Are you wanting to delete a field or a method?");
+        String input = kb.nextLine();
+        if (input.equalsIgnoreCase("Field")) {
+            System.out.println("What class did you want to remove the field from?");
+            CLI.listClasses();
+            System.out.print("Class name: ");
+            String className = kb.nextLine();
+            System.out.println("What is the name of the field you wish to delete?");
+            System.out.print("Field name: ");
+            String fieldname = kb.nextLine();
+
+            if (Controller.deleteField(className, fieldname)) {
+                System.out.println("Field  " + fieldname + " removed to class " + className);
+            } else {
+                System.out.println("Failed to delete field. Please try again");
+            }
+
+
+        } else if (input.equalsIgnoreCase("Method")) {
+            System.out.println("What class did you want to remove the method from?");
+            CLI.listClasses();
+            System.out.print("Class name: ");
+            String className = kb.nextLine();
+            System.out.println("What is the name of the method you wish to delete?");
+            System.out.print("Field name: ");
+            String methodName = kb.nextLine();
+
+            if (Controller.deleteField(className, methodName)) {
+                System.out.println("Method  " + methodName + " removed to class " + className);
+            } else {
+                System.out.println("Failed to delete method. Please try again");
+            }
         }
     }
 

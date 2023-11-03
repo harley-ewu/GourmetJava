@@ -99,9 +99,11 @@ public class GUI extends JFrame implements ActionListener{
         LinkedList<String> params = new LinkedList<>();
         params.add("String");
         params.add("int");
+
         c1.addField("name", 1,"String");
         c1.addMethod("toString", 1,"String", params);
         Controller.addRelationship(c1.getName(), c2.getName(), 2);
+
         //for(int i = 0; i<6; i++){
             cc.add(c1);
             cc.add(c2);

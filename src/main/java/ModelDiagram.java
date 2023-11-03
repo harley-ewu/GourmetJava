@@ -171,14 +171,27 @@ public class ModelDiagram {
         return list;
     }
 
-    public static String[] listAllClassDetails() {
+    /*
+        Returns the details of a class in the format:
+        {
+            { Class name, Type},
+            { List of Methods },
+            { List of Fields }
+        }
+     */
+    public static String[][] listAllClassDetails(final String name) {
+        if(name == null || name.isEmpty())
+            throw new IllegalArgumentException("bad name passed to ModelDiagram.listAllClassDetails");
 
-        return null;
-    }
+        ClassBox box = findClassBox(name);
+        if(box == null)
+            return null;
 
-    public static String[] listClassAttributes(final String cb) {
-
-        return null;
+        String[][] details = new String[3][];
+        details[0] = new String[]{box.getName(), box.getType()};
+        details[1] = box.listMethods();
+        details[2] = box.listFields();
+        return details;
     }
 
     //returns true only if the class was renamed
