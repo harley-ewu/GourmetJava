@@ -179,6 +179,10 @@ public class Controller {
         return ModelDiagram.deleteField(className, fieldName);
     }
 
+    public static boolean deleteParam(String className, String methodName, String paramName) {
+        return ModelDiagram.deleteParam(className, methodName, paramName);
+    }
+
     public static boolean renameMethod(String className, String methodName, String newMethodName) {
         return ModelDiagram.renameMethod(className, methodName, newMethodName);
     }

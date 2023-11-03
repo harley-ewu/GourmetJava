@@ -98,6 +98,15 @@ public class ClassBox {
         return false;
     }
 
+    public boolean deleteParam(String methodName, String paramName) {
+        Methods target = findMethod(methodName);
+        if (target != null) {
+            target.deleteParam(paramName);
+            return true;
+        }
+        return false;
+    }
+
     public void renameAttribute(Attribute att, String newName) {
         att.setName(newName);
     }
