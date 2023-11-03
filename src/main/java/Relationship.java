@@ -64,11 +64,7 @@ public class Relationship {
         }
     }
 
-    /**
-     * @return A String array with the names of all the types
-     * NOT FULLY TESTED
-     */
-    public static String[] getRelationshipTypes(){
+    public static String[] listRelationshipTypes(){
         return Arrays.stream(RelationshipType.values()).map(Enum::name).toArray(String[]::new);
     }
 
