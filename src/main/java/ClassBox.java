@@ -1,5 +1,6 @@
 package src.main.java;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class ClassBox {
@@ -31,6 +32,10 @@ public class ClassBox {
 
     private final LinkedList<Field> fields = new LinkedList<>();
 
+    public String getType(){
+        return this.type.name();
+    }
+
     public ClassBox(String name, int type) {
         if (name == null || name.isEmpty() || type < 1 || type > ClassType.values().length)
             throw new IllegalArgumentException("Bad params at ClassBox constructor");
@@ -39,12 +44,6 @@ public class ClassBox {
         this.type = ClassBox.ClassType.values()[type - 1];
     }
 
-    public static void printClassTypes() {
-        ClassBox.ClassType[] types = ClassBox.ClassType.values();
-        for (int i = 0; i < 5; ++i) {
-            System.out.println((i + 1) + " - " + types[i].name());
-        }
-    }
 
     public void addMethod(String name, Visibility view, String type, LinkedList<String> params){
         //call the constructor and add to list
@@ -93,9 +92,9 @@ public class ClassBox {
     }
 
     public boolean renameMethod(String methodName, String newMethodName) {
-        for (int i = 0; i < methods.size(); i++) {
-            if (methods.get(i).getName().equals(methodName)) {
-                methods.get(i).setName(newMethodName);
+        for (Methods method : methods) {
+            if (method.getName().equals(methodName)) {
+                method.setName(newMethodName);
                 return true;
             }
         }
@@ -103,9 +102,9 @@ public class ClassBox {
     }
 
     public boolean renameField(String fieldName, String newFieldName) {
-        for (int i = 0; i < fields.size(); i++) {
-            if (fields.get(i).getName().equals(fieldName)) {
-                fields.get(i).setName(newFieldName);
+        for (Field field : fields) {
+            if (field.getName().equals(fieldName)) {
+                field.setName(newFieldName);
                 return true;
             }
         }
@@ -161,22 +160,42 @@ public class ClassBox {
     }
 
     public String[] listRelationships() {
-        String[] rels = new String[this.parents.size()];
-        for (int i = 0; i < rels.length; ++i) {
-            rels[i] = this.parents.get(i).toString();
+        String[] relationships = new String[this.parents.size()];
+        for (int i = 0; i < relationships.length; ++i) {
+            relationships[i] = this.name + " " + this.parents.get(i).toString();
         }
-        return rels;
+        return relationships;
     }
+
+    public String[] listMethods(){
+        String[] methods = new String[this.methods.size()];
+        for(int i = 0; i < this.methods.size(); ++i){
+            methods[i] = this.methods.get(i).toString();
+        }
+        return methods;
+    }
+
+    public String[] listFields(){
+        String[] fields = new String[this.fields.size()];
+        for(int i = 0; i < this.fields.size(); ++i){
+            fields[i] = this.fields.get(i).toString();
+        }
+        return fields;
+    }
+
+    public static String[] listVisibilityTypes(){
+        return Arrays.stream(Visibility.values()).map(Enum::name).toArray(String[]::new);
+    }
+
+    public static String[] listRelationshipTypes(){
+        return Relationship.listRelationshipTypes();
+    }
+
 
     public void rename(final String name) {
         this.name = name;
     }
     //For list class details
-
-    @Override
-    public String toString() {
-        return null;
-    }
 
 
     public String getName() {

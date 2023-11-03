@@ -2,11 +2,11 @@ package src.main.java;
 
 import java.util.LinkedList;
 
-public class Methods extends Attribute{
+public class Methods extends Attribute {
     //parameter types
     private LinkedList<String> paramTypes;
     //return type
-    private String returnType;
+    private final String returnType;
 
     public Methods(String name, Visibility view, String type, LinkedList<String> params) {
         super(name, view);
@@ -43,10 +43,10 @@ public class Methods extends Attribute{
         StringBuilder s = new StringBuilder(this.getView().name().toLowerCase() + " ");
         s.append(this.getName());
         s.append("(");
-        for(int i = 0; i<this.getParamTypes().size()-1; i++){
+        for (int i = 0; i < this.getParamTypes().size() - 1; i++) {
             s.append(this.getParamTypes().get(i)).append(", ");
         }
-        s.append(this.getParamTypes().get(this.getParamTypes().size()-1));
+        s.append(this.getParamTypes().get(this.getParamTypes().size() - 1));
         s.append(")");
         return s.toString();
     }
@@ -56,11 +56,31 @@ public class Methods extends Attribute{
         StringBuilder s = new StringBuilder(this.getView().getSymbol() + " ");
         s.append(this.getName());
         s.append("(");
-        for(int i = 0; i<this.getParamTypes().size()-1; i++){
+        for (int i = 0; i < this.getParamTypes().size() - 1; i++) {
             s.append(this.getParamTypes().get(i)).append(", ");
         }
-        s.append(this.getParamTypes().get(this.getParamTypes().size()-1));
+        s.append(this.getParamTypes().get(this.getParamTypes().size() - 1));
         s.append(")");
         return s.toString();
     }
+
+    /*
+        returns a String in the format:
+            [visibility symbol][method name] ([param types]) : [return type]
+     */
+    @Override
+    public String toString() {
+        StringBuilder ret = new StringBuilder(super.toString());
+        ret.append("(");
+        int size = this.paramTypes.size();
+        for (int i = 0; i < size; ++i) {
+            ret.append(this.paramTypes.get(i));
+            if (i != size - 1) {
+                ret.append(", ");
+            }
+        }
+        ret.append(") : ").append(this.returnType);
+        return ret.toString();
+    }
+
 }

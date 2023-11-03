@@ -50,6 +50,14 @@ public class Controller {
 
     }
 
+    public static String[] listClassMethods(final String name){
+        return ModelDiagram.listClassMethods(name);
+    }
+
+    public static String[] listClassFields(final String name){
+        return ModelDiagram.listClassFields(name);
+    }
+
     // Deletes a relationship between two classes while prompting the user to verify
     // they wish to delete along the way
     public static boolean deleteRelationship(final String cb1, final String cb2) {
@@ -299,6 +307,8 @@ public class Controller {
     public static String[] listClassDetails(final String name) {
         return ModelDiagram.listClassDetails(name);
     }
+
+
 
     public static String[] listHelp() {
         return new String[]{"1.) List Options.",
