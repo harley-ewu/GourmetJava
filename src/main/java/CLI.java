@@ -309,7 +309,7 @@ public class CLI {
         System.out.println("Are you wanting to delete a field or a method?");
         String input = kb.nextLine();
         if (input.equalsIgnoreCase("Field")) {
-            System.out.println("What is the name of the class you wanted to remove a field from?");
+            System.out.println("What is the name of the class you want to remove a field from?");
             CLI.listClasses();
             System.out.print("Class name: ");
             String className = kb.nextLine();
@@ -327,7 +327,7 @@ public class CLI {
 
 
         } else if (input.equalsIgnoreCase("Method")) {
-            System.out.println("What is the name of the class you wanted to remove a Method from??");
+            System.out.println("What is the name of the class you want to remove a Method from??");
             CLI.listClasses();
             System.out.print("Class name: ");
             String className = kb.nextLine();
