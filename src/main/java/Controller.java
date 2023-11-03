@@ -80,58 +80,6 @@ public class Controller {
         return ModelDiagram.addParam(className, methodName, paramName);
     }
 
-    // Adds an attribute to a given class
-    // NEW: ask for field or method, do io based on each, pass fields to classbox
-    // add
-    public static void addAttribute() {
-        /*
-        listClasses();
-        System.out.println("What is the index of the class you would like to add an attribute to?");
-        System.out.print("Class Index:");
-        int ind = Integer.parseInt(kb.nextLine());
-        if (ind < 1 || ind > createdClasses.size()) {
-            System.out.println("That class does not exist.");
-        } else {
-            ClassBox c = createdClasses.get(ind - 1);
-            System.out.println("What would you like to call your attribute?");
-            System.out.print("Attribute name:");
-            String attributeName = kb.nextLine();
-            System.out.println("What is the attribute's view? (public, private, or protected)");
-            System.out.print("public/private/protected:");
-            String view = kb.nextLine().trim().toLowerCase(Locale.ROOT);
-            if (!(view.equals("public") || view.equals("private") || view.equals("protected"))) {
-                System.out.println("Invalid view");
-                return;
-            }
-            System.out.println("Enter any applicable modifiers, such as static, seperated by commas(a,b,c)");
-            System.out.print("Tags:");
-            String modstring = kb.nextLine();
-            String[] modarray = modstring.split(",");
-            LinkedList<String> modll = new LinkedList<String>(Arrays.asList(modarray));
-            System.out.println(
-                    "Enter the type (the return type if it is a method, the variable type if it is a variable");
-            System.out.print("Type:");
-            String type = kb.nextLine();
-            System.out.println(
-                    "Enter the parameters, seperated by commas, if this is a method (Leave blank for a variable)");
-            System.out.print("Parameters:");
-            String params = kb.nextLine();
-            LinkedList<String> paramsss = null;
-            if (!params.isEmpty()) {
-                String[] paramss = params.split(",");
-                paramsss = new LinkedList<String>(Arrays.asList(paramss));
-            }
-            try {
-                c.addAttribute(attributeName, view, modll, type, paramsss);
-                System.out.println(attributeName + " has been added to " + c.getName());
-            } catch (Exception e) {
-                System.out.println("Bad inputs, no attribute created");
-            }
-        }
-
-         */
-    }// end addAttribute
-
     // Finds an attribute, checks with the user to verify intent, then deletes the
     // attribute
     // NEW - search both class lists on name, if in method twice, ask for params
