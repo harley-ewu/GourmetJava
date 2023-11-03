@@ -1,5 +1,6 @@
 package src.main.java;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class ClassBox {
@@ -39,11 +40,10 @@ public class ClassBox {
         this.type = ClassBox.ClassType.values()[type - 1];
     }
 
-    public static void printClassTypes() {
-        ClassBox.ClassType[] types = ClassBox.ClassType.values();
-        for (int i = 0; i < 5; ++i) {
-            System.out.println((i + 1) + " - " + types[i].name());
-        }
+    //returns an array that contains the names of all constants in the ClassType enum
+    //I shamelessly found the code online -David
+    public static String[] listClassTypes() {
+        return Arrays.stream(ClassType.values()).map(Enum::name).toArray(String[]::new);
     }
 
     public void addMethod(String name, Visibility view, String type, LinkedList<String> params){
@@ -57,6 +57,18 @@ public class ClassBox {
         Field newField = new Field(name, view, type);
         this.fields.add(newField);
     }
+
+
+    // Adds a new param to a found method, returns false otherwise
+    public boolean addParam(String methodName, String newParamName) {
+        Methods target = findMethod(methodName);
+        if (target != null) {
+            target.addParam(newParamName);
+            return true;
+        }
+        return false;
+    }
+
 
     public void deleteAttribute(Attribute a) {
         if (a.getClass().getSimpleName().equals("Method")) {
@@ -79,7 +91,7 @@ public class ClassBox {
     }
 
     public boolean deleteMethod(String name/*, LinkedList<String> params*/) {
-        for (int i = 0; i < fields.size(); i++) {
+        for (int i = 0; i < methods.size(); i++) {
             if (methods.get(i).getName().equals(name)) {
                 methods.remove(i);
                 return true;
@@ -88,6 +100,7 @@ public class ClassBox {
         return false;
     }
 
+
     public boolean renameParam(String methodName, String paramName) {
         for (int i = 0; i < fields.size(); i++) {
             if (methods.get(i).getName().equals(methodName)) {
@@ -95,6 +108,19 @@ public class ClassBox {
             }
         }
         return false;
+    }
+
+    public boolean deleteParam(String methodName, String paramName) {
+        Methods target = findMethod(methodName);
+        if (target != null) {
+            target.deleteParam(paramName);
+            return true;
+        }
+        return false;
+    }
+
+    public void renameAttribute(Attribute att, String newName) {
+        att.setName(newName);
     }
 
     public boolean renameMethod(String methodName, String newMethodName) {
@@ -118,6 +144,7 @@ public class ClassBox {
     }
 
 
+    //finds a relationship between two ClassBoxes if it exists, or null if the relationship does not exist
     public static Relationship findRelationship(final ClassBox cb1, final ClassBox cb2) {
         for (Relationship rel : cb1.parents) {
             if (rel.getOtherClass().equals(cb2)) {
@@ -127,6 +154,17 @@ public class ClassBox {
         for (Relationship rel : cb1.children) {
             if (rel.getOtherClass().equals(cb2)) {
                 return rel;
+            }
+        }
+        return null;
+    }
+
+    // Helper method that attempts to find a method within the methods list based on name
+    // returns null if not found
+    public Methods findMethod(String methodName) {
+        for (int i = 0; i < methods.size(); i++) {
+            if (methods.get(i).getName().equals(methodName)) {
+                return methods.get(i);
             }
         }
         return null;
@@ -145,42 +183,39 @@ public class ClassBox {
         childClass.parents.add(new Relationship(parentClass,type));
     }
 
-    //returns true only if a Relationship was deleted
-    //returns false if no Relationship was deleted or it did not exist
-    public static boolean deleteRelationship(final ClassBox cb1, final ClassBox cb2) {
+   //Deletes the relationship between the two ClassBox objects
+    public static void deleteRelationship(final ClassBox cb1, final ClassBox cb2) {
         for (Relationship rel : cb1.parents) {
             if (rel.getOtherClass().equals(cb2)) {
                 cb1.parents.remove(rel);
                 cb2.children.remove(rel);
-                return true;
             }
         }
         for (Relationship rel : cb1.children) {
             if (rel.getOtherClass().equals(cb2)) {
                 cb1.children.remove(rel);
                 cb2.parents.remove(rel);
-                return true;
             }
         }
-        return false;
     }
 
+    //returns a list of ONLY the class names in the calling ClassBox's parents list
     public String[] listRelationships() {
-        String[] rels = new String[this.parents.size()];
-        for (int i = 0; i < rels.length; ++i) {
-            rels[i] = this.parents.get(i).toString();
+        String[] relationships = new String[this.parents.size()];
+        for (int i = 0; i < relationships.length; ++i) {
+            relationships[i] = this.parents.get(i).toString();
         }
-        return rels;
+        return relationships;
     }
 
     public void rename(final String name) {
         this.name = name;
     }
-    //For list class details
+
 
     @Override
     public String toString() {
-        return null;
+        return "ClassBox toString() not implemented";
     }
 
 
