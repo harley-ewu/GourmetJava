@@ -84,6 +84,16 @@ public class ModelDiagram {
         }
     }
 
+    public static boolean addParam(String className, String methodName, String paramName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        } else {
+            target.addParam(methodName, paramName);
+            return true;
+        }
+    }
+
     public static boolean deleteMethod(String className, String methodName) {
         ClassBox target = findClassBox(className);
         if (target == null) {
@@ -102,6 +112,16 @@ public class ModelDiagram {
         }
     }
 
+    public static boolean deleteParam(String className, String methodName, String paramName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        }
+        else {
+            return target.deleteParam(methodName, paramName);
+        }
+    }
+
     public static boolean renameMethod(String className, String methodName, String newMethodName) {
         ClassBox target = findClassBox(className);
         if (target == null) {
@@ -117,6 +137,16 @@ public class ModelDiagram {
             return false;
         } else {
             return target.renameField(fieldName, newFieldName);
+        }
+    }
+
+    public static boolean renameParam(String className, String methodName, String paramName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        }
+        else {
+            return target.renameParam(methodName, paramName);
         }
     }
 
@@ -186,7 +216,9 @@ public class ModelDiagram {
         if (parent == null || child == null)
             return false;
 
-        //check if relationship between boxes exist within ClassBox
+        Relationship relationship = ClassBox.findRelationship(parent, child);
+        if(relationship != null)
+            return false;
 
         ClassBox.addRelationship(parent, child, type);
         return true;
@@ -203,10 +235,16 @@ public class ModelDiagram {
         if (parent == null || child == null)
             return false;
 
-        return ClassBox.deleteRelationship(parent, child);
+        Relationship relationship = ClassBox.findRelationship(parent, child);
+        if(relationship == null)
+            return false;
 
+        ClassBox.deleteRelationship(parent, child);
+        return true;
     }
 
+    //returns list of names of ONLY each createdClasses's parent classes
+    //each createdClass's list is stored in a list (list of lists)
     public static String[][] listRelationships() {
         String[][] list = new String[createdClasses.size()][];
         for (int i = 0; i < createdClasses.size(); ++i) {
@@ -215,7 +253,17 @@ public class ModelDiagram {
         return list;
     }
 
-    //How do we want to handle the class details?
+    /*We need to return:
+        Class name
+            - Class type
+        Its methods
+            - method return types and parameter list
+            - visibility
+        Its fields
+            - the field data types and visibility
+
+        I'm not sure how to handle this -David
+     */
     public static String[] listClassDetails(final String name) {
         if (name == null || name.isEmpty())
             throw new IllegalArgumentException("bad param passed to ModelDiagram.listClass");
