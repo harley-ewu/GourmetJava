@@ -67,6 +67,11 @@ public class Controller {
         return ModelDiagram.addField(className, name, view, type);
     }
 
+    // Adds a new param to a method within the classbox if both exist
+    public static boolean addParam(String className, String methodName, String paramName) {
+        return ModelDiagram.addParam(className, methodName, paramName);
+    }
+
     // Adds an attribute to a given class
     // NEW: ask for field or method, do io based on each, pass fields to classbox
     // add
@@ -170,8 +175,8 @@ public class Controller {
     }
 
     //deletes field based on className and methodName
-    public static boolean deleteField(String className, String methodName) {
-        return ModelDiagram.deleteField(className, methodName);
+    public static boolean deleteField(String className, String fieldName) {
+        return ModelDiagram.deleteField(className, fieldName);
     }
 
     public static boolean renameMethod(String className, String methodName, String newMethodName) {
