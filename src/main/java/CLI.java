@@ -29,7 +29,7 @@ public class CLI {
                         if (input2 == 1) {
                             CLI.listClasses();
                         } else if (input2 == 2) {
-                            printStringList(Controller.listAllClassDetails());
+                            //printStringList(Controller.listAllClassDetails());
                         } else if (input2 == 3) {
                             CLI.listClassDetails();
                         } else if (input2 == 4) {

@@ -250,13 +250,8 @@ public class Controller {
 
     // Returns a list of Strings, each String holding the detailed info for a
     // CreatedClass
-    public static String[] listAllClassDetails() {
-        return ModelDiagram.listAllClassDetails();
-    }
-
-    // What are attributes?
-    public static String[] listClassAttributes(final String cb) {
-        return ModelDiagram.listClassAttributes(cb);
+    public static String[][] listAllClassDetails(final String name) {
+        return ModelDiagram.listAllClassDetails(name);
     }
 
     // Returns an array of String arrays
