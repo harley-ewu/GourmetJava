@@ -100,6 +100,16 @@ public class ClassBox {
         return false;
     }
 
+
+    public boolean renameParam(String methodName, String paramName) {
+        for (int i = 0; i < fields.size(); i++) {
+            if (methods.get(i).getName().equals(methodName)) {
+                return methods.get(i).renameParam(paramName);
+            }
+        }
+        return false;
+    }
+
     public boolean deleteParam(String methodName, String paramName) {
         Methods target = findMethod(methodName);
         if (target != null) {

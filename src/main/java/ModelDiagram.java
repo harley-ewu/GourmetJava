@@ -144,6 +144,16 @@ public class ModelDiagram {
         }
     }
 
+    public static boolean renameParam(String className, String methodName, String paramName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        }
+        else {
+            return target.renameParam(methodName, paramName);
+        }
+    }
+
 
     public static String[] listClasses() {
         String[] list = new String[createdClasses.size()];

@@ -191,6 +191,10 @@ public class Controller {
         return ModelDiagram.renameField(className, fieldName, newFieldName);
     }
 
+    public static boolean renameParam(String className, String methodName, String paramName) {
+        return ModelDiagram.renameParam(className, methodName, paramName);
+    }
+
     public static void renameAttribute() {
         /*
 
