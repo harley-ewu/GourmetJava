@@ -23,9 +23,7 @@ public class GUI extends JFrame implements ActionListener{
 
     //public static void startGUIMenu(ArrayList<ClassBox> cc){
     public static void main(String[] args){
-        GUI m = new GUI();
-        //TODO
-        //What does m stand for here??
+        GUI mainContainer = new GUI();
 
         guiWindow = new JFrame("UML Editor");
 
@@ -34,15 +32,15 @@ public class GUI extends JFrame implements ActionListener{
 
         displayDropdown = new JMenu("Display");
         display = new JMenuItem("Display");
-        display.addActionListener(m);
+        display.addActionListener(mainContainer);
         displayDropdown.add(display);
         classDropdown = new JMenu("Class");
         addClass = new JMenuItem("Add Class");
         deleteClass = new JMenuItem("Delete Class");
         renameClass = new JMenuItem("Rename Class");
-        addClass.addActionListener(m);
-        deleteClass.addActionListener(m);
-        renameClass.addActionListener(m);
+        addClass.addActionListener(mainContainer);
+        deleteClass.addActionListener(mainContainer);
+        renameClass.addActionListener(mainContainer);
         classDropdown.add(addClass);
         classDropdown.add(deleteClass);
         classDropdown.add(renameClass);
@@ -50,24 +48,24 @@ public class GUI extends JFrame implements ActionListener{
         addAtt = new JMenuItem("Add Attribute");
         delAtt = new JMenuItem("Delete Attribute");
         renameAtt = new JMenuItem("Rename Attribute");
-        addAtt.addActionListener(m);
-        delAtt.addActionListener(m);
-        renameAtt.addActionListener(m);
+        addAtt.addActionListener(mainContainer);
+        delAtt.addActionListener(mainContainer);
+        renameAtt.addActionListener(mainContainer);
         attributeDropdown.add(addAtt);
         attributeDropdown.add(delAtt);
         attributeDropdown.add(renameAtt);
         relationshipDropdown = new JMenu("Relationship");
         addRelation = new JMenuItem("Add Relationship");
         delRelation = new JMenuItem("Delete Relationship");
-        addRelation.addActionListener(m);
-        delRelation.addActionListener(m);
+        addRelation.addActionListener(mainContainer);
+        delRelation.addActionListener(mainContainer);
         relationshipDropdown.add(addRelation);
         relationshipDropdown.add(delRelation);
         saveLoadDropdown = new JMenu("Save/Load");
         save = new JMenuItem("Save");
         load = new JMenuItem("Load");
-        save.addActionListener(m);
-        load.addActionListener(m);
+        save.addActionListener(mainContainer);
+        load.addActionListener(mainContainer);
         saveLoadDropdown.add(save);
         saveLoadDropdown.add(load);
         helpDropdown = new JMenu("Help");
@@ -75,7 +73,7 @@ public class GUI extends JFrame implements ActionListener{
          that isn't exactly needed to be repeated if we can get around it*/
         help = new JMenuItem("Help");
         helpDropdown.add(help);
-        help.addActionListener(m);
+        help.addActionListener(mainContainer);
         // add individual dropdown menus to menu bar
         mainMenu.add(displayDropdown);
         mainMenu.add(classDropdown);
@@ -94,7 +92,7 @@ public class GUI extends JFrame implements ActionListener{
         guiWindow.setVisible(true);
         //TODO why use pack?
         // Is this code below just for testing purposes?
-        m.pack();
+        mainContainer.pack();
         ArrayList<ClassBox> cc = new ArrayList<>();
         ClassBox c1 = new ClassBox("tim", 1);
         ClassBox c2 = new ClassBox("dave", 2);
@@ -130,17 +128,20 @@ public class GUI extends JFrame implements ActionListener{
             Graphics2D g2 = (Graphics2D) g;
             //Spacing out based on the number of classes
             //TODO so n is spacing then. Yeah?
-            int n = createdClasses.size();
+            int n = createdClasses.size(); //how many classes there are
             //Spots, e.g 3 classes has 3 spots and 4 spaces between them and outside
+            // If there are 3 classes, it has 3 spots with one classbox space between each box
             //TODO ...what?? what do you mean spots in relation to spaces?
-            int k = (2 * n) + 1;
+            int k = (2 * n) + 1; // number of total spaces including class boxes and empty spaces in between
             //Overall width of panel divided by spots
-            int j = 1000/k;
+            int j = 1000/k; //width divided by spots
             //Current x coordinate
             int curx = j;
             //Stores coordinates of each class when printed for relationship printing
             LinkedList<Integer> coords = new LinkedList<>();
             //Goes through all classes and prints them
+            //TODO
+            //this will stick every other class on an upper row, and the ones in between on a lower row
             for(int i = 0; i < n; i++){
                 if(i % 2 == 0){
                     drawClass(createdClasses.get(i), curx, 200, g2);
@@ -154,28 +155,34 @@ public class GUI extends JFrame implements ActionListener{
                 }
                 curx += (1.5 * j);
             }
+            //Prints the line for each relationship
             for (int i = 0; i < createdClasses.size(); i++){
                 for(Relationship r: createdClasses.get(i).getRelationships()){
                     //For each relationship, retrieve the coordinates of each, and draw a line between them
-                    int c1x = i*2;
-                    int c1y = c1x+1;
-                    int c2 = createdClasses.indexOf(r.getFrom());
-                    int c2x = c2*2;
-                    int c2y = c2x+1;
-                    c1x = coords.get(c1x);
-                    c1y = coords.get(c1y);
-                    c2x = coords.get(c2x);
-                    c2y = coords.get(c2y);
-                    c1x += 10;
-                    c2x += 10;
-                    g2.drawLine(c1x, c1y, c2x, c2y);
+                    int class1XIndex = i * 2; //index of where the coordinates are in the array
+                    int class1YIndex = class1XIndex + 1;
+                    int class2 = createdClasses.indexOf(r.getFrom());
+                    int class2XIndex = class2 * 2;
+                    int class2YIndex = class2XIndex + 1;
+                    int class1XCoords = coords.get(class1XIndex);
+                    int class1YCoords = coords.get(class1YIndex);
+                    int class2XCoords = coords.get(class2XIndex);
+                    int class2YCoords = coords.get(class2YIndex);
+                    class1XIndex += 10;
+                    //scooches the line over to the right a bit so it isn't on the corner
+                    class2XCoords += 10;
+                    g2.drawLine(class1XCoords, class1YCoords, class2XCoords, class2YCoords);
                     //Display the relationship type at the line's midpoint
-                    g2.drawString(r.getType(), ((c1x+c2x)/2), ((c1y+c2y)/2));
+                    //Finds midpoint and then prints the relationship string. "Aggregates" for example
+                    g2.drawString(r.getType(), ((class1XCoords + class2XCoords)/2), ((class1YCoords + class2YCoords)/2));
                 }
             }
         }
+
+        //Draws the class boxes
         public void drawClass(ClassBox c, int x, int y, Graphics2D g2){
-            int height = 15*(c.getFields().size()+c.getMethods().size()+2);
+            //number of fields and methods
+            int height = 15 * (c.getFields().size() + c.getMethods().size()+2);
             int width = c.getName().length();
             //Set width to largest of the attribute toStrings
             for(int i = 0; i < c.getFields().size(); i++){
@@ -188,17 +195,20 @@ public class GUI extends JFrame implements ActionListener{
                     width = c.getMethods().get(i).GUIToString().length();
                 }
             }
+            //the 8 here is just for good spacing
             width *= 8;
             //Outer rectangle
             g2.drawRect(x,y,width,height);
             //Write Class name
             g2.drawString(c.getName(), x+5, y+15);
             //Draw line under the name
-            g2.drawLine(x,y+15,x+width, y+15);
+            g2.drawLine(x,y + 15,x+width, y+15);
+            //moves down twice the spacing of above
             y = y + 30;
             //For each attribute, print the gui toString
             for(int i=0; i < c.getFields().size(); i++){
                 g2.drawString(c.getFields().get(i).GUIToString(), x+10, y);
+                //moves down 15
                 y += 15;
             }
             for(int i=0; i <c.getMethods().size(); i++){
