@@ -23,7 +23,8 @@ public class CLI {
                     if(Controller.getCreatedClassesSize() == 0){
                         System.out.println("Nothing to display! Please make a class first");
                     } else {
-                        printStringList(Controller.printMenu());
+                        printStringList(Controller.subMenu1());
+                        System.out.print("Choice: ");
                         input2 = Integer.parseInt(kb.nextLine());
                         if (input2 == 1) {
                             CLI.listClasses();
@@ -46,13 +47,8 @@ public class CLI {
                     }
                     break;
                 case 2:
-                    System.out.println("Please choose a number from the options below: ");
-                    System.out.println("1.) Add Class");
-                    System.out.println("2.) Remove Class");
-                    System.out.println("3.) Rename Class");
-                    System.out.println("4.) Help");
-                    System.out.println("5.) Back");
-                    System.out.print("Choice:");
+                    printStringList(Controller.subMenu2());
+                    System.out.print("Choice: ");
                     input2 = Integer.parseInt(kb.nextLine());
                     if (input2 == 1) {
                         CLI.addClass();
@@ -69,16 +65,11 @@ public class CLI {
                     }
                     break;
                 case 3:
-                    //if (createdClasses.isEmpty()) {
+
                     if(Controller.getCreatedClassesSize() == 0){
                         System.out.println("Please create a class first");
                     } else {
-                        System.out.println("Please choose a number from the options below: ");
-                        System.out.println("1.) Add Attribute");
-                        System.out.println("2.) Remove Attribute");
-                        System.out.println("3.) Rename Attribute");
-                        System.out.println("4.) Help");
-                        System.out.println("5.) Back");
+                        printStringList(Controller.subMenu3());
                         System.out.print("Choice:");
                         input2 = Integer.parseInt(kb.nextLine());
                         if (input2 == 1) {
@@ -101,11 +92,7 @@ public class CLI {
                     if(Controller.getCreatedClassesSize() < 2){
                         System.out.println("Please create 2 classes first");
                     } else {
-                        System.out.println("Please choose a number from the options below: ");
-                        System.out.println("1.) Add Relationship");
-                        System.out.println("2.) Remove Relationship");
-                        System.out.println("3.) Help");
-                        System.out.println("4.) Back");
+                        printStringList(Controller.subMenu4());
                         System.out.print("Choice:");
                         input2 = Integer.parseInt(kb.nextLine());
                         if (input2 == 1) {
@@ -243,7 +230,7 @@ public class CLI {
         int type = Integer.parseInt(kb.nextLine());
 
         //Test to see if adding relationship was sucessful
-        //if (Controller.addRelationship(index1, index2, type)) {
+
         if(Controller.addRelationship(name1, name2, type)){
             System.out.println("Relationship created!");
         } else {
@@ -252,23 +239,47 @@ public class CLI {
     }
 
     public static void deleteRelationship() {
-        Controller.listClasses();
-        System.out.println("What is the index of the first class of this relationship?");
-        System.out.print("Class Index:");
-        int index1 = Integer.parseInt(kb.nextLine());
-        System.out.println("What is the index of the second class?");
-        System.out.print("Class Index:");
-        int index2 = Integer.parseInt(kb.nextLine());
-        System.out.println("Are you sure you want to delete this relationship? Please write yes or no.");
-        System.out.print("yes/no:");
-        String answer = kb.nextLine();
+
+        System.out.println("What is the name of the first class of this relationship?");
+        printStringList(Controller.listClasses());
+        System.out.print("Class name:");
+        String name1 = kb.nextLine();
+        System.out.println("What is the name of the second class?");
+        printStringList(Controller.listClasses());
+        System.out.print("Class name:");
+        String name2 = kb.nextLine();
+
 
         //Test to see if deleting relationship was sucessful
         //if (Controller.deleteRelationship(index1, index2, answer)) {
-        if(false){
-            System.out.println("Relationship created!");
+        if(Controller.deleteRelationship(name1, name2)){
+            System.out.println("Relationship deleted!");
         } else {
             System.out.println("Bad inputs for relationship, deletion cancelled.");
+        }
+    }
+
+    //DOES NOT WORK
+    public static void addAttribute(){
+        System.out.println("Are you wanting to add a field or a method?");
+        String input = kb.nextLine();
+        if(input.equalsIgnoreCase("Field")){
+            System.out.println("What class did you want this field associated with?");
+            CLI.listClasses();
+            System.out.print("Class name: ");
+            String name = kb.nextLine();
+            System.out.println("What do you want to name this field?");
+            System.out.print("Field name: ");
+            String fieldname = kb.nextLine();
+            System.out.println("What is the visibility of this field?");
+            System.out.print("Field visibility: ");
+            String view = kb.nextLine();
+
+
+        }else if(input.equalsIgnoreCase("Method")){
+
+        }else{
+            System.out.println("Please enter either Field or Method. Please try again");
         }
     }
 

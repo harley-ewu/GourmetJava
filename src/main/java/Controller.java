@@ -249,6 +249,53 @@ public class Controller {
     // Rachael
     // Takes input from user on what index from the list they want to see then calls
     // a toString for that object
+    public static String[] subMenu1(){
+        return new String[]{"1.) List Options.",
+        "These options are listing options. They will lead you to the options where you can list classes, list class details, and list relationships.",
+                "The options are as listed below:",
+                "1.) List Classes",
+                "2.) List All Classes Detailed",
+                "3.) List class details.",
+                "4.) List relationships.",
+
+        };
+    }
+    public static String[] subMenu2(){
+        return new String[]{"Please choose a number from the options below: ",
+        "1.) Add Class",
+        "2.) Remove Class",
+        "3.) Rename Class",
+        "4.) Help",
+        "5.) Back",
+        };
+    }
+    public static String[] subMenu3(){
+        return new String[]{"Please choose a number from the options below: ",
+        "1.) Add Attribute",
+        "2.) Remove Attribute",
+        "3.) Rename Attribute",
+        "4.) Help",
+        "5.) Back",
+        };
+    }
+    public static String[] subMenu4(){
+        return new String[]{"Please choose a number from the options below: ",
+                "1.) Add Relationship",
+                "2.) Remove Relationship",
+                "3.) Help",
+                "4.) Back",
+        };
+    }
+    public static String[] subMenu5(){
+        return new String[]{"Please choose a number from the options below: ",
+                "1.) Save",
+                "2.) Load",
+                "3.) Help",
+                "4.) Back",
+        };
+    }
+
+
     public static String[] listClassDetails(final String name) {
         return ModelDiagram.listClassDetails(name);
     }
