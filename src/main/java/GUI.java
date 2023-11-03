@@ -218,3 +218,8 @@ public class GUI extends JFrame implements ActionListener{
         }
     }
 }
+
+// make the buttons work
+// to display, change the actual display button under Display to open CLI
+// we need to get the actual class boxes listed
+// all of a class's fields, methods, and relationships are added to the box as well
