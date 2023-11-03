@@ -50,7 +50,7 @@ public class GUI extends JFrame implements ActionListener{
                 //Draw new box (either entire screen refresh or just draw new box)
                 //done
 
-                /*
+                /* 
                        maybe test:
                             popup box that takes one integer (as string)
                             String -> int
