@@ -124,6 +124,7 @@ public class Controller {
      */
     public static String[][] listAllClassDetails(final String name) {
         return ModelDiagram.listAllClassDetails(name);
+
     }
 
     // Returns an array of String arrays

@@ -4,7 +4,6 @@ package src.main.java;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class GUI extends JFrame implements ActionListener{
@@ -21,8 +20,7 @@ public class GUI extends JFrame implements ActionListener{
     //creates a frame to be the main, base window to hold the entirety of the GUI
     static JFrame guiWindow;
 
-    //public static void startGUIMenu(ArrayList<ClassBox> cc){
-    public static void main(String[] args){
+    public static void startGUIMenu(){
         GUI mainContainer = new GUI();
 
         guiWindow = new JFrame("UML Editor");
@@ -145,6 +143,7 @@ public class GUI extends JFrame implements ActionListener{
         //TODO why use pack?
         // Is this code below just for testing purposes?
         mainContainer.pack();
+    /*
         ArrayList<ClassBox> cc = new ArrayList<>();
         ClassBox c1 = new ClassBox("tim", 1);
         ClassBox c2 = new ClassBox("dave", 2);
@@ -160,7 +159,9 @@ public class GUI extends JFrame implements ActionListener{
             cc.add(c1);
             cc.add(c2);
         //}
+        */
         displayGUI(guiWindow, cc);
+    
     }
     public void actionPerformed(ActionEvent e){
         String s = e.getActionCommand();
@@ -168,20 +169,18 @@ public class GUI extends JFrame implements ActionListener{
             //I/o, then call method
         }
     }
-    public static void displayGUI(JFrame guiWindow, ArrayList<ClassBox> createdClasses){
-        guiWindow.add(new ShapeDrawing(createdClasses));
+    public static void displayGUI(JFrame guiWindow){
+        guiWindow.add(new ShapeDrawing());
         guiWindow.setVisible(true);
     }
     public static class ShapeDrawing extends JComponent{
-        ArrayList<ClassBox> createdClasses;
-        public ShapeDrawing(ArrayList<ClassBox> createdClasses){
+        public ShapeDrawing(){
             super();
-            this.createdClasses = createdClasses;
         }
         public void paint(Graphics g){
             Graphics2D g2 = (Graphics2D) g;
             //Spacing out based on the number of classes
-            int numberOfClasses = createdClasses.size();
+            int numberOfClasses = Controller.getCreatedClassesSize();
             // number of total spaces including class boxes and empty spaces in between
             // If there are 3 classes, it has 3 spots with one classbox space between each box
             int totalSpace = (2 * numberOfClasses) + 1;
@@ -192,63 +191,71 @@ public class GUI extends JFrame implements ActionListener{
             //Stores coordinates of each class when printed for relationship printing
             LinkedList<Integer> coords = new LinkedList<>();
             //Goes through all classes and prints them
-            //TODO
+            String[] classNames = Controller.listClasses();
             //this will stick every other class on an upper row, and the ones in between on a lower row
             for(int i = 0; i < numberOfClasses; i++){
                 if(i % 2 == 0){
-                    drawClass(createdClasses.get(i), curx, 200, g2);
+                    drawClass(classNames[i], curx, 200, g2);
                     coords.add(curx);
                     coords.add(200);
                 }
                 else{
-                    drawClass(createdClasses.get(i), curx, 400, g2);
+                    drawClass(classNames[i], curx, 400, g2);
                     coords.add(curx);
                     coords.add(400);
                 }
                 curx += (1.5 * spaceWidth);
             }
+            String[] classes = Controller.listClasses();
             //Prints the line for each relationship
-            for (int i = 0; i < createdClasses.size(); i++){
-                //List relationships was changed to strings instead of relationships
-                for(String r: createdClasses.get(i).listRelationships()){
+            for (int i = 0; i < Controller.getCreatedClassesSize(); i++){
+                String[][] relationships = Controller.listRelationships();
+                for(int j = 0; i<relationships[i].length; j++){
                     //For each relationship, retrieve the coordinates of each, and draw a line between them
                     int class1XIndex = i * 2; //index of where the coordinates are in the array
                     int class1YIndex = class1XIndex + 1;
-                    //TODO the code below was altered and commented out just to get it to compile
-                    int class2 = 1;   // createdClasses.indexOf(r.getOtherClass());
-                    int class2XIndex = class2 * 2;
+                    String[] relationship = relationships[i][j].split(" ");
+                    int class2Index = -1;
+                    for(int k = 0;k<classes.length;k++){
+                        if (relationship[2].equals(classes[k])){
+                            class2Index = k;
+                        }
+                    }
+                    int class2XIndex = class2Index * 2;
+
                     int class2YIndex = class2XIndex + 1;
                     int class1XCoords = coords.get(class1XIndex);
                     int class1YCoords = coords.get(class1YIndex);
                     int class2XCoords = coords.get(class2XIndex);
                     int class2YCoords = coords.get(class2YIndex);
-                    class1XIndex += 10;
+                    class1XCoords += 10;
                     //scooches the line over to the right a bit so it isn't on the corner
                     class2XCoords += 10;
                     g2.drawLine(class1XCoords, class1YCoords, class2XCoords, class2YCoords);
                     //Display the relationship type at the line's midpoint
                     //Finds midpoint and then prints the relationship string. "Aggregates" for example
 
-                    //TODO below code does not work now as r is not a relationship
-                    //g2.drawString(r.getType(), ((class1XCoords + class2XCoords)/2), ((class1YCoords + class2YCoords)/2));
+                    g2.drawString(relationship[1], ((class1XCoords + class2XCoords)/2), ((class1YCoords + class2YCoords)/2));
+
                 }
             }
         }
 
         //Draws the class boxes
-        public void drawClass(ClassBox c, int x, int y, Graphics2D g2){
+        public void drawClass(String className, int x, int y, Graphics2D g2){
             //number of fields and methods
-            int height = 15 * (c.getFields().size() + c.getMethods().size()+2);
-            int width = c.getName().length();
+            String[][] classDetails = Controller.listAllClassDetails(className);
+            int height = 15 * (classDetails[1].length + classDetails[2].length+2);
+            int width = className.length();
             //Set width to largest of the attribute toStrings
-            for(int i = 0; i < c.getFields().size(); i++){
-                if(c.getFields().get(i).GUIToString().length() > width){
-                    width = c.getFields().get(i).GUIToString().length();
+            for(int i = 0; i < classDetails[1].length; i++){
+                if(classDetails[1][i].length() > width){
+                    width = classDetails[1][i].length();
                 }
             }
-            for(int i = 0; i < c.getMethods().size(); i++){
-                if(c.getMethods().get(i).GUIToString().length() > width){
-                    width = c.getMethods().get(i).GUIToString().length();
+            for(int i = 0; i < classDetails[2].length; i++){
+                if(classDetails[2][i].length() > width){
+                    width = classDetails[2][i].length();
                 }
             }
             //the 8 here is just for good spacing
@@ -256,19 +263,19 @@ public class GUI extends JFrame implements ActionListener{
             //Outer rectangle
             g2.drawRect(x,y,width,height);
             //Write Class name
-            g2.drawString(c.getName(), x+5, y+15);
+            g2.drawString(className, x+5, y+15);
             //Draw line under the name
             g2.drawLine(x,y + 15,x+width, y+15);
             //moves down twice the spacing of above
             y = y + 30;
             //For each attribute, print the gui toString
-            for(int i=0; i < c.getFields().size(); i++){
-                g2.drawString(c.getFields().get(i).GUIToString(), x+10, y);
+            for(int i=0; i < classDetails[1].length; i++){
+                g2.drawString(classDetails[1][i], x+10, y);
                 //moves down 15
                 y += 15;
             }
-            for(int i=0; i <c.getMethods().size(); i++){
-                g2.drawString(c.getMethods().get(i).GUIToString(), x+10, y);
+            for(int i=0; i <classDetails[2].length; i++){
+                g2.drawString(classDetails[2][i], x+10, y);
                 y += 15;
             }
         }
