@@ -162,6 +162,8 @@ public class GUI extends JFrame implements ActionListener{
         //}
         displayGUI(guiWindow, cc);
     }
+
+    
     public void actionPerformed(ActionEvent e){
         String s = e.getActionCommand();
         if(s.equals("Add Class")){
@@ -172,6 +174,7 @@ public class GUI extends JFrame implements ActionListener{
         guiWindow.add(new ShapeDrawing(createdClasses));
         guiWindow.setVisible(true);
     }
+
     public static class ShapeDrawing extends JComponent{
         ArrayList<ClassBox> createdClasses;
         public ShapeDrawing(ArrayList<ClassBox> createdClasses){
