@@ -30,7 +30,7 @@ public class CLI {
                         if (input2 == 1) {
                             CLI.listClasses();
                         } else if (input2 == 2) {
-                            printStringList(Controller.listAllClassDetails("name")[0]);
+                            //printStringList(Controller.listAllClassDetails());
                         } else if (input2 == 3) {
                             CLI.listClassDetails();
                         } else if (input2 == 4) {
@@ -78,7 +78,7 @@ public class CLI {
                         } else if (input2 == 2) {
                             CLI.deleteAttribute();
                         } else if (input2 == 3) {
-                            //Controller.renameAttribute();
+                            CLI.renameAttribute();
                         } else if (input2 == 4) {
                             CLI.printStringList(Controller.attributeHelp());
                         } else if (input2 == 5) {
@@ -355,9 +355,53 @@ public class CLI {
             } else {
                 System.out.println("Failed to delete method. Please try again");
             }
-        }
+        }else{
+        System.out.println("Please enter either Field or Method. Please try again");
+    }
     }
 
+    public static void renameAttribute(){
+        System.out.println("Are you wanting to rename a field or a method?");
+        String input = kb.nextLine();
+        if(input.equalsIgnoreCase("Field")){
+            System.out.println("What is the name of the class containing the field you wish to rename?");
+            CLI.listClasses();
+            System.out.print("Class name: ");
+            String className = kb.nextLine();
+            System.out.println("What is the current name of the field you want to rename?");
+
+            System.out.print("Current field name: ");
+            String fieldName = kb.nextLine();
+            System.out.println("What would you like this field's new name to be?");
+            System.out.print("New field name: ");
+            String newName = kb.nextLine();
+            if(Controller.renameField(className, fieldName, newName)){
+                System.out.println("Field  " + fieldName + " renamed to " + newName);
+            }else{
+                System.out.println("Failed to rename field. Please try again");
+            }
+
+        }else if(input.equalsIgnoreCase("Method")){
+            System.out.println("What is the name of the class containing the method you wish to rename?");
+            CLI.listClasses();
+            System.out.print("Class name: ");
+            String className = kb.nextLine();
+            System.out.println("What is the current name of the method you want to rename?");
+
+            System.out.print("Current method name: ");
+            String methodName = kb.nextLine();
+            System.out.println("What would you like this method's new name to be?");
+            System.out.print("Class name: ");
+            String newName = kb.nextLine();
+            if(Controller.renameMethod(className, methodName, newName)){
+                System.out.println("Field  " + methodName + " renamed to " + newName);
+            }else{
+                System.out.println("Failed to rename method. Please try again");
+            }
+        }else{
+            System.out.println("Please enter either Field or Method. Please try again");
+        }
+    }
 
 
 
