@@ -2,6 +2,7 @@ package src.main.java;
 
 //The "view" when the program is in command line interface (CLI) mode
 
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class CLI {
@@ -40,7 +41,7 @@ public class CLI {
                         } else if (input2 == 5) {
                             CLI.printStringList(Controller.listHelp());
                         } else if (input2 == 6) {
-                            return;
+                            break;
                         } else {
                             System.out.println("Invalid input, please try again");
                         }
@@ -59,7 +60,7 @@ public class CLI {
                     } else if (input2 == 4) {
                         CLI.printStringList(Controller.classHelp());
                     } else if (input2 == 5) {
-                        return;
+                        break;
                     } else {
                         System.out.println("Invalid input, please try again");
                     }
@@ -81,7 +82,7 @@ public class CLI {
                         } else if (input2 == 4) {
                             CLI.printStringList(Controller.attributeHelp());
                         } else if (input2 == 5) {
-                            return;
+                            break;
                         } else {
                             System.out.println("Invalid input, please try again");
                         }
@@ -102,7 +103,7 @@ public class CLI {
                         } else if (input2 == 3) {
                             CLI.printStringList(Controller.relationshipHelp());
                         } else if (input2 == 4) {
-                            return;
+                            break;
                         } else {
                             System.out.println("Invalid input, please try again");
                         }
@@ -119,7 +120,7 @@ public class CLI {
                     } else if (input2 == 3) {
                         printStringList(Controller.saveLoadHelp());
                     } else if (input2 == 4) {
-                        return;
+                        break;
                     } else {
                         System.out.println("Invalid input, please try again");
                     }
@@ -257,46 +258,58 @@ public class CLI {
 
     //Structure complete errors will fix when merged
     public static void addAttribute(){
-        System.out.println("Are you wanting to add a field or a method?");
+        String[] visibilityList = Controller.listVisibilityTypes();
+        System.out.println("Are you wanting to add a field or a method?" +
+                            "\nType 'Field' for field, or 'Method' for method");
         String input = kb.nextLine();
+
         if(input.equalsIgnoreCase("Field")){
-            System.out.println("What class did you want this field associated with?");
+            System.out.println("Enter the name of the class you are adding the field to:");
             CLI.listClasses();
             System.out.print("Class name: ");
             String className = kb.nextLine();
-            System.out.println("What do you want to name this field?");
+            System.out.println("What is the name of the field?");
             System.out.print("Field name: ");
             String fieldname = kb.nextLine();
-            System.out.println("What is the visibility of this field?");
+            System.out.println("Enter the visibility number below:");
+            for (int i = 0; i < visibilityList.length; i++)
+                System.out.println((i + 1) + ": " + visibilityList[i]);
             System.out.print("Field visibility: ");
             int view = Integer.parseInt(kb.nextLine());
             System.out.println("Lastly, what is the data type of this field?");
-            System.out.print("Field name: ");
+            System.out.print("Field type: ");
             String type = kb.nextLine();
 
             if(Controller.addField(className, fieldname, view, type)){
-                System.out.println("Field  " + fieldname + " added to class " + className);
+                System.out.println("Field " + fieldname + " added to class " + className + "\n");
             }else{
                 System.out.println("Failed to add field. Please try again");
             }
-
-
         }else if(input.equalsIgnoreCase("Method")){
-            System.out.println("What class did you want this method associated with?");
+            System.out.println("Enter the name of the class you are adding this method to:");
             CLI.listClasses();
             System.out.print("Class name: ");
             String className = kb.nextLine();
             System.out.println("What do you want to name this method?");
             System.out.print("Method name: ");
             String methodName = kb.nextLine();
-            System.out.println("What is the visibility of this method?");
+            System.out.println("Enter the visibility number below:");
+            for (int i = 0; i < visibilityList.length; i++)
+                System.out.println((i + 1) + ": " + visibilityList[i]);
             System.out.print("Method visibility: ");
             int view = Integer.parseInt(kb.nextLine());
-            System.out.println("Lastly, what is the return type of this method?");
+            System.out.println("What is the return type of this method?");
             System.out.print("Method return type: ");
             String type = kb.nextLine();
+            LinkedList<String> params = new LinkedList<>();
+            System.out.print("Lastly what parameters does the method have?" +
+                                "\nWhen you are finished press the enter key" +
+                                "\nParam: ");
+            while (!kb.nextLine().isEmpty()) {
+                System.out.print("Param: ");
+            }
 
-            if(Controller.addField(className, methodName, view, type)){
+            if(Controller.addMethod(className, methodName, view, type, params)){
                 System.out.println("Field  " + methodName + " added to class " + className);
             }else{
                 System.out.println("Failed to add field. Please try again");
