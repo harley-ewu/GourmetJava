@@ -30,7 +30,7 @@ public class CLI {
                         if (input2 == 1) {
                             CLI.listClasses();
                         } else if (input2 == 2) {
-                            printStringList(Controller.listAllClassDetails());
+                            printStringList(Controller.listAllClassDetails("name")[0]);
                         } else if (input2 == 3) {
                             CLI.listClassDetails();
                         } else if (input2 == 4) {
@@ -78,7 +78,7 @@ public class CLI {
                         } else if (input2 == 2) {
                             CLI.deleteAttribute();
                         } else if (input2 == 3) {
-                            Controller.renameAttribute();
+                            //Controller.renameAttribute();
                         } else if (input2 == 4) {
                             CLI.printStringList(Controller.attributeHelp());
                         } else if (input2 == 5) {
@@ -322,32 +322,36 @@ public class CLI {
         System.out.println("Are you wanting to delete a field or a method?");
         String input = kb.nextLine();
         if (input.equalsIgnoreCase("Field")) {
-            System.out.println("What class did you want to remove the field from?");
+            System.out.println("What is the name of the class you want to remove a field from?");
             CLI.listClasses();
             System.out.print("Class name: ");
             String className = kb.nextLine();
             System.out.println("What is the name of the field you wish to delete?");
+            String[] fieldList = Controller.listClassFields(className);
+            printStringList(fieldList);
             System.out.print("Field name: ");
             String fieldname = kb.nextLine();
 
             if (Controller.deleteField(className, fieldname)) {
-                System.out.println("Field  " + fieldname + " removed to class " + className);
+                System.out.println("Field " + fieldname + " was removed from class " + className);
             } else {
                 System.out.println("Failed to delete field. Please try again");
             }
 
 
         } else if (input.equalsIgnoreCase("Method")) {
-            System.out.println("What class did you want to remove the method from?");
+            System.out.println("What is the name of the class you want to remove a Method from??");
             CLI.listClasses();
             System.out.print("Class name: ");
             String className = kb.nextLine();
             System.out.println("What is the name of the method you wish to delete?");
-            System.out.print("Field name: ");
+            String[] methodList = Controller.listClassMethods(className);
+            printStringList(methodList);
+            System.out.print("Method name: ");
             String methodName = kb.nextLine();
 
-            if (Controller.deleteField(className, methodName)) {
-                System.out.println("Method  " + methodName + " removed to class " + className);
+            if (Controller.deleteMethod(className, methodName)) {
+                System.out.println("Method " + methodName + " was removed from class " + className);
             } else {
                 System.out.println("Failed to delete method. Please try again");
             }
