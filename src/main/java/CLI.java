@@ -65,6 +65,7 @@ public class CLI {
                     } else {
                         System.out.println("Invalid input, please try again");
                     }
+                    GUI.displayGUI();
                     break;
                 case 3:
 
@@ -79,7 +80,7 @@ public class CLI {
                         } else if (input2 == 2) {
                             CLI.deleteAttribute();
                         } else if (input2 == 3) {
-                            CLI.renameAttribute();
+                            //CLI.renameAttribute();
                         } else if (input2 == 4) {
 
                             printStringList(Controller.subMenu6());
@@ -102,6 +103,7 @@ public class CLI {
                         } else {
                             System.out.println("Invalid input, please try again");
                         }
+                        GUI.displayGUI();
                     }
                     break;
                 case 4:
@@ -123,6 +125,7 @@ public class CLI {
                         } else {
                             System.out.println("Invalid input, please try again");
                         }
+                        GUI.displayGUI();
                     }
                     break;
                 case 5:
@@ -140,16 +143,21 @@ public class CLI {
                     } else {
                         System.out.println("Invalid input, please try again");
                     }
+                    GUI.displayGUI();
                     break;
                 case 6:
                     Controller.help();
                     break;
                 case 7:
+                    GUI.startGUIMenu();
+                    break;
+                case 8:
                     System.out.println("Are you sure you want to exit? Type \"yes\" to confirm");
                     System.out.print("yes/no:");
                     if (kb.nextLine().equalsIgnoreCase("yes")) {
                         System.out.println("Program Closed! Bye!");
                         cont = false;
+                        Main.cview = false;
                     }
                     break;
                 default:
