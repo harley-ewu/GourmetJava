@@ -103,8 +103,8 @@ public class Controller {
         return ModelDiagram.renameField(className, fieldName, newFieldName);
     }
 
-    public static boolean renameParam(String className, String methodName, String paramName) {
-        return ModelDiagram.renameParam(className, methodName, paramName);
+    public static boolean renameParam(String className, String methodName, String oldParamName, String newParamName) {
+        return ModelDiagram.renameParam(className, methodName, oldParamName, newParamName);
     }
 
    
@@ -196,6 +196,16 @@ public class Controller {
                 "2.) Load",
                 "3.) Help",
                 "4.) Back",
+        };
+    }
+
+    public static String[] subMenu6(){
+        return new String[]{"Please choose a number from the options below: ",
+                "1.) Add Param to method",
+                "2.) Delete Param in method",
+                "3.) Rename Param in method",
+                "4.) Help",
+                "5.) Back",
         };
     }
 

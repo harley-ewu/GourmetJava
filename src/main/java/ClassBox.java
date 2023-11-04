@@ -118,10 +118,10 @@ public class ClassBox {
     }
 
 
-    public boolean renameParam(String methodName, String paramName) {
+    public boolean renameParam(String methodName, String oldParamName, String newParamName) {
         for (int i = 0; i < fields.size(); i++) {
             if (methods.get(i).getName().equals(methodName)) {
-                return methods.get(i).renameParam(paramName);
+                return methods.get(i).renameParam(oldParamName, newParamName);
             }
         }
         return false;

@@ -137,12 +137,12 @@ public class ModelDiagram {
         }
     }
 
-    public static boolean renameParam(String className, String methodName, String paramName) {
+    public static boolean renameParam(String className, String methodName, String oldParamName, String newParamName) {
         ClassBox target = findClassBox(className);
         if (target == null) {
             return false;
         } else {
-            return target.renameParam(methodName, paramName);
+            return target.renameParam(methodName, oldParamName, newParamName);
         }
     }
 
