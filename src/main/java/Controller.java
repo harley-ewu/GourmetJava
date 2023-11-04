@@ -198,14 +198,14 @@ public class Controller {
 
     // Returns a list of Strings, each String holding the detailed info for a
     // CreatedClass
-    public static String[] listAllClassDetails() {
+   /* public static String[] listAllClassDetails() {
         return ModelDiagram.listAllClassDetails();
-    }
+    }*/
 
     // What are attributes?
-    public static String[] listClassAttributes(final String cb) {
+    /*public static String[] listClassAttributes(final String cb) {
         return ModelDiagram.listClassAttributes(cb);
-    }
+    }*/
 
     // Returns an array of String arrays
     // We have a list of createdClass objects, and each createdClass object has a

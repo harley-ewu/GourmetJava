@@ -99,8 +99,8 @@ public class GUI extends JFrame implements ActionListener{
         LinkedList<String> params = new LinkedList<>();
         params.add("String");
         params.add("int");
-        c1.addField("name", Visibility.PROTECTED,"String");
-        c1.addMethod("toString", Visibility.PUBLIC,"String", params);
+        //c1.addField("name", Visibility.PROTECTED,"String");
+        //c1.addMethod("toString", Visibility.PUBLIC,"String", params);
         //c1.addRelationship(c2, 2);
         //for(int i = 0; i<6; i++){
             cc.add(c1);
@@ -155,7 +155,7 @@ public class GUI extends JFrame implements ActionListener{
             }
             //Prints the line for each relationship
             for (int i = 0; i < createdClasses.size(); i++){
-                for(Relationship r: createdClasses.get(i).getRelationships()){
+                /*for(Relationship r: createdClasses.get(i).getRelationships()){
                     //For each relationship, retrieve the coordinates of each, and draw a line between them
                     int class1XIndex = i * 2; //index of where the coordinates are in the array
                     int class1YIndex = class1XIndex + 1;
@@ -173,7 +173,7 @@ public class GUI extends JFrame implements ActionListener{
                     //Display the relationship type at the line's midpoint
                     //Finds midpoint and then prints the relationship string. "Aggregates" for example
                     g2.drawString(r.getType(), ((class1XCoords + class2XCoords)/2), ((class1YCoords + class2YCoords)/2));
-                }
+                }*/
             }
         }
 
