@@ -13,6 +13,7 @@ public class CLI {
         boolean cont = true;
         while (cont) {
             int input2;
+            int input3;
             CLI.printStringList(Controller.printMenu());
             System.out.print("Choice:");
             // get user input of 1-15
@@ -80,9 +81,23 @@ public class CLI {
                         } else if (input2 == 3) {
                             CLI.renameAttribute();
                         } else if (input2 == 4) {
-                            CLI.printStringList(Controller.attributeHelp());
+                            printStringList(Controller.subMenu6());
+                            input3 = Integer.parseInt(kb.nextLine());
+                            if (input3 == 1) {
+                                CLI.addParam();
+                            } else if (input3 == 2) {
+                                CLI.deleteParam();
+                            } else if (input3 == 3) {
+                                CLI.renameParam();
+                            } else if (input3 == 4) {
+                                System.out.println("WE NEED TO MAKE HELP FOR PARAM MENU");
+                            } else if (input3 == 5) {
+                                break;
+                            }
                         } else if (input2 == 5) {
-                            break;
+                            CLI.printStringList(Controller.attributeHelp());
+                        } else if (input2 == 6) {
+                            return;
                         } else {
                             System.out.println("Invalid input, please try again");
                         }
@@ -360,46 +375,69 @@ public class CLI {
     }
     }
 
-    public static void renameAttribute(){
-        System.out.println("Are you wanting to rename a field or a method?");
-        String input = kb.nextLine();
-        if(input.equalsIgnoreCase("Field")){
-            System.out.println("What is the name of the class containing the field you wish to rename?");
-            CLI.listClasses();
-            System.out.print("Class name: ");
-            String className = kb.nextLine();
-            System.out.println("What is the current name of the field you want to rename?");
+    public static void addParam() {
+        System.out.println("What class contains the method you would like to add a parameter to?");
+        CLI.listClasses();
+        System.out.print("Class name: ");
+        String className = kb.nextLine();
+        System.out.println("What is the name of the method you are adding the param to?");
+        Controller.listClassMethods(className);
+        System.out.print("Method name: ");
+        String methodName = kb.nextLine();
+        System.out.println("What is the new parameter you are adding?");
+        System.out.print("Parameter: ");
+        String paramName = kb.nextLine();
 
-            System.out.print("Current field name: ");
-            String fieldName = kb.nextLine();
-            System.out.println("What would you like this field's new name to be?");
-            System.out.print("New field name: ");
-            String newName = kb.nextLine();
-            if(Controller.renameField(className, fieldName, newName)){
-                System.out.println("Field  " + fieldName + " renamed to " + newName);
-            }else{
-                System.out.println("Failed to rename field. Please try again");
-            }
+        if (Controller.addParam(className, methodName, paramName)) {
+            System.out.println("Parameter successfully added to " + methodName + "!");
+        }
+        else {
+            System.out.println("Failed to add parameter. Please try again");
+        }
+    }
 
-        }else if(input.equalsIgnoreCase("Method")){
-            System.out.println("What is the name of the class containing the method you wish to rename?");
-            CLI.listClasses();
-            System.out.print("Class name: ");
-            String className = kb.nextLine();
-            System.out.println("What is the current name of the method you want to rename?");
+    public static void deleteParam() {
+        System.out.println("What class contains the method you would like to remove a parameter from?");
+        CLI.listClasses();
+        System.out.print("Class name: ");
+        String className = kb.nextLine();
+        System.out.println("What is the name of the method you are deleting the param from?");
+        Controller.listClassMethods(className);
+        System.out.print("Method name: ");
+        String methodName = kb.nextLine();
+        System.out.println("What is the param you are deleting?");
+        System.out.print("Parameter: ");
+        String paramName = kb.nextLine();
 
-            System.out.print("Current method name: ");
-            String methodName = kb.nextLine();
-            System.out.println("What would you like this method's new name to be?");
-            System.out.print("Class name: ");
-            String newName = kb.nextLine();
-            if(Controller.renameMethod(className, methodName, newName)){
-                System.out.println("Field  " + methodName + " renamed to " + newName);
-            }else{
-                System.out.println("Failed to rename method. Please try again");
-            }
-        }else{
-            System.out.println("Please enter either Field or Method. Please try again");
+        if (Controller.deleteParam(className, methodName, paramName)) {
+            System.out.println("Parameter successfully added to " + methodName + "!");
+        }
+        else {
+            System.out.println("Failed to add parameter. Please try again");
+        }
+    }
+
+    public static void renameParam() {
+        System.out.println("What class contains the method you would like to rename a parameter in?");
+        CLI.listClasses();
+        System.out.print("Class name: ");
+        String className = kb.nextLine();
+        System.out.println("What is the name of the method containing the parameter you are renaming?");
+        Controller.listClassMethods(className);
+        System.out.print("Method name: ");
+        String methodName = kb.nextLine();
+        System.out.println("Which parameter are you renaming?");
+        System.out.print("Parameter: ");
+        String oldParamName = kb.nextLine();
+        System.out.println("What will be the new name?");
+        System.out.print("New parameter: ");
+        String newParamName = kb.nextLine();
+
+        if (Controller.renameParam(className, methodName, oldParamName, newParamName)) {
+            System.out.println("Parameter successfully renamed from " + oldParamName + " to " + newParamName + "!");
+        }
+        else {
+            System.out.println("Failed to rename parameter. Please try again");
         }
     }
 
