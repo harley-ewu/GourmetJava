@@ -344,13 +344,14 @@ public class CLI {
             }
         }
     }
-    
+
     public static void addParam() {
         System.out.println("What class contains the method you would like to add a parameter to?");
         CLI.listClasses();
         System.out.print("Class name: ");
         String className = kb.nextLine();
         System.out.println("What is the name of the method you are adding the param to?");
+        Controller.listClassMethods(className);
         System.out.print("Method name: ");
         String methodName = kb.nextLine();
         System.out.println("What is the new parameter you are adding?");
@@ -371,6 +372,7 @@ public class CLI {
         System.out.print("Class name: ");
         String className = kb.nextLine();
         System.out.println("What is the name of the method you are deleting the param from?");
+        Controller.listClassMethods(className);
         System.out.print("Method name: ");
         String methodName = kb.nextLine();
         System.out.println("What is the param you are deleting?");
@@ -391,6 +393,7 @@ public class CLI {
         System.out.print("Class name: ");
         String className = kb.nextLine();
         System.out.println("What is the name of the method containing the parameter you are renaming?");
+        Controller.listClassMethods(className);
         System.out.print("Method name: ");
         String methodName = kb.nextLine();
         System.out.println("Which parameter are you renaming?");
