@@ -10,6 +10,10 @@ public class Field extends Attribute{
         this.type = type;
     }
 
+    public String getType() {
+        return type;
+    }
+
     @Override
     public String CLIToString() {
         return super.getName() + " " + super.getView() + " " + super.getModifiers() + " " + type;

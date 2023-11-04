@@ -19,7 +19,7 @@ public class ModelDiagramTest {
             ModelDiagram.addClass(null, 1);
             fail("Expected an IllegalArgumentException to be thrown");
         } catch (IllegalArgumentException exception) {
-            assertEquals("bad param passed to ModelDiagram.addClass", exception.getMessage());
+            assertEquals("Bad parameter passed to ModelDiagram.addClass()", exception.getMessage());
         }
 
         // Test adding a class with an empty name
@@ -27,7 +27,7 @@ public class ModelDiagramTest {
             ModelDiagram.addClass("", 1);
             fail("Expected an IllegalArgumentException to be thrown");
         } catch (IllegalArgumentException exception) {
-            assertEquals("bad param passed to ModelDiagram.addClass", exception.getMessage());
+            assertEquals("Bad parameter passed to ModelDiagram.addClass()", exception.getMessage());
         }
     }
 }
