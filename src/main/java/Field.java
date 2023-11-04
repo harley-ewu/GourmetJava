@@ -1,12 +1,11 @@
 package src.main.java;
 
-import java.util.LinkedList;
 
 public class Field extends Attribute{
     //type of field
-    private String type;
-    public Field(String name, Visibility view, LinkedList<String> tags, String type) {
-        super(name, view, tags);
+    private final String type;
+    public Field(String name, int view, String type) {
+        super(name, view);
         this.type = type;
     }
 
@@ -16,23 +15,26 @@ public class Field extends Attribute{
 
     @Override
     public String CLIToString() {
-        return super.getName() + " " + super.getView() + " " + super.getModifiers() + " " + type;
+        return this.getView().name().toLowerCase() + " " + this.getName();
     }
 
     @Override
     public String GUIToString() {
-        throw new UnsupportedOperationException("Unimplemented method 'GUIToString'");
+        return this.getView().getSymbol() + " " + this.getName();
     }
 
-    @Override
-    boolean equalTo(Attribute another) {
-        if (another instanceof Field) {
-            Field other = (Field) another;
-            if (this.getName().equals(other.getName()) && this.type.equals(other.type)) {
-                return true;
-            }
-        }
-        return false;
+
+    boolean equalTo(Field other) {
+        return this.getName().equals(other.getName()) && this.type.equals(other.type);
     }    
+
+    /*
+           returns a String in the format:
+           [visibility symbol][field name] : [type]
+     */
+    @Override
+    public String toString(){
+        return super.toString() + " : " + this.type;
+    }
 
 }

@@ -1,10 +1,11 @@
 package src.main.java;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public abstract class Attribute implements Comparable<Attribute> {
 
-    enum AttributeType {
+    private enum AttributeType {
         METHOD,
         FIELD;
     }
@@ -12,18 +13,22 @@ public abstract class Attribute implements Comparable<Attribute> {
     private String name;
     //public, private, protected
     private Visibility view;
-    //Stuff like static
-    private LinkedList<String> modifiers;
-    //Return type if method, value type if value
 
-
-    public Attribute(String name, Visibility view, LinkedList<String> tags) {
-        if (name == null || name.isEmpty() || view == null || tags == null) {
+    public Attribute(String name, Visibility view) {
+        if (name == null || name.isEmpty() || view == null) {
             throw new IllegalArgumentException("Bad params at Attribute constructor");
         }
         this.name = name;
         this.view = view;
-        this.modifiers = tags;
+    }
+
+    public Attribute(final String name, final int viewType) {
+        if (name == null || name.isEmpty() || viewType < 1 || viewType > Visibility.values().length)
+            throw new IllegalArgumentException("Bad params at Attribute constructor");
+
+        this.name = name;
+        this.view = Visibility.values()[viewType];
+
     }
 
     public void setName(String newName) {
@@ -40,13 +45,6 @@ public abstract class Attribute implements Comparable<Attribute> {
         this.view = newView;
     }
 
-    public void setModifiers(LinkedList<String> newModifiers) {
-        if (newModifiers == null) {
-            throw new IllegalArgumentException("Bad modifiers at attribute setModifiers");
-        }
-        this.modifiers = newModifiers;
-    }
-
     public String getName() {
         return this.name;
     }
@@ -55,19 +53,27 @@ public abstract class Attribute implements Comparable<Attribute> {
         return this.view;
     }
 
-    public LinkedList<String> getModifiers() {
-        return this.modifiers;
-    }
-
     @Override
     public int compareTo(Attribute a) {
         return this.name.compareTo(a.name);
     }
 
-    //compare by name if field, by name and params if method
-    abstract boolean equalTo(Attribute another);
+    public static String[] listAttributeTypes() {
+        return Arrays.stream(AttributeType.values()).map(Enum::name).toArray(String[]::new);
+    }
+
+    /*
+    Returns the visibility symbol of the attribute and then the name
+    Ex: "+myMethod"
+     */
+    @Override
+    public String toString() {
+        return this.view.getSymbol() + this.name;
+    }
+
     //will have symbols for view
     abstract public String GUIToString();
+
     //view as word
     abstract public String CLIToString();
 }

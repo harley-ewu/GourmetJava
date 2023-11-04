@@ -33,7 +33,7 @@ public class ModelDiagram {
     //returns false if a class was not added or a class with the same name already existed
     //throws an exception if the input "type" int was invalid
     public static boolean addClass(final String name, final int type) {
-        if(name == null || name.isEmpty())
+        if (name == null || name.isEmpty())
             throw new IllegalArgumentException("bad param passed to ModelDiagram.addClass");
 
         ClassBox newBox = findClassBox(name);
@@ -58,12 +58,45 @@ public class ModelDiagram {
         return true;
     }
 
+    // This method finds classBox within createdClasses
+    // If not found returns false
+    // Else adds method to the classBox and returns true
+    public static boolean addMethod(String className, String name, int view, String returnType, LinkedList<String> params) {
+        ClassBox target = findClassBox(className);
+        if (target == null)
+            return false;
+
+        return target.addMethod(name, view, returnType, params);
+
+    }
+
+    // This method finds classBox within createdClasses
+    // If not found returns false
+    // Else adds field to the classBox and returns true
+    public static boolean addField(String className, String name, int view, String type) {
+        ClassBox target = findClassBox(className);
+        if (target == null)
+            return false;
+
+        return target.addField(name, view, type);
+
+    }
+
+    public static boolean addParam(String className, String methodName, String paramName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        } else {
+            target.addParam(methodName, paramName);
+            return true;
+        }
+    }
+
     public static boolean deleteMethod(String className, String methodName) {
         ClassBox target = findClassBox(className);
         if (target == null) {
             return false;
-        }
-        else {
+        } else {
             return target.deleteMethod(methodName);
         }
     }
@@ -72,11 +105,47 @@ public class ModelDiagram {
         ClassBox target = findClassBox(className);
         if (target == null) {
             return false;
-        }
-        else {
+        } else {
             return target.deleteField(fieldName);
         }
     }
+
+    public static boolean deleteParam(String className, String methodName, String paramName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        } else {
+            return target.deleteParam(methodName, paramName);
+        }
+    }
+
+    public static boolean renameMethod(String className, String methodName, String newMethodName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        } else {
+            return target.renameMethod(methodName, newMethodName);
+        }
+    }
+
+    public static boolean renameField(String className, String fieldName, String newFieldName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        } else {
+            return target.renameField(fieldName, newFieldName);
+        }
+    }
+
+    public static boolean renameParam(String className, String methodName, String oldParamName, String newParamName) {
+        ClassBox target = findClassBox(className);
+        if (target == null) {
+            return false;
+        } else {
+            return target.renameParam(methodName, oldParamName, newParamName);
+        }
+    }
+
 
     public static String[] listClasses() {
         String[] list = new String[createdClasses.size()];
@@ -86,14 +155,45 @@ public class ModelDiagram {
         return list;
     }
 
-    public static String[] listDetailedClasses() {
-
-        return null;
+    /*
+        lists the classes in the format:
+            {Class1, Class1 type},
+            {Class2, Class2 types},
+            etc.
+        Made a separate method to not break existing code
+     */
+    public static String[][] listClassesAndTypes() {
+        String[][] list = new String[getCreatedClassesSize()][2];
+        for (int i = 0; i < getCreatedClassesSize(); ++i) {
+            list[i][0] = createdClasses.get(i).getName();
+            list[i][1] = createdClasses.get(i).getType();
+        }
+        return list;
     }
 
-    public static String[] listClassAttributes(final String cb) {
+    /*
+        Returns the details of a class in the format:
+        {
+            { Class name, Type},
+            { List of Methods },
+            { List of Fields }
+            { List of Relationships }
+        }
+     */
+    public static String[][] listAllClassDetails(final String name) {
+        if(name == null || name.isEmpty())
+            throw new IllegalArgumentException("bad name passed to ModelDiagram.listAllClassDetails");
 
-        return null;
+        ClassBox box = findClassBox(name);
+        if(box == null)
+            return null;
+
+        String[][] details = new String[4][];
+        details[0] = new String[]{box.getName(), box.getType()};
+        details[1] = box.listMethods();
+        details[2] = box.listFields();
+        details[3] = box.listRelationships();
+        return details;
     }
 
     //returns true only if the class was renamed
@@ -118,59 +218,80 @@ public class ModelDiagram {
     //does not handle which class is the parent or child
     //returns true if a relationship was added, false otherwise (also returns false if a relationship existed)
     //idk if the type should be an int or a String
-    public static boolean addRelationship(final String cb1, final String cb2, final int type) {
-        if (cb1 == null || cb2 == null || cb1.isEmpty() || cb2.isEmpty())
+    public static boolean addRelationship(final String parentClass, final String childClass, final int type) {
+        if (parentClass == null || childClass == null || parentClass.isEmpty() || childClass.isEmpty())
             throw new IllegalArgumentException("bad param passed to ModelDiagram.addRelationship");
 
-        ClassBox box1 = findClassBox(cb1);
-        ClassBox box2 = findClassBox(cb2);
-        if (box1 == null || box2 == null)
+        ClassBox parent = findClassBox(parentClass);
+        ClassBox child = findClassBox(childClass);
+        if (parent == null || child == null)
             return false;
 
-        //check if relationship between boxes exist within ClassBox
+        Relationship relationship = ClassBox.findRelationship(parent, child);
+        if (relationship != null)
+            return false;
 
-        return box1.addRelationship(box2, type);
+        ClassBox.addRelationship(parent, child, type);
+        return true;
     }
 
     //returns true if a relationship between the classes was deleted
     //returns false if the box objects do not exist or if there wasn't a relationship to begin with
-    public static boolean deleteRelationship(final String cb1, final String cb2) {
-        if (cb1 == null || cb2 == null || cb1.isEmpty() || cb2.isEmpty())
+    public static boolean deleteRelationship(final String parentClass, final String childClass) {
+        if (parentClass == null || childClass == null || parentClass.isEmpty() || childClass.isEmpty())
             throw new IllegalArgumentException("bad param passed to ModelDiagram.deleteRelationship");
 
-        ClassBox box1 = findClassBox(cb1);
-        ClassBox box2 = findClassBox(cb2);
-        if (box1 == null || box2 == null)
+        ClassBox parent = findClassBox(parentClass);
+        ClassBox child = findClassBox(childClass);
+        if (parent == null || child == null)
             return false;
 
-        return ClassBox.deleteRelationship(box1, box2);
+        Relationship relationship = ClassBox.findRelationship(parent, child);
+        if (relationship == null)
+            return false;
 
+        ClassBox.deleteRelationship(parent, child);
+        return true;
     }
 
+    //returns list of names of ONLY each createdClasses's parent classes
+    //each createdClass's list is stored in a list (list of lists)
     public static String[][] listRelationships() {
         String[][] list = new String[createdClasses.size()][];
-        for(int i = 0; i < createdClasses.size(); ++i){
+        for (int i = 0; i < createdClasses.size(); ++i) {
             list[i] = createdClasses.get(i).listRelationships();
         }
         return list;
     }
 
-    //How do we want to handle the class details?
-    public static String[] listClass(final String name) {
-        if(name == null || name.isEmpty())
+    /*We need to return:
+        Class name
+            - Class type
+        Its methods
+            - method return types and parameter list
+            - visibility
+        Its fields
+            - the field data types and visibility
+
+        I'm not sure how to handle this -David
+     */
+    public static String[] listClassDetails(final String name) {
+        if (name == null || name.isEmpty())
             throw new IllegalArgumentException("bad param passed to ModelDiagram.listClass");
 
         ClassBox box = findClassBox(name);
-        if(box == null)
+        if (box == null)
             return null;
 
         return null;
     }
 
+
     // The save method takes the current state of the program and saves it into a
     // .json file
     // Currently only a single save is supported
     public static void save() {
+        /*
         // Create a gson object that will take java objects and translate them to json
         Gson gson = new Gson();
         // Create a FileWriter that will write the converted Java to SavedFile.json
@@ -197,7 +318,7 @@ public class ModelDiagram {
                 // Find second index
                 int secondIndex = -1;
                 for (int p = 0; p < createdClasses.size(); p++) {
-                    if (createdClasses.get(p).getName().equals(relationships.get(j).getFrom().getName())) {
+                    if (createdClasses.get(p).getName().equals(relationships.get(j).getOtherClass().getName())) {
                         secondIndex = p;
                         p = createdClasses.size();
                     }
@@ -216,6 +337,8 @@ public class ModelDiagram {
                     e.printStackTrace();
                 }
             }
+
+
         }
 
         // Set relationships to null to avoid StackOverflow, then write ClassBoxes to
@@ -240,12 +363,14 @@ public class ModelDiagram {
             e.printStackTrace();
         }
         System.out.println("Your progress has been saved!");
+        */
     }
 
     // The load function is used to restore data that was previously saved using the
     // save function
     // Again we only support up to a single save
     public static void load() {
+        /*
         // Create a File and add a scanner to it to read the data
         File inputFile = new File("SavedFile.json");
         Scanner fileScanner = null;
@@ -302,26 +427,61 @@ public class ModelDiagram {
                 ClassBox class1 = createdClasses.get(firstIndex);
                 ClassBox class2 = createdClasses.get(secondIndex);
 
-                class1.addRelationship(class2, type);
+                ClassBox.addRelationship(class1, class2, type);
             }
         }
         fileScanner.close();
         System.out.println("Your previous save has been loaded!");
+        */
+
     }
 
-    /*Methods needed to be implemented
-        - addClass
-        - deleteClass
-        - renameClass
-        - addRelationship
-        - deleteRelationship
-        - addAttribute
-        - deleteAttribute
-        - renameAttribute
-        - Save
-        - Load
-
-        Not sure about implementation yet:
-        - Some sort of method to update to view
+    /*
+        Lists the class methods as a list in the format:
+           { [visibility symbol][method name] ([param types]) : [return type] },
+           etc.
+        Returns null if the ClassBox does not exist
      */
+    public static String[] listClassMethods(final String name) {
+        if (name == null || name.isEmpty())
+            throw new IllegalArgumentException("bad param passed to ModelDiagram.listClassMethods");
+
+        ClassBox box = findClassBox(name);
+        if (box == null)
+            return null;
+
+        return box.listMethods();
+    }
+
+    /*
+        Lists the class methods as a list in the format:
+        { [visibility symbol][field name] : [field type] },
+        etc.
+        Returns null if the ClassBox does not exist
+     */
+    public static String[] listClassFields(final String name) {
+        if (name == null || name.isEmpty())
+            throw new IllegalArgumentException("bad param passed to ModelDiagram.listClassFields");
+
+        ClassBox box = findClassBox(name);
+        if (box == null)
+            return null;
+
+        return box.listFields();
+
+    }
+
+    public static int getCreatedClassesSize() {
+        return createdClasses.size();
+    }
+
+    public static String[] getClassMethods(String className) {
+        return null;
+    }
+
+    public static String[] getClassFields(String name) {
+        return null;
+    }
+
+
 }

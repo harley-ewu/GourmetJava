@@ -9,7 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="true" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="21" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library>
@@ -39,7 +39,17 @@
         <jarDirectory url="file://$MODULE_DIR$/../GourmetJavaDeps" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="bluecatcode.junit.4.11.extended" level="project" />
-    <orderEntry type="library" name="google.code.gson" level="project" />
+
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$USER_HOME$/Desktop/42/Fall 2023/CSCD 350; Software Engeneering/Gson stuff" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$USER_HOME$/Desktop/42/Fall 2023/CSCD 350; Software Engeneering/Gson stuff" recursive="false" />
+      </library>
+    </orderEntry>
+
   </component>
 </module>

@@ -12,7 +12,13 @@ public enum Visibility {
     private Visibility(final String symbol){
         this.symbol = symbol;
     }
+    public String getSymbol(){
+        return this.symbol;
+    }
 
+    public String getVisibility() {
+        return this.name();
+    }
     //getname
     //tostring
 
