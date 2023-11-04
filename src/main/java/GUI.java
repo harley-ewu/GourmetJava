@@ -159,8 +159,8 @@ public class GUI extends JFrame implements ActionListener{
             cc.add(c1);
             cc.add(c2);
         //}
-        */
         displayGUI(guiWindow, cc);
+        */
     
     }
     public void actionPerformed(ActionEvent e){
