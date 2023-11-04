@@ -79,7 +79,7 @@ public class CLI {
                         } else if (input2 == 2) {
                             CLI.deleteAttribute();
                         } else if (input2 == 3) {
-                            CLI.renameAttribute();
+                            //CLI.renameAttribute();
                         } else if (input2 == 4) {
                             printStringList(Controller.subMenu6());
                             input3 = Integer.parseInt(kb.nextLine());
