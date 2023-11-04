@@ -81,7 +81,7 @@ public class CLI {
                             CLI.renameAttribute();
                         } else if (input2 == 4) {
                             CLI.printStringList(Controller.attributeHelp());
-                        } else if (input2 == 5) {
+                        } else if (input2 == 5) { 
                             break;
                         } else {
                             System.out.println("Invalid input, please try again");
