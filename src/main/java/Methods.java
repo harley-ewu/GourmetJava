@@ -31,10 +31,10 @@ public class Methods extends Attribute {
     }
 
   
-    public boolean renameParam(String paramName) {
+    public boolean renameParam(String oldParamName, String newParamName) {
         for (int i = 0; i < paramTypes.size(); i++) {
-            if (paramTypes.get(i).equals(paramName)) {
-                paramTypes.set(i, paramName);
+            if (paramTypes.get(i).equals(oldParamName)) {
+                paramTypes.set(i, newParamName);
                 return true;
             }
         }
@@ -50,7 +50,6 @@ public class Methods extends Attribute {
         return this.paramTypes;
     }
 
-    @Override
     public boolean equalTo(Attribute another) {
         if (another instanceof Methods) {
             Methods other = (Methods) another;
