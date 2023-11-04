@@ -178,8 +178,9 @@ public class Controller {
         "1.) Add Attribute",
         "2.) Remove Attribute",
         "3.) Rename Attribute",
-        "4.) Help",
-        "5.) Back",
+        "4.) Edit Method Parameters",
+        "5.) Help",
+                "6.) Back",
         };
     }
     public static String[] subMenu4(){

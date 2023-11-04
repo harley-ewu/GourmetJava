@@ -12,6 +12,7 @@ public class CLI {
         boolean cont = true;
         while (cont) {
             int input2;
+            int input3;
             CLI.printStringList(Controller.printMenu());
             System.out.print("Choice:");
             // get user input of 1-15
@@ -79,8 +80,22 @@ public class CLI {
                         } else if (input2 == 3) {
                             //Controller.renameAttribute();
                         } else if (input2 == 4) {
-                            CLI.printStringList(Controller.attributeHelp());
+                            printStringList(Controller.subMenu6());
+                            input3 = Integer.parseInt(kb.nextLine());
+                            if (input3 == 1) {
+                                CLI.addParam();
+                            } else if (input3 == 2) {
+                                CLI.deleteParam();
+                            } else if (input3 == 3) {
+                                CLI.renameParam();
+                            } else if (input3 == 4) {
+                                System.out.println("WE NEED TO MAKE HELP FOR PARAM MENU");
+                            } else if (input3 == 5) {
+                                break;
+                            }
                         } else if (input2 == 5) {
+                            CLI.printStringList(Controller.attributeHelp());
+                        } else if (input2 == 6) {
                             return;
                         } else {
                             System.out.println("Invalid input, please try again");
