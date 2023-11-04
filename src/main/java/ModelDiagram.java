@@ -177,6 +177,7 @@ public class ModelDiagram {
             { Class name, Type},
             { List of Methods },
             { List of Fields }
+            { List of Relationships }
         }
      */
     public static String[][] listAllClassDetails(final String name) {
@@ -187,10 +188,11 @@ public class ModelDiagram {
         if(box == null)
             return null;
 
-        String[][] details = new String[3][];
+        String[][] details = new String[4][];
         details[0] = new String[]{box.getName(), box.getType()};
         details[1] = box.listMethods();
         details[2] = box.listFields();
+        details[3] = box.listRelationships();
         return details;
     }
 
