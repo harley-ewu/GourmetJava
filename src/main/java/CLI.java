@@ -65,7 +65,7 @@ public class CLI {
                     } else {
                         System.out.println("Invalid input, please try again");
                     }
-                    GUI.displayGUI();
+                    //GUI.displayGUI();
                     break;
                 case 3:
 
@@ -103,7 +103,7 @@ public class CLI {
                         } else {
                             System.out.println("Invalid input, please try again");
                         }
-                        GUI.displayGUI();
+                        //GUI.displayGUI();
                     }
                     break;
                 case 4:
@@ -125,7 +125,7 @@ public class CLI {
                         } else {
                             System.out.println("Invalid input, please try again");
                         }
-                        GUI.displayGUI();
+                        //GUI.displayGUI();
                     }
                     break;
                 case 5:
@@ -143,13 +143,13 @@ public class CLI {
                     } else {
                         System.out.println("Invalid input, please try again");
                     }
-                    GUI.displayGUI();
+                    //GUI.displayGUI();
                     break;
                 case 6:
                     Controller.help();
                     break;
                 case 7:
-                    GUI.startGUIMenu();
+                    //GUI.startGUIMenu();
                     break;
                 case 8:
                     System.out.println("Are you sure you want to exit? Type \"yes\" to confirm");
