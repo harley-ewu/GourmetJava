@@ -16,6 +16,8 @@ public class Main {
         System.out.println("Happy editing!");
         System.out.println("Which view would you like to begin in? (\"c\" for command line or \"g\" for graphic interface");
         System.out.print("(c/g):");
+        CLI.menu();
+        /*
         Scanner kb = new Scanner(System.in);
         char input = '.';
         while(!(input=='c'||input=='g')){
@@ -33,7 +35,8 @@ public class Main {
                 System.out.print("(c/g):");
             }
         }
-        CLI.menu();
+        
+         */
     }
 
 
