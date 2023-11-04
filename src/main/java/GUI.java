@@ -267,17 +267,17 @@ public class GUI extends JFrame {
         public void drawClass(String className, int x, int y, Graphics2D g2){
             //number of fields and methods
             String[][] classDetails = Controller.listAllClassDetails(className);
-            int height = 15 * (classDetails[1].length + classDetails[2].length+2);
+            int height = 15 * (classDetails[Controller.DETAILS_METHODS].length + classDetails[Controller.DETAILS_FIELDS].length+2);
             int width = className.length();
             //Set width to largest of the attribute toStrings
-            for(int i = 0; i < classDetails[1].length; i++){
+            for(int i = 0; i < classDetails[Controller.DETAILS_METHODS].length; i++){
                 if(classDetails[1][i].length() > width){
-                    width = classDetails[1][i].length();
+                    width = classDetails[Controller.DETAILS_METHODS][i].length();
                 }
             }
-            for(int i = 0; i < classDetails[2].length; i++){
+            for(int i = 0; i < classDetails[Controller.DETAILS_FIELDS].length; i++){
                 if(classDetails[2][i].length() > width){
-                    width = classDetails[2][i].length();
+                    width = classDetails[Controller.DETAILS_FIELDS][i].length();
                 }
             }
             //the 8 here is just for good spacing
@@ -291,13 +291,13 @@ public class GUI extends JFrame {
             //moves down twice the spacing of above
             y = y + 30;
             //For each attribute, print the gui toString
-            for(int i=0; i < classDetails[1].length; i++){
-                g2.drawString(classDetails[1][i], x+10, y);
+            for(int i=0; i < classDetails[Controller.DETAILS_METHODS].length; i++){
+                g2.drawString(classDetails[Controller.DETAILS_METHODS][i], x+10, y);
                 //moves down 15
                 y += 15;
             }
-            for(int i=0; i <classDetails[2].length; i++){
-                g2.drawString(classDetails[2][i], x+10, y);
+            for(int i=0; i <classDetails[Controller.DETAILS_FIELDS].length; i++){
+                g2.drawString(classDetails[Controller.DETAILS_FIELDS][i], x+10, y);
                 y += 15;
             }
         }
