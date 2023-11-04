@@ -71,9 +71,4 @@ public abstract class Attribute implements Comparable<Attribute> {
         return this.view.getSymbol() + this.name;
     }
 
-    //will have symbols for view
-    abstract public String GUIToString();
-
-    //view as word
-    abstract public String CLIToString();
 }
