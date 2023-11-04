@@ -6,22 +6,21 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.LinkedList;
 
-public class GUI extends JFrame implements ActionListener{
+public class GUI extends JFrame {
     // Creates a dropdown style menu framework at the top of the frame
     static JMenuBar mainMenu;
 
     // Creates individual dropdown menus for each category within the overall menu
-    static JMenu displayDropdown,classDropdown,attributeDropdown,relationshipDropdown,saveLoadDropdown,helpDropdown;
+    static JMenu parameterDropdown, displayDropdown,classDropdown,attributeDropdown,relationshipDropdown,saveLoadDropdown,helpDropdown;
 
     // Individual menu items/buttons under their individual category menus
-    static JMenuItem display,addClass,deleteClass,renameClass,addAtt,delAtt,renameAtt,addRelation,delRelation,save,load,help;
+    static JMenuItem display,addClass,deleteClass,renameClass,addAtt,delAtt,renameAtt,addRelation,delRelation,save,load,help,addPar, delPar, renPar;
 
 
     //creates a frame to be the main, base window to hold the entirety of the GUI
     static JFrame guiWindow;
 
     public static void startGUIMenu(){
-        GUI mainContainer = new GUI();
 
         guiWindow = new JFrame("UML Editor");
 
@@ -29,13 +28,12 @@ public class GUI extends JFrame implements ActionListener{
         mainMenu = new JMenuBar();
 
         displayDropdown = new JMenu("Display");
-        display = new JMenuItem(new AbstractAction("Display") {
+        display = new JMenuItem(new AbstractAction("Refresh") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(10);
+                displayGUI();
             }
         });
-        //display.addActionListener(mainContainer);
         displayDropdown.add(display);
 
 
@@ -69,13 +67,9 @@ public class GUI extends JFrame implements ActionListener{
                 System.exit(13);
             }
         });
-        //addClass.addActionListener(mainContainer);
-        //deleteClass.addActionListener(mainContainer);
-        //renameClass.addActionListener(mainContainer);
         classDropdown.add(addClass);
         classDropdown.add(deleteClass);
         classDropdown.add(renameClass);
-
 
         attributeDropdown = new JMenu("Attribute");
         addAtt = new JMenuItem(new AbstractAction("Add Attribute") {
@@ -96,38 +90,81 @@ public class GUI extends JFrame implements ActionListener{
                 System.exit(16);
             }
         });
-        //addAtt.addActionListener(mainContainer);
-        //delAtt.addActionListener(mainContainer);
-        //renameAtt.addActionListener(mainContainer);
         attributeDropdown.add(addAtt);
         attributeDropdown.add(delAtt);
         attributeDropdown.add(renameAtt);
 
+        parameterDropdown = new JMenu("Parameters");
+        addPar = new JMenuItem(new AbstractAction("Add Parameter") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(14);
+            }
+        });
+        delPar = new JMenuItem(new AbstractAction("Delete Parameter") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(15);
+            }
+        });
+        renPar = new JMenuItem(new AbstractAction("Rename Parameter") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(16);
+            }
+        });
+        parameterDropdown.add(addPar);
+        parameterDropdown.add(delPar);
+        parameterDropdown.add(renPar);
 
         relationshipDropdown = new JMenu("Relationship");
-        addRelation = new JMenuItem("Add Relationship");
-        delRelation = new JMenuItem("Delete Relationship");
-        addRelation.addActionListener(mainContainer);
-        delRelation.addActionListener(mainContainer);
+        addRelation = new JMenuItem(new AbstractAction("Add Relationship") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(1);
+            }
+        });
+        delRelation = new JMenuItem(new AbstractAction("Delete Relationship") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(1);
+            }
+        });
         relationshipDropdown.add(addRelation);
         relationshipDropdown.add(delRelation);
+
         saveLoadDropdown = new JMenu("Save/Load");
-        save = new JMenuItem("Save");
-        load = new JMenuItem("Load");
-        save.addActionListener(mainContainer);
-        load.addActionListener(mainContainer);
+        save = new JMenuItem(new AbstractAction("Save") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(1);
+            }
+        });
+        load = new JMenuItem(new AbstractAction("Load") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(1);
+            }
+        });
         saveLoadDropdown.add(save);
         saveLoadDropdown.add(load);
+
         helpDropdown = new JMenu("Help");
         /*Maybe take out the dropdown part of "help" since there's just one component.
          that isn't exactly needed to be repeated if we can get around it*/
-        help = new JMenuItem("Help");
+        help = new JMenuItem(new AbstractAction("Help") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(1);
+            }
+        });
         helpDropdown.add(help);
-        help.addActionListener(mainContainer);
+
         // add individual dropdown menus to menu bar
         mainMenu.add(displayDropdown);
         mainMenu.add(classDropdown);
         mainMenu.add(attributeDropdown);
+        mainMenu.add(parameterDropdown);
         mainMenu.add(relationshipDropdown);
         mainMenu.add(saveLoadDropdown);
         mainMenu.add(helpDropdown);
@@ -140,43 +177,19 @@ public class GUI extends JFrame implements ActionListener{
         guiWindow.setPreferredSize(new Dimension(1000, 800));
         guiWindow.setResizable(false);
         guiWindow.setVisible(true);
-        //TODO why use pack?
-        // Is this code below just for testing purposes?
-        mainContainer.pack();
+        Main.mainContainer.pack();
         guiWindow.addWindowListener(new WindowAdapter(){
             @Override
             public void windowClosing(WindowEvent event){
                 Main.gview = false;
             }
         });
-    /*
-        ArrayList<ClassBox> cc = new ArrayList<>();
-        ClassBox c1 = new ClassBox("tim", 1);
-        ClassBox c2 = new ClassBox("dave", 2);
-        LinkedList<String> params = new LinkedList<>();
-        params.add("String");
-        params.add("int");
-
-        c1.addField("name", 1,"String");
-        c1.addMethod("toString", 1,"String", params);
-        Controller.addRelationship(c1.getName(), c2.getName(), 2);
-
-        //for(int i = 0; i<6; i++){
-            cc.add(c1);
-            cc.add(c2);
-        //}*/
         displayGUI();
         //Want to stay idle if CLI view is not there; need to keep program running
         while(!Main.cview) {
             ;
         }
     
-    }
-    public void actionPerformed(ActionEvent e){
-        String s = e.getActionCommand();
-        if(s.equals("Add Class")){
-            //I/o, then call method
-        }
     }
     public static void displayGUI(){
         guiWindow.add(new ShapeDrawing());

@@ -9,21 +9,6 @@ public class Field extends Attribute{
         this.type = type;
     }
 
-    @Override
-    public String CLIToString() {
-        return this.getView().name().toLowerCase() + " " + this.getName();
-    }
-
-    @Override
-    public String GUIToString() {
-        return this.getView().getSymbol() + " " + this.getName();
-    }
-
-
-    boolean equalTo(Field other) {
-        return this.getName().equals(other.getName()) && this.type.equals(other.type);
-    }    
-
     /*
            returns a String in the format:
            [visibility symbol][field name] : [type]
