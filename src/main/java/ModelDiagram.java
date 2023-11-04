@@ -174,10 +174,10 @@ public class ModelDiagram {
     /*
         Returns the details of a class in the format:
         {
-            { Class name, Type},
-            { List of Methods },
-            { List of Fields }
-            { List of Relationships }
+           [0][x] - { Class name, Type},
+           [1][x] - { List of Methods },
+           [2][x] - { List of Fields }
+           [3][x] - { List of Relationships }
         }
      */
     public static String[][] listAllClassDetails(final String name) {

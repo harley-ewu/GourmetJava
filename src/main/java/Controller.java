@@ -50,11 +50,11 @@ public class Controller {
 
     }
 
-    public static String[] listClassMethods(final String name){
+    public static String[] listClassMethods(final String name) {
         return ModelDiagram.listClassMethods(name);
     }
 
-    public static String[] listClassFields(final String name){
+    public static String[] listClassFields(final String name) {
         return ModelDiagram.listClassFields(name);
     }
 
@@ -108,7 +108,10 @@ public class Controller {
         return ModelDiagram.renameParam(className, methodName, oldParamName, newParamName);
     }
 
-   
+    public final static int DETAILS_NAME_TYPE = 0;
+    public final static int DETAILS_METHODS = 1;
+    public final static int DETAILS_FIELDS = 2;
+    public final static int DETAILS_RELATIONSHIPS = 3;
 
     public static String[] listClasses() {
         return ModelDiagram.listClasses();
@@ -117,9 +120,10 @@ public class Controller {
     /*
         Returns the details of a class in the format:
         {
-            { Class name, Type},
-            { List of Methods },
-            { List of Fields }
+           [0][x] - { Class name, Type},
+           [1][x] - { List of Methods },
+           [2][x] - { List of Fields }
+           [3][x] - { List of Relationships }
         }
      */
     public static String[][] listAllClassDetails(final String name) {
@@ -134,19 +138,19 @@ public class Controller {
         return ModelDiagram.listRelationships();
     }
 
-    public static String[] listClassTypes(){
+    public static String[] listClassTypes() {
         return ClassBox.listClassTypes();
     }
 
-    public static String[] listAttributeTypes(){
+    public static String[] listAttributeTypes() {
         return Attribute.listAttributeTypes();
     }
 
-    public static String[] listVisibilityTypes(){
+    public static String[] listVisibilityTypes() {
         return ClassBox.listVisibilityTypes();
     }
 
-    public static String[] listRelationshipTypes(){
+    public static String[] listRelationshipTypes() {
         return Relationship.listRelationshipTypes();
     }
 
@@ -155,9 +159,9 @@ public class Controller {
     // Rachael
     // Takes input from user on what index from the list they want to see then calls
     // a toString for that object
-    public static String[] subMenu1(){
+    public static String[] subMenu1() {
         return new String[]{"1.) List Options.",
-        "These options are listing options. They will lead you to the options where you can list classes, list class details, and list relationships.",
+                "These options are listing options. They will lead you to the options where you can list classes, list class details, and list relationships.",
                 "The options are as listed below:",
                 "1.) List Classes",
                 "2.) List All Classes Detailed",
@@ -166,26 +170,29 @@ public class Controller {
 
         };
     }
-    public static String[] subMenu2(){
+
+    public static String[] subMenu2() {
         return new String[]{"Please choose a number from the options below: ",
-        "1.) Add Class",
-        "2.) Remove Class",
-        "3.) Rename Class",
-        "4.) Help",
-        "5.) Back",
+                "1.) Add Class",
+                "2.) Remove Class",
+                "3.) Rename Class",
+                "4.) Help",
+                "5.) Back",
         };
     }
-    public static String[] subMenu3(){
+
+    public static String[] subMenu3() {
         return new String[]{"Please choose a number from the options below: ",
-        "1.) Add Attribute",
-        "2.) Remove Attribute",
-        "3.) Rename Attribute",
-        "4.) Edit Method Parameters",
-        "5.) Help",
+                "1.) Add Attribute",
+                "2.) Remove Attribute",
+                "3.) Rename Attribute",
+                "4.) Edit Method Parameters",
+                "5.) Help",
                 "6.) Back",
         };
     }
-    public static String[] subMenu4(){
+
+    public static String[] subMenu4() {
         return new String[]{"Please choose a number from the options below: ",
                 "1.) Add Relationship",
                 "2.) Remove Relationship",
@@ -193,7 +200,8 @@ public class Controller {
                 "4.) Back",
         };
     }
-    public static String[] subMenu5(){
+
+    public static String[] subMenu5() {
         return new String[]{"Please choose a number from the options below: ",
                 "1.) Save",
                 "2.) Load",
@@ -202,7 +210,7 @@ public class Controller {
         };
     }
 
-    public static String[] subMenu6(){
+    public static String[] subMenu6() {
         return new String[]{"Please choose a number from the options below: ",
                 "1.) Add Param to method",
                 "2.) Delete Param in method",
@@ -216,7 +224,6 @@ public class Controller {
     public static String[] listClassDetails(final String name) {
         return ModelDiagram.listClassDetails(name);
     }
-
 
 
     public static String[] listHelp() {
