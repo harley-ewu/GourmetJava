@@ -330,7 +330,8 @@ public class Controller {
                 "4.) Relationship Options (Add, Delete)",
                 "5.) Save/Load",
                 "6.) Help",
-                "7.) Exit"
+                "7.) Open GUI",
+                "8.) Exit"
         };
     }
 

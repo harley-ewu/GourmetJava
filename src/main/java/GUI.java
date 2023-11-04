@@ -143,6 +143,12 @@ public class GUI extends JFrame implements ActionListener{
         //TODO why use pack?
         // Is this code below just for testing purposes?
         mainContainer.pack();
+        guiWindow.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosing(WindowEvent event){
+                Main.gview = false;
+            }
+        });
     /*
         ArrayList<ClassBox> cc = new ArrayList<>();
         ClassBox c1 = new ClassBox("tim", 1);
@@ -158,9 +164,12 @@ public class GUI extends JFrame implements ActionListener{
         //for(int i = 0; i<6; i++){
             cc.add(c1);
             cc.add(c2);
-        //}
-        displayGUI(guiWindow, cc);
-        */
+        //}*/
+        displayGUI();
+        //Want to stay idle if CLI view is not there; need to keep program running
+        while(!Main.cview) {
+            ;
+        }
     
     }
     public void actionPerformed(ActionEvent e){
@@ -169,7 +178,7 @@ public class GUI extends JFrame implements ActionListener{
             //I/o, then call method
         }
     }
-    public static void displayGUI(JFrame guiWindow){
+    public static void displayGUI(){
         guiWindow.add(new ShapeDrawing());
         guiWindow.setVisible(true);
     }
