@@ -152,8 +152,13 @@ public class CLI {
                     break;
                 case 8:
                     System.out.println("Are you sure you want to exit? Type \"yes\" to confirm");
-                    System.out.print("yes/no:");
+                    System.out.print("yes/no: ");
                     if (kb.nextLine().equalsIgnoreCase("yes")) {
+                        System.out.println("Would you like to save first?");
+                        System.out.print("yes/no: ");
+                        if (kb.nextLine().equalsIgnoreCase("yes")) {
+                            ModelDiagram.save();
+                        }
                         System.out.println("Program Closed! Bye!");
                         cont = false;
                         Main.cview = false;

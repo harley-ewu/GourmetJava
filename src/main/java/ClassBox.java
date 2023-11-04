@@ -273,4 +273,8 @@ public class ClassBox {
     public LinkedList<Field> getFields() {
         return fields;
     }
+
+    public LinkedList<Relationship> getParents() { return parents;}
+
+    public LinkedList<Relationship> getChildren() { return children;}
 }
