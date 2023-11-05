@@ -186,6 +186,20 @@ public class GUI extends JFrame {
         });
         displayGUI();
         //Want to stay idle if CLI view is not there; need to keep program running
+        Controller.addClass("shit",1);
+        Controller.addField("shit", "crap",1,"dumb fucking program");
+        LinkedList<String> params = new LinkedList<>();
+        params.add("AHH");
+        params.add("i'd rather be sleeping");
+        Controller.addMethod("shit","I hate this",1,"FUCK",params);
+        Controller.addField("shit","iHateThis",1,"please");
+
+        Controller.addClass("fuck",1);
+        LinkedList<String> params2 = new LinkedList<>();
+        params2.add("ugh");
+        params2.add("i'd rather be dead");
+        Controller.addMethod("fuck","I hate this",1,"FUCK",params);
+        Controller.addField("fuck","weeeeeeeee",1,"snore");
         while(!Main.cview) {
             ;
         }
