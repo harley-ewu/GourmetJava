@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class CLI {
     //Scanner to read user input
-    private static Scanner kb = new Scanner(System.in);
+    private static final Scanner kb = new Scanner(System.in);
 
     public static void menu() {
         boolean cont = true;
@@ -15,19 +15,17 @@ public class CLI {
             int input2;
             int input3;
             CLI.printStringList(Controller.printMenu());
-            System.out.print("Choice: ");
             // get user input of 1-15
             // call io method below
             // io method calls actual method in other classes
-            int input = Integer.parseInt(kb.nextLine());
+            int input = CLI.readInt("Choice: ");
             switch (input) {
                 case 1:
                     if (Controller.getCreatedClassesSize() == 0) {
                         System.out.println("Nothing to display! Please make a class first");
                     } else {
                         printStringList(Controller.subMenu1());
-                        System.out.print("Choice: ");
-                        input2 = Integer.parseInt(kb.nextLine());
+                        input2 = CLI.readInt("Choice: ");
                         if (input2 == 1) {
                             CLI.listClasses();
                         } else if (input2 == 2) {
@@ -49,8 +47,7 @@ public class CLI {
                     break;
                 case 2:
                     printStringList(Controller.subMenu2());
-                    System.out.print("Choice: ");
-                    input2 = Integer.parseInt(kb.nextLine());
+                    input2 = CLI.readInt("Choice: ");
                     if (input2 == 1) {
                         CLI.addClass();
                     } else if (input2 == 2) {
@@ -72,8 +69,7 @@ public class CLI {
                         System.out.println("Please create a class first");
                     } else {
                         printStringList(Controller.subMenu3());
-                        System.out.print("Choice: ");
-                        input2 = Integer.parseInt(kb.nextLine());
+                        input2 = CLI.readInt("Choice: ");
                         if (input2 == 1) {
                             CLI.addAttribute();
                         } else if (input2 == 2) {
@@ -82,8 +78,7 @@ public class CLI {
                             CLI.renameAttribute();
                         } else if (input2 == 4) {
                             printStringList(Controller.subMenu6());
-                            System.out.print("Choice ");
-                            input3 = Integer.parseInt(kb.nextLine());
+                            input3 = CLI.readInt("Choice ");
                             if (input3 == 1) {
                                 CLI.addParam();
                             } else if (input3 == 2) {
@@ -111,8 +106,7 @@ public class CLI {
                         System.out.println("Please create 2 classes first");
                     } else {
                         printStringList(Controller.subMenu4());
-                        System.out.print("Choice: ");
-                        input2 = Integer.parseInt(kb.nextLine());
+                        input2 = CLI.readInt("Choice: ");
                         if (input2 == 1) {
                             CLI.addRelationship();
                         } else if (input2 == 2) {
@@ -129,8 +123,7 @@ public class CLI {
                     break;
                 case 5:
                     printStringList(Controller.subMenu5());
-                    System.out.print("Choice: ");
-                    input2 = Integer.parseInt(kb.nextLine());
+                    input2 = CLI.readInt("Choice: ");
                     if (input2 == 1) {
                         CLI.save();
                     } else if (input2 == 2) {
@@ -178,18 +171,20 @@ public class CLI {
     public static void addClass() {
         System.out.println("What would you like to name your class?");
         if (Controller.listClasses().length != 0) {
-            System.out.println("Existing Classes:");
+            System.out.println("Existing Classes: ");
             CLI.listClasses();
         }
-        System.out.print("Class Name: ");
-        String name = kb.nextLine();
+        String name = CLI.readString("Class Name: ");
+        if(Controller.existentialCrisisExists(name)){
+            System.out.println("Class " + name + " already exists, try again");
+            return;
+        }
         System.out.println("What number below corresponds to the class type?");
         String[] classTypes = Controller.listClassTypes();
         for (int i = 0; i < classTypes.length; i++) {
             System.out.println((i + 1) + ": " + classTypes[i]);
         }
-        System.out.print("Class Type Number: ");
-        int type = Integer.parseInt(kb.nextLine());
+        int type = CLI.readInt("Class Type Number: ");
         //Test to see if adding was sucessful
         if (Controller.addClass(name, type)) {
             System.out.println("Class created!");
@@ -206,8 +201,11 @@ public class CLI {
     public static void deleteClass() {
         System.out.println("What is the name of the class you want to delete?");
         CLI.listClasses();
-        System.out.print("Class Name: ");
-        String input = kb.nextLine();
+        String input = CLI.readString("Class Name: ");
+        if(!Controller.existentialCrisisExists(input)){
+            System.out.println("Class " + input + " does not exist, try again");
+            return;
+        }
 
         //Test to see if deleting was sucessful
         if (Controller.deleteClass(input)) {
@@ -224,12 +222,18 @@ public class CLI {
     public static void renameClass() {
         System.out.println("What is the name of the class you want to rename?");
         CLI.listClasses();
-        System.out.print("Class Name: ");
-        String oldName = kb.nextLine();
+        String oldName = CLI.readString("Class Name: ");
+        if(!Controller.existentialCrisisExists(oldName)){
+            System.out.println("Class " + oldName + " does not exist, try again");
+            return;
+        }
 
         System.out.println("What would you like to rename your class?");
-        System.out.print("New Class Name: ");
-        String name = kb.nextLine();
+        String name = CLI.readString("New Class Name: ");
+        if(Controller.existentialCrisisExists(name)){
+            System.out.println("Class " + name + " already exists, try again");
+            return;
+        }
 
         //Test to see if rename was sucessful
         if (Controller.renameClass(oldName, name)) {
@@ -247,18 +251,23 @@ public class CLI {
 
         System.out.println("What is the name of the first class you want to have a relationship? (The lower/to class, e.g this implements the other class)");
         CLI.printStringList(Controller.listClasses());
-        System.out.print("Class 1 name: ");
-        String name1 = kb.nextLine();
+        String name1 = CLI.readString("Class 1 name: ");
+        if(!Controller.existentialCrisisExists(name1)){
+            System.out.println("Class " + name1 + " does not exist, try again");
+            return;
+        }
 
         System.out.println("What is the name of the second class you want to have a relationship?(The higher/from class, e.g the other class implements this)");
         CLI.printStringList(Controller.listClasses());
-        System.out.print("Class 2 name: ");
-        String name2 = kb.nextLine();
+        String name2 = CLI.readString("Class 2 name: ");
+        if(!Controller.existentialCrisisExists(name2)){
+            System.out.println("Class " + name2 + " does not exist, try again");
+            return;
+        }
 
-        Relationship.printRelationshipTypes();
+        CLI.printStringListNumbered(Controller.listRelationshipTypes());
         System.out.println("Please select an option for the relationship type by number");
-        System.out.print("Type #: ");
-        int type = Integer.parseInt(kb.nextLine());
+        String type = CLI.readString("Type #: ");
 
         //Test to see if adding relationship was sucessful
 
@@ -273,13 +282,18 @@ public class CLI {
 
         System.out.println("What is the name of the first class of this relationship?");
         printStringList(Controller.listClasses());
-        System.out.print("Class name: ");
-        String name1 = kb.nextLine();
+        String name1 = CLI.readString("Class name: ");
+        if(!Controller.existentialCrisisExists(name1)){
+            System.out.println("Class " + name1 + " does not exist, try again");
+            return;
+        }
         System.out.println("What is the name of the second class?");
         printStringList(Controller.listClasses());
-        System.out.print("Class name: ");
-        String name2 = kb.nextLine();
-
+        String name2 = CLI.readString("Class name: ");
+        if(!Controller.existentialCrisisExists(name2)){
+            System.out.println("Class " + name2 + " does not exist, try again");
+            return;
+        }
 
         //Test to see if deleting relationship was sucessful
         //if (Controller.deleteRelationship(index1, index2, answer)) {
@@ -295,31 +309,24 @@ public class CLI {
         String[] visibilityList = Controller.listVisibilityTypes();
         System.out.println("Are you wanting to add a field or a method?" +
                 "\nType '1' for field, or '2' for method");
-        System.out.print("Input: ");
-        int input = 0;
-        try {
-            input = Integer.parseInt(kb.nextLine());
-        } catch (Exception e){
-            System.out.println("Please enter either '1' or '2'. Please try again");
-            return;
-        }
+        int input = CLI.readInt("Input: ");
 
         if (input == 1) {
             System.out.println("Enter the name of the class you are adding the field to:");
             CLI.listClasses();
-            System.out.print("Class name: ");
-            String className = kb.nextLine();
+            String className = CLI.readString("Class name: ");
+            if(!Controller.existentialCrisisExists(className)){
+                System.out.println("Class " + className + " does not exist, try again");
+                return;
+            }
             System.out.println("What is the name of the field?");
-            System.out.print("Field name: ");
-            String fieldname = kb.nextLine();
+            String fieldname = CLI.readString("Field name: ");
             System.out.println("Enter the visibility number below:");
             for (int i = 0; i < visibilityList.length; i++)
                 System.out.println((i + 1) + ": " + visibilityList[i]);
-            System.out.print("Field visibility: ");
-            int view = Integer.parseInt(kb.nextLine());
+            int view = CLI.readInt("Field visibility: ");
             System.out.println("Lastly, what is the data type of this field?");
-            System.out.print("Field type: ");
-            String type = kb.nextLine();
+            String type = CLI.readString("Field type: ");
 
             if (Controller.addField(className, fieldname, view, type)) {
                 System.out.println("Field " + fieldname + " added to class " + className + "\n");
@@ -329,19 +336,19 @@ public class CLI {
         } else if (input == 2) {
             System.out.println("Enter the name of the class you are adding this method to:");
             CLI.listClasses();
-            System.out.print("Class name: ");
-            String className = kb.nextLine();
+            String className = CLI.readString("Class name: ");
+            if(!Controller.existentialCrisisExists(className)){
+                System.out.println("Class " + className + " does not exist, try again");
+                return;
+            }
             System.out.println("What do you want to name this method?");
-            System.out.print("Method name: ");
-            String methodName = kb.nextLine();
+            String methodName = CLI.readString("Method name: ");
             System.out.println("Enter the visibility number below:");
             for (int i = 0; i < visibilityList.length; i++)
                 System.out.println((i + 1) + ": " + visibilityList[i]);
-            System.out.print("Method visibility: ");
-            int view = Integer.parseInt(kb.nextLine());
+            int view = CLI.readInt("Method visibility: ");
             System.out.println("What is the return type of this method?");
-            System.out.print("Method return type: ");
-            String type = kb.nextLine();
+            String type = CLI.readString("Method return type: ");
             LinkedList<String> params = new LinkedList<>();
             System.out.print("Lastly what parameters does the method have?" +
                     "\nWhen you are finished press the enter key when the line is blank" +
@@ -363,26 +370,22 @@ public class CLI {
     }
 
     public static void deleteAttribute() {
-        System.out.println("Are you wanting to delete a field or a method?");
-        System.out.print("Input: ");
-        int input = 0;
-        try {
-            input = Integer.parseInt(kb.nextLine());
-        } catch (Exception e){
-            System.out.println("Please enter either '1' or '2'. Please try again");
-            return;
-        }
+        System.out.println("Are you wanting to delete a field or a method?" +
+                "\nType '1' for field, or '2' for method");
+        int input = CLI.readInt("Input: ");
 
         if (input == 1) {
             System.out.println("What is the name of the class you want to remove a field from?");
             CLI.listClasses();
-            System.out.print("Class name: ");
-            String className = kb.nextLine();
+            String className = CLI.readString("Class name: ");
+            if(!Controller.existentialCrisisExists(className)){
+                System.out.println("Class " + className + " does not exist, try again");
+                return;
+            }
             System.out.println("What is the name of the field you wish to delete?");
             String[] fieldList = Controller.listClassFields(className);
             printStringList(fieldList);
-            System.out.print("Field name: ");
-            String fieldname = kb.nextLine();
+            String fieldname = CLI.readString("Field name: ");
 
             if (Controller.deleteField(className, fieldname)) {
                 System.out.println("Field " + fieldname + " was removed from class " + className);
@@ -394,13 +397,15 @@ public class CLI {
         } else if (input == 2) {
             System.out.println("What is the name of the class you want to remove a Method from??");
             CLI.listClasses();
-            System.out.print("Class name: ");
-            String className = kb.nextLine();
+            String className = CLI.readString("Class name: ");
+            if(!Controller.existentialCrisisExists(className)){
+                System.out.println("Class " + className + " does not exist, try again");
+                return;
+            }
             System.out.println("What is the name of the method you wish to delete?");
             String[] methodList = Controller.listClassMethods(className);
             printStringList(methodList);
-            System.out.print("Method name: ");
-            String methodName = kb.nextLine();
+            String methodName = CLI.readString("Method name: ");
 
             if (Controller.deleteMethod(className, methodName)) {
                 System.out.println("Method " + methodName + " was removed from class " + className);
@@ -415,15 +420,16 @@ public class CLI {
     public static void addParam() {
         System.out.println("What class contains the method you would like to add a parameter to?");
         CLI.listClasses();
-        System.out.print("Class name: ");
-        String className = kb.nextLine();
+        String className = CLI.readString("Class name: ");
+        if(!Controller.existentialCrisisExists(className)){
+            System.out.println("Class " + className + " does not exist, try again");
+            return;
+        }
         System.out.println("What is the name of the method you are adding the param to?");
         printStringList(Controller.listClassMethods(className));
-        System.out.print("Method name: ");
-        String methodName = kb.nextLine();
+        String methodName = CLI.readString("Method name: ");
         System.out.println("What is the new parameter you are adding?");
-        System.out.print("Parameter: ");
-        String paramName = kb.nextLine();
+        String paramName = CLI.readString("Parameter: ");
 
         if (Controller.addParam(className, methodName, paramName)) {
             System.out.println("Parameter successfully added to " + methodName + "!");
@@ -435,15 +441,16 @@ public class CLI {
     public static void deleteParam() {
         System.out.println("What class contains the method you would like to remove a parameter from?");
         CLI.listClasses();
-        System.out.print("Class name: ");
-        String className = kb.nextLine();
+        String className = CLI.readString("Class name: ");
+        if(!Controller.existentialCrisisExists(className)){
+            System.out.println("Class " + className + " does not exist, try again");
+            return;
+        }
         System.out.println("What is the name of the method you are deleting the param from?");
         printStringList(Controller.listClassMethods(className));
-        System.out.print("Method name: ");
-        String methodName = kb.nextLine();
+        String methodName = CLI.readString("Method name: ");
         System.out.println("What is the param you are deleting?");
-        System.out.print("Parameter: ");
-        String paramName = kb.nextLine();
+        String paramName = CLI.readString("Parameter: ");
 
         if (Controller.deleteParam(className, methodName, paramName)) {
             System.out.println("Parameter successfully removed from " + methodName + "!");
@@ -455,18 +462,18 @@ public class CLI {
     public static void renameParam() {
         System.out.println("What class contains the method you would like to rename a parameter in?");
         CLI.listClasses();
-        System.out.print("Class name: ");
-        String className = kb.nextLine();
+        String className = CLI.readString("Class name: ");
+        if(!Controller.existentialCrisisExists(className)){
+            System.out.println("Class " + className + " does not exist, try again");
+            return;
+        }
         System.out.println("What is the name of the method containing the parameter you are renaming?");
         printStringList(Controller.listClassMethods(className));
-        System.out.print("Method name: ");
-        String methodName = kb.nextLine();
+        String methodName = CLI.readString("Method name: ");
         System.out.println("Which parameter are you renaming?");
-        System.out.print("Parameter: ");
-        String oldParamName = kb.nextLine();
+        String oldParamName = CLI.readString("Parameter: ");
         System.out.println("What will be the new name?");
-        System.out.print("New parameter: ");
-        String newParamName = kb.nextLine();
+        String newParamName = CLI.readString("New parameter: ");
 
         if (Controller.renameParam(className, methodName, oldParamName, newParamName)) {
             System.out.println("Parameter successfully renamed from " + oldParamName + " to " + newParamName + "!");
@@ -477,40 +484,43 @@ public class CLI {
 
 
     public static void renameAttribute() {
-        System.out.println("Are you wanting to rename a field or a method?");
-        String input = kb.nextLine();
-        if (input.equalsIgnoreCase("Field")) {
+        System.out.println("Are you wanting to delete a field or a method?" +
+                "\nType '1' for field, or '2' for method");
+        int input = readInt("Choice: ");
+        if (input == 1) {
             System.out.println("What is the name of the class containing the field you wish to rename?");
             CLI.listClasses();
-            System.out.print("Class name: ");
-            String className = kb.nextLine();
+            String className = CLI.readString("Class name: ");
+            if(!Controller.existentialCrisisExists(className)){
+                System.out.println("Class " + className + " does not exist, try again");
+                return;
+            }
             System.out.println("What is the current name of the field you want to rename?");
             printStringList(Controller.listClassFields(className));
-            System.out.print("Current field name: ");
-            String fieldName = kb.nextLine();
+            String fieldName = CLI.readString("Current field name: ");
             System.out.println("What would you like this field's new name to be?");
-            System.out.print("New field name: ");
-            String newName = kb.nextLine();
+            String newName = CLI.readString("New field name: ");
             if (Controller.renameField(className, fieldName, newName)) {
                 System.out.println("Field " + fieldName + " renamed to " + newName);
             } else {
                 System.out.println("Failed to rename field. Please try again");
             }
 
-        } else if (input.equalsIgnoreCase("Method")) {
+        } else if (input == 2) {
             System.out.println("What is the name of the class containing the method you wish to rename?");
             CLI.listClasses();
-            System.out.print("Class name: ");
-            String className = kb.nextLine();
+            String className = CLI.readString("Class name: ");
+            if(!Controller.existentialCrisisExists(className)){
+                System.out.println("Class " + className + " does not exist, try again");
+                return;
+            }
             System.out.println("What is the current name of the method you want to rename?");
             printStringList(Controller.listClassMethods(className));
-            System.out.print("Current method name: ");
-            String methodName = kb.nextLine();
+            String methodName = CLI.readString("Current method name: ");
             System.out.println("What would you like this method's new name to be?");
-            System.out.print("Class name: ");
-            String newName = kb.nextLine();
+            String newName = CLI.readString("New Method name: ");
             if (Controller.renameMethod(className, methodName, newName)) {
-                System.out.println("Field " + methodName + " renamed to " + newName);
+                System.out.println("Method " + methodName + " renamed to " + newName);
             } else {
                 System.out.println("Failed to rename method. Please try again");
             }
@@ -523,13 +533,17 @@ public class CLI {
     public static void listAllClassDetails() {
         System.out.println("What is the name of the class you want see?");
         printStringList(Controller.listClasses());
-        System.out.print("Class name: ");
-        String input = kb.nextLine();
-        try {
-            printArrayOfStringList(Controller.listAllClassDetails(input));
-        } catch (Exception e) {
-            System.out.println("Failed to get details for class: \"" + input + "\"");
+        String input = CLI.readString("Class name: ");
+        if(!Controller.existentialCrisisExists(input)){
+            System.out.println("Class " + input + " does not exist, try again");
+            return;
         }
+        String[][] details = Controller.listAllClassDetails(input);
+        if(details == null)
+            System.out.println("Failed to get details for class: \"" + input + "\"");
+        else
+            printArrayOfStringList(details);
+
     }
 
     //This method takes in an arraylist of strings and is able to print it out line after line.
@@ -556,6 +570,14 @@ public class CLI {
         }
     }
 
+    public static void printStringListNumbered(final String[] list){
+        int counter = 1;
+        for (String s : list) {
+            System.out.println(counter + ". " + s);
+            counter++;
+        }
+    }
+
     public static void listClassesDetailed() {
         String[] classes = Controller.listClasses();
         for (int i = 0; i < classes.length; i++)
@@ -565,8 +587,7 @@ public class CLI {
     public static void save() {
         if (Controller.save()) {
             System.out.println("Your progress has been saved!");
-        }
-        else
+        } else
             System.out.println("Nothing to save");
     }
 
@@ -575,6 +596,22 @@ public class CLI {
             System.out.println("Your previous save has been loaded!");
         else
             System.out.println("There is no save to load.");
+    }
+
+    public static int readInt(final String msg) {
+        System.out.print(msg);
+        while (true) {
+            try {
+                return Integer.parseInt(kb.nextLine());
+            } catch (Exception e) {
+                System.out.print(msg);
+            }
+        }
+    }
+
+    public static String readString(final String msg) {
+        System.out.print(msg);
+        return kb.nextLine();
     }
 
 

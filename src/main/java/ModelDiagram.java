@@ -232,7 +232,6 @@ public class ModelDiagram {
         } catch (Exception e) {
             return false;
         }
-
     }
 
     //returns true if a relationship was added, false otherwise (also returns false if a relationship existed)

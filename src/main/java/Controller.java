@@ -42,7 +42,12 @@ public class Controller {
 
     public static boolean addRelationship(final String cb1, final String cb2, final int type) {
         return ModelDiagram.addRelationship(cb1, cb2, type);
+    }
 
+    //Adds a relationship with the type being an integer stored as a String (ex: "1" or "2")
+    //Does not accept the name of the enum itself (maybe add later)
+    public static boolean addRelationship(final String parentClass, final String childClass, final String type){
+        return ModelDiagram.addRelationship(parentClass,childClass,type);
     }
 
     public static String[] listClassMethods(final String name) {
@@ -137,9 +142,6 @@ public class Controller {
         return ClassBox.listClassTypes();
     }
 
-    public static String[] listAttributeTypes() {
-        return Attribute.listAttributeTypes();
-    }
 
     public static String[] listVisibilityTypes() {
         return ClassBox.listVisibilityTypes();

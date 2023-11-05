@@ -54,16 +54,6 @@ public class Relationship {
         this.type = RelationshipType.values()[type - 1];
     }
 
-    /**
-     * Prints the relationships in the format "[num] - [relationship type]
-     */
-    public static void printRelationshipTypes(){
-        RelationshipType[] relations = RelationshipType.values();
-        for(int i = 0; i < relations.length; ++i){
-            System.out.println((i + 1) + " - " + relations[i].name());
-        }
-    }
-
     public static String[] listRelationshipTypes(){
         return Arrays.stream(RelationshipType.values()).map(Enum::name).toArray(String[]::new);
     }
