@@ -132,9 +132,9 @@ public class CLI {
                     System.out.print("Choice: ");
                     input2 = Integer.parseInt(kb.nextLine());
                     if (input2 == 1) {
-                        ModelDiagram.save();
+                        CLI.save();
                     } else if (input2 == 2) {
-                        ModelDiagram.load();
+                        CLI.load();
                     } else if (input2 == 3) {
                         printStringList(Controller.saveLoadHelp());
                     } else if (input2 == 4) {
@@ -157,7 +157,7 @@ public class CLI {
                         System.out.println("Would you like to save first?");
                         System.out.print("yes/no: ");
                         if (kb.nextLine().equalsIgnoreCase("yes")) {
-                            ModelDiagram.save();
+                            CLI.save();
                         }
                         System.out.println("Program Closed! Bye!");
                         cont = false;
@@ -560,6 +560,21 @@ public class CLI {
         String[] classes = Controller.listClasses();
         for (int i = 0; i < classes.length; i++)
             printArrayOfStringList(Controller.listAllClassDetails(classes[i]));
+    }
+
+    public static void save() {
+        if (Controller.save()) {
+            System.out.println("Your progress has been saved!");
+        }
+        else
+            System.out.println("Nothing to save");
+    }
+
+    public static void load() {
+        if (Controller.load())
+            System.out.println("Your previous save has been loaded!");
+        else
+            System.out.println("There is no save to load.");
     }
 
 
