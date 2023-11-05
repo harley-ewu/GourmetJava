@@ -186,10 +186,24 @@ public class GUI extends JFrame {
         });
         displayGUI();
         //Want to stay idle if CLI view is not there; need to keep program running
+        Controller.addClass("shit",2);
+        Controller.addField("shit", "crap",1,"dumb fucking program");
+        LinkedList<String> params = new LinkedList<>();
+        params.add("AHH");
+        params.add("i'd rather be sleeping");
+        Controller.addMethod("shit","I hate this",1,"FUCK",params);
+        Controller.addField("shit","iHateThis",1,"please");
+
+        Controller.addClass("fuck",1);
+        LinkedList<String> params2 = new LinkedList<>();
+        params2.add("ugh");
+        params2.add("i'd rather be dead");
+        Controller.addMethod("fuck","I hate this",1,"FUCK",params);
+        Controller.addField("fuck","weeeeeeeee",1,"snore");
         while(!Main.cview) {
             ;
         }
-    
+
     }
     public static void displayGUI(){
         guiWindow.add(new ShapeDrawing());
@@ -271,35 +285,47 @@ public class GUI extends JFrame {
             int width = className.length();
             //Set width to largest of the attribute toStrings
             for(int i = 0; i < classDetails[Controller.DETAILS_METHODS].length; i++){
-                if(classDetails[1][i].length() > width){
+                if(classDetails[Controller.DETAILS_METHODS][i].length() > width){
                     width = classDetails[Controller.DETAILS_METHODS][i].length();
                 }
             }
             for(int i = 0; i < classDetails[Controller.DETAILS_FIELDS].length; i++){
-                if(classDetails[2][i].length() > width){
+                if(classDetails[Controller.DETAILS_FIELDS][i].length() > width){
                     width = classDetails[Controller.DETAILS_FIELDS][i].length();
                 }
             }
+            //If the box is not a class, it needs a special header above the name
+            boolean isClass = classDetails[Controller.DETAILS_NAME_TYPE][1].equals("CLASS");
+            if(!isClass)
+                height += 15;
             //the 8 here is just for good spacing
             width *= 8;
             //Outer rectangle
             g2.drawRect(x,y,width,height);
+            //If the box is not a class, it needs a special header above the name
+            if(!isClass) {
+                String classType = classDetails[Controller.DETAILS_NAME_TYPE][1].toLowerCase();
+                g2.drawString("<<" + classType + ">>", x + width / 2 - classType.length()/2 * 7, y + 15);
+                y += 15;
+            }
             //Write Class name
-            g2.drawString(className, x+5, y+15);
+            g2.drawString(className, x + width/2, y+15);
             //Draw line under the name
-            g2.drawLine(x,y + 15,x+width, y+15);
+            g2.drawLine(x,y + 17,x+width, y+17);
             //moves down twice the spacing of above
             y = y + 30;
             //For each attribute, print the gui toString
+            for(int i=0; i <classDetails[Controller.DETAILS_FIELDS].length; i++){
+                g2.drawString(classDetails[Controller.DETAILS_FIELDS][i], x+10, y);
+                y += 15;
+            }
+            g2.drawLine(x,y - 12,x+width, y - 12);
             for(int i=0; i < classDetails[Controller.DETAILS_METHODS].length; i++){
                 g2.drawString(classDetails[Controller.DETAILS_METHODS][i], x+10, y);
                 //moves down 15
                 y += 15;
             }
-            for(int i=0; i <classDetails[Controller.DETAILS_FIELDS].length; i++){
-                g2.drawString(classDetails[Controller.DETAILS_FIELDS][i], x+10, y);
-                y += 15;
-            }
+
         }
     }
 

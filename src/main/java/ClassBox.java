@@ -15,7 +15,7 @@ public class ClassBox {
 
     private enum ClassType {
 
-        CLASS, INTERFACE, RECORD, ENUM, ANNOTATION;
+        CLASS, INTERFACE, RECORD, ENUMERATION, ANNOTATION;
 
     }
 
@@ -87,14 +87,6 @@ public class ClassBox {
     }
 
 
-    public void deleteAttribute(Attribute a) {
-        if (a.getClass().getSimpleName().equals("Method")) {
-            this.methods.remove((Methods) a);
-        } else {
-            this.fields.remove((Field) a);
-        }
-    }
-
     public boolean deleteField(String name) {
         //Find the field with the name
         //remove that field from the list
@@ -130,15 +122,11 @@ public class ClassBox {
     public boolean deleteParam(String methodName, String paramName) {
         Methods target = findMethod(methodName);
         if (target != null) {
-            target.deleteParam(paramName);
-            return true;
+            return target.deleteParam(paramName);
         }
         return false;
     }
 
-    public void renameAttribute(Attribute att, String newName) {
-        att.setName(newName);
-    }
 
     public boolean renameMethod(String methodName, String newMethodName) {
         for (Methods method : methods) {
@@ -153,8 +141,7 @@ public class ClassBox {
     public boolean renameField(String fieldName, String newFieldName) {
         for (Field field : fields) {
             if (field.getName().equals(fieldName)) {
-                field.setName(newFieldName);
-                return true;
+                return field.setName(newFieldName);
             }
         }
         return false;
@@ -179,9 +166,9 @@ public class ClassBox {
     // Helper method that attempts to find a method within the methods list based on name
     // returns null if not found
     public Methods findMethod(String methodName) {
-        for (int i = 0; i < methods.size(); i++) {
-            if (methods.get(i).getName().equals(methodName)) {
-                return methods.get(i);
+        for (Methods method : methods) {
+            if (method.getName().equals(methodName)) {
+                return method;
             }
         }
         return null;
@@ -273,4 +260,8 @@ public class ClassBox {
     public LinkedList<Field> getFields() {
         return fields;
     }
+
+    public LinkedList<Relationship> getParents() { return parents;}
+
+    public LinkedList<Relationship> getChildren() { return children;}
 }

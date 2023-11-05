@@ -27,22 +27,24 @@ public abstract class Attribute implements Comparable<Attribute> {
             throw new IllegalArgumentException("Bad params at Attribute constructor");
 
         this.name = name;
-        this.view = Visibility.values()[viewType];
+        this.view = Visibility.values()[viewType - 1];
 
     }
 
-    public void setName(String newName) {
-        if (newName == null || newName.isEmpty()) {
-            throw new IllegalArgumentException("Bad name at attribute setName");
-        }
+    public boolean setName(String newName) {
+        if (newName == null || newName.isEmpty())
+            return false;
+
         this.name = newName;
+        return true;
     }
 
-    public void setView(Visibility newView) {
-        if (newView == null) {
-            throw new IllegalArgumentException("Bad view at attribute setView");
-        }
+    public boolean setView(Visibility newView) {
+        if (newView == null)
+            return false;
+
         this.view = newView;
+        return true;
     }
 
     public String getName() {

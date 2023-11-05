@@ -34,7 +34,7 @@ public class ModelDiagram {
     //throws an exception if the input "type" int was invalid
     public static boolean addClass(final String name, final int type) {
         if (name == null || name.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.addClass");
+            return false;
 
         ClassBox newBox = findClassBox(name);
         if (newBox != null)
@@ -48,7 +48,7 @@ public class ModelDiagram {
     //returns false if the class was not deleted or the class with the given name DNE
     public static boolean deleteClass(final String name) {
         if (name == null || name.isEmpty())
-            throw new IllegalArgumentException("bad String name passed to ModelDiagram.deleteClass");
+            return false;
 
         ClassBox targetBox = findClassBox(name);
         if (targetBox == null)
@@ -87,8 +87,7 @@ public class ModelDiagram {
         if (target == null) {
             return false;
         } else {
-            target.addParam(methodName, paramName);
-            return true;
+            return target.addParam(methodName, paramName);
         }
     }
 
@@ -182,7 +181,7 @@ public class ModelDiagram {
      */
     public static String[][] listAllClassDetails(final String name) {
         if(name == null || name.isEmpty())
-            throw new IllegalArgumentException("bad name passed to ModelDiagram.listAllClassDetails");
+            return null;
 
         ClassBox box = findClassBox(name);
         if(box == null)
@@ -200,7 +199,7 @@ public class ModelDiagram {
     //returns false if the class DNE or the name was not changed
     public static boolean renameClass(final String originalName, final String newName) {
         if (originalName == null || newName == null || originalName.isEmpty() || newName.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.renameClass");
+            return false;
 
         ClassBox newBox = findClassBox(newName);
         if (newBox != null)
@@ -220,7 +219,7 @@ public class ModelDiagram {
     //idk if the type should be an int or a String
     public static boolean addRelationship(final String parentClass, final String childClass, final int type) {
         if (parentClass == null || childClass == null || parentClass.isEmpty() || childClass.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.addRelationship");
+            return false;
 
         ClassBox parent = findClassBox(parentClass);
         ClassBox child = findClassBox(childClass);
@@ -239,7 +238,7 @@ public class ModelDiagram {
     //returns false if the box objects do not exist or if there wasn't a relationship to begin with
     public static boolean deleteRelationship(final String parentClass, final String childClass) {
         if (parentClass == null || childClass == null || parentClass.isEmpty() || childClass.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.deleteRelationship");
+            return false;
 
         ClassBox parent = findClassBox(parentClass);
         ClassBox child = findClassBox(childClass);
@@ -264,34 +263,11 @@ public class ModelDiagram {
         return list;
     }
 
-    /*We need to return:
-        Class name
-            - Class type
-        Its methods
-            - method return types and parameter list
-            - visibility
-        Its fields
-            - the field data types and visibility
-
-        I'm not sure how to handle this -David
-     */
-    public static String[] listClassDetails(final String name) {
-        if (name == null || name.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.listClass");
-
-        ClassBox box = findClassBox(name);
-        if (box == null)
-            return null;
-
-        return null;
-    }
-
 
     // The save method takes the current state of the program and saves it into a
     // .json file
     // Currently only a single save is supported
     public static void save() {
-        /*
         // Create a gson object that will take java objects and translate them to json
         Gson gson = new Gson();
         // Create a FileWriter that will write the converted Java to SavedFile.json
@@ -312,7 +288,7 @@ public class ModelDiagram {
             // With this for loop we are going to write each relationship to the file so
             // that we can recreate
             // them in the load method
-            LinkedList<Relationship> relationships = createdClasses.get(i).getRelationships();
+            LinkedList<Relationship> relationships = createdClasses.get(i).getChildren();
             for (int j = 0; j < relationships.size(); j++) {
 
                 // Find second index
@@ -327,7 +303,7 @@ public class ModelDiagram {
                 // find type index for creation
                 int typeSelection = relationships.get(j).getTypeOrdinal();
 
-                RelationshipBuilder relB = new RelationshipBuilder(i, secondIndex, typeSelection);
+                RelationshipBuilder relB = new RelationshipBuilder(i, secondIndex, typeSelection, "child");
 
                 try {
                     writer.append(gson.toJson(relB));
@@ -337,15 +313,14 @@ public class ModelDiagram {
                     e.printStackTrace();
                 }
             }
-
-
         }
 
         // Set relationships to null to avoid StackOverflow, then write ClassBoxes to
         // file
         for (int i = 0; i < createdClasses.size(); i++) {
             // Delete all relationships to avoid StackOverflow
-            createdClasses.get(i).getRelationships().clear();
+            createdClasses.get(i).getParents().clear();
+            createdClasses.get(i).getChildren().clear();
             // Now that our relationships list is empty, we can safely store each ClassBox
             // in our json file
             gson.toJson(createdClasses.get(i), writer);
@@ -363,14 +338,12 @@ public class ModelDiagram {
             e.printStackTrace();
         }
         System.out.println("Your progress has been saved!");
-        */
     }
 
     // The load function is used to restore data that was previously saved using the
     // save function
     // Again we only support up to a single save
     public static void load() {
-        /*
         // Create a File and add a scanner to it to read the data
         File inputFile = new File("SavedFile.json");
         Scanner fileScanner = null;
@@ -393,7 +366,7 @@ public class ModelDiagram {
         while (fileScanner.hasNextLine()) {
             String classboxString = fileScanner.nextLine();
             if (classboxString.contains("name") && classboxString.contains("type")
-                    && classboxString.contains("attributes") && classboxString.contains("relationships")) {
+                    && classboxString.contains("children") && classboxString.contains("parents")) {
                 createdClasses.add(gson.fromJson(classboxString, ClassBox.class));
             }
         }
@@ -417,8 +390,8 @@ public class ModelDiagram {
             inputString = fileScanner.nextLine();
             RelationshipBuilder relB = gson.fromJson(inputString, RelationshipBuilder.class);
 
-            if (inputString.contains("name") && inputString.contains("type") && inputString.contains("attributes")
-                    && inputString.contains("relationships")) {
+            if (inputString.contains("name") && inputString.contains("type") && inputString.contains("children")
+                    && inputString.contains("parents")) {
                 endOfRelationships = true;
             } else {
                 firstIndex = relB.getFirstIndex();
@@ -432,8 +405,6 @@ public class ModelDiagram {
         }
         fileScanner.close();
         System.out.println("Your previous save has been loaded!");
-        */
-
     }
 
     /*
@@ -444,7 +415,7 @@ public class ModelDiagram {
      */
     public static String[] listClassMethods(final String name) {
         if (name == null || name.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.listClassMethods");
+            return null;
 
         ClassBox box = findClassBox(name);
         if (box == null)
@@ -461,7 +432,7 @@ public class ModelDiagram {
      */
     public static String[] listClassFields(final String name) {
         if (name == null || name.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.listClassFields");
+            return null;
 
         ClassBox box = findClassBox(name);
         if (box == null)

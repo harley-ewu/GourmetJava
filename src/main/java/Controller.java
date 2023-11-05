@@ -13,18 +13,8 @@ public class Controller {
         // kb = new Scanner(System.in);
     }
 
-    // recall menu at end if not
 
-
-    // Creates a new Classbox object and adds to to the arraylist createdClasses
-    // Rachael
-    // Allows the user to name their class, then adds it to the list of created
-    // classes
-    public static boolean addClass(final String name, final String type) {
-        //return ModelDiagram.addClass(name, type);
-        return false;
-    }
-
+    // Allows the user to name their class, then adds it to the list of created classes
     public static boolean addClass(final String name, final int type) {
         return ModelDiagram.addClass(name, type);
     }
@@ -160,21 +150,21 @@ public class Controller {
     // Takes input from user on what index from the list they want to see then calls
     // a toString for that object
     public static String[] subMenu1() {
-        return new String[]{"1.) List Options.",
+        return new String[]{"\n1.) List Options.",
                 "These options are listing options. They will lead you to the options where you can list classes, list class details, and list relationships.",
                 "The options are as listed below:",
                 "1.) List Classes",
-                "2.) List All Classes Detailed",
-                "3.) List class details.",
-                "4.) List relationships.",
+                "2.) List all details for every class",
+                "3.) List all details for one specific class",
+                "4.) List all relationships for every class",
 
         };
     }
 
     public static String[] subMenu2() {
-        return new String[]{"Please choose a number from the options below: ",
+        return new String[]{"\nPlease choose a number from the options below: ",
                 "1.) Add Class",
-                "2.) Remove Class",
+                "2.) Delete Class",
                 "3.) Rename Class",
                 "4.) Help",
                 "5.) Back",
@@ -182,9 +172,9 @@ public class Controller {
     }
 
     public static String[] subMenu3() {
-        return new String[]{"Please choose a number from the options below: ",
+        return new String[]{"\nPlease choose a number from the options below: ",
                 "1.) Add Attribute",
-                "2.) Remove Attribute",
+                "2.) Delete Attribute",
                 "3.) Rename Attribute",
                 "4.) Edit Method Parameters",
                 "5.) Help",
@@ -193,16 +183,16 @@ public class Controller {
     }
 
     public static String[] subMenu4() {
-        return new String[]{"Please choose a number from the options below: ",
+        return new String[]{"\nPlease choose a number from the options below: ",
                 "1.) Add Relationship",
-                "2.) Remove Relationship",
+                "2.) Delete Relationship",
                 "3.) Help",
                 "4.) Back",
         };
     }
 
     public static String[] subMenu5() {
-        return new String[]{"Please choose a number from the options below: ",
+        return new String[]{"\nPlease choose a number from the options below: ",
                 "1.) Save",
                 "2.) Load",
                 "3.) Help",
@@ -211,7 +201,7 @@ public class Controller {
     }
 
     public static String[] subMenu6() {
-        return new String[]{"Please choose a number from the options below: ",
+        return new String[]{"\nPlease choose a number from the options below: ",
                 "1.) Add Param to method",
                 "2.) Delete Param in method",
                 "3.) Rename Param in method",
@@ -221,13 +211,8 @@ public class Controller {
     }
 
 
-    public static String[] listClassDetails(final String name) {
-        return ModelDiagram.listClassDetails(name);
-    }
-
-
     public static String[] listHelp() {
-        return new String[]{"1.) List Options.",
+        return new String[]{"\n1.) List Options.",
                 "These options are listing options. They will lead you to the options where you can list classes, list class details, and list relationships.",
                 "The options are as listed below:",
                 "1.) List Classes",
@@ -244,7 +229,7 @@ public class Controller {
 
 
     public static String[] classHelp() {
-        return new String[]{"2.) Class Options.",
+        return new String[]{"\n2.) Class Options.",
                 "These options are related to classes. They will give you the option to create, delete, and rename classes.",
                 "The options are as listed below:",
                 "1.) Create a class.",
@@ -257,7 +242,7 @@ public class Controller {
     }
 
     public static String[] attributeHelp() {
-        return new String[]{"3.) Attribute Options.",
+        return new String[]{"\n3.) Attribute Options.",
                 "These options are related to class attributes. They will allow you to create, delete, and rename attributes associated with classes.",
                 "The options are as listed below:",
                 "1.) Add an attribute.",
@@ -271,8 +256,24 @@ public class Controller {
         };
     }
 
+    public static String[] editParamHelp() {
+        return new String[]{"\n4.) Edit Method Parameters",
+                "These options are related to editting method parameters. They will allow you to create, delete, and rename parameters associated with methods.",
+                "The options are as listed below:",
+                "1.) Add Parameter to method",
+                "This command first asks for the class name containing the method you are editing, then for the method containing the parameter.",
+                "It then asks for the name of the new parameter you are adding.",
+                "2.) Delete Parameter in method",
+                "This command first asks for the class name containing the method you are editing, then for the method containing the parameter.",
+                "It will then ask for the parameter name you are looking to delete.",
+                "3.) Rename Parameter in method",
+                "This command first asks for the class name containing the method you are editing, then for the method containing the parameter.",
+                "It will then ask for the current parameter name, followed by the new parameter name."
+        };
+    }
+
     public static String[] relationshipHelp() {
-        return new String[]{"4.) Relationship Options.",
+        return new String[]{"\n4.) Relationship Options.",
                 "These options are related to relationships between classes.",
                 "The options are as listed below:",
                 "1.) Add a relationship.",
@@ -285,7 +286,7 @@ public class Controller {
     }
 
     public static String[] saveLoadHelp() {
-        return new String[]{"5.) Save/Load.",
+        return new String[]{"\n5.) Save/Load.",
                 "These commands will aid in saving current projects and loading previous ones.",
                 "The options are as listed below:",
                 "1.) Save",
@@ -330,7 +331,7 @@ public class Controller {
     // corresponding number on the menu
     public static String[] printMenu() {
         return new String[]{
-                "Please choose a number from the following options below",
+                "\nPlease choose a number from the following options below",
                 "1.) List Display (Classes, Class details, Relationships)",
                 "2.) Class Options (Add, Delete, Rename)",
                 "3.) Attribute Options (Add, Delete, Rename)",
