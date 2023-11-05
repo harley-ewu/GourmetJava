@@ -149,8 +149,17 @@ public class Controller {
         return Relationship.listRelationshipTypes();
     }
 
+
     public static ArrayList<String[]> listRelationshipsSaveHelper(){
         return ModelDiagram.listRelationshipsSaveHelper();
+    }
+
+    public static boolean save() {
+        return ModelDiagram.save();
+    }
+
+    public static boolean load() {
+        return ModelDiagram.load();
     }
 
     // Allows the user to choose what Classbox item they want to see in detail
