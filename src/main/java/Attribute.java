@@ -32,17 +32,17 @@ public abstract class Attribute implements Comparable<Attribute> {
     }
 
     public boolean setName(String newName) {
-        if (newName == null || newName.isEmpty()) {
+        if (newName == null || newName.isEmpty())
             return false;
-        }
+
         this.name = newName;
         return true;
     }
 
     public boolean setView(Visibility newView) {
-        if (newView == null) {
+        if (newView == null)
             return false;
-        }
+
         this.view = newView;
         return true;
     }

@@ -415,7 +415,7 @@ public class ModelDiagram {
      */
     public static String[] listClassMethods(final String name) {
         if (name == null || name.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.listClassMethods");
+            return null;
 
         ClassBox box = findClassBox(name);
         if (box == null)
@@ -432,7 +432,7 @@ public class ModelDiagram {
      */
     public static String[] listClassFields(final String name) {
         if (name == null || name.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.listClassFields");
+            return null;
 
         ClassBox box = findClassBox(name);
         if (box == null)

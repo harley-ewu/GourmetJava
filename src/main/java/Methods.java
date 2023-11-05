@@ -24,6 +24,7 @@ public class Methods extends Attribute {
         }
         return false;
     }
+
   
     public boolean renameParam(String oldParamName, String newParamName) {
         for (int i = 0; i < paramTypes.size(); i++) {
