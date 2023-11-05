@@ -320,7 +320,7 @@ public class CLI {
                 return;
             }
             System.out.println("What is the name of the field?");
-            String fieldname = CLI.readString("Field name: ");
+            String fieldName = CLI.readString("Field name: ");
             System.out.println("Enter the visibility number below:");
             for (int i = 0; i < visibilityList.length; i++)
                 System.out.println((i + 1) + ": " + visibilityList[i]);
@@ -328,8 +328,8 @@ public class CLI {
             System.out.println("Lastly, what is the data type of this field?");
             String type = CLI.readString("Field type: ");
 
-            if (Controller.addField(className, fieldname, view, type)) {
-                System.out.println("Field " + fieldname + " added to class " + className + "\n");
+            if (Controller.addField(className, fieldName, view, type)) {
+                System.out.println("Field " + fieldName + " added to class " + className + "\n");
             } else {
                 System.out.println("Failed to add field. Please try again");
             }
@@ -385,10 +385,10 @@ public class CLI {
             System.out.println("What is the name of the field you wish to delete?");
             String[] fieldList = Controller.listClassFields(className);
             printStringList(fieldList);
-            String fieldname = CLI.readString("Field name: ");
+            String fieldName = CLI.readString("Field name: ");
 
-            if (Controller.deleteField(className, fieldname)) {
-                System.out.println("Field " + fieldname + " was removed from class " + className);
+            if (Controller.deleteField(className, fieldName)) {
+                System.out.println("Field " + fieldName + " was removed from class " + className);
             } else {
                 System.out.println("Failed to delete field. Please try again");
             }
@@ -556,8 +556,8 @@ public class CLI {
 
     public static void printArrayOfStringList(final String[][] list) {
         for (String[] s : list) {
-            for (int i = 0; i < s.length; i++)
-                System.out.println(s[i]);
+            for (String string : s)
+                System.out.println(string);
         }
     }
 
@@ -580,8 +580,8 @@ public class CLI {
 
     public static void listClassesDetailed() {
         String[] classes = Controller.listClasses();
-        for (int i = 0; i < classes.length; i++)
-            printArrayOfStringList(Controller.listAllClassDetails(classes[i]));
+        for (String aClass : classes)
+            printArrayOfStringList(Controller.listAllClassDetails(aClass));
     }
 
     public static void save() {
