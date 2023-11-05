@@ -7,10 +7,13 @@ public class RelationshipBuilder {
     private int secondIndex;
     private int relationshipType;
 
-    public RelationshipBuilder(int firstIndex, int secondIndex, int relationshipType) {
+    private String parentOrChild;
+
+    public RelationshipBuilder(int firstIndex, int secondIndex, int relationshipType, String parentOrChild) {
         this.firstIndex = firstIndex;
         this.secondIndex = secondIndex;
         this.relationshipType = relationshipType;
+        this.parentOrChild = parentOrChild;
     }
 
     public int getFirstIndex() {
