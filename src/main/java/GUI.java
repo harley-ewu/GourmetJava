@@ -45,30 +45,39 @@ public class GUI extends JFrame implements ActionListener{
         addClass = new JMenuItem(new AbstractAction("Add Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //popup box with user input fields
-                //submit button sends shit to Controller.addClass()
-                //Draw new box (either entire screen refresh or just draw new box)
-                //done
+                //popup box with user input fields.
+                String className = JOptionPane.showInputDialog("What is the name of the class you want to add? ");
+                String classType = JOptionPane.showInputDialog("          What type is this? \n Please enter one of the numbers below: \n \n " +
+                        "1. Class \n 2. Interface \n 3. Enum \n 4. Record \n 5. Annotation");
+                //get int that corresponds to the enum type
+                int typeToInt = Integer.parseInt(classType);
+                Controller.addClass(className, typeToInt);
 
-                /* 
-                       maybe test:
-                            popup box that takes one integer (as string)
-                            String -> int
-                            pass that int to System.exit status code
-                 */
-                System.exit(4);
+                //checking to make sure class was actually added
+                //int test = ModelDiagram.getCreatedClassesSize();
+                //System.out.println("There are " + test + " classes");
+                //TODO class seems to be created, but if the enum type was appropriately taken is another matter.
+                //Draw new box (either entire screen refresh or just draw new box)
+                //System.exit(4);
             }
         });
         deleteClass = new JMenuItem(new AbstractAction("Delete Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(12);
+                //popup box asks which class to delete
+                String className = JOptionPane.showInputDialog("What is the name of the class you want to delete? ");
+                //TODO - Popup prompt to make sure you want to delete the class
+                Controller.deleteClass(className);
+                //System.exit(12);
             }
         });
         renameClass = new JMenuItem(new AbstractAction("Rename Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(13);
+                String oldName = JOptionPane.showInputDialog("What is the name of the class you want to rename? ");
+                String newName = JOptionPane.showInputDialog("What would you like to rename this class to? ");
+                Controller.renameClass(oldName, newName);
+                //System.exit(13);
             }
         });
         //addClass.addActionListener(mainContainer);
@@ -82,8 +91,19 @@ public class GUI extends JFrame implements ActionListener{
         attributeDropdown = new JMenu("Attribute");
         addAtt = new JMenuItem(new AbstractAction("Add Attribute") {
             @Override
+
+            //TODO not done. Popupmenu isn't complete. Paused to focus on that friggin class box drawing
             public void actionPerformed(ActionEvent e) {
-                System.exit(14);
+                //String oldName = JOptionPane.showInputDialog("Do you want to add a field or a method? ");
+                //Pop up menu for buttons
+                JPopupMenu fieldOrMethod = new JPopupMenu("Which would you like to add?");
+                JMenuItem field = new JMenuItem("Field");
+                JMenuItem method = new JMenuItem("Method");
+                fieldOrMethod.add(field);
+                fieldOrMethod.add(method);
+                fieldOrMethod.setVisible(true);
+
+                //System.exit(14);
             }
         });
         delAtt = new JMenuItem(new AbstractAction("Delete Attribute") {
