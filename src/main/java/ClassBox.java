@@ -15,7 +15,7 @@ public class ClassBox {
 
     private enum ClassType {
 
-        CLASS, INTERFACE, RECORD, ENUM, ANNOTATION;
+        CLASS, INTERFACE, RECORD, ENUMERATION, ANNOTATION;
 
     }
 
