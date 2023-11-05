@@ -267,7 +267,10 @@ public class ModelDiagram {
     // The save method takes the current state of the program and saves it into a
     // .json file
     // Currently only a single save is supported
-    public static void save() {
+    public static boolean save() {
+        // If there is nothing to save return false
+        if (createdClasses.size() == 0)
+            return false;
         // Create a gson object that will take java objects and translate them to json
         Gson gson = new Gson();
         // Create a FileWriter that will write the converted Java to SavedFile.json
@@ -288,7 +291,7 @@ public class ModelDiagram {
             // With this for loop we are going to write each relationship to the file so
             // that we can recreate
             // them in the load method
-            LinkedList<Relationship> relationships = createdClasses.get(i).getChildren();
+            LinkedList<Relationship> relationships = createdClasses.get(i).getParents();
             for (int j = 0; j < relationships.size(); j++) {
 
                 // Find second index
@@ -303,7 +306,7 @@ public class ModelDiagram {
                 // find type index for creation
                 int typeSelection = relationships.get(j).getTypeOrdinal();
 
-                RelationshipBuilder relB = new RelationshipBuilder(i, secondIndex, typeSelection, "child");
+                RelationshipBuilder relB = new RelationshipBuilder(secondIndex, i, typeSelection, "child");
 
                 try {
                     writer.append(gson.toJson(relB));
@@ -337,13 +340,13 @@ public class ModelDiagram {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Your progress has been saved!");
+        return true;
     }
 
     // The load function is used to restore data that was previously saved using the
     // save function
     // Again we only support up to a single save
-    public static void load() {
+    public static boolean load() {
         // Create a File and add a scanner to it to read the data
         File inputFile = new File("SavedFile.json");
         Scanner fileScanner = null;
@@ -353,8 +356,7 @@ public class ModelDiagram {
             e.printStackTrace();
         }
         if (!fileScanner.hasNextLine()) {
-            System.out.println("There is no save to load.");
-            return;
+            return false;
         }
         // Delete current ClassBox's to avoid Stu loading more than once.
         createdClasses.clear();
@@ -404,7 +406,7 @@ public class ModelDiagram {
             }
         }
         fileScanner.close();
-        System.out.println("Your previous save has been loaded!");
+        return true;
     }
 
     /*
