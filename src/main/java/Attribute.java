@@ -31,18 +31,20 @@ public abstract class Attribute implements Comparable<Attribute> {
 
     }
 
-    public void setName(String newName) {
+    public boolean setName(String newName) {
         if (newName == null || newName.isEmpty()) {
-            throw new IllegalArgumentException("Bad name at attribute setName");
+            return false;
         }
         this.name = newName;
+        return true;
     }
 
-    public void setView(Visibility newView) {
+    public boolean setView(Visibility newView) {
         if (newView == null) {
-            throw new IllegalArgumentException("Bad view at attribute setView");
+            return false;
         }
         this.view = newView;
+        return true;
     }
 
     public String getName() {

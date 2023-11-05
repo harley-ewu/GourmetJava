@@ -34,7 +34,7 @@ public class ModelDiagram {
     //throws an exception if the input "type" int was invalid
     public static boolean addClass(final String name, final int type) {
         if (name == null || name.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.addClass");
+            return false;
 
         ClassBox newBox = findClassBox(name);
         if (newBox != null)
@@ -48,7 +48,7 @@ public class ModelDiagram {
     //returns false if the class was not deleted or the class with the given name DNE
     public static boolean deleteClass(final String name) {
         if (name == null || name.isEmpty())
-            throw new IllegalArgumentException("bad String name passed to ModelDiagram.deleteClass");
+            return false;
 
         ClassBox targetBox = findClassBox(name);
         if (targetBox == null)
@@ -87,8 +87,7 @@ public class ModelDiagram {
         if (target == null) {
             return false;
         } else {
-            target.addParam(methodName, paramName);
-            return true;
+            return target.addParam(methodName, paramName);
         }
     }
 
@@ -182,7 +181,7 @@ public class ModelDiagram {
      */
     public static String[][] listAllClassDetails(final String name) {
         if(name == null || name.isEmpty())
-            throw new IllegalArgumentException("bad name passed to ModelDiagram.listAllClassDetails");
+            return null;
 
         ClassBox box = findClassBox(name);
         if(box == null)
@@ -200,7 +199,7 @@ public class ModelDiagram {
     //returns false if the class DNE or the name was not changed
     public static boolean renameClass(final String originalName, final String newName) {
         if (originalName == null || newName == null || originalName.isEmpty() || newName.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.renameClass");
+            return false;
 
         ClassBox newBox = findClassBox(newName);
         if (newBox != null)
@@ -220,7 +219,7 @@ public class ModelDiagram {
     //idk if the type should be an int or a String
     public static boolean addRelationship(final String parentClass, final String childClass, final int type) {
         if (parentClass == null || childClass == null || parentClass.isEmpty() || childClass.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.addRelationship");
+            return false;
 
         ClassBox parent = findClassBox(parentClass);
         ClassBox child = findClassBox(childClass);
@@ -239,7 +238,7 @@ public class ModelDiagram {
     //returns false if the box objects do not exist or if there wasn't a relationship to begin with
     public static boolean deleteRelationship(final String parentClass, final String childClass) {
         if (parentClass == null || childClass == null || parentClass.isEmpty() || childClass.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.deleteRelationship");
+            return false;
 
         ClassBox parent = findClassBox(parentClass);
         ClassBox child = findClassBox(childClass);
@@ -262,28 +261,6 @@ public class ModelDiagram {
             list[i] = createdClasses.get(i).listRelationships();
         }
         return list;
-    }
-
-    /*We need to return:
-        Class name
-            - Class type
-        Its methods
-            - method return types and parameter list
-            - visibility
-        Its fields
-            - the field data types and visibility
-
-        I'm not sure how to handle this -David
-     */
-    public static String[] listClassDetails(final String name) {
-        if (name == null || name.isEmpty())
-            throw new IllegalArgumentException("bad param passed to ModelDiagram.listClass");
-
-        ClassBox box = findClassBox(name);
-        if (box == null)
-            return null;
-
-        return null;
     }
 
 
