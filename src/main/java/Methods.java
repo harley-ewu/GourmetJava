@@ -23,14 +23,7 @@ public class Methods extends Attribute {
         }
     }
 
-    public void setParamTypes(LinkedList<String> newParamTypes) {
-        if (newParamTypes == null) {
-            throw new IllegalArgumentException("Bad paramTypes at Methods setParamTypes");
-        }
-        this.paramTypes = newParamTypes;
-    }
 
-  
     public boolean renameParam(String oldParamName, String newParamName) {
         for (int i = 0; i < paramTypes.size(); i++) {
             if (paramTypes.get(i).equals(oldParamName)) {
