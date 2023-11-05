@@ -22,7 +22,7 @@ public class CLI {
             int input = Integer.parseInt(kb.nextLine());
             switch (input) {
                 case 1:
-                    if(Controller.getCreatedClassesSize() == 0){
+                    if (Controller.getCreatedClassesSize() == 0) {
                         System.out.println("Nothing to display! Please make a class first");
                     } else {
                         printStringList(Controller.subMenu1());
@@ -35,7 +35,7 @@ public class CLI {
                         } else if (input2 == 3) {
                             CLI.listAllClassDetails();
                         } else if (input2 == 4) {
-                            for(String[] list : Controller.listRelationships()){
+                            for (String[] list : Controller.listRelationships()) {
                                 printStringList(list);
                             }
                         } else if (input2 == 5) {
@@ -68,7 +68,7 @@ public class CLI {
                     break;
                 case 3:
 
-                    if(Controller.getCreatedClassesSize() == 0){
+                    if (Controller.getCreatedClassesSize() == 0) {
                         System.out.println("Please create a class first");
                     } else {
                         printStringList(Controller.subMenu3());
@@ -107,7 +107,7 @@ public class CLI {
                     break;
                 case 4:
                     //if (createdClasses.size() < 2) {
-                    if(Controller.getCreatedClassesSize() < 2){
+                    if (Controller.getCreatedClassesSize() < 2) {
                         System.out.println("Please create 2 classes first");
                     } else {
                         printStringList(Controller.subMenu4());
@@ -262,7 +262,7 @@ public class CLI {
 
         //Test to see if adding relationship was sucessful
 
-        if(Controller.addRelationship(name1, name2, type)){
+        if (Controller.addRelationship(name1, name2, type)) {
             System.out.println("Relationship created!");
         } else {
             System.out.println("Bad inputs for relationship, creation cancelled");
@@ -283,7 +283,7 @@ public class CLI {
 
         //Test to see if deleting relationship was sucessful
         //if (Controller.deleteRelationship(index1, index2, answer)) {
-        if(Controller.deleteRelationship(name1, name2)){
+        if (Controller.deleteRelationship(name1, name2)) {
             System.out.println("Relationship deleted!");
         } else {
             System.out.println("Bad inputs for relationship, deletion cancelled.");
@@ -291,13 +291,20 @@ public class CLI {
     }
 
     //Structure complete errors will fix when merged
-    public static void addAttribute(){
+    public static void addAttribute() {
         String[] visibilityList = Controller.listVisibilityTypes();
         System.out.println("Are you wanting to add a field or a method?" +
-                            "\nType 'Field' for field, or 'Method' for method");
-        String input = kb.nextLine();
+                "\nType '1' for field, or '2' for method");
+        System.out.print("Input: ");
+        int input = 0;
+        try {
+            input = Integer.parseInt(kb.nextLine());
+        } catch (Exception e){
+            System.out.println("Please enter either '1' or '2'. Please try again");
+            return;
+        }
 
-        if(input.equalsIgnoreCase("Field")){
+        if (input == 1) {
             System.out.println("Enter the name of the class you are adding the field to:");
             CLI.listClasses();
             System.out.print("Class name: ");
@@ -314,12 +321,12 @@ public class CLI {
             System.out.print("Field type: ");
             String type = kb.nextLine();
 
-            if(Controller.addField(className, fieldname, view, type)){
+            if (Controller.addField(className, fieldname, view, type)) {
                 System.out.println("Field " + fieldname + " added to class " + className + "\n");
-            }else{
+            } else {
                 System.out.println("Failed to add field. Please try again");
             }
-        }else if(input.equalsIgnoreCase("Method")){
+        } else if (input == 2) {
             System.out.println("Enter the name of the class you are adding this method to:");
             CLI.listClasses();
             System.out.print("Class name: ");
@@ -337,25 +344,36 @@ public class CLI {
             String type = kb.nextLine();
             LinkedList<String> params = new LinkedList<>();
             System.out.print("Lastly what parameters does the method have?" +
-                                "\nWhen you are finished press the enter key when the line is blank" +
-                                "\nParameter: ");
-            while (!kb.nextLine().isEmpty()) {
+                    "\nWhen you are finished press the enter key when the line is blank" +
+                    "\nParameter: ");
+            String paramInput;
+            while (!(paramInput = kb.nextLine()).isEmpty()) {
                 System.out.print("Parameter: ");
+                params.add(paramInput);
             }
 
-            if(Controller.addMethod(className, methodName, view, type, params)){
+            if (Controller.addMethod(className, methodName, view, type, params)) {
                 System.out.println("Method " + methodName + " added to class " + className);
-            }else{
+            } else {
                 System.out.println("Failed to add method. Please try again");
             }
-        }else{
-            System.out.println("Please enter either Field or Method. Please try again");
+        } else {
+            System.out.println("Please enter either '1' or '2'. Please try again");
         }
     }
+
     public static void deleteAttribute() {
         System.out.println("Are you wanting to delete a field or a method?");
-        String input = kb.nextLine();
-        if (input.equalsIgnoreCase("Field")) {
+        System.out.print("Input: ");
+        int input = 0;
+        try {
+            input = Integer.parseInt(kb.nextLine());
+        } catch (Exception e){
+            System.out.println("Please enter either '1' or '2'. Please try again");
+            return;
+        }
+
+        if (input == 1) {
             System.out.println("What is the name of the class you want to remove a field from?");
             CLI.listClasses();
             System.out.print("Class name: ");
@@ -373,7 +391,7 @@ public class CLI {
             }
 
 
-        } else if (input.equalsIgnoreCase("Method")) {
+        } else if (input == 2) {
             System.out.println("What is the name of the class you want to remove a Method from??");
             CLI.listClasses();
             System.out.print("Class name: ");
@@ -389,9 +407,9 @@ public class CLI {
             } else {
                 System.out.println("Failed to delete method. Please try again");
             }
-        }else{
-        System.out.println("Please enter either Field or Method. Please try again");
-    }
+        } else {
+            System.out.println("Please enter either '1' or '2'. Please try again");
+        }
     }
 
     public static void addParam() {
@@ -409,8 +427,7 @@ public class CLI {
 
         if (Controller.addParam(className, methodName, paramName)) {
             System.out.println("Parameter successfully added to " + methodName + "!");
-        }
-        else {
+        } else {
             System.out.println("Failed to add parameter. Please try again");
         }
     }
@@ -430,8 +447,7 @@ public class CLI {
 
         if (Controller.deleteParam(className, methodName, paramName)) {
             System.out.println("Parameter successfully removed from " + methodName + "!");
-        }
-        else {
+        } else {
             System.out.println("Failed to add parameter. Please try again");
         }
     }
@@ -454,17 +470,16 @@ public class CLI {
 
         if (Controller.renameParam(className, methodName, oldParamName, newParamName)) {
             System.out.println("Parameter successfully renamed from " + oldParamName + " to " + newParamName + "!");
-        }
-        else {
+        } else {
             System.out.println("Failed to rename parameter. Please try again");
         }
     }
 
 
-    public static void renameAttribute(){
+    public static void renameAttribute() {
         System.out.println("Are you wanting to rename a field or a method?");
         String input = kb.nextLine();
-        if(input.equalsIgnoreCase("Field")){
+        if (input.equalsIgnoreCase("Field")) {
             System.out.println("What is the name of the class containing the field you wish to rename?");
             CLI.listClasses();
             System.out.print("Class name: ");
@@ -476,13 +491,13 @@ public class CLI {
             System.out.println("What would you like this field's new name to be?");
             System.out.print("New field name: ");
             String newName = kb.nextLine();
-            if(Controller.renameField(className, fieldName, newName)){
+            if (Controller.renameField(className, fieldName, newName)) {
                 System.out.println("Field " + fieldName + " renamed to " + newName);
-            }else{
+            } else {
                 System.out.println("Failed to rename field. Please try again");
             }
 
-        }else if(input.equalsIgnoreCase("Method")){
+        } else if (input.equalsIgnoreCase("Method")) {
             System.out.println("What is the name of the class containing the method you wish to rename?");
             CLI.listClasses();
             System.out.print("Class name: ");
@@ -494,43 +509,48 @@ public class CLI {
             System.out.println("What would you like this method's new name to be?");
             System.out.print("Class name: ");
             String newName = kb.nextLine();
-            if(Controller.renameMethod(className, methodName, newName)){
+            if (Controller.renameMethod(className, methodName, newName)) {
                 System.out.println("Field " + methodName + " renamed to " + newName);
-            }else{
+            } else {
                 System.out.println("Failed to rename method. Please try again");
             }
-        }else{
+        } else {
             System.out.println("Please enter either Field or Method. Please try again");
         }
     }
 
 
-    public static void listAllClassDetails(){
+    public static void listAllClassDetails() {
         System.out.println("What is the name of the class you want see?");
+        printStringList(Controller.listClasses());
         System.out.print("Class name: ");
         String input = kb.nextLine();
-        printArrayOfStringList(Controller.listAllClassDetails(input));
+        try {
+            printArrayOfStringList(Controller.listAllClassDetails(input));
+        } catch (Exception e) {
+            System.out.println("Failed to get details for class: \"" + input + "\"");
+        }
     }
 
     //This method takes in an arraylist of strings and is able to print it out line after line.
     //This method is used for many other methods that return String arrays full of data
-    public static void printStringList(final String[] list){
-        for(String s : list){
+    public static void printStringList(final String[] list) {
+        for (String s : list) {
             System.out.println(s);
         }
     }
 
     public static void printArrayOfStringList(final String[][] list) {
-        for(String[] s : list){
+        for (String[] s : list) {
             for (int i = 0; i < s.length; i++)
                 System.out.println(s[i]);
         }
     }
 
-    public static void listClasses(){
+    public static void listClasses() {
         int counter = 1;
         String[] list = Controller.listClasses();
-        for(String s : list){
+        for (String s : list) {
             System.out.println(counter + ". " + s);
             counter++;
         }
@@ -541,7 +561,6 @@ public class CLI {
         for (int i = 0; i < classes.length; i++)
             printArrayOfStringList(Controller.listAllClassDetails(classes[i]));
     }
-
 
 
 }
