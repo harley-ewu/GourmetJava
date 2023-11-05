@@ -21,6 +21,9 @@ public class ModelDiagram {
     //searched the list of created classes for a ClassBox with the given name
     //returns the ClassBox object if it exists, or null otherwise
     private static ClassBox findClassBox(final String name) {
+        if (name == null || name.isEmpty())
+            return null;
+
         for (ClassBox cb : createdClasses) {
             if (cb.equals(name))
                 return cb;
@@ -28,6 +31,9 @@ public class ModelDiagram {
         return null;
     }
 
+    public static boolean existentialCrisisExists(final String crisis) {
+        return (!(findClassBox(crisis) == null));
+    }
 
     //returns true only if a class was added
     //returns false if a class was not added or a class with the same name already existed
@@ -180,11 +186,11 @@ public class ModelDiagram {
         }
      */
     public static String[][] listAllClassDetails(final String name) {
-        if(name == null || name.isEmpty())
+        if (name == null || name.isEmpty())
             return null;
 
         ClassBox box = findClassBox(name);
-        if(box == null)
+        if (box == null)
             return null;
 
         String[][] details = new String[4][];
@@ -213,10 +219,23 @@ public class ModelDiagram {
         return true;
     }
 
+    //Adds a relationship with the type being an integer stored as a String (ex: "1" or "2")
+    //Does not accept the name of the enum itself (maybe add later)
+    public static boolean addRelationship(final String parentClass, final String childClass, final String type) {
+        if (type == null || type.isEmpty())
+            return false;
 
-    //does not handle which class is the parent or child
+        int relationshipType;
+        try {
+            relationshipType = Integer.parseInt(type);
+            return addRelationship(parentClass, childClass, relationshipType);
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
     //returns true if a relationship was added, false otherwise (also returns false if a relationship existed)
-    //idk if the type should be an int or a String
     public static boolean addRelationship(final String parentClass, final String childClass, final int type) {
         if (parentClass == null || childClass == null || parentClass.isEmpty() || childClass.isEmpty())
             return false;
@@ -263,6 +282,21 @@ public class ModelDiagram {
         return list;
     }
 
+    /*
+        Saves the relationships in the format:
+        {
+            { parent, child, type (integer stored as String) },
+            { parent, child, type (integer stored as String) },
+             etc.
+        }
+     */
+    public static ArrayList<String[]> listRelationshipsSaveHelper() {
+        ArrayList<String[]> list = new ArrayList<>();
+        for (ClassBox cb : createdClasses) {
+            list.addAll(cb.listRelationshipsSaveHelper());
+        }
+        return list;
+    }
 
     // The save method takes the current state of the program and saves it into a
     // .json file
@@ -277,6 +311,7 @@ public class ModelDiagram {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         // Get relationship info ie : (index of first class), (index of second class),
         // (RelationshipType)

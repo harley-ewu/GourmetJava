@@ -13,6 +13,11 @@ public class Controller {
         // kb = new Scanner(System.in);
     }
 
+    //CHECKS IF A CLASS EXISTS
+    //Returns true if the class with the given name exists, otherwise returns false
+    public static boolean existentialCrisisExists(final String crisis){
+        return ModelDiagram.existentialCrisisExists(crisis);
+    }
 
     // Allows the user to name their class, then adds it to the list of created classes
     public static boolean addClass(final String name, final int type) {
@@ -144,6 +149,9 @@ public class Controller {
         return Relationship.listRelationshipTypes();
     }
 
+    public static ArrayList<String[]> listRelationshipsSaveHelper(){
+        return ModelDiagram.listRelationshipsSaveHelper();
+    }
 
     // Allows the user to choose what Classbox item they want to see in detail
     // Rachael

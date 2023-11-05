@@ -1,5 +1,6 @@
 package src.main.java;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -32,7 +33,7 @@ public class ClassBox {
 
     private final LinkedList<Field> fields = new LinkedList<>();
 
-    public String getType(){
+    public String getType() {
         return this.type.name();
     }
 
@@ -52,24 +53,24 @@ public class ClassBox {
     }
 
 
-    public boolean addMethod(String name, int view, String type, LinkedList<String> params){
+    public boolean addMethod(String name, int view, String type, LinkedList<String> params) {
         //call the constructor and add to list
         try {
             Methods newMethod = new Methods(name, view, type, params);
             this.methods.add(newMethod);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean addField(String name, int view, String type){
+    public boolean addField(String name, int view, String type) {
         //call the constructor and add to list
         try {
             Field newField = new Field(name, view, type);
             this.fields.add(newField);
             return true;
-        } catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
 
@@ -175,19 +176,13 @@ public class ClassBox {
     }
 
     //Needs to check for existing Relationship between ClassBox objects
-    //Returns true if a relationship was added
     //ClassBox objects are guaranteed to not be null by the caller
     public static void addRelationship(final ClassBox parentClass, final ClassBox childClass, final int type) {
-            parentClass.children.add(new Relationship(childClass,type));
-            childClass.parents.add(new Relationship(parentClass,type));
+        parentClass.children.add(new Relationship(childClass, type));
+        childClass.parents.add(new Relationship(parentClass, type));
     }
 
-    public static void addRelationship(final ClassBox parentClass, final ClassBox childClass, final String type) {
-        parentClass.children.add(new Relationship(childClass,type));
-        childClass.parents.add(new Relationship(parentClass,type));
-    }
-
-   //Deletes the relationship between the two ClassBox objects
+    //Deletes the relationship between the two ClassBox objects
     public static void deleteRelationship(final ClassBox cb1, final ClassBox cb2) {
         for (Relationship rel : cb1.parents) {
             if (rel.getOtherClass().equals(cb2)) {
@@ -212,27 +207,39 @@ public class ClassBox {
         return relationships;
     }
 
-    public String[] listMethods(){
+    public String[] listMethods() {
         String[] methods = new String[this.methods.size()];
-        for(int i = 0; i < this.methods.size(); ++i){
+        for (int i = 0; i < this.methods.size(); ++i) {
             methods[i] = this.methods.get(i).toString();
         }
         return methods;
     }
 
-    public String[] listFields(){
+    public String[] listFields() {
         String[] fields = new String[this.fields.size()];
-        for(int i = 0; i < this.fields.size(); ++i){
+        for (int i = 0; i < this.fields.size(); ++i) {
             fields[i] = this.fields.get(i).toString();
         }
         return fields;
     }
 
-    public static String[] listVisibilityTypes(){
+    public static String[] listVisibilityTypes() {
         return Arrays.stream(Visibility.values()).map(Enum::name).toArray(String[]::new);
     }
 
-    public static String[] listRelationshipTypes(){
+    public ArrayList<String[]> listRelationshipsSaveHelper() {
+        ArrayList<String[]> list = new ArrayList<>();
+        for (Relationship parent : this.parents) {
+            list.add(new String[]{
+                    parent.getOtherClassName(),
+                    this.getName(),
+                    String.valueOf(parent.getTypeOrdinal())
+            });
+        }
+        return list;
+    }
+
+    public static String[] listRelationshipTypes() {
         return Relationship.listRelationshipTypes();
     }
 
@@ -240,7 +247,6 @@ public class ClassBox {
     public void rename(final String name) {
         this.name = name;
     }
-
 
 
     @Override
@@ -261,7 +267,11 @@ public class ClassBox {
         return fields;
     }
 
-    public LinkedList<Relationship> getParents() { return parents;}
+    public LinkedList<Relationship> getParents() {
+        return parents;
+    }
 
-    public LinkedList<Relationship> getChildren() { return children;}
+    public LinkedList<Relationship> getChildren() {
+        return children;
+    }
 }
