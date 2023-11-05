@@ -28,7 +28,7 @@ public class GUI extends JFrame {
         mainMenu = new JMenuBar();
 
         displayDropdown = new JMenu("Display");
-        display = new JMenuItem(new AbstractAction("Refresh") {
+         display = new JMenuItem(new AbstractAction("Refresh") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 displayGUI();
@@ -48,13 +48,8 @@ public class GUI extends JFrame {
                 //get int that corresponds to the enum type
                 int typeToInt = Integer.parseInt(classType);
                 Controller.addClass(className, typeToInt);
-
-                //checking to make sure class was actually added
-                //int test = ModelDiagram.getCreatedClassesSize();
-                //System.out.println("There are " + test + " classes");
-                //TODO class seems to be created, but if the enum type was appropriately taken is another matter.
                 //Draw new box (either entire screen refresh or just draw new box)
-                //System.exit(4);
+                displayGUI();
             }
         });
         deleteClass = new JMenuItem(new AbstractAction("Delete Class") {
@@ -64,7 +59,7 @@ public class GUI extends JFrame {
                 String className = JOptionPane.showInputDialog("What is the name of the class you want to delete? ");
                 //TODO - Popup prompt to make sure you want to delete the class
                 Controller.deleteClass(className);
-                //System.exit(12);
+                displayGUI();
             }
         });
         renameClass = new JMenuItem(new AbstractAction("Rename Class") {
@@ -73,7 +68,7 @@ public class GUI extends JFrame {
                 String oldName = JOptionPane.showInputDialog("What is the name of the class you want to rename? ");
                 String newName = JOptionPane.showInputDialog("What would you like to rename this class to? ");
                 Controller.renameClass(oldName, newName);
-                //System.exit(13);
+                displayGUI();
             }
         });
         classDropdown.add(addClass);
@@ -101,6 +96,7 @@ public class GUI extends JFrame {
         delAtt = new JMenuItem(new AbstractAction("Delete Attribute") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //String oldName = JOptionPane.showInputDialog("What is the name of the class you want to rename? ");
                 System.exit(15);
             }
         });
@@ -141,7 +137,13 @@ public class GUI extends JFrame {
         addRelation = new JMenuItem(new AbstractAction("Add Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(1);
+                String firstClass = JOptionPane.showInputDialog("What is the name of the first class you want to have a relationship?\n" +
+                        "(The lower/to class, e.g this implements the other class)");
+                //TODO maybe change this to buttons instead of string input?
+                String secondClass = JOptionPane.showInputDialog("What is the name of the second class you want to have a relationship?\n" +
+                        "(The higher/from class, e.g the other class implements this)");
+
+                //System.exit(1);
             }
         });
         delRelation = new JMenuItem(new AbstractAction("Delete Relationship") {
