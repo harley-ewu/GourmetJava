@@ -15,15 +15,17 @@ public class Methods extends Attribute {
         this.returnType = type;
     }
 
-    public void deleteParam(String param) {
+    public boolean deleteParam(String param) {
         for (int i = 0; i < paramTypes.size(); i++) {
             if (paramTypes.get(i).equals(param)) {
                 paramTypes.remove(i);
+                return true;
             }
         }
+        return false;
     }
 
-
+  
     public boolean renameParam(String oldParamName, String newParamName) {
         for (int i = 0; i < paramTypes.size(); i++) {
             if (paramTypes.get(i).equals(oldParamName)) {

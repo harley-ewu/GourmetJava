@@ -13,18 +13,8 @@ public class Controller {
         // kb = new Scanner(System.in);
     }
 
-    // recall menu at end if not
 
-
-    // Creates a new Classbox object and adds to to the arraylist createdClasses
-    // Rachael
-    // Allows the user to name their class, then adds it to the list of created
-    // classes
-    public static boolean addClass(final String name, final String type) {
-        //return ModelDiagram.addClass(name, type);
-        return false;
-    }
-
+    // Allows the user to name their class, then adds it to the list of created classes
     public static boolean addClass(final String name, final int type) {
         return ModelDiagram.addClass(name, type);
     }
@@ -218,11 +208,6 @@ public class Controller {
                 "4.) Help",
                 "5.) Back",
         };
-    }
-
-
-    public static String[] listClassDetails(final String name) {
-        return ModelDiagram.listClassDetails(name);
     }
 
 

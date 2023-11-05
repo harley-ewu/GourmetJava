@@ -87,8 +87,7 @@ public class ModelDiagram {
         if (target == null) {
             return false;
         } else {
-            target.addParam(methodName, paramName);
-            return true;
+            return target.addParam(methodName, paramName);
         }
     }
 
@@ -262,28 +261,6 @@ public class ModelDiagram {
             list[i] = createdClasses.get(i).listRelationships();
         }
         return list;
-    }
-
-    /*We need to return:
-        Class name
-            - Class type
-        Its methods
-            - method return types and parameter list
-            - visibility
-        Its fields
-            - the field data types and visibility
-
-        I'm not sure how to handle this -David
-     */
-    public static String[] listClassDetails(final String name) {
-        if (name == null || name.isEmpty())
-            return null;
-
-        ClassBox box = findClassBox(name);
-        if (box == null)
-            return null;
-
-        return null;
     }
 
 
