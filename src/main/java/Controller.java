@@ -164,9 +164,9 @@ public class Controller {
                 "These options are listing options. They will lead you to the options where you can list classes, list class details, and list relationships.",
                 "The options are as listed below:",
                 "1.) List Classes",
-                "2.) List All Classes Detailed",
-                "3.) List specific class details.",
-                "4.) List relationships.",
+                "2.) List all details for every class",
+                "3.) List all details for one specific class",
+                "4.) List all relationships for every class",
 
         };
     }

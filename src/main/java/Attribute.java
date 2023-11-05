@@ -27,7 +27,7 @@ public abstract class Attribute implements Comparable<Attribute> {
             throw new IllegalArgumentException("Bad params at Attribute constructor");
 
         this.name = name;
-        this.view = Visibility.values()[viewType];
+        this.view = Visibility.values()[viewType - 1];
 
     }
 
