@@ -31,10 +31,10 @@ public class Methods extends Attribute {
     }
 
   
-    public boolean renameParam(String paramName) {
+    public boolean renameParam(String oldParamName, String newParamName) {
         for (int i = 0; i < paramTypes.size(); i++) {
-            if (paramTypes.get(i).equals(paramName)) {
-                paramTypes.set(i, paramName);
+            if (paramTypes.get(i).equals(oldParamName)) {
+                paramTypes.set(i, newParamName);
                 return true;
             }
         }
@@ -48,44 +48,6 @@ public class Methods extends Attribute {
 
     public LinkedList<String> getParamTypes() {
         return this.paramTypes;
-    }
-
-    @Override
-    public boolean equalTo(Attribute another) {
-        if (another instanceof Methods) {
-            Methods other = (Methods) another;
-            if (this.getName().equals(other.getName()) && this.paramTypes.equals(other.paramTypes)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // to string for CLI    
-    @Override
-    public String CLIToString() {
-        StringBuilder s = new StringBuilder(this.getView().name().toLowerCase() + " ");
-        s.append(this.getName());
-        s.append("(");
-        for (int i = 0; i < this.getParamTypes().size() - 1; i++) {
-            s.append(this.getParamTypes().get(i)).append(", ");
-        }
-        s.append(this.getParamTypes().get(this.getParamTypes().size() - 1));
-        s.append(")");
-        return s.toString();
-    }
-
-    @Override
-    public String GUIToString() {
-        StringBuilder s = new StringBuilder(this.getView().getSymbol() + " ");
-        s.append(this.getName());
-        s.append("(");
-        for (int i = 0; i < this.getParamTypes().size() - 1; i++) {
-            s.append(this.getParamTypes().get(i)).append(", ");
-        }
-        s.append(this.getParamTypes().get(this.getParamTypes().size() - 1));
-        s.append(")");
-        return s.toString();
     }
 
     /*

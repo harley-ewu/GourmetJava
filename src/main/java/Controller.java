@@ -50,11 +50,11 @@ public class Controller {
 
     }
 
-    public static String[] listClassMethods(final String name){
+    public static String[] listClassMethods(final String name) {
         return ModelDiagram.listClassMethods(name);
     }
 
-    public static String[] listClassFields(final String name){
+    public static String[] listClassFields(final String name) {
         return ModelDiagram.listClassFields(name);
     }
 
@@ -80,101 +80,6 @@ public class Controller {
         return ModelDiagram.addParam(className, methodName, paramName);
     }
 
-    // Adds an attribute to a given class
-    // NEW: ask for field or method, do io based on each, pass fields to classbox
-    // add
-    public static void addAttribute() {
-        /*
-        listClasses();
-        System.out.println("What is the index of the class you would like to add an attribute to?");
-        System.out.print("Class Index:");
-        int ind = Integer.parseInt(kb.nextLine());
-        if (ind < 1 || ind > createdClasses.size()) {
-            System.out.println("That class does not exist.");
-        } else {
-            ClassBox c = createdClasses.get(ind - 1);
-            System.out.println("What would you like to call your attribute?");
-            System.out.print("Attribute name:");
-            String attributeName = kb.nextLine();
-            System.out.println("What is the attribute's view? (public, private, or protected)");
-            System.out.print("public/private/protected:");
-            String view = kb.nextLine().trim().toLowerCase(Locale.ROOT);
-            if (!(view.equals("public") || view.equals("private") || view.equals("protected"))) {
-                System.out.println("Invalid view");
-                return;
-            }
-            System.out.println("Enter any applicable modifiers, such as static, seperated by commas(a,b,c)");
-            System.out.print("Tags:");
-            String modstring = kb.nextLine();
-            String[] modarray = modstring.split(",");
-            LinkedList<String> modll = new LinkedList<String>(Arrays.asList(modarray));
-            System.out.println(
-                    "Enter the type (the return type if it is a method, the variable type if it is a variable");
-            System.out.print("Type:");
-            String type = kb.nextLine();
-            System.out.println(
-                    "Enter the parameters, seperated by commas, if this is a method (Leave blank for a variable)");
-            System.out.print("Parameters:");
-            String params = kb.nextLine();
-            LinkedList<String> paramsss = null;
-            if (!params.isEmpty()) {
-                String[] paramss = params.split(",");
-                paramsss = new LinkedList<String>(Arrays.asList(paramss));
-            }
-            try {
-                c.addAttribute(attributeName, view, modll, type, paramsss);
-                System.out.println(attributeName + " has been added to " + c.getName());
-            } catch (Exception e) {
-                System.out.println("Bad inputs, no attribute created");
-            }
-        }
-
-         */
-    }// end addAttribute
-
-    // Finds an attribute, checks with the user to verify intent, then deletes the
-    // attribute
-    // NEW - search both class lists on name, if in method twice, ask for params
-    public static void deleteAttribute() {
-        /*
-        listClasses();
-        System.out.println("What is the index of the class you'd like to remove an attribute from?");
-        System.out.print("Class Index:");
-        int ind = Integer.parseInt(kb.nextLine());
-        ClassBox c = createdClasses.get(ind - 1);
-        LinkedList<Attribute> attList = c.getAttributes();
-        if (!(attList.isEmpty())) {
-            System.out.println("Which attribute would you like to delete?");
-            // find attributes using a loop
-            for (int i = 0; i < attList.size(); i++) {
-                System.out.println(i + 1 + ".)" + attList.get(i).toString());
-            }
-            System.out.print("Attribute Index:");
-            int index = Integer.parseInt(kb.nextLine());
-
-            System.out.println("Are you sure you want to delete " + attList.get(index - 1).getName()
-                    + "? Please enter yes or no.");
-            System.out.print("yes/no:");
-            String answer = kb.nextLine().toLowerCase();
-            // stick the part below in a loop so if an incorrect input is entered, it'll
-            // re-prompt
-            while (!(answer.equals("yes") || answer.equals("no"))) {
-                System.out.println("That is not a valid input. Please enter yes or no.");
-                System.out.print("yes/no:");
-                answer = kb.nextLine().toLowerCase();
-            } // end of while loop checking for valid input
-            if (answer.equals("yes")) {
-                c.deleteAttribute(attList.get(index - 1));
-            } else if (answer.equals("no")) {
-                System.out.println("Canceled");
-            }
-
-        } else {
-            System.out.println("No attributes found for class " + c.getName());
-        }
-
-         */
-    }
 
     //deletes method based on className and methodName
     //Needs params eventually to differentiate overloaded methods
@@ -199,59 +104,31 @@ public class Controller {
         return ModelDiagram.renameField(className, fieldName, newFieldName);
     }
 
-    public static boolean renameParam(String className, String methodName, String paramName) {
-        return ModelDiagram.renameParam(className, methodName, paramName);
+    public static boolean renameParam(String className, String methodName, String oldParamName, String newParamName) {
+        return ModelDiagram.renameParam(className, methodName, oldParamName, newParamName);
     }
 
-    public static void renameAttribute() {
-        /*
-
-        if (createdClasses.isEmpty()) {
-            System.out.println("Nothing to rename!");
-        }
-
-        else {
-
-            listClasses();
-            System.out.println("What is the index of the class you'd like to rename an attribute from?");
-            System.out.print("Class Index:");
-            int ind = Integer.parseInt(kb.nextLine());
-            ClassBox c = createdClasses.get(ind - 1);
-            LinkedList<Attribute> attList = c.getAttributes();
-            if (!(attList.isEmpty())) {
-                System.out.println("Which attribute would you like to rename?");
-                // find attributes using a loop
-                for (int i = 0; i < attList.size(); i++) {
-                    System.out.println(i + 1 + ".)" + attList.get(i).toString());
-                }
-                System.out.println("Attribute Index:");
-                int index = Integer.parseInt(kb.nextLine());
-                System.out.println("What would you like the new name to be?");
-                System.out.print("New Name:");
-                String newName = kb.nextLine();
-                try {
-                    c.renameAttribute(attList.get(index - 1), newName);
-                } catch (Exception e) {
-                    System.out.println("Bad new name, no change done");
-                }
-            } else {
-                System.out.println("No attributes found for class " + c.getName());
-            }
-        }
-        */
-
-    }
-
-   
+    public final static int DETAILS_NAME_TYPE = 0;
+    public final static int DETAILS_METHODS = 1;
+    public final static int DETAILS_FIELDS = 2;
+    public final static int DETAILS_RELATIONSHIPS = 3;
 
     public static String[] listClasses() {
         return ModelDiagram.listClasses();
     }
 
-    // Returns a list of Strings, each String holding the detailed info for a
-    // CreatedClass
+    /*
+        Returns the details of a class in the format:
+        {
+           [0][x] - { Class name, Type},
+           [1][x] - { List of Methods },
+           [2][x] - { List of Fields }
+           [3][x] - { List of Relationships }
+        }
+     */
     public static String[][] listAllClassDetails(final String name) {
         return ModelDiagram.listAllClassDetails(name);
+
     }
 
     // Returns an array of String arrays
@@ -261,19 +138,19 @@ public class Controller {
         return ModelDiagram.listRelationships();
     }
 
-    public static String[] listClassTypes(){
+    public static String[] listClassTypes() {
         return ClassBox.listClassTypes();
     }
 
-    public static String[] listAttributeTypes(){
+    public static String[] listAttributeTypes() {
         return Attribute.listAttributeTypes();
     }
 
-    public static String[] listVisibilityTypes(){
+    public static String[] listVisibilityTypes() {
         return ClassBox.listVisibilityTypes();
     }
 
-    public static String[] listRelationshipTypes(){
+    public static String[] listRelationshipTypes() {
         return Relationship.listRelationshipTypes();
     }
 
@@ -282,49 +159,64 @@ public class Controller {
     // Rachael
     // Takes input from user on what index from the list they want to see then calls
     // a toString for that object
-    public static String[] subMenu1(){
-        return new String[]{"1.) List Options.",
-        "These options are listing options. They will lead you to the options where you can list classes, list class details, and list relationships.",
+    public static String[] subMenu1() {
+        return new String[]{"\n1.) List Options.",
+                "These options are listing options. They will lead you to the options where you can list classes, list class details, and list relationships.",
                 "The options are as listed below:",
                 "1.) List Classes",
-                "2.) List All Classes Detailed",
-                "3.) List class details.",
-                "4.) List relationships.",
+                "2.) List all details for every class",
+                "3.) List all details for one specific class",
+                "4.) List all relationships for every class",
 
         };
     }
-    public static String[] subMenu2(){
-        return new String[]{"Please choose a number from the options below: ",
-        "1.) Add Class",
-        "2.) Remove Class",
-        "3.) Rename Class",
-        "4.) Help",
-        "5.) Back",
+
+    public static String[] subMenu2() {
+        return new String[]{"\nPlease choose a number from the options below: ",
+                "1.) Add Class",
+                "2.) Delete Class",
+                "3.) Rename Class",
+                "4.) Help",
+                "5.) Back",
         };
     }
-    public static String[] subMenu3(){
-        return new String[]{"Please choose a number from the options below: ",
-        "1.) Add Attribute",
-        "2.) Remove Attribute",
-        "3.) Rename Attribute",
-        "4.) Help",
-        "5.) Back",
+
+    public static String[] subMenu3() {
+        return new String[]{"\nPlease choose a number from the options below: ",
+                "1.) Add Attribute",
+                "2.) Delete Attribute",
+                "3.) Rename Attribute",
+                "4.) Edit Method Parameters",
+                "5.) Help",
+                "6.) Back",
         };
     }
-    public static String[] subMenu4(){
-        return new String[]{"Please choose a number from the options below: ",
+
+    public static String[] subMenu4() {
+        return new String[]{"\nPlease choose a number from the options below: ",
                 "1.) Add Relationship",
-                "2.) Remove Relationship",
+                "2.) Delete Relationship",
                 "3.) Help",
                 "4.) Back",
         };
     }
-    public static String[] subMenu5(){
-        return new String[]{"Please choose a number from the options below: ",
+
+    public static String[] subMenu5() {
+        return new String[]{"\nPlease choose a number from the options below: ",
                 "1.) Save",
                 "2.) Load",
                 "3.) Help",
                 "4.) Back",
+        };
+    }
+
+    public static String[] subMenu6() {
+        return new String[]{"\nPlease choose a number from the options below: ",
+                "1.) Add Param to method",
+                "2.) Delete Param in method",
+                "3.) Rename Param in method",
+                "4.) Help",
+                "5.) Back",
         };
     }
 
@@ -334,9 +226,8 @@ public class Controller {
     }
 
 
-
     public static String[] listHelp() {
-        return new String[]{"1.) List Options.",
+        return new String[]{"\n1.) List Options.",
                 "These options are listing options. They will lead you to the options where you can list classes, list class details, and list relationships.",
                 "The options are as listed below:",
                 "1.) List Classes",
@@ -353,7 +244,7 @@ public class Controller {
 
 
     public static String[] classHelp() {
-        return new String[]{"2.) Class Options.",
+        return new String[]{"\n2.) Class Options.",
                 "These options are related to classes. They will give you the option to create, delete, and rename classes.",
                 "The options are as listed below:",
                 "1.) Create a class.",
@@ -366,7 +257,7 @@ public class Controller {
     }
 
     public static String[] attributeHelp() {
-        return new String[]{"3.) Attribute Options.",
+        return new String[]{"\n3.) Attribute Options.",
                 "These options are related to class attributes. They will allow you to create, delete, and rename attributes associated with classes.",
                 "The options are as listed below:",
                 "1.) Add an attribute.",
@@ -380,8 +271,24 @@ public class Controller {
         };
     }
 
+    public static String[] editParamHelp() {
+        return new String[]{"\n4.) Edit Method Parameters",
+                "These options are related to editting method parameters. They will allow you to create, delete, and rename parameters associated with methods.",
+                "The options are as listed below:",
+                "1.) Add Parameter to method",
+                "This command first asks for the class name containing the method you are editing, then for the method containing the parameter.",
+                "It then asks for the name of the new parameter you are adding.",
+                "2.) Delete Parameter in method",
+                "This command first asks for the class name containing the method you are editing, then for the method containing the parameter.",
+                "It will then ask for the parameter name you are looking to delete.",
+                "3.) Rename Parameter in method",
+                "This command first asks for the class name containing the method you are editing, then for the method containing the parameter.",
+                "It will then ask for the current parameter name, followed by the new parameter name."
+        };
+    }
+
     public static String[] relationshipHelp() {
-        return new String[]{"4.) Relationship Options.",
+        return new String[]{"\n4.) Relationship Options.",
                 "These options are related to relationships between classes.",
                 "The options are as listed below:",
                 "1.) Add a relationship.",
@@ -394,7 +301,7 @@ public class Controller {
     }
 
     public static String[] saveLoadHelp() {
-        return new String[]{"5.) Save/Load.",
+        return new String[]{"\n5.) Save/Load.",
                 "These commands will aid in saving current projects and loading previous ones.",
                 "The options are as listed below:",
                 "1.) Save",
@@ -439,14 +346,15 @@ public class Controller {
     // corresponding number on the menu
     public static String[] printMenu() {
         return new String[]{
-                "Please choose a number from the following options below",
+                "\nPlease choose a number from the following options below",
                 "1.) List Display (Classes, Class details, Relationships)",
                 "2.) Class Options (Add, Delete, Rename)",
                 "3.) Attribute Options (Add, Delete, Rename)",
                 "4.) Relationship Options (Add, Delete)",
                 "5.) Save/Load",
                 "6.) Help",
-                "7.) Exit"
+                "7.) Open GUI",
+                "8.) Exit"
         };
     }
 

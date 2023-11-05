@@ -4,26 +4,23 @@ package src.main.java;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class GUI extends JFrame implements ActionListener{
+public class GUI extends JFrame {
     // Creates a dropdown style menu framework at the top of the frame
     static JMenuBar mainMenu;
 
     // Creates individual dropdown menus for each category within the overall menu
-    static JMenu displayDropdown,classDropdown,attributeDropdown,relationshipDropdown,saveLoadDropdown,helpDropdown;
+    static JMenu parameterDropdown, displayDropdown,classDropdown,attributeDropdown,relationshipDropdown,saveLoadDropdown,helpDropdown;
 
     // Individual menu items/buttons under their individual category menus
-    static JMenuItem display,addClass,deleteClass,renameClass,addAtt,delAtt,renameAtt,addRelation,delRelation,save,load,help;
+    static JMenuItem display,addClass,deleteClass,renameClass,addAtt,delAtt,renameAtt,addRelation,delRelation,save,load,help,addPar, delPar, renPar;
 
 
     //creates a frame to be the main, base window to hold the entirety of the GUI
     static JFrame guiWindow;
 
-    //public static void startGUIMenu(ArrayList<ClassBox> cc){
-    public static void main(String[] args){
-        GUI mainContainer = new GUI();
+    public static void startGUIMenu(){
 
         guiWindow = new JFrame("UML Editor");
 
@@ -31,13 +28,12 @@ public class GUI extends JFrame implements ActionListener{
         mainMenu = new JMenuBar();
 
         displayDropdown = new JMenu("Display");
-        display = new JMenuItem(new AbstractAction("Display") {
+        display = new JMenuItem(new AbstractAction("Refresh") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(10);
+                displayGUI();
             }
         });
-        //display.addActionListener(mainContainer);
         displayDropdown.add(display);
 
 
@@ -80,13 +76,9 @@ public class GUI extends JFrame implements ActionListener{
                 //System.exit(13);
             }
         });
-        //addClass.addActionListener(mainContainer);
-        //deleteClass.addActionListener(mainContainer);
-        //renameClass.addActionListener(mainContainer);
         classDropdown.add(addClass);
         classDropdown.add(deleteClass);
         classDropdown.add(renameClass);
-
 
         attributeDropdown = new JMenu("Attribute");
         addAtt = new JMenuItem(new AbstractAction("Add Attribute") {
@@ -118,38 +110,81 @@ public class GUI extends JFrame implements ActionListener{
                 System.exit(16);
             }
         });
-        //addAtt.addActionListener(mainContainer);
-        //delAtt.addActionListener(mainContainer);
-        //renameAtt.addActionListener(mainContainer);
         attributeDropdown.add(addAtt);
         attributeDropdown.add(delAtt);
         attributeDropdown.add(renameAtt);
 
+        parameterDropdown = new JMenu("Parameters");
+        addPar = new JMenuItem(new AbstractAction("Add Parameter") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(14);
+            }
+        });
+        delPar = new JMenuItem(new AbstractAction("Delete Parameter") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(15);
+            }
+        });
+        renPar = new JMenuItem(new AbstractAction("Rename Parameter") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(16);
+            }
+        });
+        parameterDropdown.add(addPar);
+        parameterDropdown.add(delPar);
+        parameterDropdown.add(renPar);
 
         relationshipDropdown = new JMenu("Relationship");
-        addRelation = new JMenuItem("Add Relationship");
-        delRelation = new JMenuItem("Delete Relationship");
-        addRelation.addActionListener(mainContainer);
-        delRelation.addActionListener(mainContainer);
+        addRelation = new JMenuItem(new AbstractAction("Add Relationship") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(1);
+            }
+        });
+        delRelation = new JMenuItem(new AbstractAction("Delete Relationship") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(1);
+            }
+        });
         relationshipDropdown.add(addRelation);
         relationshipDropdown.add(delRelation);
+
         saveLoadDropdown = new JMenu("Save/Load");
-        save = new JMenuItem("Save");
-        load = new JMenuItem("Load");
-        save.addActionListener(mainContainer);
-        load.addActionListener(mainContainer);
+        save = new JMenuItem(new AbstractAction("Save") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(1);
+            }
+        });
+        load = new JMenuItem(new AbstractAction("Load") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(1);
+            }
+        });
         saveLoadDropdown.add(save);
         saveLoadDropdown.add(load);
+
         helpDropdown = new JMenu("Help");
         /*Maybe take out the dropdown part of "help" since there's just one component.
          that isn't exactly needed to be repeated if we can get around it*/
-        help = new JMenuItem("Help");
+        help = new JMenuItem(new AbstractAction("Help") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(1);
+            }
+        });
         helpDropdown.add(help);
-        help.addActionListener(mainContainer);
+
         // add individual dropdown menus to menu bar
         mainMenu.add(displayDropdown);
         mainMenu.add(classDropdown);
         mainMenu.add(attributeDropdown);
+        mainMenu.add(parameterDropdown);
         mainMenu.add(relationshipDropdown);
         mainMenu.add(saveLoadDropdown);
         mainMenu.add(helpDropdown);
@@ -162,49 +197,47 @@ public class GUI extends JFrame implements ActionListener{
         guiWindow.setPreferredSize(new Dimension(1000, 800));
         guiWindow.setResizable(false);
         guiWindow.setVisible(true);
-        //TODO why use pack?
-        // Is this code below just for testing purposes?
-        mainContainer.pack();
-        ArrayList<ClassBox> cc = new ArrayList<>();
-        ClassBox c1 = new ClassBox("tim", 1);
-        ClassBox c2 = new ClassBox("dave", 2);
+        Main.mainContainer.pack();
+        guiWindow.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosing(WindowEvent event){
+                Main.gview = false;
+            }
+        });
+        displayGUI();
+        //Want to stay idle if CLI view is not there; need to keep program running
+        Controller.addClass("shit",1);
+        Controller.addField("shit", "crap",1,"dumb fucking program");
         LinkedList<String> params = new LinkedList<>();
-        params.add("String");
-        params.add("int");
+        params.add("AHH");
+        params.add("i'd rather be sleeping");
+        Controller.addMethod("shit","I hate this",1,"FUCK",params);
+        Controller.addField("shit","iHateThis",1,"please");
 
-        c1.addField("name", 1,"String");
-        c1.addMethod("toString", 1,"String", params);
-        Controller.addRelationship(c1.getName(), c2.getName(), 2);
-
-        //for(int i = 0; i<6; i++){
-            cc.add(c1);
-            cc.add(c2);
-        //}
-        displayGUI(guiWindow, cc);
-    }
-
-    
-    public void actionPerformed(ActionEvent e){
-        String s = e.getActionCommand();
-        if(s.equals("Add Class")){
-            //I/o, then call method
+        Controller.addClass("fuck",1);
+        LinkedList<String> params2 = new LinkedList<>();
+        params2.add("ugh");
+        params2.add("i'd rather be dead");
+        Controller.addMethod("fuck","I hate this",1,"FUCK",params);
+        Controller.addField("fuck","weeeeeeeee",1,"snore");
+        while(!Main.cview) {
+            ;
         }
+    
     }
-    public static void displayGUI(JFrame guiWindow, ArrayList<ClassBox> createdClasses){
-        guiWindow.add(new ShapeDrawing(createdClasses));
+    public static void displayGUI(){
+        guiWindow.add(new ShapeDrawing());
         guiWindow.setVisible(true);
     }
 
     public static class ShapeDrawing extends JComponent{
-        ArrayList<ClassBox> createdClasses;
-        public ShapeDrawing(ArrayList<ClassBox> createdClasses){
+        public ShapeDrawing(){
             super();
-            this.createdClasses = createdClasses;
         }
         public void paint(Graphics g){
             Graphics2D g2 = (Graphics2D) g;
             //Spacing out based on the number of classes
-            int numberOfClasses = createdClasses.size();
+            int numberOfClasses = Controller.getCreatedClassesSize();
             // number of total spaces including class boxes and empty spaces in between
             // If there are 3 classes, it has 3 spots with one classbox space between each box
             int totalSpace = (2 * numberOfClasses) + 1;
@@ -215,63 +248,71 @@ public class GUI extends JFrame implements ActionListener{
             //Stores coordinates of each class when printed for relationship printing
             LinkedList<Integer> coords = new LinkedList<>();
             //Goes through all classes and prints them
-            //TODO
+            String[] classNames = Controller.listClasses();
             //this will stick every other class on an upper row, and the ones in between on a lower row
             for(int i = 0; i < numberOfClasses; i++){
                 if(i % 2 == 0){
-                    drawClass(createdClasses.get(i), curx, 200, g2);
+                    drawClass(classNames[i], curx, 200, g2);
                     coords.add(curx);
                     coords.add(200);
                 }
                 else{
-                    drawClass(createdClasses.get(i), curx, 400, g2);
+                    drawClass(classNames[i], curx, 400, g2);
                     coords.add(curx);
                     coords.add(400);
                 }
                 curx += (1.5 * spaceWidth);
             }
+            String[] classes = Controller.listClasses();
             //Prints the line for each relationship
-            for (int i = 0; i < createdClasses.size(); i++){
-                //List relationships was changed to strings instead of relationships
-                for(String r: createdClasses.get(i).listRelationships()){
+            for (int i = 0; i < Controller.getCreatedClassesSize(); i++){
+                String[][] relationships = Controller.listRelationships();
+                for(int j = 0; i<relationships[i].length; j++){
                     //For each relationship, retrieve the coordinates of each, and draw a line between them
                     int class1XIndex = i * 2; //index of where the coordinates are in the array
                     int class1YIndex = class1XIndex + 1;
-                    //TODO the code below was altered and commented out just to get it to compile
-                    int class2 = 1;   // createdClasses.indexOf(r.getOtherClass());
-                    int class2XIndex = class2 * 2;
+                    String[] relationship = relationships[i][j].split(" ");
+                    int class2Index = -1;
+                    for(int k = 0;k<classes.length;k++){
+                        if (relationship[2].equals(classes[k])){
+                            class2Index = k;
+                        }
+                    }
+                    int class2XIndex = class2Index * 2;
+
                     int class2YIndex = class2XIndex + 1;
                     int class1XCoords = coords.get(class1XIndex);
                     int class1YCoords = coords.get(class1YIndex);
                     int class2XCoords = coords.get(class2XIndex);
                     int class2YCoords = coords.get(class2YIndex);
-                    class1XIndex += 10;
+                    class1XCoords += 10;
                     //scooches the line over to the right a bit so it isn't on the corner
                     class2XCoords += 10;
                     g2.drawLine(class1XCoords, class1YCoords, class2XCoords, class2YCoords);
                     //Display the relationship type at the line's midpoint
                     //Finds midpoint and then prints the relationship string. "Aggregates" for example
 
-                    //TODO below code does not work now as r is not a relationship
-                    //g2.drawString(r.getType(), ((class1XCoords + class2XCoords)/2), ((class1YCoords + class2YCoords)/2));
+                    g2.drawString(relationship[1], ((class1XCoords + class2XCoords)/2), ((class1YCoords + class2YCoords)/2));
+
                 }
             }
         }
 
         //Draws the class boxes
-        public void drawClass(ClassBox c, int x, int y, Graphics2D g2){
+        public void drawClass(String className, int x, int y, Graphics2D g2){
             //number of fields and methods
-            int height = 15 * (c.getFields().size() + c.getMethods().size()+2);
-            int width = c.getName().length();
+            String[][] classDetails = Controller.listAllClassDetails(className);
+            int height = 15 * (classDetails[Controller.DETAILS_METHODS].length + classDetails[Controller.DETAILS_FIELDS].length+2);
+            int width = className.length();
             //Set width to largest of the attribute toStrings
-            for(int i = 0; i < c.getFields().size(); i++){
-                if(c.getFields().get(i).GUIToString().length() > width){
-                    width = c.getFields().get(i).GUIToString().length();
+            for(int i = 0; i < classDetails[Controller.DETAILS_METHODS].length; i++){
+                if(classDetails[1][i].length() > width){
+                    width = classDetails[Controller.DETAILS_METHODS][i].length();
                 }
             }
-            for(int i = 0; i < c.getMethods().size(); i++){
-                if(c.getMethods().get(i).GUIToString().length() > width){
-                    width = c.getMethods().get(i).GUIToString().length();
+            for(int i = 0; i < classDetails[Controller.DETAILS_FIELDS].length; i++){
+                if(classDetails[2][i].length() > width){
+                    width = classDetails[Controller.DETAILS_FIELDS][i].length();
                 }
             }
             //the 8 here is just for good spacing
@@ -279,19 +320,19 @@ public class GUI extends JFrame implements ActionListener{
             //Outer rectangle
             g2.drawRect(x,y,width,height);
             //Write Class name
-            g2.drawString(c.getName(), x+5, y+15);
+            g2.drawString(className, x+5, y+15);
             //Draw line under the name
             g2.drawLine(x,y + 15,x+width, y+15);
             //moves down twice the spacing of above
             y = y + 30;
             //For each attribute, print the gui toString
-            for(int i=0; i < c.getFields().size(); i++){
-                g2.drawString(c.getFields().get(i).GUIToString(), x+10, y);
+            for(int i=0; i < classDetails[Controller.DETAILS_METHODS].length; i++){
+                g2.drawString(classDetails[Controller.DETAILS_METHODS][i], x+10, y);
                 //moves down 15
                 y += 15;
             }
-            for(int i=0; i <c.getMethods().size(); i++){
-                g2.drawString(c.getMethods().get(i).GUIToString(), x+10, y);
+            for(int i=0; i <classDetails[Controller.DETAILS_FIELDS].length; i++){
+                g2.drawString(classDetails[Controller.DETAILS_FIELDS][i], x+10, y);
                 y += 15;
             }
         }

@@ -137,12 +137,12 @@ public class ModelDiagram {
         }
     }
 
-    public static boolean renameParam(String className, String methodName, String paramName) {
+    public static boolean renameParam(String className, String methodName, String oldParamName, String newParamName) {
         ClassBox target = findClassBox(className);
         if (target == null) {
             return false;
         } else {
-            return target.renameParam(methodName, paramName);
+            return target.renameParam(methodName, oldParamName, newParamName);
         }
     }
 
@@ -174,9 +174,10 @@ public class ModelDiagram {
     /*
         Returns the details of a class in the format:
         {
-            { Class name, Type},
-            { List of Methods },
-            { List of Fields }
+           [0][x] - { Class name, Type},
+           [1][x] - { List of Methods },
+           [2][x] - { List of Fields }
+           [3][x] - { List of Relationships }
         }
      */
     public static String[][] listAllClassDetails(final String name) {
@@ -187,10 +188,11 @@ public class ModelDiagram {
         if(box == null)
             return null;
 
-        String[][] details = new String[3][];
+        String[][] details = new String[4][];
         details[0] = new String[]{box.getName(), box.getType()};
         details[1] = box.listMethods();
         details[2] = box.listFields();
+        details[3] = box.listRelationships();
         return details;
     }
 
@@ -289,7 +291,6 @@ public class ModelDiagram {
     // .json file
     // Currently only a single save is supported
     public static void save() {
-        /*
         // Create a gson object that will take java objects and translate them to json
         Gson gson = new Gson();
         // Create a FileWriter that will write the converted Java to SavedFile.json
@@ -310,7 +311,7 @@ public class ModelDiagram {
             // With this for loop we are going to write each relationship to the file so
             // that we can recreate
             // them in the load method
-            LinkedList<Relationship> relationships = createdClasses.get(i).getRelationships();
+            LinkedList<Relationship> relationships = createdClasses.get(i).getChildren();
             for (int j = 0; j < relationships.size(); j++) {
 
                 // Find second index
@@ -325,7 +326,7 @@ public class ModelDiagram {
                 // find type index for creation
                 int typeSelection = relationships.get(j).getTypeOrdinal();
 
-                RelationshipBuilder relB = new RelationshipBuilder(i, secondIndex, typeSelection);
+                RelationshipBuilder relB = new RelationshipBuilder(i, secondIndex, typeSelection, "child");
 
                 try {
                     writer.append(gson.toJson(relB));
@@ -335,15 +336,14 @@ public class ModelDiagram {
                     e.printStackTrace();
                 }
             }
-
-
         }
 
         // Set relationships to null to avoid StackOverflow, then write ClassBoxes to
         // file
         for (int i = 0; i < createdClasses.size(); i++) {
             // Delete all relationships to avoid StackOverflow
-            createdClasses.get(i).getRelationships().clear();
+            createdClasses.get(i).getParents().clear();
+            createdClasses.get(i).getChildren().clear();
             // Now that our relationships list is empty, we can safely store each ClassBox
             // in our json file
             gson.toJson(createdClasses.get(i), writer);
@@ -361,14 +361,12 @@ public class ModelDiagram {
             e.printStackTrace();
         }
         System.out.println("Your progress has been saved!");
-        */
     }
 
     // The load function is used to restore data that was previously saved using the
     // save function
     // Again we only support up to a single save
     public static void load() {
-        /*
         // Create a File and add a scanner to it to read the data
         File inputFile = new File("SavedFile.json");
         Scanner fileScanner = null;
@@ -391,7 +389,7 @@ public class ModelDiagram {
         while (fileScanner.hasNextLine()) {
             String classboxString = fileScanner.nextLine();
             if (classboxString.contains("name") && classboxString.contains("type")
-                    && classboxString.contains("attributes") && classboxString.contains("relationships")) {
+                    && classboxString.contains("children") && classboxString.contains("parents")) {
                 createdClasses.add(gson.fromJson(classboxString, ClassBox.class));
             }
         }
@@ -415,8 +413,8 @@ public class ModelDiagram {
             inputString = fileScanner.nextLine();
             RelationshipBuilder relB = gson.fromJson(inputString, RelationshipBuilder.class);
 
-            if (inputString.contains("name") && inputString.contains("type") && inputString.contains("attributes")
-                    && inputString.contains("relationships")) {
+            if (inputString.contains("name") && inputString.contains("type") && inputString.contains("children")
+                    && inputString.contains("parents")) {
                 endOfRelationships = true;
             } else {
                 firstIndex = relB.getFirstIndex();
@@ -430,8 +428,6 @@ public class ModelDiagram {
         }
         fileScanner.close();
         System.out.println("Your previous save has been loaded!");
-        */
-
     }
 
     /*
