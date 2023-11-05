@@ -33,9 +33,9 @@ public class Relationship {
      * @throws IllegalArgumentException if any objects are null, or the enum type does not exist
      */
     public Relationship(final ClassBox otherClass, final String type){
-        if(otherClass == null || type == null){
+        if(otherClass == null || type == null)
             throw new IllegalArgumentException("null object passed to Relationship object");
-        }
+
         this.otherClass = otherClass;
         this.type = RelationshipType.valueOf(type.strip().toUpperCase());
     }
@@ -81,6 +81,10 @@ public class Relationship {
     //Getters and setters are self-explanatory
     public ClassBox getOtherClass() {
         return this.otherClass;
+    }
+
+    public String getOtherClassName(){
+        return this.otherClass.getName();
     }
 
     public String getType() {
