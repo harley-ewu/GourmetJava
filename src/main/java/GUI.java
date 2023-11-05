@@ -294,20 +294,22 @@ public class GUI extends JFrame {
                     width = classDetails[Controller.DETAILS_FIELDS][i].length();
                 }
             }
-            if(!classDetails[Controller.DETAILS_NAME_TYPE][1].equals("CLASS"))
+            //If the box is not a class, it needs a special header above the name
+            boolean isClass = classDetails[Controller.DETAILS_NAME_TYPE][1].equals("CLASS");
+            if(!isClass)
                 height += 15;
-
             //the 8 here is just for good spacing
             width *= 8;
             //Outer rectangle
             g2.drawRect(x,y,width,height);
-            //Write Class name
-            if(!classDetails[Controller.DETAILS_NAME_TYPE][1].equals("CLASS")) {
+            //If the box is not a class, it needs a special header above the name
+            if(!isClass) {
                 String classType = classDetails[Controller.DETAILS_NAME_TYPE][1].toLowerCase();
-                g2.drawString("<<" + classType + ">>", x + 5 + width / 2 - classType.length()/2 * 7, y + 15);
+                g2.drawString("<<" + classType + ">>", x + width / 2 - classType.length()/2 * 7, y + 15);
                 y += 15;
             }
-            g2.drawString(className, x+5 + width/2, y+15);
+            //Write Class name
+            g2.drawString(className, x + width/2, y+15);
             //Draw line under the name
             g2.drawLine(x,y + 17,x+width, y+17);
             //moves down twice the spacing of above
