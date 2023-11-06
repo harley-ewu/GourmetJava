@@ -217,16 +217,14 @@ public class GUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String firstClass = JOptionPane.showInputDialog("What is the name of the first class you want to have a relationship?\n" +
                         "(The lower/to class, e.g this implements the other class)");
-                //TODO maybe change this to buttons instead of string input?
                 String secondClass = JOptionPane.showInputDialog("What is the name of the second class you want to have a relationship?\n" +
                         "(The higher/from class, e.g the other class implements this)");
+                String typeAsString = JOptionPane.showInputDialog("Please enter the relationship type's number below\n" +
+                        "1.) Aggregation \n 2.) Composition \n 3.) Implementation \n 4.) Realization");
+                int type = Integer.parseInt(typeAsString);
+                Controller.addRelationship(firstClass, secondClass, type);
 
-                //We need to pop up list the relationship types, perhaps in a popup menu
-                //Grab input for the relationship type
                 //Different prompts letting the user know if the relationship was successfully added or not
-
-
-                //System.exit(1);
             }
         });
         delRelation = new JMenuItem(new AbstractAction("Delete Relationship") {
@@ -307,20 +305,7 @@ public class GUI extends JFrame {
         });
         displayGUI();
         //Want to stay idle if CLI view is not there; need to keep program running
-        Controller.addClass("shit",2);
-        Controller.addField("shit", "crap",1,"dumb fucking program");
-        LinkedList<String> params = new LinkedList<>();
-        params.add("AHH");
-        params.add("i'd rather be sleeping");
-        Controller.addMethod("shit","I hate this",1,"FUCK",params);
-        Controller.addField("shit","iHateThis",1,"please");
 
-        Controller.addClass("fuck",1);
-        LinkedList<String> params2 = new LinkedList<>();
-        params2.add("ugh");
-        params2.add("i'd rather be dead");
-        Controller.addMethod("fuck","I hate this",1,"FUCK",params);
-        Controller.addField("fuck","weeeeeeeee",1,"snore");
         while(!Main.cview) {
             ;
         }
