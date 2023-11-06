@@ -16,7 +16,7 @@ With this UML Editor you can make UML structures for a Java project you have in 
 
 ## Features
 
-- Feature 1: Build and manipulate classes using a CLI or GUI interface.
+- Feature 1: Build and manipulate classes.
 - Feature 2: Add and manipulate class attributes.
 - Feature 3: Add and manipulate relationships between classes.
 - Feature 4: Save and Load the UML Project.
@@ -85,7 +85,6 @@ This Installation guide will walk you through the process of installing a JVM an
 4. Compile the Java classes. Enter `gradlew.bat compileJava`
 5. Generate a jar file. Enter `gradlew.bat jar`
 6. Run the Java project. Enter `java -jar build/libs/GourmetJava.jar`.
-7. Press 'c' or 'g' respectively for the CLI or GUI interface.
 
 **For Linux**
 
@@ -95,7 +94,6 @@ This Installation guide will walk you through the process of installing a JVM an
 4. Compile the Java classes. Enter `./gradlew compileJava`
 5. Generate a jar file. Enter `./gradlew jar`
 6. Run the Java project. Enter `java -jar build/libs/GourmetJava.jar`.
-7. Press 'c' or 'g' respectively for the CLI or GUI interface.
 
 ## Programmers 
 - Rachael D 
