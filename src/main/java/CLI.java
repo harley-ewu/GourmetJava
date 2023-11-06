@@ -83,7 +83,6 @@ public class CLI {
                     } else {
                         System.out.println("Invalid input, please try again");
                     }
-                    //GUI.displayGUI();
                     break;
                 case 3:
                     //If the user selects 3, it takes them to the attribute submenu
@@ -121,7 +120,6 @@ public class CLI {
                         } else {
                             System.out.println("Invalid input, please try again");
                         }
-                        //GUI.displayGUI();
                     }
                     break;
                 case 4:
@@ -145,7 +143,6 @@ public class CLI {
                         } else {
                             System.out.println("Invalid input, please try again");
                         }
-                        //GUI.displayGUI();
                     }
                     break;
                 case 5:
@@ -165,7 +162,6 @@ public class CLI {
                     } else {
                         System.out.println("Invalid input, please try again");
                     }
-                    //GUI.displayGUI();
                     break;
                 case 6:
                     //If the user selects 6, it opens the help menu which can help you understand how the program runs
@@ -173,7 +169,8 @@ public class CLI {
                     break;
                 case 7:
                     //If the user selects 7, it will open and start the GUI menu with the same information from CLI
-                    //GUI.startGUIMenu();
+                    Main.gview = true;
+                    GUI.startGUIMenu();
                     break;
                 case 8:
                     //If the user selects 8, it will pull up the exit menu, confirm exit with the user, then proceed as directed
@@ -194,6 +191,9 @@ public class CLI {
                     //If the user selects an invalid option, it will let them know and bring them back to the main menu
                     System.out.println("That is not a valid input. Please try again");
                     break;
+            }
+            if(Main.gview){
+                GUI.displayGUI();
             }
         }
     }
