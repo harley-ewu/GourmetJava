@@ -732,6 +732,7 @@ public class CLI {
             try {
                 return Integer.parseInt(kb.nextLine());
             } catch (Exception e) {
+                System.out.println("Invalid input, try again");
                 System.out.print(msg);
             }
         }
