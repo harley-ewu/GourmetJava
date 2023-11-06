@@ -15,19 +15,14 @@ public class Methods extends Attribute {
         this.returnType = type;
     }
 
-    public void deleteParam(String param) {
+    public boolean deleteParam(String param) {
         for (int i = 0; i < paramTypes.size(); i++) {
             if (paramTypes.get(i).equals(param)) {
                 paramTypes.remove(i);
+                return true;
             }
         }
-    }
-
-    public void setParamTypes(LinkedList<String> newParamTypes) {
-        if (newParamTypes == null) {
-            throw new IllegalArgumentException("Bad paramTypes at Methods setParamTypes");
-        }
-        this.paramTypes = newParamTypes;
+        return false;
     }
 
   

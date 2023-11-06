@@ -19,7 +19,5 @@ public enum Visibility {
     public String getVisibility() {
         return this.name();
     }
-    //getname
-    //tostring
 
 }
