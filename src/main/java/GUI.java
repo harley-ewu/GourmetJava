@@ -6,15 +6,17 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.LinkedList;
 
+import static javax.swing.JOptionPane.YES_NO_OPTION;
+
 public class GUI extends JFrame {
     // Creates a dropdown style menu framework at the top of the frame
     static JMenuBar mainMenu;
 
     // Creates individual dropdown menus for each category within the overall menu
-    static JMenu parameterDropdown, displayDropdown,classDropdown,attributeDropdown,relationshipDropdown,saveLoadDropdown,helpDropdown;
+    static JMenu parameterDropdown, displayDropdown,classDropdown,attributeDropdown,relationshipDropdown,saveLoadDropdown,helpDropdown, CLIDropdown;
 
     // Individual menu items/buttons under their individual category menus
-    static JMenuItem display,addClass,deleteClass,renameClass,addAtt,delAtt,renameAtt,addRelation,delRelation,save,load,help,addPar, delPar, renPar;
+    static JMenuItem display,addClass,deleteClass,renameClass,addAtt,delAtt,renameAtt,addRelation,delRelation,save,load,help,addPar, delPar, renPar, openCLI;
 
 
     //creates a frame to be the main, base window to hold the entirety of the GUI
@@ -322,6 +324,15 @@ public class GUI extends JFrame {
             }
         });
         helpDropdown.add(help);
+        CLIDropdown = new JMenu("CLI");
+        openCLI = new JMenuItem(new AbstractAction("Open CLI") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.cview = true;
+                CLI.menu();
+            }
+        });
+        CLIDropdown.add(openCLI);
 
         // add individual dropdown menus to menu bar
         mainMenu.add(displayDropdown);
@@ -345,6 +356,12 @@ public class GUI extends JFrame {
             @Override
             public void windowClosing(WindowEvent event){
                 Main.gview = false;
+                if(!Main.cview){
+                    int a = JOptionPane.showConfirmDialog(guiWindow,"Are you sure you want to exit?", "Question", YES_NO_OPTION );
+                    if(a==0){
+                        System.exit(0);
+                    }
+                }
             }
         });
         displayGUI();
@@ -395,9 +412,9 @@ public class GUI extends JFrame {
             }
             String[] classes = Controller.listClasses();
             //Prints the line for each relationship
-            for (int i = 0; i < Controller.getCreatedClassesSize(); i++){
+            for (int i = 1; i < Controller.getCreatedClassesSize(); i++){
                 String[][] relationships = Controller.listRelationships();
-                for(int j = 0; i<relationships[i].length; j++){
+                for(int j = 0; j<relationships[i].length; j++){
                     //For each relationship, retrieve the coordinates of each, and draw a line between them
                     int class1XIndex = i * 2; //index of where the coordinates are in the array
                     int class1YIndex = class1XIndex + 1;
@@ -433,34 +450,37 @@ public class GUI extends JFrame {
             //number of fields and methods
             String[][] classDetails = Controller.listAllClassDetails(className);
             int height = 15 * (classDetails[Controller.DETAILS_METHODS].length + classDetails[Controller.DETAILS_FIELDS].length+2);
-            int width = className.length();
+            int width = g2.getFontMetrics().stringWidth(className);
             //Set width to largest of the attribute toStrings
             for(int i = 0; i < classDetails[Controller.DETAILS_METHODS].length; i++){
-                if(classDetails[Controller.DETAILS_METHODS][i].length() > width){
-                    width = classDetails[Controller.DETAILS_METHODS][i].length();
+                if(g2.getFontMetrics().stringWidth(classDetails[Controller.DETAILS_METHODS][i]) > width){
+                    width = g2.getFontMetrics().stringWidth(classDetails[Controller.DETAILS_METHODS][i]) + 10;
                 }
             }
             for(int i = 0; i < classDetails[Controller.DETAILS_FIELDS].length; i++){
-                if(classDetails[Controller.DETAILS_FIELDS][i].length() > width){
-                    width = classDetails[Controller.DETAILS_FIELDS][i].length();
+                if(g2.getFontMetrics().stringWidth(classDetails[Controller.DETAILS_FIELDS][i]) > width){
+                    width = g2.getFontMetrics().stringWidth(classDetails[Controller.DETAILS_FIELDS][i]) + 10;
                 }
             }
             //If the box is not a class, it needs a special header above the name
             boolean isClass = classDetails[Controller.DETAILS_NAME_TYPE][1].equals("CLASS");
             if(!isClass)
                 height += 15;
-            //the 8 here is just for good spacing
-            width *= 8;
+            String classType = "<<"+classDetails[Controller.DETAILS_NAME_TYPE][1].toLowerCase()+">>";
+            if(width<g2.getFontMetrics().stringWidth(classType)){
+                width = g2.getFontMetrics().stringWidth(classType);
+            }
+            //Add 10 to width for nice spacing
+            width += 10;
             //Outer rectangle
             g2.drawRect(x,y,width,height);
             //If the box is not a class, it needs a special header above the name
             if(!isClass) {
-                String classType = classDetails[Controller.DETAILS_NAME_TYPE][1].toLowerCase();
-                g2.drawString("<<" + classType + ">>", x + width / 2 - classType.length()/2 * 7, y + 15);
+                g2.drawString(classType, x + width / 2 - g2.getFontMetrics().stringWidth(classType)/2, y + 15);
                 y += 15;
             }
             //Write Class name
-            g2.drawString(className, x + width/2, y+15);
+            g2.drawString(className, x + ((width/2) - (g2.getFontMetrics().stringWidth(className)/2)), y+15);
             //Draw line under the name
             g2.drawLine(x,y + 17,x+width, y+17);
             //moves down twice the spacing of above
