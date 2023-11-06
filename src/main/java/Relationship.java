@@ -33,9 +33,9 @@ public class Relationship {
      * @throws IllegalArgumentException if any objects are null, or the enum type does not exist
      */
     public Relationship(final ClassBox otherClass, final String type){
-        if(otherClass == null || type == null){
+        if(otherClass == null || type == null)
             throw new IllegalArgumentException("null object passed to Relationship object");
-        }
+
         this.otherClass = otherClass;
         this.type = RelationshipType.valueOf(type.strip().toUpperCase());
     }
@@ -52,16 +52,6 @@ public class Relationship {
         }
         this.otherClass = otherClass;
         this.type = RelationshipType.values()[type - 1];
-    }
-
-    /**
-     * Prints the relationships in the format "[num] - [relationship type]
-     */
-    public static void printRelationshipTypes(){
-        RelationshipType[] relations = RelationshipType.values();
-        for(int i = 0; i < relations.length; ++i){
-            System.out.println((i + 1) + " - " + relations[i].name());
-        }
     }
 
     public static String[] listRelationshipTypes(){
@@ -81,6 +71,10 @@ public class Relationship {
     //Getters and setters are self-explanatory
     public ClassBox getOtherClass() {
         return this.otherClass;
+    }
+
+    public String getOtherClassName(){
+        return this.otherClass.getName();
     }
 
     public String getType() {
