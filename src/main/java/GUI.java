@@ -279,31 +279,6 @@ public class GUI extends JFrame {
             }
         });
         displayGUI();
-        //Want to stay idle if CLI view is not there; need to keep program running
-        Controller.addClass("shit",2);
-        Controller.addField("shit", "crap",1,"dumb fucking program");
-        LinkedList<String> params = new LinkedList<>();
-        params.add("AHH");
-        params.add("i'd rather be sleeping");
-        Controller.addMethod("shit","I hate this",1,"FUCK",params);
-        Controller.addField("shit","iHateThis",1,"please");
-
-        Controller.addClass("shit2",2);
-        Controller.addField("shit", "crap",1,"dumb fucking program");
-        Controller.addMethod("shit","I hate this",1,"FUCK",params);
-        Controller.addField("shit","iHateThis",1,"please");
-
-        Controller.addClass("fuck",1);
-        LinkedList<String> params2 = new LinkedList<>();
-        params2.add("ugh");
-        params2.add("i'd rather be dead");
-        Controller.addMethod("fuck","I hate this",1,"FUCK",params2);
-        Controller.addField("fuck","weeeeeeeee",1,"snore");
-
-        Controller.addClass("fuck2",1);
-        Controller.addMethod("fuck2","I hate this",1,"FUCK",params2);
-        Controller.addField("fuck2","weeeeeeeee",1,"snore");
-
         while(!Main.cview) {
             ;
         }
@@ -349,44 +324,95 @@ public class GUI extends JFrame {
             }
             String[] classes = Controller.listClasses();
             //Prints the line for each relationship
-            for (int i = 1; i < Controller.getCreatedClassesSize(); i++){
+            int rcount = 0;
+            for (int i = 0; i < Controller.getCreatedClassesSize(); i++){
                 String[][] relationships = Controller.listRelationships();
-                for(int j = 0; j<relationships[i].length; j++){
+                for(int j = 0; j<relationships[i].length; j++) {
                     //For each relationship, retrieve the coordinates of each, and draw a line between them
                     int class1XIndex = i * 2; //index of where the coordinates are in the array
                     int class1YIndex = class1XIndex + 1;
                     String[] relationship = relationships[i][j].split(" ");
                     int class2Index = -1;
-                    for(int k = 0;k<classes.length;k++){
-                        if (relationship[2].equals(classes[k])){
+                    for (int k = 0; k < classes.length; k++) {
+                        if (relationship[2].equals(classes[k])) {
                             class2Index = k;
                         }
                     }
                     int class2XIndex = class2Index * 2;
 
                     int class2YIndex = class2XIndex + 1;
-                    int class1XCoords = coords.get(class1XIndex);
-                    int class1YCoords = coords.get(class1YIndex);
-                    int class2XCoords = coords.get(class2XIndex);
-                    int class2YCoords = coords.get(class2YIndex);
+                    int class1XCoords = coords.get(class1XIndex) + (rcount * 20);
+                    int class1YCoords = coords.get(class1YIndex) - (rcount * 10);
+                    int class2XCoords = coords.get(class2XIndex) + (rcount * 20);
+                    int class2YCoords = coords.get(class2YIndex) - (rcount * 10);
                     class1XCoords += 10;
                     //scooches the line over to the right a bit so it isn't on the corner
                     class2XCoords += 10;
-                    g2.drawLine(class1XCoords, class1YCoords, class2XCoords, class2YCoords);
-                    //Display the relationship type at the line's midpoint
-                    //Finds midpoint and then prints the relationship string. "Aggregates" for example
-
-                    g2.drawString(relationship[1], ((class1XCoords + class2XCoords)/2), ((class1YCoords + class2YCoords)/2));
-
+                    String relationshipType = relationship[1];
+                    if (relationshipType.equals("aggregates") || relationshipType.equals("composes")) {
+                        if (class1YCoords == class2YCoords) {
+                            g2.drawLine(class1XCoords, class1YCoords + (rcount * 10), class1XCoords, class1YCoords - 20);
+                            g2.drawLine(class1XCoords, class1YCoords - 20, class2XCoords, class2YCoords - 20);
+                            g2.drawLine(class2XCoords, class2YCoords + (rcount * 10), class2XCoords, class2YCoords - 20);
+                        }
+                        else {
+                            if (class1XCoords < class2XCoords) {
+                                g2.drawLine(class1XCoords, class1YCoords + (rcount * 10), class1XCoords, class1YCoords - 20);
+                                g2.drawLine(class1XCoords, class1YCoords - 20, class1XCoords + getClassWidth(relationship[0], g2) + 40, class1YCoords - 20);
+                                g2.drawLine(class1XCoords + getClassWidth(relationship[0], g2) + 40, class1YCoords - 20, class1XCoords + getClassWidth(relationship[0], g2) + 40, class2YCoords - 20);
+                                g2.drawLine(class1XCoords + getClassWidth(relationship[0], g2) + 40, class2YCoords - 20, class2XCoords, class2YCoords - 20);
+                                g2.drawLine(class2XCoords, class2YCoords + (rcount * 10), class2XCoords, class2YCoords - 20);
+                            } else {
+                                g2.drawLine(class1XCoords, class1YCoords + (rcount * 10), class1XCoords, class1YCoords - 20);
+                                g2.drawLine(class1XCoords, class1YCoords - 20, class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class1YCoords - 20);
+                                g2.drawLine(class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class1YCoords - 20, class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class2YCoords - 20);
+                                g2.drawLine(class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class2YCoords - 20, class2XCoords, class2YCoords - 20);
+                                g2.drawLine(class2XCoords, class2YCoords + (rcount * 10), class2XCoords, class2YCoords - 20);
+                            }
+                        }
+                        class2YCoords += 10*rcount-20;
+                        int[] xpoints = {class2XCoords, class2XCoords - 10, class2XCoords, class2XCoords + 10};
+                        int[] ypoints = {class2YCoords, class2YCoords + 10, class2YCoords + 20, class2YCoords + 10};
+                        int npoints = 4;
+                        if (relationshipType.equals("aggregates")) {
+                            g2.drawPolygon(xpoints, ypoints, npoints);
+                        } else {
+                            g2.fillPolygon(xpoints, ypoints, npoints);
+                        }
+                    }
+                    else{
+                        if (class1YCoords == class2YCoords) {
+                            drawDashedLine(g2, class1XCoords, class1YCoords + (rcount * 10), class1XCoords, class1YCoords - 20);
+                            drawDashedLine(g2, class1XCoords, class1YCoords - 20, class2XCoords, class2YCoords - 20);
+                            drawDashedLine(g2, class2XCoords, class2YCoords + (rcount * 10), class2XCoords, class2YCoords - 20);
+                        }
+                        else {
+                            if (class1XCoords < class2XCoords) {
+                                drawDashedLine(g2, class1XCoords, class1YCoords + (rcount * 10), class1XCoords, class1YCoords - 20);
+                                drawDashedLine(g2, class1XCoords, class1YCoords - 20, class1XCoords + getClassWidth(relationship[0], g2) + 40, class1YCoords - 20);
+                                drawDashedLine(g2, class1XCoords + getClassWidth(relationship[0], g2) + 40, class1YCoords - 20, class1XCoords + getClassWidth(relationship[0], g2) + 40, class2YCoords - 20);
+                                drawDashedLine(g2, class1XCoords + getClassWidth(relationship[0], g2) + 40, class2YCoords - 20, class2XCoords, class2YCoords - 20);
+                                drawDashedLine(g2, class2XCoords, class2YCoords + (rcount * 10), class2XCoords, class2YCoords - 20);
+                            } else {
+                                drawDashedLine(g2, class1XCoords, class1YCoords + (rcount * 10), class1XCoords, class1YCoords - 20);
+                                drawDashedLine(g2, class1XCoords, class1YCoords - 20, class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class1YCoords - 20);
+                                drawDashedLine(g2, class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class1YCoords - 20, class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class2YCoords - 20);
+                                drawDashedLine(g2, class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class2YCoords - 20, class2XCoords, class2YCoords - 20);
+                                drawDashedLine(g2, class2XCoords, class2YCoords + (rcount * 10), class2XCoords, class2YCoords - 20);
+                            }
+                        }
+                        class2YCoords += 10*rcount-20;
+                        int[] xpoints = {class2XCoords,class2XCoords-10,class2XCoords+10};
+                        int[] ypoints = {class2YCoords+20,class2YCoords,class2YCoords};
+                        int npoints = 3;
+                        g2.drawPolygon(xpoints, ypoints, npoints);
+                    }
+                    rcount++;
                 }
             }
         }
-
-        //Draws the class boxes
-        public void drawClass(String className, int x, int y, Graphics2D g2){
-            //number of fields and methods
+        public int getClassWidth(String className, Graphics2D g2){
             String[][] classDetails = Controller.listAllClassDetails(className);
-            int height = 15 * (classDetails[Controller.DETAILS_METHODS].length + classDetails[Controller.DETAILS_FIELDS].length+2);
             int width = g2.getFontMetrics().stringWidth(className);
             //Set width to largest of the attribute toStrings
             for(int i = 0; i < classDetails[Controller.DETAILS_METHODS].length; i++){
@@ -399,19 +425,29 @@ public class GUI extends JFrame {
                     width = g2.getFontMetrics().stringWidth(classDetails[Controller.DETAILS_FIELDS][i]) + 10;
                 }
             }
-            //If the box is not a class, it needs a special header above the name
-            boolean isClass = classDetails[Controller.DETAILS_NAME_TYPE][1].equals("CLASS");
-            if(!isClass)
-                height += 15;
+
             String classType = "<<"+classDetails[Controller.DETAILS_NAME_TYPE][1].toLowerCase()+">>";
             if(width<g2.getFontMetrics().stringWidth(classType)){
                 width = g2.getFontMetrics().stringWidth(classType);
             }
             //Add 10 to width for nice spacing
             width += 10;
+            return width;
+        }
+        //Draws the class boxes
+        public void drawClass(String className, int x, int y, Graphics2D g2){
+            //number of fields and methods
+            String[][] classDetails = Controller.listAllClassDetails(className);
+            int height = 15 * (classDetails[Controller.DETAILS_METHODS].length + classDetails[Controller.DETAILS_FIELDS].length+2);
+            int width = getClassWidth(className, g2);
+            //If the box is not a class, it needs a special header above the name
+            boolean isClass = classDetails[Controller.DETAILS_NAME_TYPE][1].equals("CLASS");
+            if(!isClass)
+                height += 15;
             //Outer rectangle
             g2.drawRect(x,y,width,height);
             //If the box is not a class, it needs a special header above the name
+            String classType = "<<"+classDetails[Controller.DETAILS_NAME_TYPE][1].toLowerCase()+">>";
             if(!isClass) {
                 g2.drawString(classType, x + width / 2 - g2.getFontMetrics().stringWidth(classType)/2, y + 15);
                 y += 15;
@@ -434,6 +470,13 @@ public class GUI extends JFrame {
                 y += 15;
             }
 
+        }
+        public static void drawDashedLine(Graphics2D g, int x1, int y1, int x2, int y2){
+            Graphics2D g2d = (Graphics2D) g.create();
+            Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
+            g2d.setStroke(dashed);
+            g2d.drawLine(x1, y1, x2, y2);
+            g2d.dispose();
         }
     }
 
