@@ -13,10 +13,10 @@ public class GUI extends JFrame {
     static JMenuBar mainMenu;
 
     // Creates individual dropdown menus for each category within the overall menu
-    static JMenu parameterDropdown, displayDropdown,classDropdown,attributeDropdown,relationshipDropdown,saveLoadDropdown,helpDropdown;
+    static JMenu parameterDropdown, displayDropdown,classDropdown,attributeDropdown,relationshipDropdown,saveLoadDropdown,helpDropdown, CLIDropdown;
 
     // Individual menu items/buttons under their individual category menus
-    static JMenuItem display,addClass,deleteClass,renameClass,addAtt,delAtt,renameAtt,addRelation,delRelation,save,load,help,addPar, delPar, renPar;
+    static JMenuItem display,addClass,deleteClass,renameClass,addAtt,delAtt,renameAtt,addRelation,delRelation,save,load,help,addPar, delPar, renPar, openCLI;
 
 
     //creates a frame to be the main, base window to hold the entirety of the GUI
@@ -238,6 +238,15 @@ public class GUI extends JFrame {
             }
         });
         helpDropdown.add(help);
+        CLIDropdown = new JMenu("CLI");
+        openCLI = new JMenuItem(new AbstractAction("Open CLI") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.cview = true;
+                CLI.menu();
+            }
+        });
+        CLIDropdown.add(openCLI);
 
         // add individual dropdown menus to menu bar
         mainMenu.add(displayDropdown);
