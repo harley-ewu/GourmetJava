@@ -80,6 +80,7 @@ public class GUI extends JFrame {
             @Override
 
             //TODO not done. Popupmenu isn't complete.
+            //Adds an attribute when the "Add attribute" button is clicked
             public void actionPerformed(ActionEvent e) {
                 String attType = JOptionPane.showInputDialog("Do you want to add a field or a method? \n" +
                         "Type '1' for field, '2' for method");
@@ -90,13 +91,54 @@ public class GUI extends JFrame {
 
                    if(attTypeAsInt == 1){ //adding a field
                        String className = JOptionPane.showInputDialog("Enter the name of the class you are adding the field to");
+                       //TODO use existentialcrisis here
                        String fieldName = JOptionPane.showInputDialog("What would you like to call your field?");
+                       //Makes sure the visibility choice will pair with one of the 3 possible visibility options
+                       int visibilityChoice = 0;
+                       while (visibilityChoice < 1 || visibilityChoice > 3){
+                           String visibilityChoiceAsString = JOptionPane.showInputDialog("Enter the visibility number below. \n" +
+                                   "1.) Private \n 2.) Public \n 3.) Protected");
+                           visibilityChoice = Integer.parseInt(visibilityChoiceAsString);
+                       }
+                       String dataType = JOptionPane.showInputDialog("What is the data type for this field? \n" +
+                               "Example: int, string");
+                       //creates field
+                       Controller.addField(className,fieldName, visibilityChoice, dataType);
+                       displayGUI();
+
                    }
                    else if (attTypeAsInt == 2) { //adding a method
+                       String className = JOptionPane.showInputDialog("Enter the name of the class you are adding this method to");
+                       String methodName = JOptionPane.showInputDialog("What is the name of this new method?");
+                       int visibilityChoice = 0;
+                       while (visibilityChoice < 1 || visibilityChoice > 3){
+                           String visibilityChoiceAsString = JOptionPane.showInputDialog("Enter the visibility number below. \n" +
+                                   "1.) Private \n 2.) Public \n 3.) Protected");
+                           visibilityChoice = Integer.parseInt(visibilityChoiceAsString);
+                       }
+                       String returnType = JOptionPane.showInputDialog("What is the return type of this method?");
+                       String params = JOptionPane.showInputDialog("What parameters does this method have?");
+                       LinkedList<String> parameters = new LinkedList<>();
+                       parameters.add(params);
+                       //TODO come back to this when my brain turns back on and finish allowing more params to be added
+                       /*boolean moreParams = false;
+                       String areMoreParams = JOptionPane.showInputDialog("Does this method have any more parameters?\n" +
+                               "Please enter 'yes' to add more, or any key to continue.");
+                       if(areMoreParams.equalsIgnoreCase("yes")){
+                           moreParams = true;
+                       }
+                       while (moreParams = true){
+                           String params2 = JOptionPane.showInputDialog("What parameters does this method have?");
+                       } */
 
+                       //Creates a new method with the given inputs from the user
+                       Controller.addMethod(className,methodName,visibilityChoice,returnType, parameters);
+                       displayGUI();
                    }
                    else{
-
+                       attType = JOptionPane.showInputDialog("Invalid Input, please try again. \n" +
+                               "Do you want to add a field or a method? \n" +
+                               "Type '1' for field, '2' for method");
                    }
                 } catch (Exception ex){
                      attType = JOptionPane.showInputDialog("Please enter either '1' or '2'. Please try again. \nDo you want to add a field or a method? \n" +
@@ -105,7 +147,7 @@ public class GUI extends JFrame {
                     return;
                 }
 
-                //Pop up menu for buttons
+                //Pop up menu for buttons. This will be returned to if I have time to go back and make this prettier
                     /* JPopupMenu fieldOrMethod = new JPopupMenu("Which would you like to add?");
                     JMenuItem field = new JMenuItem("Field");
                     JMenuItem method = new JMenuItem("Method");
@@ -116,6 +158,8 @@ public class GUI extends JFrame {
 
             }
         });
+
+        //Deletes an attribute from a class
         delAtt = new JMenuItem(new AbstractAction("Delete Attribute") {
             @Override
             public void actionPerformed(ActionEvent e) {
