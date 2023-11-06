@@ -16,7 +16,7 @@ public class MethodsTest {
         // String is our second parameter
         params.add("String");
         // Making a new method and assigning params to the constructor parameter
-        Methods meth = new Methods("printID", 1, "void", params);
+        Methods meth = new Methods("printID", 2, "void", params);
         String expected = "+printID(int, String) : void";
         // This will make sure the format of the string is correct
         assertEquals(expected, meth.toString());

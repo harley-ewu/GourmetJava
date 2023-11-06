@@ -12,7 +12,6 @@ public class RelationshipBuilderTest {
         assertEquals(9, builder.getFirstIndex());
         assertEquals(6, builder.getSecondIndex());
         assertEquals(3, builder.getRelationshipType());
-        assertEquals("parent", builder.getRelationshipType());        
     }
     
 }
