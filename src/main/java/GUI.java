@@ -39,6 +39,7 @@ public class GUI extends JFrame {
         displayDropdown.add(display);
 
 
+        //Adds a class and updates the display to show the new class in a box
         classDropdown = new JMenu("Class");
         addClass = new JMenuItem(new AbstractAction("Add Class") {
             @Override
@@ -54,6 +55,8 @@ public class GUI extends JFrame {
                 displayGUI();
             }
         });
+
+        //Deletes a class and removes it from the display
         deleteClass = new JMenuItem(new AbstractAction("Delete Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -64,6 +67,8 @@ public class GUI extends JFrame {
                 displayGUI();
             }
         });
+
+        //renames an existing class and updates the display with the new class name
         renameClass = new JMenuItem(new AbstractAction("Rename Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -81,7 +86,7 @@ public class GUI extends JFrame {
         addAtt = new JMenuItem(new AbstractAction("Add Attribute") {
             @Override
 
-            //TODO not done. Popupmenu isn't complete.
+            //Adds an attribute when the "Add attribute" button is clicked
             public void actionPerformed(ActionEvent e) {
                 String attType = JOptionPane.showInputDialog("Do you want to add a field or a method? \n" +
                         "Type '1' for field, '2' for method");
@@ -92,13 +97,54 @@ public class GUI extends JFrame {
 
                    if(attTypeAsInt == 1){ //adding a field
                        String className = JOptionPane.showInputDialog("Enter the name of the class you are adding the field to");
+                       //TODO use existentialcrisis here
                        String fieldName = JOptionPane.showInputDialog("What would you like to call your field?");
+                       //Makes sure the visibility choice will pair with one of the 3 possible visibility options
+                       int visibilityChoice = 0;
+                       while (visibilityChoice < 1 || visibilityChoice > 3){
+                           String visibilityChoiceAsString = JOptionPane.showInputDialog("Enter the visibility number below. \n" +
+                                   "1.) Private \n 2.) Public \n 3.) Protected");
+                           visibilityChoice = Integer.parseInt(visibilityChoiceAsString);
+                       }
+                       String dataType = JOptionPane.showInputDialog("What is the data type for this field? \n" +
+                               "Example: int, string");
+                       //creates field
+                       Controller.addField(className,fieldName, visibilityChoice, dataType);
+                       displayGUI();
+
                    }
                    else if (attTypeAsInt == 2) { //adding a method
+                       String className = JOptionPane.showInputDialog("Enter the name of the class you are adding this method to");
+                       String methodName = JOptionPane.showInputDialog("What is the name of this new method?");
+                       int visibilityChoice = 0;
+                       while (visibilityChoice < 1 || visibilityChoice > 3){
+                           String visibilityChoiceAsString = JOptionPane.showInputDialog("Enter the visibility number below. \n" +
+                                   "1.) Private \n 2.) Public \n 3.) Protected");
+                           visibilityChoice = Integer.parseInt(visibilityChoiceAsString);
+                       }
+                       String returnType = JOptionPane.showInputDialog("What is the return type of this method?");
+                       String params = JOptionPane.showInputDialog("What parameters does this method have?");
+                       LinkedList<String> parameters = new LinkedList<>();
+                       parameters.add(params);
+                       //TODO come back to this when my brain turns back on and finish allowing more params to be added
+                       /*boolean moreParams = false;
+                       String areMoreParams = JOptionPane.showInputDialog("Does this method have any more parameters?\n" +
+                               "Please enter 'yes' to add more, or any key to continue.");
+                       if(areMoreParams.equalsIgnoreCase("yes")){
+                           moreParams = true;
+                       }
+                       while (moreParams = true){
+                           String params2 = JOptionPane.showInputDialog("What parameters does this method have?");
+                       } */
 
+                       //Creates a new method with the given inputs from the user
+                       Controller.addMethod(className,methodName,visibilityChoice,returnType, parameters);
+                       displayGUI();
                    }
                    else{
-
+                       attType = JOptionPane.showInputDialog("Invalid Input, please try again. \n" +
+                               "Do you want to add a field or a method? \n" +
+                               "Type '1' for field, '2' for method");
                    }
                 } catch (Exception ex){
                      attType = JOptionPane.showInputDialog("Please enter either '1' or '2'. Please try again. \nDo you want to add a field or a method? \n" +
@@ -107,7 +153,7 @@ public class GUI extends JFrame {
                     return;
                 }
 
-                //Pop up menu for buttons
+                //Pop up menu for buttons. This will be returned to if I have time to go back and make this prettier
                     /* JPopupMenu fieldOrMethod = new JPopupMenu("Which would you like to add?");
                     JMenuItem field = new JMenuItem("Field");
                     JMenuItem method = new JMenuItem("Method");
@@ -118,11 +164,45 @@ public class GUI extends JFrame {
 
             }
         });
+
+        //Deletes an attribute from a class
         delAtt = new JMenuItem(new AbstractAction("Delete Attribute") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //String oldName = JOptionPane.showInputDialog("What is the name of the class you want to rename? ");
-                System.exit(15);
+                String fieldOrMethodAsString = JOptionPane.showInputDialog("Are you wanting to delete a field or a method? \n" +
+                        "Type 1 for 'field' or 2 for 'method'");
+                int fieldOrMethod = Integer.parseInt(fieldOrMethodAsString);
+
+                if (fieldOrMethod == 1) {
+                    String className = JOptionPane.showInputDialog("What is the name of the class you want to remove a field from?");
+                    String fieldName = JOptionPane.showInputDialog("What is the name of the field you wish to delete?");
+                    //Controller delete field method is called with user inputs
+                    Controller.deleteField(className, fieldName);
+                    /*if (Controller.deleteField(className, fieldName)) {
+                        System.out.println("Field " + fieldName + " was removed from class " + className);
+                    } else {
+                        System.out.println("Failed to delete field. Please try again");
+                    } */
+                    displayGUI();
+
+
+                } else if (fieldOrMethod == 2) {
+                    String className = JOptionPane.showInputDialog("What is the name of the class you want to remove a Method from?");
+                    String methodName = JOptionPane.showInputDialog("What is the name of the method you wish to delete?");
+                    //Deletes Method with input from user
+                    Controller.deleteMethod(className, methodName);
+
+                    /*if (Controller.deleteMethod(className, methodName)) {
+                        System.out.println("Method " + methodName + " was removed from class " + className);
+                    } else {
+                        System.out.println("Failed to delete method. Please try again");
+                    } */
+                    displayGUI();
+                } else {
+                    fieldOrMethodAsString = JOptionPane.showInputDialog(" Invalid input, please try again. \n Are you wanting to delete a field or a method? \n" +
+                            "Type 1 for 'field' or 2 for 'method'");
+                }
+
             }
         });
         renameAtt = new JMenuItem(new AbstractAction("Rename Attribute") {
@@ -136,7 +216,8 @@ public class GUI extends JFrame {
         attributeDropdown.add(renameAtt);
 
         parameterDropdown = new JMenu("Parameters");
-        //TODO popup saying if these below param methods were successful or not
+
+        //Adds a parameter to a method attached to a class
         addPar = new JMenuItem(new AbstractAction("Add Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -146,6 +227,8 @@ public class GUI extends JFrame {
                 Controller.addParam(classWMethod, methodName, paramName);
             }
         });
+
+        //deletes an existing parameter from a method in a class
         delPar = new JMenuItem(new AbstractAction("Delete Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -155,6 +238,8 @@ public class GUI extends JFrame {
                 Controller.deleteParam(classWMethod, methodName, paramName);
             }
         });
+
+        //renames an existing parameter
         renPar = new JMenuItem(new AbstractAction("Rename Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -170,21 +255,22 @@ public class GUI extends JFrame {
         parameterDropdown.add(renPar);
 
         relationshipDropdown = new JMenu("Relationship");
+
+        //Adds a relationship between two existing classes
         addRelation = new JMenuItem(new AbstractAction("Add Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String firstClass = JOptionPane.showInputDialog("What is the name of the first class you want to have a relationship?\n" +
                         "(The lower/to class, e.g this implements the other class)");
-                //TODO maybe change this to buttons instead of string input?
                 String secondClass = JOptionPane.showInputDialog("What is the name of the second class you want to have a relationship?\n" +
                         "(The higher/from class, e.g the other class implements this)");
+                String typeAsString = JOptionPane.showInputDialog("Please enter the relationship type's number below\n" +
+                        "1.) Aggregation \n 2.) Composition \n 3.) Implementation \n 4.) Realization");
+                int type = Integer.parseInt(typeAsString);
+                Controller.addRelationship(firstClass, secondClass, type);
+                displayGUI();
 
-                //We need to pop up list the relationship types, perhaps in a popup menu
-                //Grab input for the relationship type
                 //Different prompts letting the user know if the relationship was successfully added or not
-
-
-                //System.exit(1);
             }
         });
         delRelation = new JMenuItem(new AbstractAction("Delete Relationship") {
@@ -280,29 +366,6 @@ public class GUI extends JFrame {
         });
         displayGUI();
         //Want to stay idle if CLI view is not there; need to keep program running
-        Controller.addClass("shit",2);
-        Controller.addField("shit", "crap",1,"dumb fucking program");
-        LinkedList<String> params = new LinkedList<>();
-        params.add("AHH");
-        params.add("i'd rather be sleeping");
-        Controller.addMethod("shit","I hate this",1,"FUCK",params);
-        Controller.addField("shit","iHateThis",1,"please");
-
-        Controller.addClass("shit2",2);
-        Controller.addField("shit", "crap",1,"dumb fucking program");
-        Controller.addMethod("shit","I hate this",1,"FUCK",params);
-        Controller.addField("shit","iHateThis",1,"please");
-
-        Controller.addClass("fuck",1);
-        LinkedList<String> params2 = new LinkedList<>();
-        params2.add("ugh");
-        params2.add("i'd rather be dead");
-        Controller.addMethod("fuck","I hate this",1,"FUCK",params2);
-        Controller.addField("fuck","weeeeeeeee",1,"snore");
-
-        Controller.addClass("fuck2",1);
-        Controller.addMethod("fuck2","I hate this",1,"FUCK",params2);
-        Controller.addField("fuck2","weeeeeeeee",1,"snore");
 
         while(!Main.cview) {
             ;
