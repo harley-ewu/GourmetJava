@@ -225,6 +225,7 @@ public class GUI extends JFrame {
                 String methodName = JOptionPane.showInputDialog("What is the name of the method you are adding the param to?");
                 String paramName = JOptionPane.showInputDialog("What is the new parameter you are adding?");
                 Controller.addParam(classWMethod, methodName, paramName);
+                displayGUI();
             }
         });
 
@@ -236,6 +237,7 @@ public class GUI extends JFrame {
                 String methodName = JOptionPane.showInputDialog("What is the name of the method you are deleting the param from?");
                 String paramName = JOptionPane.showInputDialog("What is the parameter you are deleting?");
                 Controller.deleteParam(classWMethod, methodName, paramName);
+                displayGUI();
             }
         });
 
@@ -248,6 +250,7 @@ public class GUI extends JFrame {
                 String paramName = JOptionPane.showInputDialog("Which parameter do you want to rename?");
                 String newParamName = JOptionPane.showInputDialog("What do you want to rename it to?");
                 Controller.renameParam(classWMethod,methodName, paramName, newParamName);
+                displayGUI();
             }
         });
         parameterDropdown.add(addPar);
