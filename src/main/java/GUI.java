@@ -37,6 +37,7 @@ public class GUI extends JFrame {
         displayDropdown.add(display);
 
 
+        //Adds a class and updates the display to show the new class in a box
         classDropdown = new JMenu("Class");
         addClass = new JMenuItem(new AbstractAction("Add Class") {
             @Override
@@ -52,6 +53,8 @@ public class GUI extends JFrame {
                 displayGUI();
             }
         });
+
+        //Deletes a class and removes it from the display
         deleteClass = new JMenuItem(new AbstractAction("Delete Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -62,6 +65,8 @@ public class GUI extends JFrame {
                 displayGUI();
             }
         });
+
+        //renames an existing class and updates the display with the new class name
         renameClass = new JMenuItem(new AbstractAction("Rename Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -78,7 +83,6 @@ public class GUI extends JFrame {
         attributeDropdown = new JMenu("Attribute");
         addAtt = new JMenuItem(new AbstractAction("Add Attribute") {
             @Override
-
 
             //Adds an attribute when the "Add attribute" button is clicked
             public void actionPerformed(ActionEvent e) {
@@ -211,6 +215,7 @@ public class GUI extends JFrame {
 
         parameterDropdown = new JMenu("Parameters");
 
+        //Adds a parameter to a method attached to a class
         addPar = new JMenuItem(new AbstractAction("Add Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -220,6 +225,8 @@ public class GUI extends JFrame {
                 Controller.addParam(classWMethod, methodName, paramName);
             }
         });
+
+        //deletes an existing parameter from a method in a class
         delPar = new JMenuItem(new AbstractAction("Delete Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -229,6 +236,8 @@ public class GUI extends JFrame {
                 Controller.deleteParam(classWMethod, methodName, paramName);
             }
         });
+
+        //renames an existing parameter
         renPar = new JMenuItem(new AbstractAction("Rename Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -244,6 +253,8 @@ public class GUI extends JFrame {
         parameterDropdown.add(renPar);
 
         relationshipDropdown = new JMenu("Relationship");
+
+        //Adds a relationship between two existing classes
         addRelation = new JMenuItem(new AbstractAction("Add Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
