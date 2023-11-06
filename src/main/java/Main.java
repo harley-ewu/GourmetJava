@@ -3,8 +3,10 @@ package src.main.java;
 import java.util.Scanner;
 
 public class Main {
+    public static boolean cview = false;
+    public static boolean gview = false;
+    public static GUI mainContainer = new GUI();
     public static void main(String[] args) {
-        UserInterface m = new UserInterface();
         //System.out.println("Welcome to Gourmet Java's UML Editor!");
         System.out.println("Welcome to Gourmet Java's UML Editor!");
         System.out.println("Let's get started!");
@@ -12,16 +14,26 @@ public class Main {
         System.out.println("When you see an option you want, select the corresponding number and hit the enter key.");
         System.out.println("Answer the prompts that follow, hitting enter after each response, and we'll take care of the rest!");
         System.out.println("Happy editing!");
+        System.out.println("Which view would you like to begin in? (\"c\" for command line or \"g\" for graphic interface");
+        System.out.print("(c/g):");
         Scanner kb = new Scanner(System.in);
-        String input = "";
-        while (!input.equals("7")) {
-            m.printMenu();
-            input = kb.nextLine();
-            m.menu(input);
+        char input = '.';
+        while(!(input=='c'||input=='g')){
+            input = kb.nextLine().charAt(0);
+            if(input=='c'){
+                cview = true;
+                CLI.menu();
+            }
+            else if (input=='g'){
+                gview = true;
+                GUI.startGUIMenu();
+            }
+            else{
+                System.out.println("Invalid option! Please try again");
+                System.out.print("(c/g):");
+            }
         }
-        System.out.println("Program Closed! Bye!");
     }
 
-       // This is a test
 
 }
