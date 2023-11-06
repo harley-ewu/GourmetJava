@@ -42,7 +42,12 @@ public class Controller {
 
     public static boolean addRelationship(final String cb1, final String cb2, final int type) {
         return ModelDiagram.addRelationship(cb1, cb2, type);
+    }
 
+    //Adds a relationship with the type being an integer stored as a String (ex: "1" or "2")
+    //Does not accept the name of the enum itself (maybe add later)
+    public static boolean addRelationship(final String parentClass, final String childClass, final String type){
+        return ModelDiagram.addRelationship(parentClass,childClass,type);
     }
 
     public static String[] listClassMethods(final String name) {
@@ -137,9 +142,6 @@ public class Controller {
         return ClassBox.listClassTypes();
     }
 
-    public static String[] listAttributeTypes() {
-        return Attribute.listAttributeTypes();
-    }
 
     public static String[] listVisibilityTypes() {
         return ClassBox.listVisibilityTypes();
@@ -174,7 +176,8 @@ public class Controller {
                 "2.) List all details for every class",
                 "3.) List all details for one specific class",
                 "4.) List all relationships for every class",
-
+                "5.) List help for all the options in this menu and go back to the main menu",
+                "6.) Back"
         };
     }
 
@@ -184,7 +187,7 @@ public class Controller {
                 "2.) Delete Class",
                 "3.) Rename Class",
                 "4.) Help",
-                "5.) Back",
+                "5.) Back"
         };
     }
 
@@ -195,7 +198,7 @@ public class Controller {
                 "3.) Rename Attribute",
                 "4.) Edit Method Parameters",
                 "5.) Help",
-                "6.) Back",
+                "6.) Back"
         };
     }
 
@@ -204,7 +207,7 @@ public class Controller {
                 "1.) Add Relationship",
                 "2.) Delete Relationship",
                 "3.) Help",
-                "4.) Back",
+                "4.) Back"
         };
     }
 
@@ -213,7 +216,7 @@ public class Controller {
                 "1.) Save",
                 "2.) Load",
                 "3.) Help",
-                "4.) Back",
+                "4.) Back"
         };
     }
 
@@ -223,7 +226,7 @@ public class Controller {
                 "2.) Delete Param in method",
                 "3.) Rename Param in method",
                 "4.) Help",
-                "5.) Back",
+                "5.) Back"
         };
     }
 
@@ -240,7 +243,7 @@ public class Controller {
                 "This command will display relationships between classes as well as the type of relationships.",
                 "4.) List class details.",
                 "This command shows all created classes with their index.",
-                "It asks you to enter the index of the class you want to see. It will then show you all the elements associated with that class, such as type, attributes, and relationships.",
+                "It asks you to enter the index of the class you want to see. It will then show you all the elements associated with that class, such as type, attributes, and relationships."
         };
     }
 
@@ -254,7 +257,7 @@ public class Controller {
                 "2.) Delete a class",
                 "This command deletes a previously created class. It will ask you for the index of the class you want to delete and remove it from created classes.",
                 "3.) Rename a class",
-                "This command will ask for an index of the class you would like to rename. It will then ask you for the new name and replace the old name associated with the class.",
+                "This command will ask for an index of the class you would like to rename. It will then ask you for the new name and replace the old name associated with the class."
         };
     }
 
