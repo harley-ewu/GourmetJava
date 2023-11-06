@@ -79,7 +79,7 @@ public class GUI extends JFrame {
         addAtt = new JMenuItem(new AbstractAction("Add Attribute") {
             @Override
 
-            //TODO not done. Popupmenu isn't complete.
+
             //Adds an attribute when the "Add attribute" button is clicked
             public void actionPerformed(ActionEvent e) {
                 String attType = JOptionPane.showInputDialog("Do you want to add a field or a method? \n" +
@@ -163,8 +163,40 @@ public class GUI extends JFrame {
         delAtt = new JMenuItem(new AbstractAction("Delete Attribute") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //String oldName = JOptionPane.showInputDialog("What is the name of the class you want to rename? ");
-                System.exit(15);
+                String fieldOrMethodAsString = JOptionPane.showInputDialog("Are you wanting to delete a field or a method? \n" +
+                        "Type 1 for 'field' or 2 for 'method'");
+                int fieldOrMethod = Integer.parseInt(fieldOrMethodAsString);
+
+                if (fieldOrMethod == 1) {
+                    String className = JOptionPane.showInputDialog("What is the name of the class you want to remove a field from?");
+                    String fieldName = JOptionPane.showInputDialog("What is the name of the field you wish to delete?");
+                    //Controller delete field method is called with user inputs
+                    Controller.deleteField(className, fieldName);
+                    /*if (Controller.deleteField(className, fieldName)) {
+                        System.out.println("Field " + fieldName + " was removed from class " + className);
+                    } else {
+                        System.out.println("Failed to delete field. Please try again");
+                    } */
+                    displayGUI();
+
+
+                } else if (fieldOrMethod == 2) {
+                    String className = JOptionPane.showInputDialog("What is the name of the class you want to remove a Method from?");
+                    String methodName = JOptionPane.showInputDialog("What is the name of the method you wish to delete?");
+                    //Deletes Method with input from user
+                    Controller.deleteMethod(className, methodName);
+
+                    /*if (Controller.deleteMethod(className, methodName)) {
+                        System.out.println("Method " + methodName + " was removed from class " + className);
+                    } else {
+                        System.out.println("Failed to delete method. Please try again");
+                    } */
+                    displayGUI();
+                } else {
+                    fieldOrMethodAsString = JOptionPane.showInputDialog(" Invalid input, please try again. \n Are you wanting to delete a field or a method? \n" +
+                            "Type 1 for 'field' or 2 for 'method'");
+                }
+
             }
         });
         renameAtt = new JMenuItem(new AbstractAction("Rename Attribute") {
@@ -178,7 +210,7 @@ public class GUI extends JFrame {
         attributeDropdown.add(renameAtt);
 
         parameterDropdown = new JMenu("Parameters");
-        //TODO popup saying if these below param methods were successful or not
+
         addPar = new JMenuItem(new AbstractAction("Add Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -223,6 +255,7 @@ public class GUI extends JFrame {
                         "1.) Aggregation \n 2.) Composition \n 3.) Implementation \n 4.) Realization");
                 int type = Integer.parseInt(typeAsString);
                 Controller.addRelationship(firstClass, secondClass, type);
+                displayGUI();
 
                 //Different prompts letting the user know if the relationship was successfully added or not
             }
