@@ -79,18 +79,41 @@ public class GUI extends JFrame {
         addAtt = new JMenuItem(new AbstractAction("Add Attribute") {
             @Override
 
-            //TODO not done. Popupmenu isn't complete. Paused to focus on that friggin class box drawing
+            //TODO not done. Popupmenu isn't complete.
             public void actionPerformed(ActionEvent e) {
-                //String oldName = JOptionPane.showInputDialog("Do you want to add a field or a method? ");
-                //Pop up menu for buttons
-                JPopupMenu fieldOrMethod = new JPopupMenu("Which would you like to add?");
-                JMenuItem field = new JMenuItem("Field");
-                JMenuItem method = new JMenuItem("Method");
-                fieldOrMethod.add(field);
-                fieldOrMethod.add(method);
-                fieldOrMethod.setVisible(true);
+                String attType = JOptionPane.showInputDialog("Do you want to add a field or a method? \n" +
+                        "Type '1' for field, '2' for method");
+                int attTypeAsInt = 0;
 
-                //System.exit(14);
+                try {
+                   attTypeAsInt = Integer.parseInt(attType);
+
+                   if(attTypeAsInt == 1){ //adding a field
+                       String className = JOptionPane.showInputDialog("Enter the name of the class you are adding the field to");
+                       String fieldName = JOptionPane.showInputDialog("What would you like to call your field?");
+                   }
+                   else if (attTypeAsInt == 2) { //adding a method
+
+                   }
+                   else{
+
+                   }
+                } catch (Exception ex){
+                     attType = JOptionPane.showInputDialog("Please enter either '1' or '2'. Please try again. \nDo you want to add a field or a method? \n" +
+                            "Type '1' for field, '2' for method");
+                    //System.out.println("");
+                    return;
+                }
+
+                //Pop up menu for buttons
+                    /* JPopupMenu fieldOrMethod = new JPopupMenu("Which would you like to add?");
+                    JMenuItem field = new JMenuItem("Field");
+                    JMenuItem method = new JMenuItem("Method");
+                    fieldOrMethod.add(field);
+                    fieldOrMethod.add(method);
+                    fieldOrMethod.setVisible(true);
+                     */
+
             }
         });
         delAtt = new JMenuItem(new AbstractAction("Delete Attribute") {
@@ -111,22 +134,33 @@ public class GUI extends JFrame {
         attributeDropdown.add(renameAtt);
 
         parameterDropdown = new JMenu("Parameters");
+        //TODO popup saying if these below param methods were successful or not
         addPar = new JMenuItem(new AbstractAction("Add Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(14);
+                String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to add a parameter to?");
+                String methodName = JOptionPane.showInputDialog("What is the name of the method you are adding the param to?");
+                String paramName = JOptionPane.showInputDialog("What is the new parameter you are adding?");
+                Controller.addParam(classWMethod, methodName, paramName);
             }
         });
         delPar = new JMenuItem(new AbstractAction("Delete Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(15);
+                String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to delete a parameter from?");
+                String methodName = JOptionPane.showInputDialog("What is the name of the method you are deleting the param from?");
+                String paramName = JOptionPane.showInputDialog("What is the parameter you are deleting?");
+                Controller.deleteParam(classWMethod, methodName, paramName);
             }
         });
         renPar = new JMenuItem(new AbstractAction("Rename Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(16);
+                String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to rename a parameter in?");
+                String methodName = JOptionPane.showInputDialog("What is the name of the method containing the parameter you are renaming?");
+                String paramName = JOptionPane.showInputDialog("Which parameter do you want to rename?");
+                String newParamName = JOptionPane.showInputDialog("What do you want to rename it to?");
+                Controller.renameParam(classWMethod,methodName, paramName, newParamName);
             }
         });
         parameterDropdown.add(addPar);
@@ -143,29 +177,50 @@ public class GUI extends JFrame {
                 String secondClass = JOptionPane.showInputDialog("What is the name of the second class you want to have a relationship?\n" +
                         "(The higher/from class, e.g the other class implements this)");
 
+                //We need to pop up list the relationship types, perhaps in a popup menu
+                //Grab input for the relationship type
+                //Different prompts letting the user know if the relationship was successfully added or not
+
+
                 //System.exit(1);
             }
         });
         delRelation = new JMenuItem(new AbstractAction("Delete Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(1);
+                String firstClass = JOptionPane.showInputDialog("What is the name of the first class with this relationship? ");
+                String secondClass = JOptionPane.showInputDialog("What is the name of the second class with this relationship? ");
+                //TODO Prompt with a message asking "Delete the relationship from firstClass to secondClass?" with an okay or cancel button
+                String doubleCheckDelete = JOptionPane.showInputDialog("Delete the relationship between " + firstClass + " and " + secondClass + "? \n" +
+                        "Please type yes to confirm, or enter anything else to cancel. ");
+                if(doubleCheckDelete.equalsIgnoreCase("yes")){
+                    if(Controller.deleteRelationship(firstClass, secondClass)){
+                        //TODO pop up with relationship deleted
+                    }
+                    else{
+                        //Popup with some sort of error message
+                    }
+                } else{
+                    //cancel this bitch
+                }
+
             }
         });
         relationshipDropdown.add(addRelation);
         relationshipDropdown.add(delRelation);
 
         saveLoadDropdown = new JMenu("Save/Load");
+
         save = new JMenuItem(new AbstractAction("Save") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(1);
+                ModelDiagram.save();
             }
         });
         load = new JMenuItem(new AbstractAction("Load") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(1);
+                ModelDiagram.load();
             }
         });
         saveLoadDropdown.add(save);
