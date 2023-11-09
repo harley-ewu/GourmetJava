@@ -5,6 +5,7 @@ package src.main.java;
  * the information retrieved for the CLI.
  */
 
+import java.lang.reflect.Parameter;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -31,11 +32,97 @@ public class CLI {
             // get user input of 1-15
             // call io method below
             // io method calls actual method in other classes
-            int input = CLI.readInt("Choice: ");
-            switch (input) {
+            String[] input = CLI.readStringSplit("Choice: ");
+            //int firstSpaceIndex = findSpace(0, input);
+            //String command = input.substring(0, firstSpaceIndex);
+
+            if(input.length == 0){
+                System.out.println("Please enter a command");
+                break;
+            }
+            switch (input[0]) {
                 //Switch statement controls different options the user could select
-                case 1:
-                    //If the user selects 1, it will display the listing options
+                case "add":
+
+                    switch (input[1]) {
+                        case "class": {
+                            Controller.addClass(input[2], Integer.parseInt(input[3]));
+                            CLI.printArrayOfStringList(Controller.listAllClassDetails(input[2]));
+                            break;
+                        }
+                        case "method": {
+                            System.out.println("found method");
+                            LinkedList<String> params = new LinkedList<String>();
+
+
+                            params.add("stub");
+                            Controller.addMethod(input[2], input[3], Integer.parseInt(input[4]), input[5], params);
+                            break;
+                        }
+                        case "field": {
+                            Controller.addField(input[2], input[3], Integer.parseInt(input[4]), input[5]);
+                            CLI.printArrayOfStringList(Controller.listAllClassDetails(input[2]));
+                            System.out.println("Found field");
+                            break;
+                        }
+                        case "relationship": {
+                            System.out.println("Found relationship");
+                            Controller.addRelationship(input[2], input[3], input[4]);
+                            CLI.printArrayOfStringList(Controller.listRelationships());
+                            break;
+                        }
+                        default: {
+                            System.out.println("Your command is not valid please enter a new command.");
+                            break;
+                        }
+                    }
+                    break;
+                case "delete":
+                    System.out.println("Found delete");
+                    switch(input[1]){
+                        case "class":{
+                            Controller.deleteClass(input[2]);
+                            CLI.printArrayOfStringList(Controller.listAllClassDetails(input[2]));
+                            break;
+                        }
+                        case "method":{
+                            System.out.println("found method");
+                            LinkedList<String> params = new LinkedList<String>();
+
+
+                            params.add("stub");
+                            Controller.addMethod(input[2], input[3], Integer.parseInt(input[4]), input[5], params);
+                            break;
+                        }
+                    }
+                    break;
+                case "list":
+                    System.out.println("Found list!");
+                    printStringListNumbered(Controller.listClasses());
+                    break;
+                case "help":
+                    System.out.println("Found help!");
+                    break;
+                case "rename":
+                    System.out.println("Found rename!");
+                    break;
+                case "save":
+                    System.out.println("Found save!");
+                    break;
+                case "load":
+                    System.out.println("Found load!");
+                    break;
+                case "gui":
+                    System.out.println("Found GUI!");
+                    Main.gview = true;
+                    GUI.startGUIMenu();
+                    break;
+                default:
+                    break;
+            }
+
+                    /**
+                     * //If the user selects 1, it will display the listing options
                     //These are all display commands
                     if (Controller.getCreatedClassesSize() == 0) {
                         System.out.println("Nothing to display! Please make a class first");
@@ -190,13 +277,13 @@ public class CLI {
                 default:
                     //If the user selects an invalid option, it will let them know and bring them back to the main menu
                     System.out.println("That is not a valid input. Please try again");
-                    break;
+                    break;*/
             }
             if(Main.gview){
                 GUI.displayGUI();
             }
         }
-    }
+
 
     /**
      * This method will take class name input from the user in CLI mode and send it
@@ -451,6 +538,7 @@ public class CLI {
             System.out.println("Please enter either '1' or '2'. Please try again");
         }
     }
+
 
     /**
      * deleteAttribute will prompt the user if they would like to delete a method or a field.
@@ -740,8 +828,22 @@ public class CLI {
 
     public static String readString(final String msg) {
         System.out.print(msg);
-        return kb.nextLine();
+        return kb.nextLine().toLowerCase();
     }
+    public static String[] readStringSplit(final String msg) {
+        System.out.print(msg);
+        return kb.nextLine().toLowerCase().split(" ");
+    }
+    private static int findSpace(int startIndex, String command) {
+        int result = -1;
 
+        for (int i = startIndex; i < command.length() - startIndex; i++) {
+            if (Character.isWhitespace(command.charAt(i))) {
+                result = i;
+            }
+
+        }
+        return result;
+    }
 
 }
