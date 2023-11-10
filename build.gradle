@@ -1,11 +1,18 @@
-plugins{
+plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.0'
 }
 
-jar{
-    manifest{
+jar {
+    manifest {
         attributes('Main-Class': 'src.main.java.Main')
     }
+}
+
+shadowJar {
+    archiveBaseName.set('GourmetJava')
+    archiveClassifier.set('')
+    archiveVersion.set('')
 }
 
 dependencies {
