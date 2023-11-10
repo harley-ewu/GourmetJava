@@ -10,7 +10,7 @@ jar {
 }
 
 shadowJar {
-    archiveBaseName.set('GourmetJava')
+    archiveBaseName.set('shadow')
     archiveClassifier.set('')
     archiveVersion.set('')
 }
