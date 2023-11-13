@@ -82,16 +82,25 @@ public class CLI {
                     switch(input[1]){
                         case "class":{
                             Controller.deleteClass(input[2]);
-                            CLI.printArrayOfStringList(Controller.listAllClassDetails(input[2]));
                             break;
                         }
                         case "method":{
                             System.out.println("found method");
-                            LinkedList<String> params = new LinkedList<String>();
-
-
-                            params.add("stub");
-                            Controller.addMethod(input[2], input[3], Integer.parseInt(input[4]), input[5], params);
+                            Controller.deleteMethod(input[2], input[3]);
+                            break;
+                        }
+                        case "field":{
+                            System.out.println("found field");
+                            Controller.deleteField(input[2], input[3]);
+                            break;
+                        }
+                        case "relationship": {
+                            System.out.println("found relationship");
+                            Controller.deleteRelationship(input[2], input[3]);
+                            break;
+                        }
+                        default:{
+                            System.out.println("Your command is not valid please enter a new command.");
                             break;
                         }
                     }
@@ -102,15 +111,38 @@ public class CLI {
                     break;
                 case "help":
                     System.out.println("Found help!");
+                    Controller.help();
                     break;
                 case "rename":
-                    System.out.println("Found rename!");
-                    break;
+                    System.out.println("Found rename");
+                    switch(input[1]){
+                        case "class":{
+                            System.out.println("Found rename");
+                            Controller.renameClass(input[2], input[3]);
+                            break;
+                        }
+                        case "method":{
+                            System.out.println("Found method");
+                            Controller.renameMethod(input[2], input[3], input[4]);
+                            break;
+                        }
+                        case "field":{
+                            System.out.println("found field");
+                            Controller.renameField(input[2], input[3], input[4]);
+                            break;
+                        }
+                        default:{
+                            System.out.println("Your command is not valid please enter a new command.");
+                            break;
+                        }
+                    }
                 case "save":
                     System.out.println("Found save!");
+                    Controller.save();
                     break;
                 case "load":
                     System.out.println("Found load!");
+                    Controller.load();
                     break;
                 case "gui":
                     System.out.println("Found GUI!");
