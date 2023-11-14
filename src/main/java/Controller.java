@@ -15,12 +15,12 @@ public class Controller {
 
     //CHECKS IF A CLASS EXISTS
     //Returns true if the class with the given name exists, otherwise returns false
-    public static boolean existentialCrisisExists(final String crisis){
+    public static ModelDiagram.STATUS_CODES existentialCrisisExists(final String crisis){
         return ModelDiagram.existentialCrisisExists(crisis);
     }
 
     // Allows the user to name their class, then adds it to the list of created classes
-    public static boolean addClass(final String name, final int type) {
+    public static ModelDiagram.STATUS_CODES addClass(final String name, final int type) {
         return ModelDiagram.addClass(name, type);
     }
 
@@ -28,7 +28,7 @@ public class Controller {
     // Rachael
     // Takes in the index of the item user wants removed from the list and removes
     // it
-    public static boolean deleteClass(final String name) {
+    public static ModelDiagram.STATUS_CODES deleteClass(final String name) {
         return ModelDiagram.deleteClass(name);
     }
 
@@ -36,17 +36,17 @@ public class Controller {
     // Rachael
     // Takes in the index of the item they want renamed, then asks them to type in a
     // new name
-    public static boolean renameClass(final String originalName, final String newName) {
+    public static ModelDiagram.STATUS_CODES renameClass(final String originalName, final String newName) {
         return ModelDiagram.renameClass(originalName, newName);
     }
 
-    public static boolean addRelationship(final String cb1, final String cb2, final int type) {
+    public static ModelDiagram.STATUS_CODES addRelationship(final String cb1, final String cb2, final int type) {
         return ModelDiagram.addRelationship(cb1, cb2, type);
     }
 
     //Adds a relationship with the type being an integer stored as a String (ex: "1" or "2")
     //Does not accept the name of the enum itself (maybe add later)
-    public static boolean addRelationship(final String parentClass, final String childClass, final String type){
+    public static ModelDiagram.STATUS_CODES addRelationship(final String parentClass, final String childClass, final String type){
         return ModelDiagram.addRelationship(parentClass,childClass,type);
     }
 
@@ -60,18 +60,18 @@ public class Controller {
 
     // Deletes a relationship between two classes while prompting the user to verify
     // they wish to delete along the way
-    public static boolean deleteRelationship(final String cb1, final String cb2) {
+    public static ModelDiagram.STATUS_CODES deleteRelationship(final String cb1, final String cb2) {
         return ModelDiagram.deleteRelationship(cb1, cb2);
 
     } // End of deleteRelationship
 
     // className is the name of the class you want to add a method to
-    public static boolean addMethod(String className, String name, int view, String type, LinkedList<String> params) {
+    public static ModelDiagram.STATUS_CODES addMethod(String className, String name, int view, String type, LinkedList<String> params) {
         return ModelDiagram.addMethod(className, name, view, type, params);
     }
 
     // className is the name of the class you want to add a field to
-    public static boolean addField(String className, String name, int view, String type) {
+    public static ModelDiagram.STATUS_CODES addField(String className, String name, int view, String type) {
         return ModelDiagram.addField(className, name, view, type);
     }
 

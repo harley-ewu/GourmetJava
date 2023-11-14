@@ -3,6 +3,7 @@ package src.main.java;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 public class ClassBox {
 
@@ -53,27 +54,16 @@ public class ClassBox {
     }
 
 
-    public boolean addMethod(String name, int view, String type, LinkedList<String> params) {
+    public void addMethod(String name, int view, String type, LinkedList<String> params) {
         //call the constructor and add to list
-        try {
-            Methods newMethod = new Methods(name, view, type, params);
-            this.methods.add(newMethod);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        Methods newMethod = new Methods(name, view, type, params);
+        this.methods.add(newMethod);
     }
 
-    public boolean addField(String name, int view, String type) {
+    public void addField(String name, int view, String type) {
         //call the constructor and add to list
-        try {
-            Field newField = new Field(name, view, type);
-            this.fields.add(newField);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-
+        Field newField = new Field(name, view, type);
+        this.fields.add(newField);
     }
 
 
@@ -182,7 +172,12 @@ public class ClassBox {
         childClass.parents.add(new Relationship(parentClass, type));
     }
 
-    //Deletes the relationship between the two ClassBox objects
+    /*
+        Finds and deletes the relationship between the two ClassBox objects
+        The caller (ModelDiagram) guarantees that the passed ClassBox objects are valid
+        POST CONDITION: There is no relationship between the passed ClassBox objects
+            (it does not care if the relationship already exists)
+    */
     public static void deleteRelationship(final ClassBox cb1, final ClassBox cb2) {
         for (Relationship rel : cb1.parents) {
             if (rel.getOtherClass().equals(cb2)) {
@@ -196,6 +191,23 @@ public class ClassBox {
                 cb2.parents.remove(rel);
             }
         }
+    }
+
+    /*
+    Deletes the passed relationship between the two ClassBox objects
+    The caller (ModelDiagram) guarantees that the passed ClassBox objects are valid
+    POST CONDITION: There is no relationship between the passed ClassBox objects
+        (it does not care if the relationship already exists)
+    Throws an exception if the relationship does not exist in a list (which it shouldn't)
+*/
+    public static void deleteRelationship(final ClassBox cb1, final ClassBox cb2, final Relationship rel) {
+        try {
+            cb1.parents.remove(rel);
+            cb2.children.remove(rel);
+        } catch (Exception ignored) {
+        }
+        cb1.children.remove(rel);
+        cb2.parents.remove(rel);
     }
 
     //returns a list of ONLY the class names in the calling ClassBox's parents list

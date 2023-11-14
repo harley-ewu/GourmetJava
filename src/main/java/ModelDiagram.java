@@ -13,6 +13,30 @@ import java.util.Scanner;
 // This is the class representing all data within the model
 public class ModelDiagram {
 
+    public enum STATUS_CODES {
+        EXCEPTION("operation failed - exception caught"),
+        SUCCESS("operation success"),
+        OBJ_ALREADY_EXISTS("object already exists"),
+        OBJ_NOT_FOUND("object not found"),
+        OBJ_FOUND("object was found"),
+        INVALID_PARAM("invalid parameter passed"),
+        NULL_OBJ("object is null"),
+        EMPTY_STRING("entered string is empty"),
+        NULL_STRING("entered string is null"),
+        INVALID_STRING("entered string is invalid");
+
+        private final String msg;
+
+        STATUS_CODES(final String msg){
+            this.msg = msg;
+        }
+
+        @Override
+        public String toString(){
+            return this.msg;
+        }
+    }
+
     private final static ArrayList<ClassBox> createdClasses = new ArrayList<>();
     // Created classes will now be stored here
     // Methods for manipulating the model will be stored here
@@ -31,61 +55,75 @@ public class ModelDiagram {
         return null;
     }
 
-    public static boolean existentialCrisisExists(final String crisis) {
-        return (!(findClassBox(crisis) == null));
+    public static STATUS_CODES existentialCrisisExists(final String crisis) {
+        if (findClassBox(crisis) == null)
+            return STATUS_CODES.OBJ_NOT_FOUND;
+        return STATUS_CODES.OBJ_FOUND;
     }
 
     //returns true only if a class was added
     //returns false if a class was not added or a class with the same name already existed
     //throws an exception if the input "type" int was invalid
-    public static boolean addClass(final String name, final int type) {
+    public static STATUS_CODES addClass(final String name, final int type) {
         if (name == null || name.isEmpty())
-            return false;
+            return STATUS_CODES.INVALID_PARAM;
 
         ClassBox newBox = findClassBox(name);
         if (newBox != null)
-            return false;
+            return STATUS_CODES.OBJ_ALREADY_EXISTS;
 
-        createdClasses.add(new ClassBox(name, type));
-        return true;
+        try {
+            createdClasses.add(new ClassBox(name, type));
+        }catch (Exception e){
+            return STATUS_CODES.EXCEPTION;
+        }
+
+        return STATUS_CODES.SUCCESS;
     }
 
     //returns true only if a class was deleted
     //returns false if the class was not deleted or the class with the given name DNE
-    public static boolean deleteClass(final String name) {
+    public static STATUS_CODES deleteClass(final String name) {
         if (name == null || name.isEmpty())
-            return false;
+            return STATUS_CODES.INVALID_STRING;
 
         ClassBox targetBox = findClassBox(name);
         if (targetBox == null)
-            return false;
+            return STATUS_CODES.OBJ_NOT_FOUND;
 
         createdClasses.remove(targetBox);
-        return true;
+        return STATUS_CODES.SUCCESS;
     }
 
     // This method finds classBox within createdClasses
     // If not found returns false
     // Else adds method to the classBox and returns true
-    public static boolean addMethod(String className, String name, int view, String returnType, LinkedList<String> params) {
+    public static STATUS_CODES addMethod(String className, String name, int view, String returnType, LinkedList<String> params) {
         ClassBox target = findClassBox(className);
         if (target == null)
-            return false;
+            return STATUS_CODES.OBJ_NOT_FOUND;
 
-        return target.addMethod(name, view, returnType, params);
-
+        try {
+            target.addMethod(name, view, returnType, params);
+            return STATUS_CODES.SUCCESS;
+        }catch (Exception e){
+            return STATUS_CODES.EXCEPTION;
+        }
     }
 
     // This method finds classBox within createdClasses
     // If not found returns false
     // Else adds field to the classBox and returns true
-    public static boolean addField(String className, String name, int view, String type) {
+    public static STATUS_CODES addField(String className, String name, int view, String type) {
         ClassBox target = findClassBox(className);
         if (target == null)
-            return false;
-
-        return target.addField(name, view, type);
-
+            return STATUS_CODES.OBJ_NOT_FOUND;
+        try {
+            target.addField(name, view, type);
+            return STATUS_CODES.SUCCESS;
+        }catch (Exception e){
+            return STATUS_CODES.EXCEPTION;
+        }
     }
 
     public static boolean addParam(String className, String methodName, String paramName) {
@@ -203,72 +241,77 @@ public class ModelDiagram {
 
     //returns true only if the class was renamed
     //returns false if the class DNE or the name was not changed
-    public static boolean renameClass(final String originalName, final String newName) {
+    public static STATUS_CODES renameClass(final String originalName, final String newName) {
         if (originalName == null || newName == null || originalName.isEmpty() || newName.isEmpty())
-            return false;
+            return STATUS_CODES.INVALID_PARAM;
 
         ClassBox newBox = findClassBox(newName);
         if (newBox != null)
-            return false;
+            return STATUS_CODES.OBJ_ALREADY_EXISTS;
 
         ClassBox originalBox = findClassBox(originalName);
         if (originalBox == null)
-            return false;
+            return STATUS_CODES.OBJ_NOT_FOUND;
 
         originalBox.rename(newName);
-        return true;
+        return STATUS_CODES.SUCCESS;
     }
 
     //Adds a relationship with the type being an integer stored as a String (ex: "1" or "2")
     //Does not accept the name of the enum itself (maybe add later)
-    public static boolean addRelationship(final String parentClass, final String childClass, final String type) {
+    public static STATUS_CODES addRelationship(final String parentClass, final String childClass, final String type) {
         if (type == null || type.isEmpty())
-            return false;
+            return STATUS_CODES.INVALID_STRING;
 
         int relationshipType;
         try {
             relationshipType = Integer.parseInt(type);
             return addRelationship(parentClass, childClass, relationshipType);
         } catch (Exception e) {
-            return false;
+            return STATUS_CODES.EXCEPTION;
         }
     }
 
     //returns true if a relationship was added, false otherwise (also returns false if a relationship existed)
-    public static boolean addRelationship(final String parentClass, final String childClass, final int type) {
+    public static STATUS_CODES addRelationship(final String parentClass, final String childClass, final int type) {
         if (parentClass == null || childClass == null || parentClass.isEmpty() || childClass.isEmpty())
-            return false;
+            return STATUS_CODES.INVALID_STRING;
 
         ClassBox parent = findClassBox(parentClass);
         ClassBox child = findClassBox(childClass);
         if (parent == null || child == null)
-            return false;
+            return STATUS_CODES.OBJ_NOT_FOUND;
 
         Relationship relationship = ClassBox.findRelationship(parent, child);
         if (relationship != null)
-            return false;
+            return STATUS_CODES.OBJ_ALREADY_EXISTS;
 
         ClassBox.addRelationship(parent, child, type);
-        return true;
+        return STATUS_CODES.SUCCESS;
     }
 
     //returns true if a relationship between the classes was deleted
     //returns false if the box objects do not exist or if there wasn't a relationship to begin with
-    public static boolean deleteRelationship(final String parentClass, final String childClass) {
+    public static STATUS_CODES deleteRelationship(final String parentClass, final String childClass) {
         if (parentClass == null || childClass == null || parentClass.isEmpty() || childClass.isEmpty())
-            return false;
+            return STATUS_CODES.INVALID_STRING;
 
         ClassBox parent = findClassBox(parentClass);
         ClassBox child = findClassBox(childClass);
         if (parent == null || child == null)
-            return false;
+            return STATUS_CODES.OBJ_NOT_FOUND;
 
         Relationship relationship = ClassBox.findRelationship(parent, child);
         if (relationship == null)
-            return false;
+            return STATUS_CODES.OBJ_NOT_FOUND;
 
-        ClassBox.deleteRelationship(parent, child);
-        return true;
+        try {
+            ClassBox.deleteRelationship(parent, child, relationship);
+        }catch (Exception e){
+            return STATUS_CODES.EXCEPTION;
+        }
+
+        return STATUS_CODES.SUCCESS;
     }
 
     //returns list of names of ONLY each createdClasses's parent classes
