@@ -76,7 +76,7 @@ public class ModelDiagram {
     // If not found returns false
     // Else adds method to the classBox and returns true
     public static Controller.STATUS_CODES addMethod(final String className, final String name, final int view, final String returnType, final LinkedList<String> params) {
-        if (className == null || name == null || returnType == null) return Controller.STATUS_CODES.EMPTY_STRING;
+        if (className == null || name == null || returnType == null) return Controller.STATUS_CODES.NULL_STRING;
 
         if (className.isEmpty() || name.isEmpty() || returnType.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
@@ -97,7 +97,7 @@ public class ModelDiagram {
     // If not found returns false
     // Else adds field to the classBox and returns true
     public static Controller.STATUS_CODES addField(final String className, final String name, int view, final String type) {
-        if (className == null || name == null || type == null) return Controller.STATUS_CODES.EMPTY_STRING;
+        if (className == null || name == null || type == null) return Controller.STATUS_CODES.NULL_STRING;
 
         if (className.isEmpty() || name.isEmpty() || type.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
@@ -113,7 +113,7 @@ public class ModelDiagram {
     }
 
     public static Controller.STATUS_CODES addParam(final String className, final String methodName, final String paramName) {
-        if (className == null || methodName == null || paramName == null) return Controller.STATUS_CODES.EMPTY_STRING;
+        if (className == null || methodName == null || paramName == null) return Controller.STATUS_CODES.NULL_STRING;
 
         if (className.isEmpty() || methodName.isEmpty() || paramName.isEmpty())
             return Controller.STATUS_CODES.EMPTY_STRING;
@@ -125,7 +125,7 @@ public class ModelDiagram {
     }
 
     public static Controller.STATUS_CODES deleteMethod(final String className, final String methodName) {
-        if (className == null || methodName == null) return Controller.STATUS_CODES.EMPTY_STRING;
+        if (className == null || methodName == null) return Controller.STATUS_CODES.NULL_STRING;
 
         if (className.isEmpty() || methodName.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
@@ -137,7 +137,7 @@ public class ModelDiagram {
     }
 
     public static Controller.STATUS_CODES deleteField(final String className, final String fieldName) {
-        if (className == null || fieldName == null) return Controller.STATUS_CODES.EMPTY_STRING;
+        if (className == null || fieldName == null) return Controller.STATUS_CODES.NULL_STRING;
 
         if (className.isEmpty() || fieldName.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
@@ -148,7 +148,7 @@ public class ModelDiagram {
     }
 
     public static Controller.STATUS_CODES deleteParam(final String className, final String methodName, final String paramName) {
-        if (className == null || methodName == null || paramName == null) return Controller.STATUS_CODES.EMPTY_STRING;
+        if (className == null || methodName == null || paramName == null) return Controller.STATUS_CODES.NULL_STRING;
 
         if (className.isEmpty() || methodName.isEmpty() || paramName.isEmpty())
             return Controller.STATUS_CODES.EMPTY_STRING;
@@ -161,7 +161,7 @@ public class ModelDiagram {
 
     public static Controller.STATUS_CODES renameMethod(final String className, final String methodName, final String newMethodName) {
         if (className == null || methodName == null || newMethodName == null)
-            return Controller.STATUS_CODES.EMPTY_STRING;
+            return Controller.STATUS_CODES.NULL_STRING;
 
         if (className.isEmpty() || methodName.isEmpty() || newMethodName.isEmpty())
             return Controller.STATUS_CODES.EMPTY_STRING;
@@ -173,7 +173,7 @@ public class ModelDiagram {
     }
 
     public static Controller.STATUS_CODES renameField(final String className, final String fieldName, final String newFieldName) {
-        if (className == null || fieldName == null || newFieldName == null) return Controller.STATUS_CODES.EMPTY_STRING;
+        if (className == null || fieldName == null || newFieldName == null) return Controller.STATUS_CODES.NULL_STRING;
 
         if (className.isEmpty() || fieldName.isEmpty() || newFieldName.isEmpty())
             return Controller.STATUS_CODES.EMPTY_STRING;
