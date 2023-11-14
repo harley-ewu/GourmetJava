@@ -27,7 +27,7 @@ public class CLI {
         while (cont) {
             int input2;
             int input3;
-            CLI.printStringList(Controller.printMenu());
+            //CLI.printStringList(Controller.printMenu());
             //Retrieves the user input in 'input'
             // get user input of 1-15
             // call io method below
@@ -46,11 +46,19 @@ public class CLI {
 
                     switch (input[1]) {
                         case "class": {
+                            if(input.length != 4){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
                             Controller.addClass(input[2], Integer.parseInt(input[3]));
                             CLI.printArrayOfStringList(Controller.listAllClassDetails(input[2]));
                             break;
                         }
                         case "method": {
+                            if(input.length != 6){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
                             System.out.println("found method");
                             LinkedList<String> params = new LinkedList<String>();
 
@@ -60,12 +68,20 @@ public class CLI {
                             break;
                         }
                         case "field": {
+                            if(input.length != 6){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
                             Controller.addField(input[2], input[3], Integer.parseInt(input[4]), input[5]);
                             CLI.printArrayOfStringList(Controller.listAllClassDetails(input[2]));
                             System.out.println("Found field");
                             break;
                         }
                         case "relationship": {
+                            if(input.length != 5){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
                             System.out.println("Found relationship");
                             Controller.addRelationship(input[2], input[3], input[4]);
                             CLI.printArrayOfStringList(Controller.listRelationships());
@@ -81,20 +97,36 @@ public class CLI {
                     System.out.println("Found delete");
                     switch(input[1]){
                         case "class":{
+                            if(input.length != 3){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
                             Controller.deleteClass(input[2]);
                             break;
                         }
                         case "method":{
+                            if(input.length != 4){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
                             System.out.println("found method");
                             Controller.deleteMethod(input[2], input[3]);
                             break;
                         }
                         case "field":{
+                            if(input.length != 4){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
                             System.out.println("found field");
                             Controller.deleteField(input[2], input[3]);
                             break;
                         }
                         case "relationship": {
+                            if(input.length != 4){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
                             System.out.println("found relationship");
                             Controller.deleteRelationship(input[2], input[3]);
                             break;
@@ -117,16 +149,28 @@ public class CLI {
                     System.out.println("Found rename");
                     switch(input[1]){
                         case "class":{
+                            if(input.length != 4){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
                             System.out.println("Found rename");
                             Controller.renameClass(input[2], input[3]);
                             break;
                         }
                         case "method":{
+                            if(input.length != 5){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
                             System.out.println("Found method");
                             Controller.renameMethod(input[2], input[3], input[4]);
                             break;
                         }
                         case "field":{
+                            if(input.length != 5){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
                             System.out.println("found field");
                             Controller.renameField(input[2], input[3], input[4]);
                             break;
