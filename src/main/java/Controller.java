@@ -8,7 +8,7 @@ public class Controller {
     public enum STATUS_CODES {
         EXCEPTION("operation failed - exception caught"),
         SUCCESS("operation success"),
-        OBJ_ALREADY_EXISTS("object already exists"),
+        OBJ_ALREADY_EXISTS("already exists"),
         OBJ_NOT_FOUND("object not found"),
         OBJ_FOUND("object was found"),
         NULL_PARAM_OBJ("object is null"),
