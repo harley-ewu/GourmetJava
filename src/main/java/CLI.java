@@ -27,7 +27,7 @@ public class CLI {
         while (cont) {
             int input2;
             int input3;
-            //CLI.printStringList(Controller.printMenu());
+            CLI.printStringList(Controller.printMenu());
             //Retrieves the user input in 'input'
             // get user input of 1-15
             // call io method below
