@@ -3,7 +3,6 @@ package src.main.java;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
 
 public class ClassBox {
 
@@ -68,74 +67,75 @@ public class ClassBox {
 
 
     // Adds a new param to a found method, returns false otherwise
-    public boolean addParam(String methodName, String newParamName) {
+    public Controller.STATUS_CODES addParam(String methodName, String newParamName) {
         Methods target = findMethod(methodName);
-        if (target != null) {
-            target.addParam(newParamName);
-            return true;
-        }
-        return false;
+        if (target == null)
+            return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+
+        target.addParam(newParamName);
+        return Controller.STATUS_CODES.SUCCESS;
     }
 
 
-    public boolean deleteField(String name) {
+    public Controller.STATUS_CODES deleteField(String name) {
         //Find the field with the name
         //remove that field from the list
         for (int i = 0; i < fields.size(); i++) {
             if (fields.get(i).getName().equals(name)) {
                 fields.remove(i);
-                return true;
+                return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return false;
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
     }
 
-    public boolean deleteMethod(String name/*, LinkedList<String> params*/) {
+    public Controller.STATUS_CODES deleteMethod(String name/*, LinkedList<String> params*/) {
         for (int i = 0; i < methods.size(); i++) {
             if (methods.get(i).getName().equals(name)) {
                 methods.remove(i);
-                return true;
+                return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return false;
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
     }
 
 
-    public boolean renameParam(String methodName, String oldParamName, String newParamName) {
+    public Controller.STATUS_CODES renameParam(String methodName, String oldParamName, String newParamName) {
         for (int i = 0; i < fields.size(); i++) {
             if (methods.get(i).getName().equals(methodName)) {
                 return methods.get(i).renameParam(oldParamName, newParamName);
             }
         }
-        return false;
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
     }
 
-    public boolean deleteParam(String methodName, String paramName) {
+    public Controller.STATUS_CODES deleteParam(String methodName, String paramName) {
         Methods target = findMethod(methodName);
-        if (target != null) {
-            return target.deleteParam(paramName);
-        }
-        return false;
+        if (target == null)
+            return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+
+        return target.deleteParam(paramName);
     }
 
 
-    public boolean renameMethod(String methodName, String newMethodName) {
+    public Controller.STATUS_CODES renameMethod(String methodName, String newMethodName) {
         for (Methods method : methods) {
             if (method.getName().equals(methodName)) {
                 method.setName(newMethodName);
-                return true;
+                return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return false;
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
     }
 
-    public boolean renameField(String fieldName, String newFieldName) {
+    public Controller.STATUS_CODES renameField(String fieldName, String newFieldName) {
         for (Field field : fields) {
             if (field.getName().equals(fieldName)) {
-                return field.setName(newFieldName);
+                field.setName(newFieldName);
+                return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return false;
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
     }
 
 

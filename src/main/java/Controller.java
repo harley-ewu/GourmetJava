@@ -4,7 +4,28 @@ import java.util.*;
 
 
 public class Controller {
+    
+    public enum STATUS_CODES {
+        EXCEPTION("operation failed - exception caught"),
+        SUCCESS("operation success"),
+        OBJ_ALREADY_EXISTS("object already exists"),
+        OBJ_NOT_FOUND("object not found"),
+        OBJ_FOUND("object was found"),
+        NULL_PARAM_OBJ("object is null"),
+        EMPTY_STRING("entered string is empty"),
+        NULL_STRING("entered string is null");
 
+        private final String msg;
+
+        STATUS_CODES(final String msg){
+            this.msg = msg;
+        }
+
+        @Override
+        public String toString(){
+            return this.msg;
+        }
+    }
 
     // Display all program options, choose from list, call other method based on
     // choice
@@ -15,12 +36,12 @@ public class Controller {
 
     //CHECKS IF A CLASS EXISTS
     //Returns true if the class with the given name exists, otherwise returns false
-    public static ModelDiagram.STATUS_CODES existentialCrisisExists(final String crisis){
+    public static STATUS_CODES existentialCrisisExists(final String crisis){
         return ModelDiagram.existentialCrisisExists(crisis);
     }
 
     // Allows the user to name their class, then adds it to the list of created classes
-    public static ModelDiagram.STATUS_CODES addClass(final String name, final int type) {
+    public static STATUS_CODES addClass(final String name, final int type) {
         return ModelDiagram.addClass(name, type);
     }
 
@@ -28,7 +49,7 @@ public class Controller {
     // Rachael
     // Takes in the index of the item user wants removed from the list and removes
     // it
-    public static ModelDiagram.STATUS_CODES deleteClass(final String name) {
+    public static STATUS_CODES deleteClass(final String name) {
         return ModelDiagram.deleteClass(name);
     }
 
@@ -36,17 +57,17 @@ public class Controller {
     // Rachael
     // Takes in the index of the item they want renamed, then asks them to type in a
     // new name
-    public static ModelDiagram.STATUS_CODES renameClass(final String originalName, final String newName) {
+    public static STATUS_CODES renameClass(final String originalName, final String newName) {
         return ModelDiagram.renameClass(originalName, newName);
     }
 
-    public static ModelDiagram.STATUS_CODES addRelationship(final String cb1, final String cb2, final int type) {
+    public static STATUS_CODES addRelationship(final String cb1, final String cb2, final int type) {
         return ModelDiagram.addRelationship(cb1, cb2, type);
     }
 
     //Adds a relationship with the type being an integer stored as a String (ex: "1" or "2")
     //Does not accept the name of the enum itself (maybe add later)
-    public static ModelDiagram.STATUS_CODES addRelationship(final String parentClass, final String childClass, final String type){
+    public static STATUS_CODES addRelationship(final String parentClass, final String childClass, final String type){
         return ModelDiagram.addRelationship(parentClass,childClass,type);
     }
 
@@ -60,51 +81,51 @@ public class Controller {
 
     // Deletes a relationship between two classes while prompting the user to verify
     // they wish to delete along the way
-    public static ModelDiagram.STATUS_CODES deleteRelationship(final String cb1, final String cb2) {
+    public static STATUS_CODES deleteRelationship(final String cb1, final String cb2) {
         return ModelDiagram.deleteRelationship(cb1, cb2);
 
     } // End of deleteRelationship
 
     // className is the name of the class you want to add a method to
-    public static ModelDiagram.STATUS_CODES addMethod(String className, String name, int view, String type, LinkedList<String> params) {
+    public static STATUS_CODES addMethod(String className, String name, int view, String type, LinkedList<String> params) {
         return ModelDiagram.addMethod(className, name, view, type, params);
     }
 
     // className is the name of the class you want to add a field to
-    public static ModelDiagram.STATUS_CODES addField(String className, String name, int view, String type) {
+    public static STATUS_CODES addField(String className, String name, int view, String type) {
         return ModelDiagram.addField(className, name, view, type);
     }
 
     // Adds a new param to a method within the classbox if both exist
-    public static boolean addParam(String className, String methodName, String paramName) {
+    public static STATUS_CODES addParam(String className, String methodName, String paramName) {
         return ModelDiagram.addParam(className, methodName, paramName);
     }
 
 
     //deletes method based on className and methodName
     //Needs params eventually to differentiate overloaded methods
-    public static boolean deleteMethod(String className, String methodName/*, LinkedList params*/) {
+    public static STATUS_CODES deleteMethod(String className, String methodName/*, LinkedList params*/) {
         return ModelDiagram.deleteMethod(className, methodName);
     }
 
     //deletes field based on className and methodName
-    public static boolean deleteField(String className, String fieldName) {
+    public static STATUS_CODES deleteField(String className, String fieldName) {
         return ModelDiagram.deleteField(className, fieldName);
     }
 
-    public static boolean deleteParam(String className, String methodName, String paramName) {
+    public static STATUS_CODES deleteParam(String className, String methodName, String paramName) {
         return ModelDiagram.deleteParam(className, methodName, paramName);
     }
 
-    public static boolean renameMethod(String className, String methodName, String newMethodName) {
+    public static STATUS_CODES renameMethod(String className, String methodName, String newMethodName) {
         return ModelDiagram.renameMethod(className, methodName, newMethodName);
     }
 
-    public static boolean renameField(String className, String fieldName, String newFieldName) {
+    public static STATUS_CODES renameField(String className, String fieldName, String newFieldName) {
         return ModelDiagram.renameField(className, fieldName, newFieldName);
     }
 
-    public static boolean renameParam(String className, String methodName, String oldParamName, String newParamName) {
+    public static STATUS_CODES renameParam(String className, String methodName, String oldParamName, String newParamName) {
         return ModelDiagram.renameParam(className, methodName, oldParamName, newParamName);
     }
 
