@@ -5,6 +5,7 @@ package src.main.java;
  * the information retrieved for the CLI.
  */
 
+import javax.naming.ldap.Control;
 import java.lang.reflect.Parameter;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -53,8 +54,10 @@ public class CLI {
                             Controller.STATUS_CODES status = Controller.addClass(input[2], Integer.parseInt(input[3]));
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Class " + input[2] + " " + status.toString());
+                            }else{
+                                System.out.println("Class " + input[2] + " added!");
                             }
-                            CLI.printArrayOfStringList(Controller.listAllClassDetails(input[2]));
+                            //CLI.printArrayOfStringList(Controller.listAllClassDetails(input[2]));
                             break;
                         }
                         case "method": {
@@ -67,7 +70,12 @@ public class CLI {
 
 
                             params.add("stub");
-                            Controller.addMethod(input[2], input[3], Integer.parseInt(input[4]), input[5], params);
+                            Controller.STATUS_CODES status = Controller.addMethod(input[2], input[3], Integer.parseInt(input[4]), input[5], params);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Method " + input[3] + " " + status.toString());
+                            }else{
+                                System.out.println("Method " + input[3] + " added to class " + input[2] + "!");
+                            }
                             break;
                         }
                         case "field": {
@@ -75,7 +83,12 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
-                            Controller.addField(input[2], input[3], Integer.parseInt(input[4]), input[5]);
+                            Controller.STATUS_CODES status = Controller.addField(input[2], input[3], Integer.parseInt(input[4]), input[5]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Field " + input[3] + " " + status.toString());
+                            }else{
+                                System.out.println("Field " + input[3] + " added to class " + input[2] + "!");
+                            }
                             CLI.printArrayOfStringList(Controller.listAllClassDetails(input[2]));
                             System.out.println("Found field");
                             break;
@@ -86,7 +99,12 @@ public class CLI {
                                 break;
                             }
                             System.out.println("Found relationship");
-                            Controller.addRelationship(input[2], input[3], input[4]);
+                            Controller.STATUS_CODES status = Controller.addRelationship(input[2], input[3], input[4]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Relationship " + status.toString());
+                            }else{
+                                System.out.println("Relationship between " + input[2] + " and " + input[3] + " created!");
+                            }
                             CLI.printArrayOfStringList(Controller.listRelationships());
                             break;
                         }
@@ -104,7 +122,12 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
-                            Controller.deleteClass(input[2]);
+                            Controller.STATUS_CODES status = Controller.deleteClass(input[2]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Class " + status.toString());
+                            }else{
+                                System.out.println("Class " + input[2] + " deleted!");
+                            }
                             break;
                         }
                         case "method":{
@@ -113,7 +136,12 @@ public class CLI {
                                 break;
                             }
                             System.out.println("found method");
-                            Controller.deleteMethod(input[2], input[3]);
+                            Controller.STATUS_CODES status = Controller.deleteMethod(input[2], input[3]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Method " + status.toString());
+                            }else{
+                                System.out.println("Method " + input[3] + " removed from class " + input[2] + "!");
+                            }
                             break;
                         }
                         case "field":{
@@ -122,7 +150,12 @@ public class CLI {
                                 break;
                             }
                             System.out.println("found field");
-                            Controller.deleteField(input[2], input[3]);
+                            Controller.STATUS_CODES status = Controller.deleteField(input[2], input[3]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Field " + status.toString());
+                            }else{
+                                System.out.println("Field " + input[3] + " removed from class " + input[2] + "!");
+                            }
                             break;
                         }
                         case "relationship": {
@@ -130,8 +163,14 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
+
                             System.out.println("found relationship");
-                            Controller.deleteRelationship(input[2], input[3]);
+                            Controller.STATUS_CODES status = Controller.deleteRelationship(input[2], input[3]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Relationship " + status.toString());
+                            }else{
+                                System.out.println("Relationship between " + input[2] + " and " + input[3] + " deleted!");
+                            }
                             break;
                         }
                         default:{
@@ -157,7 +196,12 @@ public class CLI {
                                 break;
                             }
                             System.out.println("Found rename");
-                            Controller.renameClass(input[2], input[3]);
+                            Controller.STATUS_CODES status = Controller.renameClass(input[2], input[3]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Class " + status.toString());
+                            }else{
+                                System.out.println("Class " + input[2] +  "renamed to " + input[3]);
+                            }
                             break;
                         }
                         case "method":{
@@ -166,7 +210,12 @@ public class CLI {
                                 break;
                             }
                             System.out.println("Found method");
-                            Controller.renameMethod(input[2], input[3], input[4]);
+                            Controller.STATUS_CODES status = Controller.renameMethod(input[2], input[3], input[4]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Method " + status.toString());
+                            }else{
+                                System.out.println("Method " + input[3] + " renamed to " + input [4] +"from class " + input[2] + "!");
+                            }
                             break;
                         }
                         case "field":{
@@ -175,7 +224,12 @@ public class CLI {
                                 break;
                             }
                             System.out.println("found field");
-                            Controller.renameField(input[2], input[3], input[4]);
+                            Controller.STATUS_CODES status = Controller.renameField(input[2], input[3], input[4]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Field " + status.toString());
+                            }else{
+                                System.out.println("Field " + input[3] + " renamed to " + input [4] +"from class " + input[2] + "!");
+                            }
                             break;
                         }
                         default:{
