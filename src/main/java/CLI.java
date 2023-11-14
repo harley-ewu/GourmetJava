@@ -5,8 +5,6 @@ package src.main.java;
  * the information retrieved for the CLI.
  */
 
-import javax.naming.ldap.Control;
-import java.lang.reflect.Parameter;
 import java.util.LinkedList;
 import java.util.Scanner;
 
