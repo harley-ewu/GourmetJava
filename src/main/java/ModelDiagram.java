@@ -21,134 +21,190 @@ public class ModelDiagram {
     //searched the list of created classes for a ClassBox with the given name
     //returns the ClassBox object if it exists, or null otherwise
     private static ClassBox findClassBox(final String name) {
-        if (name == null || name.isEmpty())
-            return null;
+        if (name == null || name.isEmpty()) return null;
 
         for (ClassBox cb : createdClasses) {
-            if (cb.equals(name))
-                return cb;
+            if (cb.equals(name)) return cb;
         }
         return null;
     }
 
-    public static boolean existentialCrisisExists(final String crisis) {
-        return (!(findClassBox(crisis) == null));
+    public static Controller.STATUS_CODES existentialCrisisExists(final String crisis) {
+        if (crisis == null) return Controller.STATUS_CODES.NULL_STRING;
+
+        if (crisis.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
+
+        if (findClassBox(crisis) == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+        return Controller.STATUS_CODES.OBJ_FOUND;
     }
 
     //returns true only if a class was added
     //returns false if a class was not added or a class with the same name already existed
     //throws an exception if the input "type" int was invalid
-    public static boolean addClass(final String name, final int type) {
-        if (name == null || name.isEmpty())
-            return false;
+    public static Controller.STATUS_CODES addClass(final String name, final int type) {
+        if (name == null) return Controller.STATUS_CODES.NULL_STRING;
+
+        if (name.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
         ClassBox newBox = findClassBox(name);
-        if (newBox != null)
-            return false;
+        if (newBox != null) return Controller.STATUS_CODES.OBJ_ALREADY_EXISTS;
 
-        createdClasses.add(new ClassBox(name, type));
-        return true;
+        try {
+            createdClasses.add(new ClassBox(name, type));
+        } catch (Exception e) {
+            return Controller.STATUS_CODES.EXCEPTION;
+        }
+
+        return Controller.STATUS_CODES.SUCCESS;
     }
 
     //returns true only if a class was deleted
     //returns false if the class was not deleted or the class with the given name DNE
-    public static boolean deleteClass(final String name) {
-        if (name == null || name.isEmpty())
-            return false;
+    public static Controller.STATUS_CODES deleteClass(final String name) {
+        if (name == null) return Controller.STATUS_CODES.NULL_STRING;
+
+        if (name.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
         ClassBox targetBox = findClassBox(name);
-        if (targetBox == null)
-            return false;
+        if (targetBox == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
 
         createdClasses.remove(targetBox);
-        return true;
+        return Controller.STATUS_CODES.SUCCESS;
     }
 
     // This method finds classBox within createdClasses
     // If not found returns false
     // Else adds method to the classBox and returns true
-    public static boolean addMethod(String className, String name, int view, String returnType, LinkedList<String> params) {
+    public static Controller.STATUS_CODES addMethod(final String className, final String name, final int view, final String returnType, final LinkedList<String> params) {
+        if (className == null || name == null || returnType == null) return Controller.STATUS_CODES.NULL_STRING;
+
+        if (className.isEmpty() || name.isEmpty() || returnType.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
+
+        if (params == null) return Controller.STATUS_CODES.NULL_PARAM_OBJ;
+
         ClassBox target = findClassBox(className);
-        if (target == null)
-            return false;
+        if (target == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
 
-        return target.addMethod(name, view, returnType, params);
-
+        try {
+            target.addMethod(name, view, returnType, params);
+            return Controller.STATUS_CODES.SUCCESS;
+        } catch (Exception e) {
+            return Controller.STATUS_CODES.EXCEPTION;
+        }
     }
 
     // This method finds classBox within createdClasses
     // If not found returns false
     // Else adds field to the classBox and returns true
-    public static boolean addField(String className, String name, int view, String type) {
+    public static Controller.STATUS_CODES addField(final String className, final String name, int view, final String type) {
+        if (className == null || name == null || type == null) return Controller.STATUS_CODES.NULL_STRING;
+
+        if (className.isEmpty() || name.isEmpty() || type.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
+
         ClassBox target = findClassBox(className);
-        if (target == null)
-            return false;
+        if (target == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
 
-        return target.addField(name, view, type);
-
-    }
-
-    public static boolean addParam(String className, String methodName, String paramName) {
-        ClassBox target = findClassBox(className);
-        if (target == null) {
-            return false;
-        } else {
-            return target.addParam(methodName, paramName);
+        try {
+            target.addField(name, view, type);
+            return Controller.STATUS_CODES.SUCCESS;
+        } catch (Exception e) {
+            return Controller.STATUS_CODES.EXCEPTION;
         }
     }
 
-    public static boolean deleteMethod(String className, String methodName) {
+    public static Controller.STATUS_CODES addParam(final String className, final String methodName, final String paramName) {
+        if (className == null || methodName == null || paramName == null) return Controller.STATUS_CODES.NULL_STRING;
+
+        if (className.isEmpty() || methodName.isEmpty() || paramName.isEmpty())
+            return Controller.STATUS_CODES.EMPTY_STRING;
+
         ClassBox target = findClassBox(className);
-        if (target == null) {
-            return false;
-        } else {
-            return target.deleteMethod(methodName);
-        }
+        if (target == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+
+        return target.addParam(methodName, paramName);
     }
 
-    public static boolean deleteField(String className, String fieldName) {
+    public static Controller.STATUS_CODES deleteMethod(final String className, final String methodName) {
+        if (className == null || methodName == null) return Controller.STATUS_CODES.NULL_STRING;
+
+        if (className.isEmpty() || methodName.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
+
         ClassBox target = findClassBox(className);
-        if (target == null) {
-            return false;
-        } else {
-            return target.deleteField(fieldName);
-        }
+        if (target == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+
+        return target.deleteMethod(methodName);
+
     }
 
-    public static boolean deleteParam(String className, String methodName, String paramName) {
+    public static Controller.STATUS_CODES deleteField(final String className, final String fieldName) {
+        if (className == null || fieldName == null) return Controller.STATUS_CODES.NULL_STRING;
+
+        if (className.isEmpty() || fieldName.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
+
         ClassBox target = findClassBox(className);
-        if (target == null) {
-            return false;
-        } else {
-            return target.deleteParam(methodName, paramName);
-        }
+        if (target == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+
+        return target.deleteField(fieldName);
     }
 
-    public static boolean renameMethod(String className, String methodName, String newMethodName) {
+    public static Controller.STATUS_CODES deleteParam(final String className, final String methodName, final String paramName) {
+        if (className == null || methodName == null || paramName == null) return Controller.STATUS_CODES.NULL_STRING;
+
+        if (className.isEmpty() || methodName.isEmpty() || paramName.isEmpty())
+            return Controller.STATUS_CODES.EMPTY_STRING;
+
         ClassBox target = findClassBox(className);
-        if (target == null) {
-            return false;
-        } else {
-            return target.renameMethod(methodName, newMethodName);
-        }
+        if (target == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+
+        return target.deleteParam(methodName, paramName);
     }
 
-    public static boolean renameField(String className, String fieldName, String newFieldName) {
+    public static Controller.STATUS_CODES renameMethod(final String className, final String methodName, final String newMethodName) {
+        if (className == null || methodName == null || newMethodName == null)
+            return Controller.STATUS_CODES.NULL_STRING;
+
+        if (className.isEmpty() || methodName.isEmpty() || newMethodName.isEmpty())
+            return Controller.STATUS_CODES.EMPTY_STRING;
+
         ClassBox target = findClassBox(className);
-        if (target == null) {
-            return false;
-        } else {
+        if (target == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+
+        return target.renameMethod(methodName, newMethodName);
+    }
+
+    public static Controller.STATUS_CODES renameField(final String className, final String fieldName, final String newFieldName) {
+        if (className == null || fieldName == null || newFieldName == null) return Controller.STATUS_CODES.NULL_STRING;
+
+        if (className.isEmpty() || fieldName.isEmpty() || newFieldName.isEmpty())
+            return Controller.STATUS_CODES.EMPTY_STRING;
+
+        ClassBox target = findClassBox(className);
+        if (target == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+
+        try {
             return target.renameField(fieldName, newFieldName);
+        } catch (Exception e) {
+            return Controller.STATUS_CODES.EXCEPTION;
         }
+
     }
 
-    public static boolean renameParam(String className, String methodName, String oldParamName, String newParamName) {
+    public static Controller.STATUS_CODES renameParam(final String className, final String methodName, final String oldParamName, final String newParamName) {
+        if (className == null || methodName == null || oldParamName == null || newParamName == null)
+            return Controller.STATUS_CODES.NULL_STRING;
+
+        if (className.isEmpty() || methodName.isEmpty() || oldParamName.isEmpty() || newParamName.isEmpty())
+            return Controller.STATUS_CODES.EMPTY_STRING;
+
         ClassBox target = findClassBox(className);
-        if (target == null) {
-            return false;
-        } else {
+        if (target == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+
+        try {
             return target.renameParam(methodName, oldParamName, newParamName);
+        } catch (Exception e) {
+            return Controller.STATUS_CODES.EXCEPTION;
         }
+
     }
 
 
@@ -186,12 +242,10 @@ public class ModelDiagram {
         }
      */
     public static String[][] listAllClassDetails(final String name) {
-        if (name == null || name.isEmpty())
-            return null;
+        if (name == null || name.isEmpty()) return null;
 
         ClassBox box = findClassBox(name);
-        if (box == null)
-            return null;
+        if (box == null) return null;
 
         String[][] details = new String[4][];
         details[0] = new String[]{box.getName(), box.getType()};
@@ -203,72 +257,75 @@ public class ModelDiagram {
 
     //returns true only if the class was renamed
     //returns false if the class DNE or the name was not changed
-    public static boolean renameClass(final String originalName, final String newName) {
-        if (originalName == null || newName == null || originalName.isEmpty() || newName.isEmpty())
-            return false;
+    public static Controller.STATUS_CODES renameClass(final String originalName, final String newName) {
+        if (originalName == null || newName == null) return Controller.STATUS_CODES.NULL_STRING;
+
+        if (originalName.isEmpty() || newName.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
         ClassBox newBox = findClassBox(newName);
-        if (newBox != null)
-            return false;
+        if (newBox != null) return Controller.STATUS_CODES.OBJ_ALREADY_EXISTS;
 
         ClassBox originalBox = findClassBox(originalName);
-        if (originalBox == null)
-            return false;
+        if (originalBox == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
 
         originalBox.rename(newName);
-        return true;
+        return Controller.STATUS_CODES.SUCCESS;
     }
 
     //Adds a relationship with the type being an integer stored as a String (ex: "1" or "2")
     //Does not accept the name of the enum itself (maybe add later)
-    public static boolean addRelationship(final String parentClass, final String childClass, final String type) {
-        if (type == null || type.isEmpty())
-            return false;
+    public static Controller.STATUS_CODES addRelationship(final String parentClass, final String childClass, final String type) {
+        if (parentClass == null || childClass == null || type == null) return Controller.STATUS_CODES.NULL_STRING;
+
+        if (parentClass.isEmpty() || childClass.isEmpty() || type.isEmpty())
+            return Controller.STATUS_CODES.EMPTY_STRING;
 
         int relationshipType;
         try {
             relationshipType = Integer.parseInt(type);
             return addRelationship(parentClass, childClass, relationshipType);
         } catch (Exception e) {
-            return false;
+            return Controller.STATUS_CODES.EXCEPTION;
         }
     }
 
     //returns true if a relationship was added, false otherwise (also returns false if a relationship existed)
-    public static boolean addRelationship(final String parentClass, final String childClass, final int type) {
-        if (parentClass == null || childClass == null || parentClass.isEmpty() || childClass.isEmpty())
-            return false;
+    public static Controller.STATUS_CODES addRelationship(final String parentClass, final String childClass, final int type) {
+        if (parentClass == null || childClass == null) return Controller.STATUS_CODES.NULL_STRING;
+
+        if (parentClass.isEmpty() || childClass.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
         ClassBox parent = findClassBox(parentClass);
         ClassBox child = findClassBox(childClass);
-        if (parent == null || child == null)
-            return false;
+        if (parent == null || child == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
 
         Relationship relationship = ClassBox.findRelationship(parent, child);
-        if (relationship != null)
-            return false;
+        if (relationship != null) return Controller.STATUS_CODES.OBJ_ALREADY_EXISTS;
 
         ClassBox.addRelationship(parent, child, type);
-        return true;
+        return Controller.STATUS_CODES.SUCCESS;
     }
 
     //returns true if a relationship between the classes was deleted
     //returns false if the box objects do not exist or if there wasn't a relationship to begin with
-    public static boolean deleteRelationship(final String parentClass, final String childClass) {
-        if (parentClass == null || childClass == null || parentClass.isEmpty() || childClass.isEmpty())
-            return false;
+    public static Controller.STATUS_CODES deleteRelationship(final String parentClass, final String childClass) {
+        if (parentClass == null || childClass == null) return Controller.STATUS_CODES.NULL_STRING;
+
+        if (parentClass.isEmpty() || childClass.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
         ClassBox parent = findClassBox(parentClass);
         ClassBox child = findClassBox(childClass);
-        if (parent == null || child == null)
-            return false;
+        if (parent == null || child == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
 
         Relationship relationship = ClassBox.findRelationship(parent, child);
-        if (relationship == null)
-            return false;
+        if (relationship == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+        try {
+            ClassBox.deleteRelationship(parent, child, relationship);
+        } catch (Exception e) {
+            return Controller.STATUS_CODES.EXCEPTION;
+        }
 
-        ClassBox.deleteRelationship(parent, child);
-        return true;
+        return Controller.STATUS_CODES.SUCCESS;
     }
 
     //returns list of names of ONLY each createdClasses's parent classes
@@ -302,8 +359,7 @@ public class ModelDiagram {
     // Currently only a single save is supported
     public static boolean save() {
         // If there is nothing to save return false
-        if (createdClasses.size() == 0)
-            return false;
+        if (createdClasses.size() == 0) return false;
         // Create a gson object that will take java objects and translate them to json
         Gson gson = new Gson();
         // Create a FileWriter that will write the converted Java to SavedFile.json
@@ -401,8 +457,7 @@ public class ModelDiagram {
         // Scan in each line containing a ClassBox and create it using our gson object
         while (fileScanner.hasNextLine()) {
             String classboxString = fileScanner.nextLine();
-            if (classboxString.contains("name") && classboxString.contains("type")
-                    && classboxString.contains("children") && classboxString.contains("parents")) {
+            if (classboxString.contains("name") && classboxString.contains("type") && classboxString.contains("children") && classboxString.contains("parents")) {
                 createdClasses.add(gson.fromJson(classboxString, ClassBox.class));
             }
         }
@@ -426,8 +481,7 @@ public class ModelDiagram {
             inputString = fileScanner.nextLine();
             RelationshipBuilder relB = gson.fromJson(inputString, RelationshipBuilder.class);
 
-            if (inputString.contains("name") && inputString.contains("type") && inputString.contains("children")
-                    && inputString.contains("parents")) {
+            if (inputString.contains("name") && inputString.contains("type") && inputString.contains("children") && inputString.contains("parents")) {
                 endOfRelationships = true;
             } else {
                 firstIndex = relB.getFirstIndex();
@@ -450,12 +504,10 @@ public class ModelDiagram {
         Returns null if the ClassBox does not exist
      */
     public static String[] listClassMethods(final String name) {
-        if (name == null || name.isEmpty())
-            return null;
+        if (name == null || name.isEmpty()) return null;
 
         ClassBox box = findClassBox(name);
-        if (box == null)
-            return null;
+        if (box == null) return null;
 
         return box.listMethods();
     }
@@ -467,12 +519,10 @@ public class ModelDiagram {
         Returns null if the ClassBox does not exist
      */
     public static String[] listClassFields(final String name) {
-        if (name == null || name.isEmpty())
-            return null;
+        if (name == null || name.isEmpty()) return null;
 
         ClassBox box = findClassBox(name);
-        if (box == null)
-            return null;
+        if (box == null) return null;
 
         return box.listFields();
 
@@ -482,11 +532,11 @@ public class ModelDiagram {
         return createdClasses.size();
     }
 
-    public static String[] getClassMethods(String className) {
+    public static String[] getClassMethods(final String className) {
         return null;
     }
 
-    public static String[] getClassFields(String name) {
+    public static String[] getClassFields(final String name) {
         return null;
     }
 

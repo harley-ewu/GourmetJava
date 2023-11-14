@@ -53,99 +53,89 @@ public class ClassBox {
     }
 
 
-    public boolean addMethod(String name, int view, String type, LinkedList<String> params) {
+    public void addMethod(String name, int view, String type, LinkedList<String> params) {
         //call the constructor and add to list
-        try {
-            Methods newMethod = new Methods(name, view, type, params);
-            this.methods.add(newMethod);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        Methods newMethod = new Methods(name, view, type, params);
+        this.methods.add(newMethod);
     }
 
-    public boolean addField(String name, int view, String type) {
+    public void addField(String name, int view, String type) {
         //call the constructor and add to list
-        try {
-            Field newField = new Field(name, view, type);
-            this.fields.add(newField);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-
+        Field newField = new Field(name, view, type);
+        this.fields.add(newField);
     }
 
 
     // Adds a new param to a found method, returns false otherwise
-    public boolean addParam(String methodName, String newParamName) {
+    public Controller.STATUS_CODES addParam(String methodName, String newParamName) {
         Methods target = findMethod(methodName);
-        if (target != null) {
-            target.addParam(newParamName);
-            return true;
-        }
-        return false;
+        if (target == null)
+            return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+
+        target.addParam(newParamName);
+        return Controller.STATUS_CODES.SUCCESS;
     }
 
 
-    public boolean deleteField(String name) {
+    public Controller.STATUS_CODES deleteField(String name) {
         //Find the field with the name
         //remove that field from the list
         for (int i = 0; i < fields.size(); i++) {
             if (fields.get(i).getName().equals(name)) {
                 fields.remove(i);
-                return true;
+                return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return false;
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
     }
 
-    public boolean deleteMethod(String name/*, LinkedList<String> params*/) {
+    public Controller.STATUS_CODES deleteMethod(String name/*, LinkedList<String> params*/) {
         for (int i = 0; i < methods.size(); i++) {
             if (methods.get(i).getName().equals(name)) {
                 methods.remove(i);
-                return true;
+                return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return false;
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
     }
 
 
-    public boolean renameParam(String methodName, String oldParamName, String newParamName) {
+    public Controller.STATUS_CODES renameParam(String methodName, String oldParamName, String newParamName) {
         for (int i = 0; i < fields.size(); i++) {
             if (methods.get(i).getName().equals(methodName)) {
                 return methods.get(i).renameParam(oldParamName, newParamName);
             }
         }
-        return false;
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
     }
 
-    public boolean deleteParam(String methodName, String paramName) {
+    public Controller.STATUS_CODES deleteParam(String methodName, String paramName) {
         Methods target = findMethod(methodName);
-        if (target != null) {
-            return target.deleteParam(paramName);
-        }
-        return false;
+        if (target == null)
+            return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+
+        return target.deleteParam(paramName);
     }
 
 
-    public boolean renameMethod(String methodName, String newMethodName) {
+    public Controller.STATUS_CODES renameMethod(String methodName, String newMethodName) {
         for (Methods method : methods) {
             if (method.getName().equals(methodName)) {
                 method.setName(newMethodName);
-                return true;
+                return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return false;
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
     }
 
-    public boolean renameField(String fieldName, String newFieldName) {
+    public Controller.STATUS_CODES renameField(String fieldName, String newFieldName) {
         for (Field field : fields) {
             if (field.getName().equals(fieldName)) {
-                return field.setName(newFieldName);
+                field.setName(newFieldName);
+                return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return false;
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
     }
 
 
@@ -182,7 +172,12 @@ public class ClassBox {
         childClass.parents.add(new Relationship(parentClass, type));
     }
 
-    //Deletes the relationship between the two ClassBox objects
+    /*
+        Finds and deletes the relationship between the two ClassBox objects
+        The caller (ModelDiagram) guarantees that the passed ClassBox objects are valid
+        POST CONDITION: There is no relationship between the passed ClassBox objects
+            (it does not care if the relationship already exists)
+    */
     public static void deleteRelationship(final ClassBox cb1, final ClassBox cb2) {
         for (Relationship rel : cb1.parents) {
             if (rel.getOtherClass().equals(cb2)) {
@@ -196,6 +191,23 @@ public class ClassBox {
                 cb2.parents.remove(rel);
             }
         }
+    }
+
+    /*
+    Deletes the passed relationship between the two ClassBox objects
+    The caller (ModelDiagram) guarantees that the passed ClassBox objects are valid
+    POST CONDITION: There is no relationship between the passed ClassBox objects
+        (it does not care if the relationship already exists)
+    Throws an exception if the relationship does not exist in a list (which it shouldn't)
+*/
+    public static void deleteRelationship(final ClassBox cb1, final ClassBox cb2, final Relationship rel) {
+        try {
+            cb1.parents.remove(rel);
+            cb2.children.remove(rel);
+        } catch (Exception ignored) {
+        }
+        cb1.children.remove(rel);
+        cb2.parents.remove(rel);
     }
 
     //returns a list of ONLY the class names in the calling ClassBox's parents list

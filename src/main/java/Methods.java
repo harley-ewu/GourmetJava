@@ -15,30 +15,29 @@ public class Methods extends Attribute {
         this.returnType = type;
     }
 
-    public boolean deleteParam(String param) {
+    public Controller.STATUS_CODES deleteParam(String param) {
         for (int i = 0; i < paramTypes.size(); i++) {
             if (paramTypes.get(i).equals(param)) {
                 paramTypes.remove(i);
-                return true;
+                return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return false;
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
     }
 
   
-    public boolean renameParam(String oldParamName, String newParamName) {
+    public Controller.STATUS_CODES renameParam(String oldParamName, String newParamName) {
         for (int i = 0; i < paramTypes.size(); i++) {
             if (paramTypes.get(i).equals(oldParamName)) {
                 paramTypes.set(i, newParamName);
-                return true;
+                return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return false;
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
   }
   
     public void addParam(String param) {
         this.paramTypes.add(param);
-
     }
 
     public LinkedList<String> getParamTypes() {

@@ -1,7 +1,6 @@
 package src.main.java;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 
 public abstract class Attribute implements Comparable<Attribute> {
 
@@ -31,20 +30,11 @@ public abstract class Attribute implements Comparable<Attribute> {
 
     }
 
-    public boolean setName(String newName) {
+    public void setName(String newName) {
         if (newName == null || newName.isEmpty())
-            return false;
+            throw new IllegalArgumentException("Bad string passed to Attribute.setName()");
 
         this.name = newName;
-        return true;
-    }
-
-    public boolean setView(Visibility newView) {
-        if (newView == null)
-            return false;
-
-        this.view = newView;
-        return true;
     }
 
     public String getName() {
