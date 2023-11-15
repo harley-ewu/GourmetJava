@@ -372,15 +372,34 @@ public class Controller {
     // corresponding number on the menu
     public static String[] printMenu() {
         return new String[]{
-                "\nPlease choose a number from the following options below",
-                "1.) List Display (Classes, Class details, Relationships)",
-                "2.) Class Options (Add, Delete, Rename)",
-                "3.) Attribute Options (Add, Delete, Rename)",
-                "4.) Relationship Options (Add, Delete)",
-                "5.) Save/Load",
-                "6.) Help",
-                "7.) Open GUI",
-                "8.) Exit"
+                "\nPlease enter a full command. Layouts listed below:",
+                "add methods: ",
+                "   add class [class-name] [class-type-number]",
+                "   add field [class-name] [field-name] [visibility-number] [data-type]",
+                "   add method [class-name] [method-name] [visibility-number] [return-type] [parameters]",
+                "   add relationship [1st-class-name] [2nd-class-name] [relationship-type-number]",
+                "delete methods: ",
+                "   delete class [class-name]",
+                "   delete field [class-name] [field-name]",
+                "   delete method [class-name] [method-name]",
+                "   delete relationship [1st-class-name] [2nd-class-name]",
+                "rename methods: ",
+                "   rename class [old-class-name] [new-class-name]",
+                "   rename field [class-name] [old-field-name] [new-field-name]",
+                "   rename method [class-name] [old-method-name] [new-method-name]",
+                "Save/Load",
+                "    save",
+                "    load",
+                "list",
+                "    list all",
+                "    list classes",
+                "    list relationships",
+                "Help",
+                "    help",
+                "Open GUI",
+                "    gui",
+                "Exit",
+                "    exit"
         };
     }
 
