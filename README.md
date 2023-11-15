@@ -83,8 +83,8 @@ This Installation guide will walk you through the process of installing a JVM an
 2. Open cmd.
 3. Go to the folder that has the GourmetJava File.
 4. Compile the Java classes. Enter `gradlew.bat compileJava`
-5. Generate a jar file. Enter `gradlew.bat jar`
-6. Run the Java project. Enter `java -jar build/libs/GourmetJava.jar`.
+5. Generate a jar file. Enter `gradlew.bat shadowJar`
+6. Run the Java project. Enter `java -jar build/libs/shadow.jar`.
 7. Press 'c' or 'g' respectively for the CLI or GUI interface.
 
 **For Linux**
@@ -93,8 +93,8 @@ This Installation guide will walk you through the process of installing a JVM an
 2. Open terminal.
 3. Go to the folder that has the GourmetJava File.
 4. Compile the Java classes. Enter `./gradlew compileJava`
-5. Generate a jar file. Enter `./gradlew jar`
-6. Run the Java project. Enter `java -jar build/libs/GourmetJava.jar`.
+5. Generate a jar file. Enter `./gradlew shadowJar`
+6. Run the Java project. Enter `java -jar build/libs/shadow.jar`.
 7. Press 'c' or 'g' respectively for the CLI or GUI interface.
 
 ## Programmers 
