@@ -8,6 +8,7 @@ Welcome to **Gourmet Java's UML Editor**! This is where you can find information
 - [Features](#features)
 - [Installation](#installation)
 - [UML-Editor](#running-the-uml-editor)
+- [Error-Code](#error-codes)
 - [Programmers](#programmers)
 
 ## Introduction
@@ -97,10 +98,19 @@ This Installation guide will walk you through the process of installing a JVM an
 6. Run the Java project. Enter `java -jar build/libs/shadow.jar`.
 7. Press 'c' or 'g' respectively for the CLI or GUI interface.
 
+## Error-Codes
+- EXCEPTION - msg:"operation failed - exception caught"
+- SUCCESS - msg:"operation success"
+- OBJ_ALREADY_EXISTS - msg:"already exists"
+- OBJ_NOT_FOUND - msg:"object not found"
+- OBJ_FOUND - msg:"object was found"
+- NULL_PARAM_OBJ - msg:"object is null"
+- EMPTY_STRING - msg:"entered string is empty"
+- NULL_STRING - msg:"entered string is null"
+
 ## Programmers 
 - Rachael D 
 - Karen C
 - David P
 - Ben K
-- Tim N 
 - Michael S
