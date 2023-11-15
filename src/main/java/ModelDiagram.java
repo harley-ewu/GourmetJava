@@ -13,9 +13,11 @@ import java.util.Scanner;
 // This is the class representing all data within the model
 public class ModelDiagram {
 
-    private final static ArrayList<ClassBox> createdClasses = new ArrayList<>();
+    private static ArrayList<ClassBox> createdClasses = new ArrayList<>();
 
-    public static Controller.STATUS_CODES undo() {
+    public static Controller.STATUS_CODES updateChange() {
+        Memento snapshot = new Memento(createdClasses);
+        Caretaker.updateChange(snapshot);
         return Controller.STATUS_CODES.EXCEPTION;
     }
 
@@ -26,20 +28,34 @@ public class ModelDiagram {
     // Created classes will now be stored here
     // Methods for manipulating the model will be stored here
     // Also needs some sort of way to push data to the view so it is able to display it
-    public class Memento {
-
+    public static class Memento {
+        private final ArrayList<ClassBox> snap;
+        public Memento(final ArrayList<ClassBox> snapshot) {
+            snap = new ArrayList<>();
+            for (int i = 0; i < snapshot.size(); i++) {
+                this.snap.add(snapshot.get(i).clone());
+            }
+        }
     }
     /*
         push(memento)
             - build mememto
             - call CareTaker.push(memento)
      */
+    public static void push() {
+        Memento snapshot = new Memento(createdClasses);
+        Caretaker.push(snapshot);
+    }
+
 
     /*
-        pop()
+        updateState()
             - gets Caretaker.pop()
             - restores state
      */
+    public static void updateState(ArrayList<ClassBox> state) {
+        createdClasses = state;
+    }
 
     //searched the list of created classes for a ClassBox with the given name
     //returns the ClassBox object if it exists, or null otherwise
