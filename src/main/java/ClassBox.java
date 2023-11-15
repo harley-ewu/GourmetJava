@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class ClassBox {
+public class ClassBox implements Cloneable {
 
     public boolean equals(final ClassBox cb) {
         return this.equals(cb.getName());
@@ -14,11 +14,23 @@ public class ClassBox {
         return this.getName().equals(name);
     }
 
+    @Override
+    public ClassBox clone() {
+        try {
+            ClassBox clone = (ClassBox) super.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
     private enum ClassType {
 
         CLASS, INTERFACE, RECORD, ENUMERATION, ANNOTATION;
 
     }
+
+
 
     private String name;
     //Possibly change to enum later?
