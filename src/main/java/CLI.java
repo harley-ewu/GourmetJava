@@ -26,7 +26,7 @@ public class CLI {
         while (cont) {
             int input2;
             int input3;
-            CLI.printStringList(Controller.printMenu());
+
             //Retrieves the user input in 'input'
             // get user input of 1-15
             // call io method below
@@ -63,7 +63,7 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
-                            System.out.println("found method");
+
                             LinkedList<String> params = new LinkedList<String>();
 
 
@@ -88,7 +88,7 @@ public class CLI {
                                 System.out.println("Field " + input[3] + " added to class " + input[2] + "!");
                             }
                             CLI.printArrayOfStringList(Controller.listAllClassDetails(input[2]));
-                            System.out.println("Found field");
+
                             break;
                         }
                         case "relationship": {
@@ -96,14 +96,14 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
-                            System.out.println("Found relationship");
+
                             Controller.STATUS_CODES status = Controller.addRelationship(input[2], input[3], input[4]);
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Relationship " + status.toString());
                             }else{
                                 System.out.println("Relationship between " + input[2] + " and " + input[3] + " created!");
                             }
-                            CLI.printArrayOfStringList(Controller.listRelationships());
+
                             break;
                         }
                         default: {
@@ -113,7 +113,7 @@ public class CLI {
                     }
                     break;
                 case "delete":
-                    System.out.println("Found delete");
+
                     switch(input[1]){
                         case "class":{
                             if(input.length != 3){
@@ -133,7 +133,7 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
-                            System.out.println("found method");
+
                             Controller.STATUS_CODES status = Controller.deleteMethod(input[2], input[3]);
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Method " + status.toString());
@@ -147,7 +147,7 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
-                            System.out.println("found field");
+
                             Controller.STATUS_CODES status = Controller.deleteField(input[2], input[3]);
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Field " + status.toString());
@@ -162,7 +162,7 @@ public class CLI {
                                 break;
                             }
 
-                            System.out.println("found relationship");
+
                             Controller.STATUS_CODES status = Controller.deleteRelationship(input[2], input[3]);
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Relationship " + status.toString());
@@ -178,22 +178,31 @@ public class CLI {
                     }
                     break;
                 case "list":
-                    System.out.println("Found list!");
-                    printStringListNumbered(Controller.listClasses());
-                    break;
-                case "help":
-                    System.out.println("Found help!");
-                    Controller.help();
+                    if(input.length != 2){
+                        System.out.println("Command is an invalid length. Please try again");
+                        break;
+                    }
+                    if(input[1].equals("all")){
+                        listClassesDetailed();
+                    }else if(input[1].equals("classes")){
+                        printStringListNumbered(Controller.listClasses());
+                    }else if(input[1].equals("relationships")){
+                        CLI.printArrayOfStringList(Controller.listRelationships());
+                    }else{
+                        System.out.println("Not a valid list command. Please try again");
+                    }
+
+
                     break;
                 case "rename":
-                    System.out.println("Found rename");
+
                     switch(input[1]){
                         case "class":{
                             if(input.length != 4){
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
-                            System.out.println("Found rename");
+
                             Controller.STATUS_CODES status = Controller.renameClass(input[2], input[3]);
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Class " + status.toString());
@@ -207,7 +216,7 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
-                            System.out.println("Found method");
+
                             Controller.STATUS_CODES status = Controller.renameMethod(input[2], input[3], input[4]);
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Method " + status.toString());
@@ -247,6 +256,27 @@ public class CLI {
                     System.out.println("Found GUI!");
                     Main.gview = true;
                     GUI.startGUIMenu();
+                    break;
+                case "exit":
+                    System.out.println("Are you sure you want to exit? Type \"yes\" to confirm");
+                    System.out.print("yes/no: ");
+                    if (kb.nextLine().equalsIgnoreCase("yes")) {
+                        System.out.println("Would you like to save first?");
+                        System.out.print("yes/no: ");
+                        if (kb.nextLine().equalsIgnoreCase("yes")) {
+                            CLI.save();
+                        }
+                        System.out.println("Program Closed! Bye!");
+                        cont = false;
+                        Main.cview = false;
+                    }
+                    break;
+                case "help":
+                    CLI.printStringList(Controller.printMenu());
+                    System.out.println("Class Types:");
+                    CLI.printStringList(Controller.listClassTypes());
+                    System.out.println("Relationship Types:");
+                    CLI.printStringList(Controller.listRelationshipTypes());
                     break;
                 default:
                     break;
@@ -446,6 +476,7 @@ public class CLI {
         for (String aClass : classes)
             printArrayOfStringList(Controller.listAllClassDetails(aClass));
     }
+
 
     public static void save() {
         if (Controller.save()) {
