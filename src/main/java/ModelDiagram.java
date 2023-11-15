@@ -14,9 +14,32 @@ import java.util.Scanner;
 public class ModelDiagram {
 
     private final static ArrayList<ClassBox> createdClasses = new ArrayList<>();
+
+    public static Controller.STATUS_CODES undo() {
+        return Controller.STATUS_CODES.EXCEPTION;
+    }
+
+    public static Controller.STATUS_CODES redo() {
+        return Controller.STATUS_CODES.EXCEPTION;
+    }
+
     // Created classes will now be stored here
     // Methods for manipulating the model will be stored here
     // Also needs some sort of way to push data to the view so it is able to display it
+    public class Memento {
+
+    }
+    /*
+        push(memento)
+            - build mememto
+            - call CareTaker.push(memento)
+     */
+
+    /*
+        pop()
+            - gets Caretaker.pop()
+            - restores state
+     */
 
     //searched the list of created classes for a ClassBox with the given name
     //returns the ClassBox object if it exists, or null otherwise

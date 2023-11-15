@@ -129,6 +129,14 @@ public class Controller {
         return ModelDiagram.renameParam(className, methodName, oldParamName, newParamName);
     }
 
+    public static STATUS_CODES undo(){
+        return ModelDiagram.undo();
+    }
+
+    public static STATUS_CODES redo(){
+        return ModelDiagram.redo();
+    }
+
     public final static int DETAILS_NAME_TYPE = 0;
     public final static int DETAILS_METHODS = 1;
     public final static int DETAILS_FIELDS = 2;
