@@ -17,8 +17,15 @@ public class Caretaker {
 
     }
 
-    public static ModelDiagram.Memento pop(){
+    public static ModelDiagram.Memento undo(){
         return null;
+    }
+
+    public static ModelDiagram.Memento redo(){
+        return null;
+    }
+    public static void updateChange(final ModelDiagram.Memento snapshot){
+
     }
 
 }
