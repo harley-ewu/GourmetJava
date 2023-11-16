@@ -17,16 +17,30 @@ public class ModelDiagram {
 
     public static Controller.STATUS_CODES updateChange() {
         Memento snapshot = new Memento(createdClasses);
-        Caretaker.getInstance().updateChange(snapshot);
-        return Controller.STATUS_CODES.EXCEPTION;
+        try {
+            Caretaker.getInstance().updateChange(snapshot);
+        } catch (Exception ignored) {
+            return Controller.STATUS_CODES.EXCEPTION;
+        }
+        return Controller.STATUS_CODES.SUCCESS;
     }
 
     public static Controller.STATUS_CODES redo() {
-        return Controller.STATUS_CODES.EXCEPTION;
+        try {
+            createdClasses = Caretaker.getInstance().redo().restore();
+        }catch(Exception ignored) {
+            return Controller.STATUS_CODES.EXCEPTION;
+        }
+        return Controller.STATUS_CODES.SUCCESS;
     }
 
     public static Controller.STATUS_CODES undo() {
-        return Controller.STATUS_CODES.EXCEPTION;
+        try {
+            createdClasses = Caretaker.getInstance().undo().restore();
+        }catch(Exception ignored) {
+            return Controller.STATUS_CODES.EXCEPTION;
+        }
+        return Controller.STATUS_CODES.SUCCESS;
     }
 
     // Created classes will now be stored here
@@ -34,29 +48,20 @@ public class ModelDiagram {
     // Also needs some sort of way to push data to the view so it is able to display it
     public static class Memento {
         private final ArrayList<ClassBox> snap;
+
         public Memento(final ArrayList<ClassBox> snapshot) {
             snap = new ArrayList<>();
-            for (int i = 0; i < snapshot.size(); i++) {
-                this.snap.add(snapshot.get(i).clone());
+            for (ClassBox classBox : snapshot) {
+                this.snap.add(classBox.clone());
             }
         }
-    }
-    /*
-        push(memento)
-            - build mememto
-            - call CareTaker.push(memento)
-     */
-    public static void push() {
-        Memento snapshot = new Memento(createdClasses);
-        Caretaker.push(snapshot);
+
+        public ArrayList<ClassBox> restore(){
+            return this.snap;
+        }
     }
 
 
-    /*
-        updateState()
-            - gets Caretaker.pop()
-            - restores state
-     */
     public static void updateState(ArrayList<ClassBox> state) {
         createdClasses = state;
     }
