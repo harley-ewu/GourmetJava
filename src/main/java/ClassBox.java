@@ -19,19 +19,19 @@ public class ClassBox implements Cloneable {
         CLASS, INTERFACE, RECORD, ENUMERATION, ANNOTATION;
 
     }
-    
+
     private String name;
     //Possibly change to enum later?
     //Class, Interface, Enum, etc
     private final ClassType type;
     //Way to sort fields first, methods last?
-    private LinkedList<Relationship> parents = new LinkedList<>();
+    private final LinkedList<Relationship> parents = new LinkedList<>();
 
-    private LinkedList<Relationship> children = new LinkedList<>();
+    private final LinkedList<Relationship> children = new LinkedList<>();
 
-    private LinkedList<Methods> methods = new LinkedList<>();
+    private final LinkedList<Methods> methods = new LinkedList<>();
 
-    private LinkedList<Field> fields = new LinkedList<>();
+    private final LinkedList<Field> fields = new LinkedList<>();
 
     public String getType() {
         return this.type.name();
@@ -44,17 +44,6 @@ public class ClassBox implements Cloneable {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    private ClassBox(final String name, final ClassType type, final LinkedList<Relationship> parents,
-                     final LinkedList<Relationship> children, final LinkedList<Methods> methods,
-                     final LinkedList<Field> fields){
-        this.name = name;
-        this.type = type;
-        this.parents = parents;
-        this.children = children;
-        this.methods = methods;
-        this.fields = fields;
     }
 
     public ClassBox(String name, int type) {
