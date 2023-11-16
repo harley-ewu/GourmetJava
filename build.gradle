@@ -1,11 +1,21 @@
-plugins{
+plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.0'
 }
 
-jar{
-    manifest{
+jar {
+    manifest {
         attributes('Main-Class': 'src.main.java.Main')
     }
+}
+
+shadowJar {
+    // sets the base name of the shadow jar
+    archiveBaseName.set('shadow')
+    // sets the classifier of the shadow jar which will be none in this case. 
+    archiveClassifier.set('')
+    // sets the version of the shadow jar which will be none in this case and will not be added to the end of the jar name.
+    archiveVersion.set('')
 }
 
 dependencies {
