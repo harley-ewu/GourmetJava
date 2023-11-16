@@ -44,8 +44,7 @@ public class Controller {
 
     // Allows the user to name their class, then adds it to the list of created classes
     public static STATUS_CODES addClass(final String name, final int type) {
-        STATUS_CODES status = ModelDiagram.addClass(name, type);
-        return status;
+        return ModelDiagram.addClass(name, type);
     }
 
     // Removes class from createdClasses

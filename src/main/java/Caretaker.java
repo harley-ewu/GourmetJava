@@ -92,8 +92,7 @@ public class Caretaker {
 
          */
         --this.stackPointer;
-        ModelDiagram.Memento memento = this.stack.get(this.stackPointer);
-        return memento;
+        return this.stack.get(this.stackPointer);
     }
 
     /*

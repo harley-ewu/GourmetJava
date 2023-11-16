@@ -65,11 +65,6 @@ public class ModelDiagram {
         }
     }
 
-
-    public static void updateState(ArrayList<ClassBox> state) {
-        createdClasses = state;
-    }
-
     //searched the list of created classes for a ClassBox with the given name
     //returns the ClassBox object if it exists, or null otherwise
     private static ClassBox findClassBox(final String name) {
