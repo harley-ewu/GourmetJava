@@ -74,11 +74,6 @@ public class Caretaker {
     }
 
     /*
-        CASES:
-            - stack is empty
-            - stackPointer is at 0 (the state of the program is already the oldest recorded state)
-            - 0 < stackPointer (the state of the program is not the oldest recorded state)
-
         POSTCONDITIONS:
             In cases where "undos" are invalid, will return null:
                 - If the stack is empty
@@ -87,13 +82,9 @@ public class Caretaker {
                 - The stack is not empty and the stackPointer is not 0 (the state of the program is not the oldest recorded state)
      */
     public ModelDiagram.Memento undo() {
-        //CASE: Stack is empty or stackPointer is == 0 (state of the program is already the oldest recorded state)
         if (this.stackSize == 0 || this.stackPointer == 0)
             return null;
 
-        //CASE: stackPointer is already at 0
-
-        //CASE: 0 < stackPointer (the state of the program is not the oldest recorded state)
         /*
             Full descending stack: stackPointer "points" to the element at the top of the stack (the most recent change)
                 - decrement the stackPointer
@@ -106,12 +97,6 @@ public class Caretaker {
     }
 
     /*
-        CASES:
-            - stack is empty
-            - stackPointer is at the last element (stackSize - 1)
-                - the state of the program is already the newest recorded state
-            - stackPointer < (stackSize - 1) (the state of the program is not the newest recorded state)
-
         POSTCONDITIONS:
             In cases where "redos" are invalid, will return null:
                 - If the stack is empty
@@ -127,7 +112,6 @@ public class Caretaker {
         if (this.stackSize == 0 || this.stackPointer == (stackSize - 1))
             return null;
 
-        //CASE: stackPointer < (stackSize - 1) (the state of the program is not the newest recorded state)
         /*
             Full descending stack: stackPointer "points" to the element at the top of the stack (the most recent change)
                 - increment the stackPointer
@@ -139,11 +123,6 @@ public class Caretaker {
     }
 
     /*
-        CASES:
-            - stack is empty
-            - stackSize is the same size as the array holding it
-            - 0 < stackSize < [array holding the stack].size()
-
         POSTCONDITIONS:
             - The snapshot is added to the top of the stack
             - The stackSize is increased by 1
