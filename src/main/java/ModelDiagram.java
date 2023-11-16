@@ -25,6 +25,10 @@ public class ModelDiagram {
         return Controller.STATUS_CODES.EXCEPTION;
     }
 
+    public static Controller.STATUS_CODES undo() {
+        return Controller.STATUS_CODES.EXCEPTION;
+    }
+
     // Created classes will now be stored here
     // Methods for manipulating the model will be stored here
     // Also needs some sort of way to push data to the view so it is able to display it
@@ -426,7 +430,7 @@ public class ModelDiagram {
                 // Find second index
                 int secondIndex = -1;
                 for (int p = 0; p < createdClasses.size(); p++) {
-                    if (createdClasses.get(p).getName().equals(relationships.get(j).getOtherClass().getName())) {
+                    if (createdClasses.get(p).getName().equals(relationships.get(j).getOtherClass())) {
                         secondIndex = p;
                         p = createdClasses.size();
                     }
