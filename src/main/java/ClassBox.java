@@ -19,9 +19,7 @@ public class ClassBox implements Cloneable {
         CLASS, INTERFACE, RECORD, ENUMERATION, ANNOTATION;
 
     }
-
-
-
+    
     private String name;
     //Possibly change to enum later?
     //Class, Interface, Enum, etc
@@ -42,14 +40,9 @@ public class ClassBox implements Cloneable {
     @Override
     public ClassBox clone() {
         try {
-            // Deep copy the parents list
-            LinkedList<Relationship> newParents = new LinkedList<>();
-
-
-            ClassBox clone = (ClassBox) super.clone();
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
+            return (ClassBox) super.clone();
+        } catch (Exception e) {
+            return null;
         }
     }
 
