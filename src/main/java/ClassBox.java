@@ -169,12 +169,12 @@ public class ClassBox implements Cloneable {
     //finds a relationship between two ClassBoxes if it exists, or null if the relationship does not exist
     public static Relationship findRelationship(final ClassBox cb1, final ClassBox cb2) {
         for (Relationship rel : cb1.parents) {
-            if (rel.getOtherClass().equals(cb2)) {
+            if (rel.getOtherClass().equals(cb2.getName())) {
                 return rel;
             }
         }
         for (Relationship rel : cb1.children) {
-            if (rel.getOtherClass().equals(cb2)) {
+            if (rel.getOtherClass().equals(cb2.getName())) {
                 return rel;
             }
         }
@@ -207,13 +207,13 @@ public class ClassBox implements Cloneable {
     */
     public static void deleteRelationship(final ClassBox cb1, final ClassBox cb2) {
         for (Relationship rel : cb1.parents) {
-            if (rel.getOtherClass().equals(cb2)) {
+            if (rel.getOtherClass().equals(cb2.getName())) {
                 cb1.parents.remove(rel);
                 cb2.children.remove(rel);
             }
         }
         for (Relationship rel : cb1.children) {
-            if (rel.getOtherClass().equals(cb2)) {
+            if (rel.getOtherClass().equals(cb2.getName())) {
                 cb1.children.remove(rel);
                 cb2.parents.remove(rel);
             }
@@ -270,7 +270,7 @@ public class ClassBox implements Cloneable {
         ArrayList<String[]> list = new ArrayList<>();
         for (Relationship parent : this.parents) {
             list.add(new String[]{
-                    parent.getOtherClassName(),
+                    parent.getOtherClass(),
                     this.getName(),
                     String.valueOf(parent.getTypeOrdinal())
             });
