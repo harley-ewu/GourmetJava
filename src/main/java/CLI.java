@@ -31,7 +31,7 @@ public class CLI {
             // get user input of 1-15
             // call io method below
             // io method calls actual method in other classes
-            String[] input = CLI.readStringSplit("Choice: ");
+            String[] input = CLI.readStringSplit("Command: ");
             //int firstSpaceIndex = findSpace(0, input);
             //String command = input.substring(0, firstSpaceIndex);
 
@@ -274,9 +274,9 @@ public class CLI {
                 case "help":
                     CLI.printStringList(Controller.printMenu());
                     System.out.println("Class Types:");
-                    CLI.printStringList(Controller.listClassTypes());
+                    CLI.printStringListNumbered(Controller.listClassTypes());
                     System.out.println("Relationship Types:");
-                    CLI.printStringList(Controller.listRelationshipTypes());
+                    CLI.printStringListNumbered(Controller.listRelationshipTypes());
                     break;
                 default:
                     break;

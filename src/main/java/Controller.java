@@ -189,7 +189,7 @@ public class Controller {
     // Rachael
     // Takes input from user on what index from the list they want to see then calls
     // a toString for that object
-    public static String[] subMenu1() {
+   /* public static String[] subMenu1() {
         return new String[]{"\n1.) List Options.",
                 "These options are listing options. They will lead you to the options where you can list classes, list class details, and list relationships.",
                 "The options are as listed below:",
@@ -342,7 +342,7 @@ public class Controller {
         Because this is split up with enter spaces, should this be returned as an array of string arrays?
         THIS IS A LITTLE GROSS AND I WANT MORE INPUT ON HOW TO IMPLEMENT THIS
             -David
-     */
+
     public static String[][] help() {
         return new String[][]{
                 {                   //array 1
@@ -367,44 +367,48 @@ public class Controller {
                 }
         };
     }
-
+*/
     // PrintMenu will display the menu options and prompt the user to choose a
     // corresponding number on the menu
     public static String[] printMenu() {
         return new String[]{
-                "\nPlease enter a full command. Layouts listed below:",
-                "add methods: ",
+                "\nPlease enter a full command. You will need to fill in the required parameters with the command separated by a space. Example: add class name1 2.",
+                "Numbers that corespond to class types and relationship types will be listed at the end of this menu.",
+                "Commands to add: ",
                 "   add class [class-name] [class-type-number]",
                 "   add field [class-name] [field-name] [visibility-number] [data-type]",
                 "   add method [class-name] [method-name] [visibility-number] [return-type] [parameters]",
                 "   add relationship [1st-class-name] [2nd-class-name] [relationship-type-number]",
-                "delete methods: ",
+                "Commands to delete: ",
                 "   delete class [class-name]",
                 "   delete field [class-name] [field-name]",
                 "   delete method [class-name] [method-name]",
                 "   delete relationship [1st-class-name] [2nd-class-name]",
-                "rename methods: ",
+                "Commands to rename: ",
                 "   rename class [old-class-name] [new-class-name]",
                 "   rename field [class-name] [old-field-name] [new-field-name]",
                 "   rename method [class-name] [old-method-name] [new-method-name]",
-                "Save/Load",
+                "Commands to Save/Load",
                 "    save",
                 "    load",
-                "list",
+                "Commands to list items",
                 "    list all",
                 "    list classes",
                 "    list relationships",
-                "Help",
+                "Command for help",
                 "    help",
-                "Open GUI",
-                "    gui",
-                "Exit",
+                "Command to open window interface",
+                "    window",
+                "Command to exit",
                 "    exit"
         };
     }
+
+
 
 
     public static int getCreatedClassesSize() {
         return ModelDiagram.getCreatedClassesSize();
     }
 }
+
