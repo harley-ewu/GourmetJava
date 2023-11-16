@@ -61,9 +61,9 @@ public class Caretaker {
 
     //This class is a singleton so the ctor is private
     private Caretaker() {
-        this.stackPointer = 0;
+        this.stackPointer = -1;
         this.stackSize = 0;
-        this.stack = new ArrayList<>(10); //nonzero initial capacity to make the case where stack is empty easier to handle
+        this.stack = new ArrayList<>();
     }
 
     public static Caretaker getInstance() {
@@ -74,9 +74,6 @@ public class Caretaker {
     }
 
     /*
-        PRECONDITIONS:
-            - 0 <= stackPointer < stackSize (unless the stack is empty)
-
         CASES:
             - stack is empty
             - stackPointer is at 0 (the state of the program is already the oldest recorded state)
@@ -90,25 +87,25 @@ public class Caretaker {
                 - The stack is not empty and the stackPointer is not 0 (the state of the program is not the oldest recorded state)
      */
     public ModelDiagram.Memento undo() {
-        //CASE: Stack is empty or stackPointer is already at 0 (the state of the program is already the oldest recorded state)
+        //CASE: Stack is empty or stackPointer is == 0 (state of the program is already the oldest recorded state)
         if (this.stackSize == 0 || this.stackPointer == 0)
             return null;
+
+        //CASE: stackPointer is already at 0
 
         //CASE: 0 < stackPointer (the state of the program is not the oldest recorded state)
         /*
             Full descending stack: stackPointer "points" to the element at the top of the stack (the most recent change)
-                - must decrement the stackPointer
-                    - now stackPointer is at the previously recorded state of the program
-                - return the element "pointed at" by the stackPointer
+                - decrement the stackPointer
+                - get the element "pointed at" by the stackPointer
+
          */
         --this.stackPointer;
-        return this.stack.get(this.stackPointer);
+        ModelDiagram.Memento memento = this.stack.get(this.stackPointer);
+        return memento;
     }
 
     /*
-        PRECONDITIONS:
-            - 0 <= stackPointer < stackSize (unless the stack is empty)
-
         CASES:
             - stack is empty
             - stackPointer is at the last element (stackSize - 1)
@@ -133,8 +130,8 @@ public class Caretaker {
         //CASE: stackPointer < (stackSize - 1) (the state of the program is not the newest recorded state)
         /*
             Full descending stack: stackPointer "points" to the element at the top of the stack (the most recent change)
-                - must increment the stackPointer
-                    - now stackPointer is at the next most recently recorded state of the program
+                - increment the stackPointer
+                    - now stackPointer is at the space after the current state (the next most recently recorded state of the program)
                 - return the element "pointed at" by the stackPointer
          */
         ++stackPointer;
@@ -142,9 +139,6 @@ public class Caretaker {
     }
 
     /*
-        PRECONDITIONS:
-            - 0 <= stackPointer < stackSize (unless the stack is empty)
-
         CASES:
             - stack is empty
             - stackSize is the same size as the array holding it
@@ -159,24 +153,14 @@ public class Caretaker {
         if (snapshot == null)
             throw new IllegalArgumentException("null snapshot passed to Caretaker.updateChange");
 
-        //CASE: stack is empty (the array containing it will never have size 0, so we do not need add())
-        if (this.stackSize == 0) {
-            this.stackSize = 1;         //stackSize == 1 (obvious)
-            this.stackPointer = 0;      //stackPointer == 0 (redundant)
-            this.stack.set(stackPointer, snapshot); //stack[0] = snapshot
+        ++this.stackPointer;
+        if(this.stackPointer == this.stack.size()){
+            this.stack.add(snapshot);
         }
-        //CASE: stackSize is the same size as the array holding it
-        else if (this.stackSize == this.stack.size()) {
-            this.stackPointer = this.stackSize; //an element is being added; stackPointer = (new stackSize - 1)
-            ++this.stackSize;                   //stackSize increases by 1 (last element is at stackSize - 1)
-            this.stack.add(snapshot);           //add new snapshot at the end
+        else{
+            this.stack.set(stackPointer,snapshot);
         }
-        //CASE: 0 < stackSize < [array holding the stack].size()
-        else {
-            ++this.stackPointer;                //increment the stackPointer
-            ++this.stackSize;                   //can safely be incremented because the stack is smaller than the array holding it
-            this.stack.set(stackPointer, snapshot);
-        }
+        this.stackSize = this.stackPointer + 1;
 
     }
 

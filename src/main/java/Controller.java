@@ -13,7 +13,9 @@ public class Controller {
         OBJ_FOUND("object was found"),
         NULL_PARAM_OBJ("object is null"),
         EMPTY_STRING("entered string is empty"),
-        NULL_STRING("entered string is null");
+        NULL_STRING("entered string is null"),
+        UNDO_FAILED("failed to perform undo"),
+        REDO_FAILED("failed to perform redo");
 
         private final String msg;
 
@@ -42,7 +44,8 @@ public class Controller {
 
     // Allows the user to name their class, then adds it to the list of created classes
     public static STATUS_CODES addClass(final String name, final int type) {
-        return ModelDiagram.addClass(name, type);
+        STATUS_CODES status = ModelDiagram.addClass(name, type);
+        return status;
     }
 
     // Removes class from createdClasses

@@ -248,6 +248,14 @@ public class CLI {
                     Main.gview = true;
                     GUI.startGUIMenu();
                     break;
+
+                case "undo":
+                    System.out.println("undo: " + Controller.undo().toString());
+                    break;
+
+                case "redo":
+                    System.out.println("redo: " + Controller.redo().toString());
+                    break;
                 default:
                     break;
             }

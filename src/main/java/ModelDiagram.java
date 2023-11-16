@@ -16,8 +16,8 @@ public class ModelDiagram {
     private static ArrayList<ClassBox> createdClasses = new ArrayList<>();
 
     public static Controller.STATUS_CODES updateChange() {
-        Memento snapshot = new Memento(createdClasses);
         try {
+            Memento snapshot = new Memento(createdClasses);
             Caretaker.getInstance().updateChange(snapshot);
         } catch (Exception ignored) {
             return Controller.STATUS_CODES.EXCEPTION;
@@ -27,18 +27,18 @@ public class ModelDiagram {
 
     public static Controller.STATUS_CODES redo() {
         try {
-            createdClasses = Caretaker.getInstance().redo().restore();
-        }catch(Exception ignored) {
-            return Controller.STATUS_CODES.EXCEPTION;
+            Caretaker.getInstance().redo().restore();
+        } catch (Exception ignored) {
+            return Controller.STATUS_CODES.REDO_FAILED;
         }
         return Controller.STATUS_CODES.SUCCESS;
     }
 
     public static Controller.STATUS_CODES undo() {
         try {
-            createdClasses = Caretaker.getInstance().undo().restore();
-        }catch(Exception ignored) {
-            return Controller.STATUS_CODES.EXCEPTION;
+            Caretaker.getInstance().undo().restore();
+        } catch (Exception ignored) {
+            return Controller.STATUS_CODES.UNDO_FAILED;
         }
         return Controller.STATUS_CODES.SUCCESS;
     }
@@ -50,14 +50,18 @@ public class ModelDiagram {
         private final ArrayList<ClassBox> snap;
 
         public Memento(final ArrayList<ClassBox> snapshot) {
-            snap = new ArrayList<>();
+            this.snap = new ArrayList<>();
             for (ClassBox classBox : snapshot) {
                 this.snap.add(classBox.clone());
             }
         }
 
-        public ArrayList<ClassBox> restore(){
-            return this.snap;
+        public void restore() {
+            ArrayList<ClassBox> list = new ArrayList<>();
+            for(ClassBox cb : this.snap){
+                list.add(cb.clone());
+            }
+            createdClasses = list;
         }
     }
 
@@ -94,6 +98,10 @@ public class ModelDiagram {
 
         if (name.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
+        //Necessary so that we always have an empty list of classes to undo to
+        if(createdClasses.isEmpty())
+            updateChange();
+
         ClassBox newBox = findClassBox(name);
         if (newBox != null) return Controller.STATUS_CODES.OBJ_ALREADY_EXISTS;
 
@@ -103,7 +111,7 @@ public class ModelDiagram {
             return Controller.STATUS_CODES.EXCEPTION;
         }
 
-        return Controller.STATUS_CODES.SUCCESS;
+        return updateChange();
     }
 
     //returns true only if a class was deleted
