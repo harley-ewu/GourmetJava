@@ -14,16 +14,6 @@ public class ClassBox implements Cloneable {
         return this.getName().equals(name);
     }
 
-    @Override
-    public ClassBox clone() {
-        try {
-            ClassBox clone = (ClassBox) super.clone();
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
-    }
-
     private enum ClassType {
 
         CLASS, INTERFACE, RECORD, ENUMERATION, ANNOTATION;
@@ -37,16 +27,41 @@ public class ClassBox implements Cloneable {
     //Class, Interface, Enum, etc
     private final ClassType type;
     //Way to sort fields first, methods last?
-    private final LinkedList<Relationship> parents = new LinkedList<>();
+    private LinkedList<Relationship> parents = new LinkedList<>();
 
-    private final LinkedList<Relationship> children = new LinkedList<>();
+    private LinkedList<Relationship> children = new LinkedList<>();
 
-    private final LinkedList<Methods> methods = new LinkedList<>();
+    private LinkedList<Methods> methods = new LinkedList<>();
 
-    private final LinkedList<Field> fields = new LinkedList<>();
+    private LinkedList<Field> fields = new LinkedList<>();
 
     public String getType() {
         return this.type.name();
+    }
+
+    @Override
+    public ClassBox clone() {
+        try {
+            // Deep copy the parents list
+            LinkedList<Relationship> newParents = new LinkedList<>();
+
+
+            ClassBox clone = (ClassBox) super.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
+    private ClassBox(final String name, final ClassType type, final LinkedList<Relationship> parents,
+                     final LinkedList<Relationship> children, final LinkedList<Methods> methods,
+                     final LinkedList<Field> fields){
+        this.name = name;
+        this.type = type;
+        this.parents = parents;
+        this.children = children;
+        this.methods = methods;
+        this.fields = fields;
     }
 
     public ClassBox(String name, int type) {

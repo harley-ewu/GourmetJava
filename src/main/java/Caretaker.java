@@ -5,8 +5,15 @@ import java.util.ArrayList;
 public class Caretaker {
 
     private final static ArrayList<ModelDiagram.Memento> stack = new ArrayList<>();
+
+    /*
+        stackPointer keeps track of the "current state"
+     */
     private static int stackPointer = 0;
 
+    /*
+        stackSize keeps track of the most updated state that we are allowed to redo to
+     */
     private static int stackSize = 0;
 
     private Caretaker(){
