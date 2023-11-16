@@ -17,7 +17,7 @@ public class ModelDiagram {
 
     public static Controller.STATUS_CODES updateChange() {
         Memento snapshot = new Memento(createdClasses);
-        Caretaker.updateChange(snapshot);
+        Caretaker.getInstance().updateChange(snapshot);
         return Controller.STATUS_CODES.EXCEPTION;
     }
 
