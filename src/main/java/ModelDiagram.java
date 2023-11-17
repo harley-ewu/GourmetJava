@@ -94,7 +94,7 @@ public class ModelDiagram {
         if (name.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
         //Necessary so that we always have an empty list of classes to undo to
-        if(createdClasses.isEmpty())
+        if(Caretaker.getInstance() == null)
             updateChange();
 
         ClassBox newBox = findClassBox(name);
