@@ -45,3 +45,7 @@ jobs:
     # Standard gradle test command.
     - name: Test with Gradle
       run: ./gradlew test
+    
+    # This is will generate a code coverage report.  
+    - name: Code Coverage Report
+      uses: romeovs/lcov-reporter-action@v0.3.1        
