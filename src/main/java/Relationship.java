@@ -2,7 +2,13 @@ package src.main.java;
 
 import java.util.Arrays;
 
+/**
+ * Describes the relationship between 2 classes
+ */
 public class Relationship {
+    /**
+     * the type of relationship between the 2 classes
+     */
     private enum RelationshipType {
         AGGREGATION("aggregates"),
         COMPOSITION("composes"),
@@ -22,8 +28,14 @@ public class Relationship {
 
     }
 
+    /**
+     * name of the other class (a Relationship object is owned by one class and points to another)
+     */
     private final String otherClass;
-    //Aggregation, Composition, extension, etc
+
+    /**
+     * Type of relationship
+     */
     private final RelationshipType type;
 
     /**

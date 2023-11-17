@@ -10,11 +10,21 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-// This is the class representing all data within the model
+/**
+ * This is the class representing all data within the model
+ */
 public class ModelDiagram {
 
+    /**
+     * The list of classes created by the user
+     */
     private static ArrayList<ClassBox> createdClasses = new ArrayList<>();
 
+    /**
+     * Creates a backup copy of the list of created classes (as a Memento Object) and passes that to the Caretaker to store
+     *
+     * @return STATUS_CODES.EXCEPTION if there was an error when creating the update, or SUCCESS otherwise
+     */
     public static Controller.STATUS_CODES updateChange() {
         try {
             Memento snapshot = new Memento(createdClasses);
@@ -25,6 +35,12 @@ public class ModelDiagram {
         return Controller.STATUS_CODES.SUCCESS;
     }
 
+    /**
+     * Calls the Caretaker.redo() method to retrieve a Memento Object that holds a LinkedList of ClassBox objects,
+     * then copies that list into the createdClasses list. This un-does an "undo"
+     *
+     * @return STATUS_CODES.REDO_FAILED if the redo failed for any reason, SUCCESS otherwise
+     */
     public static Controller.STATUS_CODES redo() {
         try {
             Caretaker.getInstance().redo().restore();
@@ -34,6 +50,13 @@ public class ModelDiagram {
         return Controller.STATUS_CODES.SUCCESS;
     }
 
+    /**
+     * Calls the Caretaker.undo() method to retrieve a Memento Object that holds a LinkedList of ClassBox objects,
+     * then copies that list into the createdClasses list. The list retrieved is the most recent state of the
+     * program, just before the most recent change
+     *
+     * @return STATUS_CODES.UNDO_FAILED if the redo failed for any reason, SUCCESS otherwise
+     */
     public static Controller.STATUS_CODES undo() {
         try {
             Caretaker.getInstance().undo().restore();
@@ -43,12 +66,17 @@ public class ModelDiagram {
         return Controller.STATUS_CODES.SUCCESS;
     }
 
-    // Created classes will now be stored here
-    // Methods for manipulating the model will be stored here
-    // Also needs some sort of way to push data to the view so it is able to display it
+    /**
+     * Class that stores a list of ClassBox objects, used with Caretaker for undo/redo
+     */
     public static class Memento {
         private final ArrayList<ClassBox> snap;
 
+        /**
+         * Creates a Memento Object using the createdClasses list
+         *
+         * @param snapshot the createdClasses list (this should always be ModelDiagram.createdClasses)
+         */
         public Memento(final ArrayList<ClassBox> snapshot) {
             this.snap = new ArrayList<>();
             for (ClassBox classBox : snapshot) {
@@ -56,17 +84,24 @@ public class ModelDiagram {
             }
         }
 
+        /**
+         * Creates a new list using a Memento object's object, then it to ModelDiagram.createdClasses
+         */
         public void restore() {
             ArrayList<ClassBox> list = new ArrayList<>();
-            for(ClassBox cb : this.snap){
+            for (ClassBox cb : this.snap) {
                 list.add(cb.clone());
             }
             createdClasses = list;
         }
     }
 
-    //searched the list of created classes for a ClassBox with the given name
-    //returns the ClassBox object if it exists, or null otherwise
+    /**
+     * Searches the list of created classes for a ClassBox with the given name
+     *
+     * @param name The name of the ClassBox object to find
+     * @return a ClassBox object if it exists, or null otherwise
+     */
     private static ClassBox findClassBox(final String name) {
         if (name == null || name.isEmpty()) return null;
 
@@ -76,6 +111,13 @@ public class ModelDiagram {
         return null;
     }
 
+    /**
+     * Checks if a ClassBox object exists
+     *
+     * @param crisis The name of the ClassBox object to search for
+     * @return STATUS_CODES.NULL_STRING or EMPTY_STRING if the passed String is null or empty<br>
+     * STATUS_CODES.OBJ_NOT_FOUND if the ClassBox does not exist, OBJ_FOUND if it does
+     */
     public static Controller.STATUS_CODES existentialCrisisExists(final String crisis) {
         if (crisis == null) return Controller.STATUS_CODES.NULL_STRING;
 
@@ -85,16 +127,23 @@ public class ModelDiagram {
         return Controller.STATUS_CODES.OBJ_FOUND;
     }
 
-    //returns true only if a class was added
-    //returns false if a class was not added or a class with the same name already existed
-    //throws an exception if the input "type" int was invalid
+    /**
+     * Adds a class
+     *
+     * @param name The name of the new Class to create
+     * @param type The type of the class that is being created
+     * @return STATUS_CODES.NULL_STRING/EMPTY_STRING if the given name is null/empty<br>
+     * OBJ_ALREADY_EXISTS if a created class with the given name already exists<br>
+     * EXCEPTION if there was an error making the ClassBox object or if there was a problem updating the Memento list<br>
+     * SUCCESS if there was no issue
+     */
     public static Controller.STATUS_CODES addClass(final String name, final int type) {
         if (name == null) return Controller.STATUS_CODES.NULL_STRING;
 
         if (name.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
         //Necessary so that we always have an empty list of classes to undo to
-        if(Caretaker.getInstance() == null)
+        if (Caretaker.getInstance() == null)
             updateChange();
 
         ClassBox newBox = findClassBox(name);
@@ -109,8 +158,14 @@ public class ModelDiagram {
         return updateChange();
     }
 
-    //returns true only if a class was deleted
-    //returns false if the class was not deleted or the class with the given name DNE
+    /**
+     * Deletes a class with the given name
+     *
+     * @param name the name of the class to delete
+     * @return OBJ_NOT_FOUND if the class with the given name DNE<br>
+     * SUCCESS if there was no issue<br>
+     * NULL_STRING/EMPTY_STRING if the given name is null/empty
+     */
     public static Controller.STATUS_CODES deleteClass(final String name) {
         if (name == null) return Controller.STATUS_CODES.NULL_STRING;
 
@@ -123,9 +178,21 @@ public class ModelDiagram {
         return Controller.STATUS_CODES.SUCCESS;
     }
 
-    // This method finds classBox within createdClasses
-    // If not found returns false
-    // Else adds method to the classBox and returns true
+    /**
+     * Adds a method to an existing class
+     *
+     * @param className  name of the class to add the method to
+     * @param name       name of the method being created
+     * @param view       visibility of the new method
+     * @param returnType return type of the new method
+     * @param params     LinkedList of params the new method takes
+     * @return STATUS_CODES depending on the result<br>
+     * NULL_STRING/EMPTY_STRING if any Strings are null or empty<br>
+     * NULL_PARAM_OBJ if the list of params is null<br>
+     * OBJ_NOT_FOUND if there isn't a class with the given name<br>
+     * SUCCESS if there wasn't a problem<br>
+     * EXCEPTION if creating the Method object threw an exception
+     */
     public static Controller.STATUS_CODES addMethod(final String className, final String name, final int view, final String returnType, final LinkedList<String> params) {
         if (className == null || name == null || returnType == null) return Controller.STATUS_CODES.NULL_STRING;
 
@@ -144,9 +211,19 @@ public class ModelDiagram {
         }
     }
 
-    // This method finds classBox within createdClasses
-    // If not found returns false
-    // Else adds field to the classBox and returns true
+    /**
+     * Adds a field to an existing class
+     *
+     * @param className name of the class to add the field to
+     * @param name      name of the new field
+     * @param view      visibility of the new field
+     * @param type      data type of the new field
+     * @return STATUS_CODES depending on the result<br>
+     * NULL_STRING/EMPTY_STRING if any Strings are null or empty<br>
+     * OBJ_NOT_FOUND if there isn't a class with the given name<br>
+     * SUCCESS if there wasn't a problem<br>
+     * EXCEPTION if creating the Field object threw an exception
+     */
     public static Controller.STATUS_CODES addField(final String className, final String name, int view, final String type) {
         if (className == null || name == null || type == null) return Controller.STATUS_CODES.NULL_STRING;
 
@@ -163,6 +240,14 @@ public class ModelDiagram {
         }
     }
 
+    /**
+     * Adds a parameter to a class's method
+     *
+     * @param className  name of the class
+     * @param methodName name of the method
+     * @param paramName  name of the new param
+     * @return STATUS_CODES
+     */
     public static Controller.STATUS_CODES addParam(final String className, final String methodName, final String paramName) {
         if (className == null || methodName == null || paramName == null) return Controller.STATUS_CODES.NULL_STRING;
 
@@ -175,6 +260,13 @@ public class ModelDiagram {
         return target.addParam(methodName, paramName);
     }
 
+    /**
+     * Deletes a method from a class
+     *
+     * @param className  name of the class
+     * @param methodName name of the method to delete
+     * @return STATUS_CODES
+     */
     public static Controller.STATUS_CODES deleteMethod(final String className, final String methodName) {
         if (className == null || methodName == null) return Controller.STATUS_CODES.NULL_STRING;
 
@@ -187,6 +279,13 @@ public class ModelDiagram {
 
     }
 
+    /**
+     * Deletes a field from a class
+     *
+     * @param className name of the class
+     * @param fieldName name of the field to delete
+     * @return STATUS_CODES
+     */
     public static Controller.STATUS_CODES deleteField(final String className, final String fieldName) {
         if (className == null || fieldName == null) return Controller.STATUS_CODES.NULL_STRING;
 
@@ -198,6 +297,14 @@ public class ModelDiagram {
         return target.deleteField(fieldName);
     }
 
+    /**
+     * Deletes a field from a class
+     *
+     * @param className  name of the class
+     * @param methodName name of the field to delete
+     * @param paramName  name of the param to delete
+     * @return STATUS_CODES
+     */
     public static Controller.STATUS_CODES deleteParam(final String className, final String methodName, final String paramName) {
         if (className == null || methodName == null || paramName == null) return Controller.STATUS_CODES.NULL_STRING;
 
@@ -210,6 +317,14 @@ public class ModelDiagram {
         return target.deleteParam(methodName, paramName);
     }
 
+    /**
+     * Renames a method in a class
+     *
+     * @param className     name of the class
+     * @param methodName    name of the existing method
+     * @param newMethodName new name of the method
+     * @return STATUS_CODES
+     */
     public static Controller.STATUS_CODES renameMethod(final String className, final String methodName, final String newMethodName) {
         if (className == null || methodName == null || newMethodName == null)
             return Controller.STATUS_CODES.NULL_STRING;
@@ -223,6 +338,14 @@ public class ModelDiagram {
         return target.renameMethod(methodName, newMethodName);
     }
 
+    /**
+     * Renames a field in a class
+     *
+     * @param className    name of the class
+     * @param fieldName    name of the existing field
+     * @param newFieldName new name of the field
+     * @return STATUS_CODES
+     */
     public static Controller.STATUS_CODES renameField(final String className, final String fieldName, final String newFieldName) {
         if (className == null || fieldName == null || newFieldName == null) return Controller.STATUS_CODES.NULL_STRING;
 
@@ -240,6 +363,15 @@ public class ModelDiagram {
 
     }
 
+    /**
+     * Renames a param in a class's method
+     *
+     * @param className    name of the class
+     * @param methodName   name of the method
+     * @param oldParamName name of the existing param
+     * @param newParamName new name of the param
+     * @return STATUS_CODES
+     */
     public static Controller.STATUS_CODES renameParam(final String className, final String methodName, final String oldParamName, final String newParamName) {
         if (className == null || methodName == null || oldParamName == null || newParamName == null)
             return Controller.STATUS_CODES.NULL_STRING;
@@ -258,7 +390,11 @@ public class ModelDiagram {
 
     }
 
-
+    /**
+     * makes a list of all classes
+     *
+     * @return String[] containing the names of all classes, each name a separate element
+     */
     public static String[] listClasses() {
         String[] list = new String[createdClasses.size()];
         for (int i = 0; i < createdClasses.size(); ++i) {
@@ -267,12 +403,13 @@ public class ModelDiagram {
         return list;
     }
 
-    /*
-        lists the classes in the format:
-            {Class1, Class1 type},
-            {Class2, Class2 types},
-            etc.
-        Made a separate method to not break existing code
+    /**
+     * Lists the classes and their types
+     *
+     * @return String[][] in the format:<br>
+     * {Class1, Class1 type},<br>
+     * {Class2, Class2 types},<br>
+     * etc.
      */
     public static String[][] listClassesAndTypes() {
         String[][] list = new String[getCreatedClassesSize()][2];
@@ -283,14 +420,16 @@ public class ModelDiagram {
         return list;
     }
 
-    /*
-        Returns the details of a class in the format:
-        {
-           [0][x] - { Class name, Type},
-           [1][x] - { List of Methods },
-           [2][x] - { List of Fields }
-           [3][x] - { List of Relationships }
-        }
+    /**
+     * Lists the classes and their types
+     *
+     * @return String[][] in the format:<br>
+     * {<br>
+     * [0][x] - { Class name, Type},<br>
+     * [1][x] - { List of Methods },<br>
+     * [2][x] - { List of Fields }<br>
+     * [3][x] - { List of Relationships }<br>
+     * }
      */
     public static String[][] listAllClassDetails(final String name) {
         if (name == null || name.isEmpty()) return null;
@@ -306,8 +445,13 @@ public class ModelDiagram {
         return details;
     }
 
-    //returns true only if the class was renamed
-    //returns false if the class DNE or the name was not changed
+    /**
+     * renames a class
+     *
+     * @param originalName name of the existing class
+     * @param newName      name to give to the existing class
+     * @return STATUS_CODES
+     */
     public static Controller.STATUS_CODES renameClass(final String originalName, final String newName) {
         if (originalName == null || newName == null) return Controller.STATUS_CODES.NULL_STRING;
 
@@ -323,8 +467,14 @@ public class ModelDiagram {
         return Controller.STATUS_CODES.SUCCESS;
     }
 
-    //Adds a relationship with the type being an integer stored as a String (ex: "1" or "2")
-    //Does not accept the name of the enum itself (maybe add later)
+    /**
+     * adds a relationship between 2 classes
+     *
+     * @param parentClass name of the "parent" class
+     * @param childClass  name of the "child" class
+     * @param type        type of relationship between the classes
+     * @return STATUS_CODES
+     */
     public static Controller.STATUS_CODES addRelationship(final String parentClass, final String childClass, final String type) {
         if (parentClass == null || childClass == null || type == null) return Controller.STATUS_CODES.NULL_STRING;
 
@@ -340,7 +490,14 @@ public class ModelDiagram {
         }
     }
 
-    //returns true if a relationship was added, false otherwise (also returns false if a relationship existed)
+    /**
+     * adds a relationship between 2 classes
+     *
+     * @param parentClass name of the "parent" class
+     * @param childClass  name of the "child" class
+     * @param type        type of relationship between the classes
+     * @return STATUS_CODES
+     */
     public static Controller.STATUS_CODES addRelationship(final String parentClass, final String childClass, final int type) {
         if (parentClass == null || childClass == null) return Controller.STATUS_CODES.NULL_STRING;
 
@@ -357,15 +514,20 @@ public class ModelDiagram {
         return Controller.STATUS_CODES.SUCCESS;
     }
 
-    //returns true if a relationship between the classes was deleted
-    //returns false if the box objects do not exist or if there wasn't a relationship to begin with
-    public static Controller.STATUS_CODES deleteRelationship(final String parentClass, final String childClass) {
-        if (parentClass == null || childClass == null) return Controller.STATUS_CODES.NULL_STRING;
+    /**
+     * Deletes a relationship bewteen 2 classes
+     *
+     * @param cb1 name of the first class
+     * @param cb2 name of the seconds class
+     * @return STATUS_CODES
+     */
+    public static Controller.STATUS_CODES deleteRelationship(final String cb1, final String cb2) {
+        if (cb1 == null || cb2 == null) return Controller.STATUS_CODES.NULL_STRING;
 
-        if (parentClass.isEmpty() || childClass.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
+        if (cb1.isEmpty() || cb2.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
-        ClassBox parent = findClassBox(parentClass);
-        ClassBox child = findClassBox(childClass);
+        ClassBox parent = findClassBox(cb1);
+        ClassBox child = findClassBox(cb2);
         if (parent == null || child == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
 
         Relationship relationship = ClassBox.findRelationship(parent, child);
@@ -379,8 +541,12 @@ public class ModelDiagram {
         return Controller.STATUS_CODES.SUCCESS;
     }
 
-    //returns list of names of ONLY each createdClasses's parent classes
-    //each createdClass's list is stored in a list (list of lists)
+    /**
+     * makes a list of all relationships
+     *
+     * @return String[][] of names of ONLY each createdClasses's parent classes<br>
+     * each createdClass's list is stored in a list (list of lists)
+     */
     public static String[][] listRelationships() {
         String[][] list = new String[createdClasses.size()][];
         for (int i = 0; i < createdClasses.size(); ++i) {
@@ -389,13 +555,16 @@ public class ModelDiagram {
         return list;
     }
 
-    /*
-        Saves the relationships in the format:
-        {
-            { parent, child, type (integer stored as String) },
-            { parent, child, type (integer stored as String) },
-             etc.
-        }
+
+    /**
+     * Lists classes and relationships, used for save/load
+     *
+     * @return ArrayList&lt;String[]&gt; in the format:<br>
+     * {<br>
+     * { parent, child, type (integer stored as String) },<br>
+     * { parent, child, type (integer stored as String) },<br>
+     * etc.<br>
+     * }
      */
     public static ArrayList<String[]> listRelationshipsSaveHelper() {
         ArrayList<String[]> list = new ArrayList<>();
@@ -405,9 +574,12 @@ public class ModelDiagram {
         return list;
     }
 
-    // The save method takes the current state of the program and saves it into a
-    // .json file
-    // Currently only a single save is supported
+    /**
+     * Saves the program to json file<br>
+     * only a single save can be made
+     *
+     * @return true if it saved, false if there was an error
+     */
     public static boolean save() {
         // If there is nothing to save return false
         if (createdClasses.size() == 0) return false;
@@ -484,9 +656,12 @@ public class ModelDiagram {
         return true;
     }
 
-    // The load function is used to restore data that was previously saved using the
-    // save function
-    // Again we only support up to a single save
+    /**
+     * loads a save file<br>
+     * only one save is supported
+     *
+     * @return true if it loaded, false if there was a problem
+     */
     public static boolean load() {
         // Create a File and add a scanner to it to read the data
         File inputFile = new File("SavedFile.json");
@@ -548,48 +723,13 @@ public class ModelDiagram {
         return true;
     }
 
-    /*
-        Lists the class methods as a list in the format:
-           { [visibility symbol][method name] ([param types]) : [return type] },
-           etc.
-        Returns null if the ClassBox does not exist
+    /**
+     * Gets the size of the createdClasses list
+     *
+     * @return size of the createdClasses list
      */
-    public static String[] listClassMethods(final String name) {
-        if (name == null || name.isEmpty()) return null;
-
-        ClassBox box = findClassBox(name);
-        if (box == null) return null;
-
-        return box.listMethods();
-    }
-
-    /*
-        Lists the class methods as a list in the format:
-        { [visibility symbol][field name] : [field type] },
-        etc.
-        Returns null if the ClassBox does not exist
-     */
-    public static String[] listClassFields(final String name) {
-        if (name == null || name.isEmpty()) return null;
-
-        ClassBox box = findClassBox(name);
-        if (box == null) return null;
-
-        return box.listFields();
-
-    }
-
     public static int getCreatedClassesSize() {
         return createdClasses.size();
     }
-
-    public static String[] getClassMethods(final String className) {
-        return null;
-    }
-
-    public static String[] getClassFields(final String name) {
-        return null;
-    }
-
 
 }

@@ -2,9 +2,11 @@ package src.main.java;
 
 import java.util.*;
 
-
+/**
+ * The interface between CLI/GUI and the backend
+ */
 public class Controller {
-    
+
     public enum STATUS_CODES {
         EXCEPTION("operation failed - exception caught"),
         SUCCESS("operation success"),
@@ -19,123 +21,230 @@ public class Controller {
 
         private final String msg;
 
-        STATUS_CODES(final String msg){
+        STATUS_CODES(final String msg) {
             this.msg = msg;
         }
 
         @Override
-        public String toString(){
+        public String toString() {
             return this.msg;
         }
     }
 
-    // Display all program options, choose from list, call other method based on
-    // choice
     private Controller() {
-        // createdClasses = new ArrayList<>();
-        // kb = new Scanner(System.in);
     }
 
-    //CHECKS IF A CLASS EXISTS
-    //Returns true if the class with the given name exists, otherwise returns false
-    public static STATUS_CODES existentialCrisisExists(final String crisis){
+    /**
+     * checks if a class with the given name exists
+     *
+     * @param crisis name of the class
+     * @return STATUS_CODES
+     */
+    public static STATUS_CODES existentialCrisisExists(final String crisis) {
         return ModelDiagram.existentialCrisisExists(crisis);
     }
 
-    // Allows the user to name their class, then adds it to the list of created classes
+    /**
+     * Adds a class with the given name and type
+     *
+     * @param name name of the class
+     * @param type name of the class's type
+     * @return STATUS_CODES
+     */
     public static STATUS_CODES addClass(final String name, final int type) {
         return ModelDiagram.addClass(name, type);
     }
 
-    // Removes class from createdClasses
-    // Rachael
-    // Takes in the index of the item user wants removed from the list and removes
-    // it
+    /**
+     * deletes a class with the given name
+     *
+     * @param name name of the class to delete
+     * @return STATUS_CODES
+     */
     public static STATUS_CODES deleteClass(final String name) {
         return ModelDiagram.deleteClass(name);
     }
 
-    // Renames a classbox item that has already been created
-    // Rachael
-    // Takes in the index of the item they want renamed, then asks them to type in a
-    // new name
+    /**
+     * Renames a class with the given name
+     *
+     * @param originalName name of the class to rename
+     * @param newName      new name of the class
+     * @return STATUS_CODES
+     */
     public static STATUS_CODES renameClass(final String originalName, final String newName) {
         return ModelDiagram.renameClass(originalName, newName);
     }
 
-    public static STATUS_CODES addRelationship(final String cb1, final String cb2, final int type) {
-        return ModelDiagram.addRelationship(cb1, cb2, type);
+    /**
+     * Adds a relationship between 2 classes
+     *
+     * @param parentClass name of the "parent" class
+     * @param childClass  name of the "child" class
+     * @param type        type of relationship
+     * @return STATUS_CODES
+     */
+    public static STATUS_CODES addRelationship(final String parentClass, final String childClass, final int type) {
+        return ModelDiagram.addRelationship(parentClass, childClass, type);
     }
 
-    //Adds a relationship with the type being an integer stored as a String (ex: "1" or "2")
-    //Does not accept the name of the enum itself (maybe add later)
-    public static STATUS_CODES addRelationship(final String parentClass, final String childClass, final String type){
-        return ModelDiagram.addRelationship(parentClass,childClass,type);
+    /**
+     * Adds a relationship between 2 classes
+     *
+     * @param parentClass name of the "parent" class
+     * @param childClass  name of the "child" class
+     * @param type        type of relationship
+     * @return STATUS_CODES
+     */
+    public static STATUS_CODES addRelationship(final String parentClass, final String childClass, final String type) {
+        return ModelDiagram.addRelationship(parentClass, childClass, type);
     }
 
-    public static String[] listClassMethods(final String name) {
-        return ModelDiagram.listClassMethods(name);
-    }
-
-    public static String[] listClassFields(final String name) {
-        return ModelDiagram.listClassFields(name);
-    }
-
-    // Deletes a relationship between two classes while prompting the user to verify
-    // they wish to delete along the way
+    /**
+     * deletes a relationship between 2 classes
+     *
+     * @param cb1 name of one of the classes (order does not matter)
+     * @param cb2 name of the second class (order does not matter)
+     * @return STATUS_CODES
+     */
     public static STATUS_CODES deleteRelationship(final String cb1, final String cb2) {
         return ModelDiagram.deleteRelationship(cb1, cb2);
-
-    } // End of deleteRelationship
-
-    // className is the name of the class you want to add a method to
-    public static STATUS_CODES addMethod(String className, String name, int view, String type, LinkedList<String> params) {
-        return ModelDiagram.addMethod(className, name, view, type, params);
     }
 
-    // className is the name of the class you want to add a field to
+    /**
+     * Adds a method to an existing class
+     *
+     * @param className  name of the class to add the method to
+     * @param name       name of the method being created
+     * @param view       visibility of the new method
+     * @param returnType return type of the new method
+     * @param params     LinkedList of params the new method takes
+     * @return STATUS_CODES depending on the result<br>
+     * NULL_STRING/EMPTY_STRING if any Strings are null or empty<br>
+     * NULL_PARAM_OBJ if the list of params is null<br>
+     * OBJ_NOT_FOUND if there isn't a class with the given name<br>
+     * SUCCESS if there wasn't a problem<br>
+     * EXCEPTION if creating the Method object threw an exception
+     */
+    public static STATUS_CODES addMethod(String className, String name, int view, String returnType, LinkedList<String> params) {
+        return ModelDiagram.addMethod(className, name, view, returnType, params);
+    }
+
+    /**
+     * Adds a field to an existing class
+     *
+     * @param className name of the class to add the field to
+     * @param name      name of the new field
+     * @param view      visibility of the new field
+     * @param type      data type of the new field
+     * @return STATUS_CODES depending on the result<br>
+     * NULL_STRING/EMPTY_STRING if any Strings are null or empty<br>
+     * OBJ_NOT_FOUND if there isn't a class with the given name<br>
+     * SUCCESS if there wasn't a problem<br>
+     * EXCEPTION if creating the Field object threw an exception
+     */
     public static STATUS_CODES addField(String className, String name, int view, String type) {
         return ModelDiagram.addField(className, name, view, type);
     }
 
-    // Adds a new param to a method within the classbox if both exist
+    /**
+     * Adds a parameter to a class's method
+     *
+     * @param className  name of the class
+     * @param methodName name of the method
+     * @param paramName  name of the new param
+     * @return STATUS_CODES
+     */
     public static STATUS_CODES addParam(String className, String methodName, String paramName) {
         return ModelDiagram.addParam(className, methodName, paramName);
     }
 
-
-    //deletes method based on className and methodName
-    //Needs params eventually to differentiate overloaded methods
+    /**
+     * Deletes a method from a class
+     *
+     * @param className  name of the class
+     * @param methodName name of the method to delete
+     * @return STATUS_CODES
+     */
     public static STATUS_CODES deleteMethod(String className, String methodName/*, LinkedList params*/) {
         return ModelDiagram.deleteMethod(className, methodName);
     }
 
-    //deletes field based on className and methodName
+    /**
+     * Deletes a field from a class
+     *
+     * @param className name of the class
+     * @param fieldName name of the field to delete
+     * @return STATUS_CODES
+     */
     public static STATUS_CODES deleteField(String className, String fieldName) {
         return ModelDiagram.deleteField(className, fieldName);
     }
 
+    /**
+     * Deletes a field from a class
+     *
+     * @param className  name of the class
+     * @param methodName name of the field to delete
+     * @param paramName  name of the param to delete
+     * @return STATUS_CODES
+     */
     public static STATUS_CODES deleteParam(String className, String methodName, String paramName) {
         return ModelDiagram.deleteParam(className, methodName, paramName);
     }
 
+    /**
+     * Renames a method in a class
+     *
+     * @param className     name of the class
+     * @param methodName    name of the existing method
+     * @param newMethodName new name of the method
+     * @return STATUS_CODES
+     */
     public static STATUS_CODES renameMethod(String className, String methodName, String newMethodName) {
         return ModelDiagram.renameMethod(className, methodName, newMethodName);
     }
 
+    /**
+     * Renames a field in a class
+     *
+     * @param className    name of the class
+     * @param fieldName    name of the existing field
+     * @param newFieldName new name of the field
+     * @return STATUS_CODES
+     */
     public static STATUS_CODES renameField(String className, String fieldName, String newFieldName) {
         return ModelDiagram.renameField(className, fieldName, newFieldName);
     }
 
+    /**
+     * Renames a param in a class's method
+     *
+     * @param className    name of the class
+     * @param methodName   name of the method
+     * @param oldParamName name of the existing param
+     * @param newParamName new name of the param
+     * @return STATUS_CODES
+     */
     public static STATUS_CODES renameParam(String className, String methodName, String oldParamName, String newParamName) {
         return ModelDiagram.renameParam(className, methodName, oldParamName, newParamName);
     }
 
-    public static STATUS_CODES undo(){
+    /**
+     * Un-does the most recent change
+     *
+     * @return STATUS_CODES.UNDO_FAILED if the redo failed for any reason, SUCCESS otherwise
+     */
+    public static STATUS_CODES undo() {
         return ModelDiagram.undo();
     }
 
-    public static STATUS_CODES redo(){
+    /**
+     * Un-does the most recent undo
+     *
+     * @return STATUS_CODES.UNDO_FAILED if the redo failed for any reason, SUCCESS otherwise
+     */
+    public static STATUS_CODES redo() {
         return ModelDiagram.redo();
     }
 
@@ -144,27 +253,37 @@ public class Controller {
     public final static int DETAILS_FIELDS = 2;
     public final static int DETAILS_RELATIONSHIPS = 3;
 
+    /**
+     * makes a list of all classes
+     *
+     * @return String[] containing the names of all classes, each name a separate element
+     */
     public static String[] listClasses() {
         return ModelDiagram.listClasses();
     }
 
-    /*
-        Returns the details of a class in the format:
-        {
-           [0][x] - { Class name, Type},
-           [1][x] - { List of Methods },
-           [2][x] - { List of Fields }
-           [3][x] - { List of Relationships }
-        }
+    /**
+     * Lists the classes and their types
+     *
+     * @return String[][] in the format:<br>
+     * {<br>
+     * [0][x] - { Class name, Type},<br>
+     * [1][x] - { List of Methods },<br>
+     * [2][x] - { List of Fields }<br>
+     * [3][x] - { List of Relationships }<br>
+     * }
      */
     public static String[][] listAllClassDetails(final String name) {
         return ModelDiagram.listAllClassDetails(name);
 
     }
 
-    // Returns an array of String arrays
-    // We have a list of createdClass objects, and each createdClass object has a
-    // list of relationships
+    /**
+     * makes a list of all relationships
+     *
+     * @return String[][] of names of ONLY each createdClasses's parent classes<br>
+     * each createdClass's list is stored in a list (list of lists)
+     */
     public static String[][] listRelationships() {
         return ModelDiagram.listRelationships();
     }
@@ -182,15 +301,34 @@ public class Controller {
         return Relationship.listRelationshipTypes();
     }
 
-
-    public static ArrayList<String[]> listRelationshipsSaveHelper(){
-        return ModelDiagram.listRelationshipsSaveHelper();
+    /**
+     * Lists the classes and their types
+     *
+     * @return String[][] in the format:<br>
+     * {Class1, Class1 type},<br>
+     * {Class2, Class2 types},<br>
+     * etc.
+     */
+    public static String[][] listClassesAndTypes() {
+        return ModelDiagram.listClassesAndTypes();
     }
 
+    /**
+     * Saves the program to json file<br>
+     * only a single save can be made
+     *
+     * @return true if it saved, false if there was an error
+     */
     public static boolean save() {
         return ModelDiagram.save();
     }
 
+    /**
+     * loads a save file<br>
+     * only one save is supported
+     *
+     * @return true if it loaded, false if there was a problem
+     */
     public static boolean load() {
         return ModelDiagram.load();
     }
@@ -378,8 +516,12 @@ public class Controller {
         };
     }
 */
-    // PrintMenu will display the menu options and prompt the user to choose a
-    // corresponding number on the menu
+
+    /**
+     * displays the menu options and prompts the user to choose a
+     * corresponding number on the menu
+     * @return String[] with the menu items
+     */
     public static String[] printMenu() {
         return new String[]{
                 "\nPlease enter a full command. You will need to fill in the required parameters with the command separated by a space. Example: add class name1 2.",
@@ -414,9 +556,11 @@ public class Controller {
         };
     }
 
-
-
-
+    /**
+     * Gets the size of the createdClasses list
+     *
+     * @return size of the createdClasses list
+     */
     public static int getCreatedClassesSize() {
         return ModelDiagram.getCreatedClassesSize();
     }
