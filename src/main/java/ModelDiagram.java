@@ -361,11 +361,7 @@ public class ModelDiagram {
         int relationshipType;
         try {
             relationshipType = Integer.parseInt(type);
-            Controller.STATUS_CODES status = addRelationship(parentClass, childClass, relationshipType);
-            if (status != Controller.STATUS_CODES.SUCCESS)
-                return status;
-
-            return updateChange();
+            return addRelationship(parentClass, childClass, relationshipType);
         } catch (Exception e) {
             return Controller.STATUS_CODES.EXCEPTION;
         }
@@ -407,7 +403,7 @@ public class ModelDiagram {
         } catch (Exception e) {
             return Controller.STATUS_CODES.EXCEPTION;
         }
-        
+
     }
 
     //returns list of names of ONLY each createdClasses's parent classes
