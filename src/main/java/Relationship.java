@@ -2,7 +2,16 @@ package src.main.java;
 
 import java.util.Arrays;
 
-public class Relationship {
+public class Relationship implements Cloneable {
+    @Override
+    public Relationship clone() {
+        try {
+            return (Relationship) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private enum RelationshipType {
         AGGREGATION("aggregates"),
         COMPOSITION("composes"),

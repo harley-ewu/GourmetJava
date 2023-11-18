@@ -40,10 +40,25 @@ public class ClassBox implements Cloneable {
     @Override
     public ClassBox clone() {
         try {
-            return (ClassBox) super.clone();
+            return new ClassBox((ClassBox) super.clone());
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private ClassBox(final ClassBox cb) {
+        for (Relationship r : cb.parents)
+            this.parents.add(r.clone());
+        for (Relationship r : cb.children)
+            this.children.add(r.clone());
+        for (Methods m : cb.methods)
+            this.methods.add(m.clone());
+        for (Field f : cb.fields)
+            this.fields.add(f.clone());
+
+        this.name = cb.name;
+        this.type = cb.type;
+
     }
 
     public ClassBox(String name, int type) {
@@ -176,9 +191,20 @@ public class ClassBox implements Cloneable {
 
     //Needs to check for existing Relationship between ClassBox objects
     //ClassBox objects are guaranteed to not be null by the caller
-    public static void addRelationship(final ClassBox parentClass, final ClassBox childClass, final int type) {
+    public static Controller.STATUS_CODES addRelationship(final ClassBox parentClass, final ClassBox childClass, final int type) {
+        for (Relationship rel : parentClass.parents) {
+            if (rel.getOtherClass().equals(childClass.getName())) {
+                return Controller.STATUS_CODES.OBJ_ALREADY_EXISTS;
+            }
+        }
+        for (Relationship rel : parentClass.children) {
+            if (rel.getOtherClass().equals(childClass.getName())) {
+                return Controller.STATUS_CODES.OBJ_ALREADY_EXISTS;
+            }
+        }
         parentClass.children.add(new Relationship(childClass, type));
         childClass.parents.add(new Relationship(parentClass, type));
+        return Controller.STATUS_CODES.SUCCESS;
     }
 
     /*
@@ -187,36 +213,22 @@ public class ClassBox implements Cloneable {
         POST CONDITION: There is no relationship between the passed ClassBox objects
             (it does not care if the relationship already exists)
     */
-    public static void deleteRelationship(final ClassBox cb1, final ClassBox cb2) {
-        for (Relationship rel : cb1.parents) {
-            if (rel.getOtherClass().equals(cb2.getName())) {
-                cb1.parents.remove(rel);
-                cb2.children.remove(rel);
+    public static Controller.STATUS_CODES deleteRelationship(final ClassBox cb1, final ClassBox cb2) {
+        for (int i = 0; i < cb1.parents.size(); ++i) {
+            if (cb1.parents.get(i).getOtherClass().equals(cb2.getName())) {
+                cb1.parents.remove(i);
+                cb2.children.remove(i);
+                return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        for (Relationship rel : cb1.children) {
-            if (rel.getOtherClass().equals(cb2.getName())) {
-                cb1.children.remove(rel);
-                cb2.parents.remove(rel);
+        for (int i = 0; i < cb1.children.size(); ++i) {
+            if (cb1.children.get(i).getOtherClass().equals(cb2.getName())) {
+                cb1.children.remove(i);
+                cb2.parents.remove(i);
+                return Controller.STATUS_CODES.SUCCESS;
             }
         }
-    }
-
-    /*
-    Deletes the passed relationship between the two ClassBox objects
-    The caller (ModelDiagram) guarantees that the passed ClassBox objects are valid
-    POST CONDITION: There is no relationship between the passed ClassBox objects
-        (it does not care if the relationship already exists)
-    Throws an exception if the relationship does not exist in a list (which it shouldn't)
-*/
-    public static void deleteRelationship(final ClassBox cb1, final ClassBox cb2, final Relationship rel) {
-        try {
-            cb1.parents.remove(rel);
-            cb2.children.remove(rel);
-        } catch (Exception ignored) {
-        }
-        cb1.children.remove(rel);
-        cb2.parents.remove(rel);
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
     }
 
     //returns a list of ONLY the class names in the calling ClassBox's parents list

@@ -13,7 +13,16 @@ import java.util.Scanner;
 // This is the class representing all data within the model
 public class ModelDiagram {
 
-    private static ArrayList<ClassBox> createdClasses = new ArrayList<>();
+    private static ArrayList<ClassBox> createdClasses;
+
+    /*
+        Necessary so that we always have an empty list of classes to undo to
+        I didn't know this was possible until I looked for it specifically
+     */
+    static {
+        createdClasses = new ArrayList<>();
+        updateChange();
+    }
 
     public static Controller.STATUS_CODES updateChange() {
         try {
@@ -92,10 +101,6 @@ public class ModelDiagram {
         if (name == null) return Controller.STATUS_CODES.NULL_STRING;
 
         if (name.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
-
-        //Necessary so that we always have an empty list of classes to undo to
-        if (Caretaker.getInstance() == null)
-            updateChange();
 
         ClassBox newBox = findClassBox(name);
         if (newBox != null) return Controller.STATUS_CODES.OBJ_ALREADY_EXISTS;
@@ -377,28 +382,28 @@ public class ModelDiagram {
         ClassBox child = findClassBox(childClass);
         if (parent == null || child == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
 
-        Relationship relationship = ClassBox.findRelationship(parent, child);
-        if (relationship != null) return Controller.STATUS_CODES.OBJ_ALREADY_EXISTS;
+        Controller.STATUS_CODES status = ClassBox.addRelationship(parent, child, type);
+        if (status != Controller.STATUS_CODES.SUCCESS)
+            return status;
 
-        ClassBox.addRelationship(parent, child, type);
         return updateChange();
     }
 
     //returns true if a relationship between the classes was deleted
     //returns false if the box objects do not exist or if there wasn't a relationship to begin with
-    public static Controller.STATUS_CODES deleteRelationship(final String parentClass, final String childClass) {
-        if (parentClass == null || childClass == null) return Controller.STATUS_CODES.NULL_STRING;
+    public static Controller.STATUS_CODES deleteRelationship(final String cb1, final String cb2) {
+        if (cb1 == null || cb2 == null) return Controller.STATUS_CODES.NULL_STRING;
 
-        if (parentClass.isEmpty() || childClass.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
+        if (cb1.isEmpty() || cb2.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
-        ClassBox parent = findClassBox(parentClass);
-        ClassBox child = findClassBox(childClass);
+        ClassBox parent = findClassBox(cb1);
+        ClassBox child = findClassBox(cb2);
         if (parent == null || child == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
 
-        Relationship relationship = ClassBox.findRelationship(parent, child);
-        if (relationship == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
         try {
-            ClassBox.deleteRelationship(parent, child, relationship);
+            Controller.STATUS_CODES status = ClassBox.deleteRelationship(parent, child);
+            if (status != Controller.STATUS_CODES.SUCCESS)
+                return status;
             return updateChange();
         } catch (Exception e) {
             return Controller.STATUS_CODES.EXCEPTION;
