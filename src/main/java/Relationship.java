@@ -22,7 +22,7 @@ public class Relationship {
 
     }
 
-    private final ClassBox otherClass;
+    private final String otherClass;
     //Aggregation, Composition, extension, etc
     private final RelationshipType type;
 
@@ -36,7 +36,7 @@ public class Relationship {
         if (otherClass == null || type == null)
             throw new IllegalArgumentException("null object passed to Relationship object");
 
-        this.otherClass = otherClass;
+        this.otherClass = otherClass.getName();
         this.type = RelationshipType.valueOf(type.strip().toUpperCase());
     }
 
@@ -50,7 +50,7 @@ public class Relationship {
         if (otherClass == null || type < 1 || type > RelationshipType.values().length)
             throw new IllegalArgumentException("illegal param passed to Relationship object");
 
-        this.otherClass = otherClass;
+        this.otherClass = otherClass.getName();
         this.type = RelationshipType.values()[type - 1];
     }
 
@@ -65,16 +65,12 @@ public class Relationship {
      */
     @Override
     public String toString() {
-        return this.type.verb + " " + this.getOtherClass().getName();
+        return this.type.verb + " " + this.getOtherClass();
     }
 
     //Getters and setters are self-explanatory
-    public ClassBox getOtherClass() {
+    public String getOtherClass() {
         return this.otherClass;
-    }
-
-    public String getOtherClassName() {
-        return this.otherClass.getName();
     }
 
     public String getType() {

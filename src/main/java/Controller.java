@@ -13,7 +13,9 @@ public class Controller {
         OBJ_FOUND("object was found"),
         NULL_PARAM_OBJ("object is null"),
         EMPTY_STRING("entered string is empty"),
-        NULL_STRING("entered string is null");
+        NULL_STRING("entered string is null"),
+        UNDO_FAILED("failed to perform undo"),
+        REDO_FAILED("failed to perform redo");
 
         private final String msg;
 
@@ -127,6 +129,14 @@ public class Controller {
 
     public static STATUS_CODES renameParam(String className, String methodName, String oldParamName, String newParamName) {
         return ModelDiagram.renameParam(className, methodName, oldParamName, newParamName);
+    }
+
+    public static STATUS_CODES undo(){
+        return ModelDiagram.undo();
+    }
+
+    public static STATUS_CODES redo(){
+        return ModelDiagram.redo();
     }
 
     public final static int DETAILS_NAME_TYPE = 0;

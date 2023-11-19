@@ -13,10 +13,57 @@ import java.util.Scanner;
 // This is the class representing all data within the model
 public class ModelDiagram {
 
-    private final static ArrayList<ClassBox> createdClasses = new ArrayList<>();
+    private static ArrayList<ClassBox> createdClasses = new ArrayList<>();
+
+    public static Controller.STATUS_CODES updateChange() {
+        try {
+            Memento snapshot = new Memento(createdClasses);
+            Caretaker.getInstance().updateChange(snapshot);
+        } catch (Exception ignored) {
+            return Controller.STATUS_CODES.EXCEPTION;
+        }
+        return Controller.STATUS_CODES.SUCCESS;
+    }
+
+    public static Controller.STATUS_CODES redo() {
+        try {
+            Caretaker.getInstance().redo().restore();
+        } catch (Exception ignored) {
+            return Controller.STATUS_CODES.REDO_FAILED;
+        }
+        return Controller.STATUS_CODES.SUCCESS;
+    }
+
+    public static Controller.STATUS_CODES undo() {
+        try {
+            Caretaker.getInstance().undo().restore();
+        } catch (Exception ignored) {
+            return Controller.STATUS_CODES.UNDO_FAILED;
+        }
+        return Controller.STATUS_CODES.SUCCESS;
+    }
+
     // Created classes will now be stored here
     // Methods for manipulating the model will be stored here
     // Also needs some sort of way to push data to the view so it is able to display it
+    public static class Memento {
+        private final ArrayList<ClassBox> snap;
+
+        public Memento(final ArrayList<ClassBox> snapshot) {
+            this.snap = new ArrayList<>();
+            for (ClassBox classBox : snapshot) {
+                this.snap.add(classBox.clone());
+            }
+        }
+
+        public void restore() {
+            ArrayList<ClassBox> list = new ArrayList<>();
+            for(ClassBox cb : this.snap){
+                list.add(cb.clone());
+            }
+            createdClasses = list;
+        }
+    }
 
     //searched the list of created classes for a ClassBox with the given name
     //returns the ClassBox object if it exists, or null otherwise
@@ -46,6 +93,10 @@ public class ModelDiagram {
 
         if (name.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
 
+        //Necessary so that we always have an empty list of classes to undo to
+        if(Caretaker.getInstance() == null)
+            updateChange();
+
         ClassBox newBox = findClassBox(name);
         if (newBox != null) return Controller.STATUS_CODES.OBJ_ALREADY_EXISTS;
 
@@ -55,7 +106,7 @@ public class ModelDiagram {
             return Controller.STATUS_CODES.EXCEPTION;
         }
 
-        return Controller.STATUS_CODES.SUCCESS;
+        return updateChange();
     }
 
     //returns true only if a class was deleted
@@ -387,7 +438,7 @@ public class ModelDiagram {
                 // Find second index
                 int secondIndex = -1;
                 for (int p = 0; p < createdClasses.size(); p++) {
-                    if (createdClasses.get(p).getName().equals(relationships.get(j).getOtherClass().getName())) {
+                    if (createdClasses.get(p).getName().equals(relationships.get(j).getOtherClass())) {
                         secondIndex = p;
                         p = createdClasses.size();
                     }

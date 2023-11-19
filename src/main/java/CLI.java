@@ -284,6 +284,15 @@ public class CLI {
                     Main.gview = true;
                     GUI.startGUIMenu();
                     break;
+
+                case "undo":
+                    System.out.println("undo: " + Controller.undo().toString());
+                    break;
+
+                case "redo":
+                    System.out.println("redo: " + Controller.redo().toString());
+                    break;
+                    
                 case "exit":
                     //The next part of the command is exit
                     System.out.println("Are you sure you want to exit? Type \"yes\" to confirm");
