@@ -2,7 +2,16 @@ package src.main.java;
 
 import java.util.Arrays;
 
-public abstract class Attribute implements Comparable<Attribute> {
+public abstract class Attribute implements Comparable<Attribute>, Cloneable{
+
+    @Override
+    public Attribute clone() {
+        try {
+            return (Attribute) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 
     private enum AttributeType {
         METHOD,
@@ -41,8 +50,8 @@ public abstract class Attribute implements Comparable<Attribute> {
         return this.name;
     }
 
-    public Visibility getView() {
-        return this.view;
+    public int getView() {
+        return this.view.ordinal();
     }
 
     @Override

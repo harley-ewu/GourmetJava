@@ -86,7 +86,7 @@ public class Controller {
     public static STATUS_CODES deleteRelationship(final String cb1, final String cb2) {
         return ModelDiagram.deleteRelationship(cb1, cb2);
 
-    } // End of deleteRelationship
+    }
 
     // className is the name of the class you want to add a method to
     public static STATUS_CODES addMethod(String className, String name, int view, String type, LinkedList<String> params) {

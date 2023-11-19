@@ -2,9 +2,9 @@ package src.main.java;
 
 import java.util.LinkedList;
 
-public class Methods extends Attribute {
+public class Methods extends Attribute implements Cloneable{
     //parameter types
-    private LinkedList<String> paramTypes;
+    private final LinkedList<String> paramTypes;
     //return type
     private final String returnType;
 
@@ -13,6 +13,11 @@ public class Methods extends Attribute {
 
         this.paramTypes = params;
         this.returnType = type;
+    }
+
+    @Override
+    public Methods clone() {
+        return (Methods) super.clone();
     }
 
     public Controller.STATUS_CODES deleteParam(String param) {
