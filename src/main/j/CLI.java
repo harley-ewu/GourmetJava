@@ -1,4 +1,4 @@
-package src.main.java;
+package j;
 
 /**
  * This class is for when the view selected is for CLI (Command Line Interface). It will handle displaying

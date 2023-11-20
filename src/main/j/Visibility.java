@@ -1,4 +1,4 @@
-package src.main.java;
+package j;
 
 
 //The CLI will use the enum name and the GUI will use the enum symbol

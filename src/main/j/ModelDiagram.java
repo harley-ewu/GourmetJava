@@ -1,4 +1,4 @@
-package src.main.java;
+package j;
 
 import com.google.gson.Gson;
 

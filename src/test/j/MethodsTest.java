@@ -1,8 +1,8 @@
-package src.test.java;
+package j;
 
-import org.junit.Test;
+import org.junit.*;
 import static org.junit.Assert.*;
-import src.main.java.Methods;
+
 import java.util.LinkedList;
 
 public class MethodsTest {

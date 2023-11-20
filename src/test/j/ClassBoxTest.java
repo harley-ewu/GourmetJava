@@ -1,9 +1,10 @@
-package src.test.java;
+package j;
 
-import org.junit.Test;
-import src.main.java.ClassBox;
+import org.junit.*;
+
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 
 public class ClassBoxTest {
 

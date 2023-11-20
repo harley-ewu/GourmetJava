@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/GourmetJava.iml" filepath="$PROJECT_DIR$/.idea/GourmetJava.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/GourmetJava.main.iml" filepath="$PROJECT_DIR$/.idea/modules/GourmetJava.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/GourmetJava.test.iml" filepath="$PROJECT_DIR$/.idea/modules/GourmetJava.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GourmetJava.iml" filepath="$PROJECT_DIR$/GourmetJava.iml" group="GourmetJava" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/GourmetJava_main.iml" filepath="$PROJECT_DIR$/.idea/modules/GourmetJava_main.iml" group="GourmetJava" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/GourmetJava_test.iml" filepath="$PROJECT_DIR$/.idea/modules/GourmetJava_test.iml" group="GourmetJava" />
     </modules>
   </component>
 </project>
