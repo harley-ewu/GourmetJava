@@ -31,8 +31,14 @@ public class Relationship implements Cloneable {
 
     }
 
+    /**
+     * name of the other class (a Relationship object is owned by one class and points to another)
+     */
     private final String otherClass;
-    //Aggregation, Composition, extension, etc
+
+    /**
+     * Type of relationship
+     */
     private final RelationshipType type;
 
     /**
