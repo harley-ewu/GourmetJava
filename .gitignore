@@ -19,6 +19,7 @@
 *.ini
 *.location
 *.lock
+*.iml
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -38,3 +39,5 @@ replay_pid*
 # Ignore Gradle project-specific cache directory
 .gradle
 
+/.idea/
+/.idea/*
