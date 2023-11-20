@@ -112,11 +112,6 @@ public class Controller {
 
     }
 
-    // className is the name of the class you want to add a method to
-    public static STATUS_CODES addMethod(String className, String name, int view, String type, LinkedList<String> params) {
-        return ModelDiagram.addMethod(className, name, view, type, params);
-    }
-
     /**
      * Adds a method to an existing class
      *

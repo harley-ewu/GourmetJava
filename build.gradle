@@ -6,7 +6,7 @@ plugins {
 sourceSets {
     main {
         java {
-            srcDirs = ['src/main/j']  // Change the default main source directory
+            srcDirs = ['src/main/']  // Change the default main source directory
         }
         resources {
             srcDirs = ['src/main/resources']  // Change the default main resources directory
@@ -15,7 +15,7 @@ sourceSets {
 
     test {
         java {
-            srcDirs = ['src/test/j']  // Change the default test source directory
+            srcDirs = ['src/test']  // Change the default test source directory
         }
         resources {
             srcDirs = ['src/test/resources']  // Change the default test resources directory
