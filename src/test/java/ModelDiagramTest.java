@@ -1,4 +1,4 @@
-import org.junit.Test;
+import `org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.util.LinkedList;
@@ -9,13 +9,22 @@ import src.main.java.ClassBox;
 
 public class ModelDiagramTest {
    
+    // Test objects
+    ClassBox classTest = new ClassBox("testClass",1);
+
     @Test
     public void testAddClass() {
+
+        ModelDiagram.addClass("targetClass", 1);
+
         // Test adding a class with a null name
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addClass(null, 1));
 
         // Test adding a class with an empty string
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addClass("", 1));
+
+        // Succesful Test
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.addClass("testClass", 1));
     }
     
     @Test
@@ -27,6 +36,7 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.deleteClass(""));
 
         // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.deleteClass("targetFail"));
     }
 
     @Test
@@ -34,6 +44,9 @@ public class ModelDiagramTest {
         // I need this to test parameters for the LinkedList<String> params
         LinkedList<String> testParams = new LinkedList<String>();
         testParams.add("testParam1");
+
+        // Object for successful test
+        ModelDiagram.addClass("targetClass", 1);
 
         // Test adding a method with className as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addMethod(null, "testName", 1, "returnTest", testParams));
@@ -53,11 +66,21 @@ public class ModelDiagramTest {
         // Test adding a method with returnType as an empty string
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addMethod("testClass", "testName", 1, "", testParams));
 
+        // Test adding a method with a null object passed in params
+        assertEquals(Controller.STATUS_CODES.NULL_PARAM_OBJ, ModelDiagram.addMethod("testClass", "testName", 1, "returnTest", null));
+
         // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.addMethod("targetFail", "testName", 1, "returnTest", testParams));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.addMethod("targetClass", "testName", 1, "returnTest", testParams));
     }
     
     @Test
     public void testAddField(){
+        // Object for successful test
+        ModelDiagram.addClass("targetClass", 1);
+
         // Test adding a field with className as null || (final String className, final String name, int view, final String type)
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addField(null, "testName", 1, "returnTest"));
 
@@ -77,6 +100,10 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addField("testClass", "testName", 1, ""));
 
         // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.addField("targetFail", "testName", 1, "returnTest"));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.addField("targetClass", "testName", 1, "returnTest"));
     }
 
     @Test
