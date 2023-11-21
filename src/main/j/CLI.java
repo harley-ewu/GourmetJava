@@ -36,56 +36,85 @@ public class CLI {
      */
     public static void menu() {
         Terminal terminal = null;
+        /*
+            This is where the terminal object is created.
+            It essentially just works on it's own based on the OS.
+         */
         try {
             terminal = TerminalBuilder.terminal();
         } catch (IOException e) {
-            System.out.print("Chicken Pizza");
+            System.out.print("Failed to integrate with terminal");
         }
 
+        /*
+            The completers are configured to give autosuggestions
+            at each command level, the null completer prevents further suggestions.
+         */
         ArgumentCompleter AddDeleteCompleter = new ArgumentCompleter(
                 new StringsCompleter("add", "delete"),
-                new StringsCompleter("class", "method", "field", "relationship"));
+                new StringsCompleter("class", "method", "field", "relationship"),
+                new NullCompleter());
+
         ArgumentCompleter ListCompleter = new ArgumentCompleter(
                 new StringsCompleter("list"),
-                new StringsCompleter("all", "classes", "relationships")
-                //new Completers.OptionCompleter(Arrays.asList("lists all dogs"))
-        );
-        /*TreeCompleter ListCompleter = TreeCompleter(node("Command1",
-                node("Option1",
-                        node("Param1", "Param2")),
-                node("Option2"),
-                node("Option3")));*/
+                new StringsCompleter("all", "classes", "relationships"),
+                new NullCompleter());
+
         ArgumentCompleter SingleCompleter = new ArgumentCompleter(
                 new StringsCompleter("save", "load", "help", "window", "exit"));
 
-        AggregateCompleter combinedCompleters = new AggregateCompleter(AddDeleteCompleter, ListCompleter, SingleCompleter);
+        ArgumentCompleter RenameCompleter = new ArgumentCompleter(
+                new StringsCompleter("rename"),
+                new StringsCompleter("class", "field", "method"),
+                new NullCompleter());
+
+        AggregateCompleter CombinedCompleters = new AggregateCompleter(AddDeleteCompleter, ListCompleter, SingleCompleter ,RenameCompleter);
+        // This is the LineReader that handles input and brings it all together
         LineReader reader = LineReaderBuilder.builder()
                 .terminal(terminal)
-                .completer(combinedCompleters)
+                .completer(CombinedCompleters)
                 .parser(new DefaultParser())
                 .build();
 
         Map<String, CmdDesc> tailTips = new HashMap<>();
         Map<String, List<AttributedString>> widgetOpts = new HashMap<>();
-        List<AttributedString> mainDesc = Arrays.asList(new AttributedString("add class [Class1] [Type#1-4]"),
-                new AttributedString("add method [MethodName] [ReturnType] [Param-1] ... [Param-N]"),
-                new AttributedString("add field [FieldName] [Type]"),
-                new AttributedString("add relationship [Class1] [Class2] [Type#1-4]"),
+
+        // Descriptors that display each commands requirements
+        List<AttributedString> addDesc = Arrays.asList(new AttributedString("add class [class-name] [class-type-number]"),
+                new AttributedString("add method [class-name] [method-name] [visibility-number] [return-type] [Param-1] ... [Param-N]"),
+                new AttributedString("add field [class-name] [field-name] [visibility-number] [data-type]"),
+                new AttributedString("add relationship [1st-class-name] [2nd-class-name] [relationship-type-number]")
+        );
+
+        List<AttributedString> deleteDesc = Arrays.asList(new AttributedString("delete class [class-name]"),
+                new AttributedString("delete method [class-name] [method-name]"),
+                new AttributedString("delete field [class-name] [field-name]"),
+                new AttributedString("delete relationship [1st-class-name] [2nd-class-name]"),
                 new AttributedString("delete field [FieldName] [Type]")
         );
-        widgetOpts.put("class", Arrays.asList(new AttributedString("add class")));
-        widgetOpts.put("method", Arrays.asList(new AttributedString("add method [MethodName] [ReturnType] [Param-1] ... [Param-N]")));
-        //widgetOpts.put("", Arrays.asList(new AttributedString("add field")));
-        //widgetOpts.put("", Arrays.asList(new AttributedString("add relationship")));
 
-        tailTips.put("add", new CmdDesc(mainDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
-        tailTips.put("delete", new CmdDesc(mainDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+        List<AttributedString> listDesc = Arrays.asList(new AttributedString("list all"),
+                new AttributedString("list classes"),
+                new AttributedString("list relationships")
+        );
+
+        List<AttributedString> renameDesc = Arrays.asList(new AttributedString("rename class [old-class-name] [new-class-name]"),
+                new AttributedString("rename field [class-name] [old-field-name] [new-field-name]"),
+                new AttributedString("rename method [class-name] [old-method-name] [new-method-name]")
+        );
+
+        // This attaches the descriptions to the commands
+        tailTips.put("add", new CmdDesc(addDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+        tailTips.put("delete", new CmdDesc(deleteDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+        tailTips.put("list", new CmdDesc(listDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+        tailTips.put("rename", new CmdDesc(renameDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
 
         // Create tailtip widgets that uses description window size 5 and
         // does not display suggestions after the cursor
         TailTipWidgets tailtipWidgets = new TailTipWidgets(reader, tailTips, 5, TailTipWidgets.TipType.COMBINED);
         // Enable autosuggestions
         tailtipWidgets.enable();
+
         boolean cont = true;
         while (cont) {
             int input2;

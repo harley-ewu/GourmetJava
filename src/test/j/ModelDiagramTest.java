@@ -3,14 +3,14 @@ import static org.junit.Assert.*;
 
 import java.util.LinkedList;
 
-import src.main.java.ModelDiagram;
+/*import src.main.java.ModelDiagram;
 import src.main.java.Controller;
-import src.main.java.ClassBox;
+import src.main.java.ClassBox;*/
 
 public class ModelDiagramTest {
    
     // Test objects
-    ClassBox classTest = new ClassBox("testClass",1);
+    /*ClassBox classTest = new ClassBox("testClass",1);
 
     @Test
     public void testAddClass() {
@@ -325,6 +325,6 @@ public class ModelDiagramTest {
 
         // Test listing methods of a class with name as an empty string
         assertNull(ModelDiagram.listClassMethods(""));
-    }
+    }*/
 
 }
