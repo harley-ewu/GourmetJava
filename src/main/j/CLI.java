@@ -5,11 +5,14 @@ package j;
  * the information retrieved for the CLI.
  */
 
+import org.jline.builtins.Completers;
 import org.jline.console.ArgDesc;
 import org.jline.console.CmdDesc;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.impl.DefaultParser;
+import org.jline.reader.impl.completer.*;
+import org.jline.reader.impl.completer.ArgumentCompleter;
 import org.jline.reader.impl.completer.StringsCompleter;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
@@ -38,9 +41,27 @@ public class CLI {
         } catch (IOException e) {
             System.out.print("Chicken Pizza");
         }
+
+        ArgumentCompleter AddDeleteCompleter = new ArgumentCompleter(
+                new StringsCompleter("add", "delete"),
+                new StringsCompleter("class", "method", "field", "relationship"));
+        ArgumentCompleter ListCompleter = new ArgumentCompleter(
+                new StringsCompleter("list"),
+                new StringsCompleter("all", "classes", "relationships")
+                //new Completers.OptionCompleter(Arrays.asList("lists all dogs"))
+        );
+        /*TreeCompleter ListCompleter = TreeCompleter(node("Command1",
+                node("Option1",
+                        node("Param1", "Param2")),
+                node("Option2"),
+                node("Option3")));*/
+        ArgumentCompleter SingleCompleter = new ArgumentCompleter(
+                new StringsCompleter("save", "load", "help", "window", "exit"));
+
+        AggregateCompleter combinedCompleters = new AggregateCompleter(AddDeleteCompleter, ListCompleter, SingleCompleter);
         LineReader reader = LineReaderBuilder.builder()
                 .terminal(terminal)
-                .completer(new StringsCompleter("add", "class", "relationship", "method","field", "delete", "rename", "save", "load", "list", "all", "classes", "relationships", "help", "window", "exit"))
+                .completer(combinedCompleters)
                 .parser(new DefaultParser())
                 .build();
 
@@ -49,12 +70,13 @@ public class CLI {
         List<AttributedString> mainDesc = Arrays.asList(new AttributedString("add class [Class1] [Type#1-4]"),
                 new AttributedString("add method [MethodName] [ReturnType] [Param-1] ... [Param-N]"),
                 new AttributedString("add field [FieldName] [Type]"),
-                new AttributedString("add relationship [Class1] [Class2] [Type#1-4]")
+                new AttributedString("add relationship [Class1] [Class2] [Type#1-4]"),
+                new AttributedString("delete field [FieldName] [Type]")
         );
-        /*widgetOpts.put("add ", Arrays.asList(new AttributedString("add class")));
-        widgetOpts.put("", Arrays.asList(new AttributedString("add method")));
-        widgetOpts.put("", Arrays.asList(new AttributedString("add field")));
-        widgetOpts.put("", Arrays.asList(new AttributedString("add relationship")));*/
+        widgetOpts.put("class", Arrays.asList(new AttributedString("add class")));
+        widgetOpts.put("method", Arrays.asList(new AttributedString("add method [MethodName] [ReturnType] [Param-1] ... [Param-N]")));
+        //widgetOpts.put("", Arrays.asList(new AttributedString("add field")));
+        //widgetOpts.put("", Arrays.asList(new AttributedString("add relationship")));
 
         tailTips.put("add", new CmdDesc(mainDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
         tailTips.put("delete", new CmdDesc(mainDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
@@ -74,7 +96,6 @@ public class CLI {
             //Each element in the array is a word separated by a space
             //We create an array where each element is a word for us to check the type of command that is used
             String[] input = reader.readLine("Command: ").split(" ");
-
             //If the user enters nothing, we have them restart
             if(input.length == 0){
                 System.out.println("Please enter a command");
@@ -244,12 +265,15 @@ public class CLI {
                     switch (input[1]) {
                         case "all": {
                             listClassesDetailed();
+                            break;
                         }
                         case "classes": {
                             printStringListNumbered(Controller.listClasses());
+                            break;
                         }
                         case "relationships": {
                             CLI.printArrayOfStringList(Controller.listRelationships());
+                            break;
                         }
                         default:{
                             System.out.println("Not a valid list command. Please try again");
