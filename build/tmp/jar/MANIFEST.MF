@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-<<<<<<< HEAD
-Main-Class: src.main.java.Main
-=======
-Main-Class: src.main.j.Main
->>>>>>> Development
-
