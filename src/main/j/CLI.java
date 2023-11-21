@@ -57,11 +57,11 @@ public class CLI {
         widgetOpts.put("", Arrays.asList(new AttributedString("add relationship")));*/
 
         tailTips.put("add", new CmdDesc(mainDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
-        tailTips.put("delete", new CmdDesc(mainDesc, ArgDesc.doArgNames(Arrays.asList("[pN...]")), widgetOpts));
+        tailTips.put("delete", new CmdDesc(mainDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
 
         // Create tailtip widgets that uses description window size 5 and
         // does not display suggestions after the cursor
-        TailTipWidgets tailtipWidgets = new TailTipWidgets(reader, tailTips, 5, TailTipWidgets.TipType.TAIL_TIP);
+        TailTipWidgets tailtipWidgets = new TailTipWidgets(reader, tailTips, 5, TailTipWidgets.TipType.COMBINED);
         // Enable autosuggestions
         tailtipWidgets.enable();
         boolean cont = true;
