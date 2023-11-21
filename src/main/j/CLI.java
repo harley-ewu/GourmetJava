@@ -61,7 +61,8 @@ public class CLI {
                 new NullCompleter());
 
         ArgumentCompleter SingleCompleter = new ArgumentCompleter(
-                new StringsCompleter("save", "load", "help", "window", "exit"));
+                new StringsCompleter("save", "load", "help", "window", "exit"),
+                new NullCompleter());
 
         ArgumentCompleter RenameCompleter = new ArgumentCompleter(
                 new StringsCompleter("rename"),
