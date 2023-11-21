@@ -1,9 +1,17 @@
-package src.main.java;
+package j;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 
-public abstract class Attribute implements Comparable<Attribute> {
+public abstract class Attribute implements Comparable<Attribute>, Cloneable{
+
+    @Override
+    public Attribute clone() {
+        try {
+            return (Attribute) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 
     private enum AttributeType {
         METHOD,
@@ -31,28 +39,19 @@ public abstract class Attribute implements Comparable<Attribute> {
 
     }
 
-    public boolean setName(String newName) {
+    public void setName(String newName) {
         if (newName == null || newName.isEmpty())
-            return false;
+            throw new IllegalArgumentException("Bad string passed to Attribute.setName()");
 
         this.name = newName;
-        return true;
-    }
-
-    public boolean setView(Visibility newView) {
-        if (newView == null)
-            return false;
-
-        this.view = newView;
-        return true;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public Visibility getView() {
-        return this.view;
+    public int getView() {
+        return this.view.ordinal();
     }
 
     @Override

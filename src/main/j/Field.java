@@ -1,7 +1,7 @@
-package src.main.java;
+package j;
 
 
-public class Field extends Attribute{
+public class Field extends Attribute implements Cloneable{
     //type of field
     private final String type;
     public Field(String name, int view, String type) {
@@ -18,4 +18,8 @@ public class Field extends Attribute{
         return super.toString() + " : " + this.type;
     }
 
+    @Override
+    public Field clone() {
+            return (Field) super.clone();
+    }
 }

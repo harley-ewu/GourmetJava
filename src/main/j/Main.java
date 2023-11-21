@@ -1,4 +1,4 @@
-package src.main.java;
+package j;
 
 import java.util.Scanner;
 
@@ -22,6 +22,7 @@ public class Main {
             input = kb.nextLine().charAt(0);
             if(input=='c'){
                 cview = true;
+                System.out.println("For instructions on how to use this program, please type the word \"help\"");
                 CLI.menu();
             }
             else if (input=='g'){

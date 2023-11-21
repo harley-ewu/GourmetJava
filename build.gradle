@@ -1,16 +1,49 @@
-plugins{
+plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.0'
 }
 
-jar{
-    manifest{
-        attributes('Main-Class': 'src.main.java.Main')
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/']  // Change the default main source directory
+        }
+        resources {
+            srcDirs = ['src/main/resources']  // Change the default main resources directory
+        }
     }
+
+    test {
+        java {
+            srcDirs = ['src/test']  // Change the default test source directory
+        }
+        resources {
+            srcDirs = ['src/test/resources']  // Change the default test resources directory
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes('Main-Class': 'j.Main')
+    }
+}
+
+shadowJar {
+    // sets the base name of the shadow jar
+    archiveBaseName.set('shadow')
+    // sets the classifier of the shadow jar which will be none in this case. 
+    archiveClassifier.set('')
+    // sets the version of the shadow jar which will be none in this case and will not be added to the end of the jar name.
+    archiveVersion.set('')
 }
 
 dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'junit:junit:4.13.1'
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
+    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
 }
 
 repositories {

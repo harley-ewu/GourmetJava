@@ -1,4 +1,5 @@
-package src.main.java;
+package j;
+
     // Java program to construct
 // Menu bar to add menu items
 import javax.swing.*;
@@ -284,16 +285,7 @@ public class GUI extends JFrame {
                 //TODO Prompt with a message asking "Delete the relationship from firstClass to secondClass?" with an okay or cancel button
                 String doubleCheckDelete = JOptionPane.showInputDialog("Delete the relationship between " + firstClass + " and " + secondClass + "? \n" +
                         "Please type yes to confirm, or enter anything else to cancel. ");
-                if(doubleCheckDelete.equalsIgnoreCase("yes")){
-                    if(Controller.deleteRelationship(firstClass, secondClass)){
-                        //TODO pop up with relationship deleted
-                    }
-                    else{
-                        //Popup with some sort of error message
-                    }
-                } else{
-                    //cancel this bitch
-                }
+
 
             }
         });

@@ -1,10 +1,10 @@
-package src.main.java;
+package j;
 
 import java.util.LinkedList;
 
-public class Methods extends Attribute {
+public class Methods extends Attribute implements Cloneable{
     //parameter types
-    private LinkedList<String> paramTypes;
+    private final LinkedList<String> paramTypes;
     //return type
     private final String returnType;
 
@@ -15,30 +15,34 @@ public class Methods extends Attribute {
         this.returnType = type;
     }
 
-    public boolean deleteParam(String param) {
+    @Override
+    public Methods clone() {
+        return (Methods) super.clone();
+    }
+
+    public Controller.STATUS_CODES deleteParam(String param) {
         for (int i = 0; i < paramTypes.size(); i++) {
             if (paramTypes.get(i).equals(param)) {
                 paramTypes.remove(i);
-                return true;
+                return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return false;
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
     }
 
   
-    public boolean renameParam(String oldParamName, String newParamName) {
+    public Controller.STATUS_CODES renameParam(String oldParamName, String newParamName) {
         for (int i = 0; i < paramTypes.size(); i++) {
             if (paramTypes.get(i).equals(oldParamName)) {
                 paramTypes.set(i, newParamName);
-                return true;
+                return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return false;
+        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
   }
   
     public void addParam(String param) {
         this.paramTypes.add(param);
-
     }
 
     public LinkedList<String> getParamTypes() {

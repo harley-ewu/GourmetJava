@@ -1,8 +1,7 @@
-package src.test.java;
+package j;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-import src.main.java.RelationshipBuilder;
 
 public class RelationshipBuilderTest {
 
