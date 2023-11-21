@@ -1,5 +1,4 @@
-<<<<<<< HEAD:src/test/java/ModelDiagramTest.java
-import `org.junit.Test;
+import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.util.LinkedList;
@@ -7,12 +6,6 @@ import java.util.LinkedList;
 import src.main.java.ModelDiagram;
 import src.main.java.Controller;
 import src.main.java.ClassBox;
-=======
-package j;
-
-import org.junit.Test;
-import static org.junit.Assert.*;
->>>>>>> Development:src/test/j/ModelDiagramTest.java
 
 public class ModelDiagramTest {
    
@@ -25,7 +18,6 @@ public class ModelDiagramTest {
         ModelDiagram.addClass("targetClass", 1);
 
         // Test adding a class with a null name
-<<<<<<< HEAD:src/test/java/ModelDiagramTest.java
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addClass(null, 1));
 
         // Test adding a class with an empty string
@@ -333,9 +325,6 @@ public class ModelDiagramTest {
 
         // Test listing methods of a class with name as an empty string
         assertNull(ModelDiagram.listClassMethods(""));
-=======
-        //assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addClass(null, 1));
->>>>>>> Development:src/test/j/ModelDiagramTest.java
     }
 
 }
