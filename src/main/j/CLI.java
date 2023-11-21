@@ -5,8 +5,19 @@ package j;
  * the information retrieved for the CLI.
  */
 
-import java.util.LinkedList;
-import java.util.Scanner;
+import org.jline.console.ArgDesc;
+import org.jline.console.CmdDesc;
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
+import org.jline.reader.impl.DefaultParser;
+import org.jline.reader.impl.completer.StringsCompleter;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
+import org.jline.utils.AttributedString;
+import org.jline.widget.TailTipWidgets;
+
+import java.io.IOException;
+import java.util.*;
 
 public class CLI {
     //Scanner to read user input
@@ -21,6 +32,38 @@ public class CLI {
      *
      */
     public static void menu() {
+        Terminal terminal = null;
+        try {
+            terminal = TerminalBuilder.terminal();
+        } catch (IOException e) {
+            System.out.print("Chicken Pizza");
+        }
+        LineReader reader = LineReaderBuilder.builder()
+                .terminal(terminal)
+                .completer(new StringsCompleter("add", "class", "relationship", "method","field", "delete", "rename", "save", "load", "list", "all", "classes", "relationships", "help", "window", "exit"))
+                .parser(new DefaultParser())
+                .build();
+
+        Map<String, CmdDesc> tailTips = new HashMap<>();
+        Map<String, List<AttributedString>> widgetOpts = new HashMap<>();
+        List<AttributedString> mainDesc = Arrays.asList(new AttributedString("add class [Class1] [Type#1-4]"),
+                new AttributedString("add method [MethodName] [ReturnType] [Param-1] ... [Param-N]"),
+                new AttributedString("add field [FieldName] [Type]"),
+                new AttributedString("add relationship [Class1] [Class2] [Type#1-4]")
+        );
+        /*widgetOpts.put("add ", Arrays.asList(new AttributedString("add class")));
+        widgetOpts.put("", Arrays.asList(new AttributedString("add method")));
+        widgetOpts.put("", Arrays.asList(new AttributedString("add field")));
+        widgetOpts.put("", Arrays.asList(new AttributedString("add relationship")));*/
+
+        tailTips.put("add", new CmdDesc(mainDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+        tailTips.put("delete", new CmdDesc(mainDesc, ArgDesc.doArgNames(Arrays.asList("[pN...]")), widgetOpts));
+
+        // Create tailtip widgets that uses description window size 5 and
+        // does not display suggestions after the cursor
+        TailTipWidgets tailtipWidgets = new TailTipWidgets(reader, tailTips, 5, TailTipWidgets.TipType.TAIL_TIP);
+        // Enable autosuggestions
+        tailtipWidgets.enable();
         boolean cont = true;
         while (cont) {
             int input2;
@@ -30,7 +73,7 @@ public class CLI {
             //Calls a method readStringSplit that splits the users full command into elements in an array
             //Each element in the array is a word separated by a space
             //We create an array where each element is a word for us to check the type of command that is used
-            String[] input = CLI.readStringSplit("Command: ");
+            String[] input = reader.readLine("Command: ").split(" ");
 
             //If the user enters nothing, we have them restart
             if(input.length == 0){
@@ -212,8 +255,6 @@ public class CLI {
                             System.out.println("Not a valid list command. Please try again");
                         }
                     }
-
-
                     break;
                 case "rename":
                     //The next part of the command is rename

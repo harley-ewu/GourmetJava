@@ -41,6 +41,8 @@ shadowJar {
 dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'junit:junit:4.13.1'
+    implementation group: 'org.jline', name: 'jline-terminal-jansi', version: '3.24.1'
+    implementation group: 'org.jline', name: 'jline', version: '3.24.1'
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
     testImplementation 'junit:junit:4.13.1'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
