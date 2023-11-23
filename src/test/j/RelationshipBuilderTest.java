@@ -1,7 +1,6 @@
-package j;
-
 import org.junit.Test;
 import static org.junit.Assert.*;
+import j.RelationshipBuilder;
 
 public class RelationshipBuilderTest {
 
