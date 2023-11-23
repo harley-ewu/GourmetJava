@@ -237,8 +237,12 @@ public class ModelDiagram {
         if (target == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
 
         try {
-            target.addField(name, view, type);
-            return updateChange();
+            Controller.STATUS_CODES i = target.addField(name, view, type);
+            if (i == Controller.STATUS_CODES.SUCCESS) {
+                return updateChange();
+            } else {
+                return i;
+            }
         } catch (Exception e) {
             return Controller.STATUS_CODES.EXCEPTION;
         }
@@ -407,7 +411,10 @@ public class ModelDiagram {
             return Controller.STATUS_CODES.EMPTY_STRING;
 
         ClassBox target = findClassBox(className);
-        if (target == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+        if (target == null) {
+            System.out.println("HIT");
+            return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+        }
 
         try {
             Controller.STATUS_CODES status = target.renameParam(methodName, oldParamName, newParamName);
