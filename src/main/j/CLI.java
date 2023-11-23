@@ -56,6 +56,10 @@ public class CLI {
                                 System.out.println("Please enter a valid number");
                                 break;
                             }
+                            if(!isNegative(Integer.parseInt(input[3]))){
+                                System.out.println("Please enter a non-negative number");
+                                break;
+                            }
 
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.addClass(input[2], Integer.parseInt(input[3]));
@@ -82,6 +86,10 @@ public class CLI {
                                 System.out.println("Please enter a valid visibility number");
                                 break;
                             }
+                            if(!isNegative(Integer.parseInt(input[4]))){
+                                System.out.println("Please enter a non-negative number");
+                                break;
+                            }
 
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.addMethod(input[2], input[3], Integer.parseInt(input[4]), input[5], params);
@@ -101,6 +109,10 @@ public class CLI {
 
                             if(!readInt(input[4])){
                                 System.out.println("Please enter a valid visibility number");
+                                break;
+                            }
+                            if(!isNegative(Integer.parseInt(input[4]))){
+                                System.out.println("Please enter a non-negative number");
                                 break;
                             }
 
@@ -569,6 +581,9 @@ public class CLI {
             }
 
 
+    }
+    public static boolean isNegative(int num){
+        return num < 0;
     }
 
     public static String readString(final String msg) {
