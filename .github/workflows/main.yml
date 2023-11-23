@@ -2,6 +2,10 @@ name: main
 
 # on means that this is a trigger waiting for something to happen.
 on:
+  # push means that this is a trigger waiting for a push to be made.
+  push:
+    # branches means that this is a trigger waiting for a branch to be pushed to.
+    branches: [ development ]
   # pull_request means that this is a trigger waiting for a pull request to be made.
   pull_request:
     # This event will only trigger if the pull request is made to the development branch.
@@ -38,14 +42,17 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    # Standard gradle build command.  
+    # Building with gradle, I hope the uses part is linking to our GitHub repository.  
     - name: Build with Gradle
-      run: ./gradlew build
+      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
 
     # Standard gradle test command.
     - name: Test with Gradle
       run: ./gradlew test
     
-    # This is will generate a code coverage report.  
+    # This will generate a code coverage report.  
     - name: Code Coverage Report
-      uses: romeovs/lcov-reporter-action@v0.3.1        
+      uses: romeovs/lcov-reporter-action@v0.3.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        lcov-file: ./coverage/lcov.info
