@@ -1,5 +1,8 @@
 name: main
 
+permissions:
+  contents: read
+
 # on means that this is a trigger waiting for something to happen.
 on:
   # push means that this is a trigger waiting for a push to be made.
