@@ -5,6 +5,7 @@ package j;
  * the information retrieved for the CLI.
  */
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -50,6 +51,12 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
+
+                            if(!readInt(input[3])){
+                                System.out.println("Please enter a valid number");
+                                break;
+                            }
+
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.addClass(input[2], Integer.parseInt(input[3]));
                             if(status != Controller.STATUS_CODES.SUCCESS){
@@ -62,15 +69,20 @@ public class CLI {
                         }
                         //The next part of the command is method
                         case "method": {
-                            if(input.length != 6){
+                            if(input.length < 6){
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
 
                             LinkedList<String> params = new LinkedList<String>();
+                            params.addAll(Arrays.asList(input).subList(6, input.length));
 
 
-                            params.add("stub");
+                            if(!readInt(input[4])){
+                                System.out.println("Please enter a valid visibility number");
+                                break;
+                            }
+
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.addMethod(input[2], input[3], Integer.parseInt(input[4]), input[5], params);
                             if(status != Controller.STATUS_CODES.SUCCESS){
@@ -86,6 +98,12 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
+
+                            if(!readInt(input[4])){
+                                System.out.println("Please enter a valid visibility number");
+                                break;
+                            }
+
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.addField(input[2], input[3], Integer.parseInt(input[4]), input[5]);
                             if(status != Controller.STATUS_CODES.SUCCESS){
@@ -103,6 +121,9 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
+
+
+
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.addRelationship(input[2], input[3], input[4]);
                             if(status != Controller.STATUS_CODES.SUCCESS){
@@ -201,15 +222,19 @@ public class CLI {
                     switch (input[1]) {
                         case "all": {
                             listClassesDetailed();
+                            break;
                         }
                         case "classes": {
                             printStringListNumbered(Controller.listClasses());
+                            break;
                         }
                         case "relationships": {
                             CLI.printArrayOfStringList(Controller.listRelationships());
+                            break;
                         }
                         default:{
                             System.out.println("Not a valid list command. Please try again");
+                            break;
                         }
                     }
 
@@ -229,7 +254,7 @@ public class CLI {
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Class " + status.toString());
                             }else{
-                                System.out.println("Class " + input[2] +  "renamed to " + input[3]);
+                                System.out.println("Class " + input[2] +  " renamed to " + input[3]);
                             }
                             break;
                         }
@@ -270,13 +295,13 @@ public class CLI {
                     }
                 case "save":
                     //The next part of the command is save
-                    System.out.println("Found save!");
-                    Controller.save();
+
+                    CLI.save();
                     break;
                 case "load":
                     //The next part of the command is load
-                    System.out.println("Found load!");
-                    Controller.load();
+
+                    CLI.load();
                     break;
                 case "window":
                     //The next part of the command is window
@@ -318,6 +343,7 @@ public class CLI {
                     CLI.printStringListNumbered(Controller.listRelationshipTypes());
                     break;
                 default:
+                    System.out.println("Your command is invalid. Please type a valid command");
                     break;
             }
 
@@ -511,9 +537,12 @@ public class CLI {
     }
 
     public static void listClassesDetailed() {
+        System.out.println("All created classes and their details: ");
         String[] classes = Controller.listClasses();
-        for (String aClass : classes)
+        for (String aClass : classes) {
             printArrayOfStringList(Controller.listAllClassDetails(aClass));
+            System.out.println(" ");
+        }
     }
 
 
@@ -531,16 +560,15 @@ public class CLI {
             System.out.println("There is no save to load.");
     }
 
-    public static int readInt(final String msg) {
-        System.out.print(msg);
-        while (true) {
+    public static boolean readInt(final String msg) {
             try {
-                return Integer.parseInt(kb.nextLine());
+                Integer.parseInt(msg);
+                return true;
             } catch (Exception e) {
-                System.out.println("Invalid input, try again");
-                System.out.print(msg);
+                return false;
             }
-        }
+
+
     }
 
     public static String readString(final String msg) {
@@ -551,16 +579,6 @@ public class CLI {
         System.out.print(msg);
         return kb.nextLine().toLowerCase().split(" ");
     }
-    private static int findSpace(int startIndex, String command) {
-        int result = -1;
 
-        for (int i = startIndex; i < command.length() - startIndex; i++) {
-            if (Character.isWhitespace(command.charAt(i))) {
-                result = i;
-            }
-
-        }
-        return result;
-    }
 
 }
