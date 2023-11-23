@@ -1,18 +1,18 @@
 name: main
 
-permissions:
-  contents: read
-
 # on means that this is a trigger waiting for something to happen.
 on:
   # push means that this is a trigger waiting for a push to be made.
   push:
     # branches means that this is a trigger waiting for a branch to be pushed to.
-    branches: [ development ]
+    branches: [ "Development" ]
   # pull_request means that this is a trigger waiting for a pull request to be made.
   pull_request:
     # This event will only trigger if the pull request is made to the development branch.
-    branches: [ development ]
+    branches: [ "Development" ]
+
+permissions:
+  contents: read
 
 # jobs is a list of jobs that will be run.    
 jobs:
