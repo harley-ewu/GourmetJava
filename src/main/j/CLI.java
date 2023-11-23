@@ -5,8 +5,22 @@ package j;
  * the information retrieved for the CLI.
  */
 
-import java.util.LinkedList;
-import java.util.Scanner;
+import org.jline.builtins.Completers;
+import org.jline.console.ArgDesc;
+import org.jline.console.CmdDesc;
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
+import org.jline.reader.impl.DefaultParser;
+import org.jline.reader.impl.completer.*;
+import org.jline.reader.impl.completer.ArgumentCompleter;
+import org.jline.reader.impl.completer.StringsCompleter;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
+import org.jline.utils.AttributedString;
+import org.jline.widget.TailTipWidgets;
+
+import java.io.IOException;
+import java.util.*;
 
 public class CLI {
     //Scanner to read user input
@@ -21,6 +35,87 @@ public class CLI {
      *
      */
     public static void menu() {
+        Terminal terminal = null;
+        /*
+            This is where the terminal object is created.
+            It essentially just works on it's own based on the OS.
+         */
+        try {
+            terminal = TerminalBuilder.terminal();
+        } catch (IOException e) {
+            System.out.print("Failed to integrate with terminal");
+        }
+
+        /*
+            The completers are configured to give autosuggestions
+            at each command level, the null completer prevents further suggestions.
+         */
+        ArgumentCompleter AddDeleteCompleter = new ArgumentCompleter(
+                new StringsCompleter("add", "delete"),
+                new StringsCompleter("class", "method", "field", "relationship"),
+                new NullCompleter());
+
+        ArgumentCompleter ListCompleter = new ArgumentCompleter(
+                new StringsCompleter("list"),
+                new StringsCompleter("all", "classes", "relationships"),
+                new NullCompleter());
+
+        ArgumentCompleter SingleCompleter = new ArgumentCompleter(
+                new StringsCompleter("save", "load", "help", "window", "exit", "undo", "redo"),
+                new NullCompleter());
+
+        ArgumentCompleter RenameCompleter = new ArgumentCompleter(
+                new StringsCompleter("rename"),
+                new StringsCompleter("class", "field", "method"),
+                new NullCompleter());
+
+        AggregateCompleter CombinedCompleters = new AggregateCompleter(AddDeleteCompleter, ListCompleter, SingleCompleter ,RenameCompleter);
+        // This is the LineReader that handles input and brings it all together
+        LineReader reader = LineReaderBuilder.builder()
+                .terminal(terminal)
+                .completer(CombinedCompleters)
+                .parser(new DefaultParser())
+                .build();
+
+        Map<String, CmdDesc> tailTips = new HashMap<>();
+        Map<String, List<AttributedString>> widgetOpts = new HashMap<>();
+
+        // Descriptors that display each commands requirements
+        List<AttributedString> addDesc = Arrays.asList(new AttributedString("add class [class-name] [class-type-number]"),
+                new AttributedString("add method [class-name] [method-name] [visibility-number] [return-type] [Param-1] ... [Param-N]"),
+                new AttributedString("add field [class-name] [field-name] [visibility-number] [data-type]"),
+                new AttributedString("add relationship [1st-class-name] [2nd-class-name] [relationship-type-number]")
+        );
+
+        List<AttributedString> deleteDesc = Arrays.asList(new AttributedString("delete class [class-name]"),
+                new AttributedString("delete method [class-name] [method-name]"),
+                new AttributedString("delete field [class-name] [field-name]"),
+                new AttributedString("delete relationship [1st-class-name] [2nd-class-name]"),
+                new AttributedString("delete field [FieldName] [Type]")
+        );
+
+        List<AttributedString> listDesc = Arrays.asList(new AttributedString("list all"),
+                new AttributedString("list classes"),
+                new AttributedString("list relationships")
+        );
+
+        List<AttributedString> renameDesc = Arrays.asList(new AttributedString("rename class [old-class-name] [new-class-name]"),
+                new AttributedString("rename field [class-name] [old-field-name] [new-field-name]"),
+                new AttributedString("rename method [class-name] [old-method-name] [new-method-name]")
+        );
+
+        // This attaches the descriptions to the commands
+        tailTips.put("add", new CmdDesc(addDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+        tailTips.put("delete", new CmdDesc(deleteDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+        tailTips.put("list", new CmdDesc(listDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+        tailTips.put("rename", new CmdDesc(renameDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+
+        // Create tailtip widgets that uses description window size 5 and
+        // does not display suggestions after the cursor
+        TailTipWidgets tailtipWidgets = new TailTipWidgets(reader, tailTips, 5, TailTipWidgets.TipType.COMBINED);
+        // Enable autosuggestions
+        tailtipWidgets.enable();
+
         boolean cont = true;
         while (cont) {
             int input2;
@@ -30,8 +125,7 @@ public class CLI {
             //Calls a method readStringSplit that splits the users full command into elements in an array
             //Each element in the array is a word separated by a space
             //We create an array where each element is a word for us to check the type of command that is used
-            String[] input = CLI.readStringSplit("Command: ");
-
+            String[] input = reader.readLine("Command: ").split(" ");
             //If the user enters nothing, we have them restart
             if(input.length == 0){
                 System.out.println("Please enter a command");
@@ -201,19 +295,20 @@ public class CLI {
                     switch (input[1]) {
                         case "all": {
                             listClassesDetailed();
+                            break;
                         }
                         case "classes": {
                             printStringListNumbered(Controller.listClasses());
+                            break;
                         }
                         case "relationships": {
                             CLI.printArrayOfStringList(Controller.listRelationships());
+                            break;
                         }
                         default:{
                             System.out.println("Not a valid list command. Please try again");
                         }
                     }
-
-
                     break;
                 case "rename":
                     //The next part of the command is rename
