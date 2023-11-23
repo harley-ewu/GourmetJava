@@ -1,9 +1,9 @@
-package j;
-
-import org.junit.*;
-import static org.junit.Assert.*;
+import j.Methods;
+import org.junit.Test;
 
 import java.util.LinkedList;
+
+import static org.junit.Assert.assertEquals;
 
 public class MethodsTest {
 
