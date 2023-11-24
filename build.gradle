@@ -54,8 +54,8 @@ task testCoverage(type: JacocoReport, dependsOn: ['test']) {
     classDirectories = files(sourceSets.main.output)
     executionData = files('build/jacoco/test.exec')
     reports {
-        xml.required = true
-        html.required = true
+        xml.required = false
+        html.required = false
     }
 }
 
