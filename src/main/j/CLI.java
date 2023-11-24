@@ -151,7 +151,7 @@ public class CLI {
                                 System.out.println("Please enter a valid number");
                                 break;
                             }
-                            if(!isNegative(Integer.parseInt(input[3]))){
+                            if(isNegative(Integer.parseInt(input[3]))){
                                 System.out.println("Please enter a non-negative number");
                                 break;
                             }
@@ -181,7 +181,7 @@ public class CLI {
                                 System.out.println("Please enter a valid visibility number");
                                 break;
                             }
-                            if(!isNegative(Integer.parseInt(input[4]))){
+                            if(isNegative(Integer.parseInt(input[4]))){
                                 System.out.println("Please enter a non-negative number");
                                 break;
                             }
@@ -206,7 +206,7 @@ public class CLI {
                                 System.out.println("Please enter a valid visibility number");
                                 break;
                             }
-                            if(!isNegative(Integer.parseInt(input[4]))){
+                            if(isNegative(Integer.parseInt(input[4]))){
                                 System.out.println("Please enter a non-negative number");
                                 break;
                             }
@@ -443,9 +443,9 @@ public class CLI {
                             break;
                         }
                     }
+                    break;
                 case "save":
                     //The next part of the command is save
-
                     CLI.save();
                     break;
                 case "load":
@@ -455,7 +455,6 @@ public class CLI {
                     break;
                 case "window":
                     //The next part of the command is window
-
                     Main.gview = true;
                     GUI.startGUIMenu();
                     break;
