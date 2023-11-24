@@ -19,9 +19,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     - name: Run Coverage
-      run: |
-          chmod +x gradlew
-          ./gradlew testCoverage
+      run: chmod +x gradlew && ./gradlew clean jacocoTestReport
 
     - name: Add coverage to PR
       id: jacoco
