@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '7.1.0'
+    id 'jacoco'
 }
 
 sourceSets {
@@ -46,6 +47,16 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
     testImplementation 'junit:junit:4.13.1'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+}
+
+task testCoverage(type: JacocoReport, dependsOn: ['test']) {
+    sourceDirectories = files(sourceSets.main.allJava.srcDirs)
+    classDirectories = files(sourceSets.main.output)
+    executionData = files('build/jacoco/test.exec')
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
 }
 
 repositories {
