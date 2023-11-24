@@ -1,0 +1,35 @@
+name: coverage
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+    - uses: actions/checkout@v3
+
+    # This is the Java Development Kit version that will be used. I used this one because this seems to be the version that most teammates are using.
+    - name: Set up JDK 17
+      # Sets up the a Java environment for use in actions.
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    - name: Run Coverage
+      run: |
+          chmod +x gradlew
+          ./gradlew testCoverage
+
+    - name: Add coverage to PR
+      id: jacoco
+      uses: madrapps/jacoco-report@v1.6.1
+      with:
+        paths: |
+          ${{ github.workspace }}/**/build/reports/jacoco/prodNormalDebugCoverage/prodNormalDebugCoverage.xml,
+          ${{ github.workspace }}/**/build/reports/jacoco/**/debugCoverage.xml
+        token: ${{ secrets.GITHUB_TOKEN }}
+        min-coverage-overall: 10
+        min-coverage-changed-files: 80
