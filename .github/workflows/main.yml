@@ -45,10 +45,4 @@ jobs:
 
     # Standard gradle test command.
     - name: Test with Gradle
-      run: ./gradlew test 
-
-    - name: Code Coverage Report
-      uses: romeovs/lcov-reporter-action@v0.3.1
-      with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: build/reports/jacoco/test/jacocoTestReport.lcov
+      run: ./gradlew test

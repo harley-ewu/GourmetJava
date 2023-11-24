@@ -1,7 +1,15 @@
 name: coverage
 
+# on means that this is a trigger waiting for something to happen.
 on:
-  pull_request:
+    # push means that this is a trigger waiting for a push to be made.
+    push:
+      # branches means that this is a trigger waiting for a branch to be pushed to.
+      branches: [ "Development" ]
+    # pull_request means that this is a trigger waiting for a pull request to be made.
+    pull_request:
+      # This event will only trigger if the pull request is made to the development branch.
+      branches: [ "Development" ]
 
 jobs:
   build:
@@ -15,8 +23,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Run Coverage
-        run: |
-          chmod +x gradlew
+        run: chmod +x gradlew
           ./gradlew test
     
       - name: Add coverage to PR
