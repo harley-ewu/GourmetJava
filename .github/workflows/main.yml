@@ -46,10 +46,3 @@ jobs:
     # Standard gradle test command.
     - name: Test with Gradle
       run: ./gradlew test
-    
-    # This will allow GitHub actions to use and execute JaCoCo.
-    - name: JaCoCo Report
-      uses: Madrapps/jacoco-report@v1.6.1
-      with:
-        paths: 'path/to/your/jacoco.xml'
-        token: ${{ secrets.GITHUB_TOKEN }}
