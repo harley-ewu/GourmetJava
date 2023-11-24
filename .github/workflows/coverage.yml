@@ -9,17 +9,25 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
 
     # This is the Java Development Kit version that will be used. I used this one because this seems to be the version that most teammates are using.
     - name: Set up JDK 17
       # Sets up the a Java environment for use in actions.
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v2
       with:
         java-version: '17'
         distribution: 'temurin'
     - name: Run Coverage
-      run: chmod +x gradlew && ./gradlew clean jacocoTestReport
+      run: chmod +x gradlew
+
+    # Building with gradle, I hope the uses part is linking to our GitHub repository.  
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+
+    # Standard gradle test command.
+    - name: Test with Gradle
+      run: ./gradlew test 
 
     - name: Add coverage to PR
       id: jacoco
