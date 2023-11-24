@@ -1,4 +1,4 @@
-name: main
+name: coverage
 
 # on means that this is a trigger waiting for something to happen.
 on:
@@ -12,11 +12,11 @@ on:
     branches: [ "Development" ]
 
 permissions:
-  contents: read
-
+    contents: read
+      
 # jobs is a list of jobs that will be run.    
 jobs:
-  # on build job these are the steps that will be run. 
+# on build job these are the steps that will be run. 
   build:
 
     # This is the operating system that the job will run on.
@@ -28,22 +28,13 @@ jobs:
 
     # This is the Java Development Kit version that will be used. I used this one because this seems to be the version that most teammates are using.
     - name: Set up JDK 11
-      # Sets up the a Java environment for use in actions.
+        # Sets up the a Java environment for use in actions.
       uses: actions/setup-java@v3
       with:
         java-version: '11'
         # This pulls the jdk from the adoptopenjdk website which provides open source OpenJDK binaries.
         distribution: 'temurin'
 
-    # This will allow GitHub actions to use and execute gradle and the gradle wrapper.
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-
-    # Building with gradle, I hope the uses part is linking to our GitHub repository.  
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
-
-    # Standard gradle test command.
-    - name: Test with Gradle
-      run: ./gradlew test
-    
+# This will generate a code coverage report.  
+    - name: Code Coverage Report
+      uses: romeovs/lcov-reporter-action@v0.3.1
