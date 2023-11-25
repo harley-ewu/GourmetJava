@@ -72,7 +72,7 @@ tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
     }
 
     def excludes = [
-            // '**/*Test*.*',
+            '**/*Test*.*',
             '**/actions/*.*',
             '**/core/*.*',
             '**/markers/*.*',
