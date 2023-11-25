@@ -4,6 +4,9 @@ plugins {
     id 'jacoco'
 }
 
+group 'com.madrapps'
+version '1.0-SNAPSHOT'
+
 sourceSets {
     main {
         java {
@@ -21,7 +24,16 @@ sourceSets {
         resources {
             srcDirs = ['src/test/resources']  // Change the default test resources directory
         }
+        use junitPlatform()  // Use JUnit 5 platform for unit tests
     }
+}
+
+jacoco { toolVersion '0.8.10' }
+
+task.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
+
 }
 
 jar {
@@ -47,17 +59,49 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
     testImplementation 'junit:junit:4.13.1'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
-task testCoverage(type: JacocoReport, dependsOn: ['test']) {
-    sourceDirectories = files(sourceSets.main.allJava.srcDirs)
-    classDirectories = files(sourceSets.main.output)
-    executionData = files('build/jacoco/test.exec')
+tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
+
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports for the test build."
+
     reports {
-        xml.required = true
-        html.required = true
+        html.required.set(true)
+        xml.required.set(true)
     }
+
+    def excludes = [
+            '**/*Test*.*',
+            '**/actions/*.*',
+            '**/core/*.*',
+            '**/markers/*.*',
+            '**/services/**/*.*',
+            '**/toolwindow/*.*',
+            '**/utils/*.*'
+    ]
+
+    def javaClasses = fileTree(dir: "${buildDir}/classes/java/main", excludes: excludes)
+    classDirectories.from = files([javaClasses])
+
+    sourceDirectories.from = files([
+            "$project.projectDir/src/main/java",
+            "$buildDir/generated/source/kapt/test"
+    ])
+
+    executionData.from = files("${project.buildDir}/jacoco/test.exec")
 }
+
+// task testCoverage(type: JacocoReport, dependsOn: ['test']) {
+//     sourceDirectories = files(sourceSets.main.allJava.srcDirs)
+//     classDirectories = files(sourceSets.main.output)
+//     executionData = files('build/jacoco/test.exec')
+//     reports {
+//         xml.required = true
+//         html.required = true
+//     }
+// }
 
 repositories {
     google()
