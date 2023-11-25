@@ -24,7 +24,7 @@ jobs:
         run: ./gradlew testCoverage
 
       - name: Upload Report
-        uses: 'actions/upload-artifact@v2'
+        uses: 'actions/upload-artifact@v3'
         with:
           name: report.xml
           path: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
@@ -37,7 +37,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 40
           min-coverage-changed-files: 60
-          debug-mode: false
 
       - name: Get the Coverage info
         run: |
