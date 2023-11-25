@@ -24,7 +24,6 @@ sourceSets {
         resources {
             srcDirs = ['src/test/resources']  // Change the default test resources directory
         }
-        use junitPlatform()  // Use JUnit 5 platform for unit tests
     }
 }
 
