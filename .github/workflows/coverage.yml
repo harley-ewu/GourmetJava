@@ -5,6 +5,9 @@ on:
     branches: [ Development ]
   pull_request:
 
+permissions:
+  pull-requests: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
