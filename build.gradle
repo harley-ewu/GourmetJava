@@ -82,7 +82,13 @@ tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
     ]
 
     def javaClasses = fileTree(dir: "${buildDir}/classes/java/main", excludes: excludes)
-    classDirectories.from = files([javaClasses])
+    // classDirectories.from = files([javaClasses])
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                     exclude: ['**/SomeExcludedClass.class'])
+        }))
+    }
 
     sourceDirectories.from = files([
             "$project.projectDir/src/main/java",
