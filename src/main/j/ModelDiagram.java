@@ -412,7 +412,6 @@ public class ModelDiagram {
 
         ClassBox target = findClassBox(className);
         if (target == null) {
-            System.out.println("HIT");
             return Controller.STATUS_CODES.OBJ_NOT_FOUND;
         }
 
