@@ -29,11 +29,11 @@ sourceSets {
 
 jacoco { toolVersion '0.8.10' }
 
-task.withType(Test) {
-    jacoco.includeNoLocationClasses = true
-    jacoco.excludes = ['jdk.internal.*']
+// task.withType(Test) {
+//     jacoco.includeNoLocationClasses = true
+//     jacoco.excludes = ['jdk.internal.*']
 
-}
+// }
 
 jar {
     manifest {
