@@ -53,6 +53,8 @@ public class GUI extends JFrame {
                 int typeToInt = Integer.parseInt(classType);
                 Controller.addClass(className, typeToInt);
                 //Draw new box (either entire screen refresh or just draw new box)
+                //TODO added a test on the line below
+                guiWindow.add(new ShapeDrawing());
                 displayGUI();
             }
         });
@@ -359,7 +361,9 @@ public class GUI extends JFrame {
                 }
             }
         });
-        displayGUI();
+
+        //TODO commented out line below
+        //displayGUI();
         //Want to stay idle if CLI view is not there; need to keep program running
 
 
@@ -369,13 +373,63 @@ public class GUI extends JFrame {
 
     }
     public static void displayGUI(){
-        guiWindow.add(new ShapeDrawing());
+        SwingUtilities.updateComponentTreeUI(guiWindow);
+        //guiWindow.add(new ShapeDrawing());
         guiWindow.setVisible(true);
     }
 
     public static class ShapeDrawing extends JComponent{
+        //Start of blobs
+        private volatile int screenX = 0;
+        private volatile int screenY = 0;
+        private volatile int myX = 0;
+        private volatile int myY = 0;
+        //End of blobs
+
         public ShapeDrawing(){
             super();
+        // code blob error report: Same as below unfortunately :<
+        //Start of blob
+            addMouseListener(new MouseListener() {
+
+                @Override
+                public void mouseClicked(MouseEvent e) { }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    screenX = e.getXOnScreen();
+                    screenY = e.getYOnScreen();
+
+                    myX = getX();
+                    myY = getY();
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) { }
+
+                @Override
+                public void mouseEntered(MouseEvent e) { }
+
+                @Override
+                public void mouseExited(MouseEvent e) { }
+
+            });
+            addMouseMotionListener(new MouseMotionListener() {
+
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    int deltaX = e.getXOnScreen() - screenX;
+                    int deltaY = e.getYOnScreen() - screenY;
+
+                    setLocation(myX + deltaX, myY + deltaY);
+                }
+
+                @Override
+                public void mouseMoved(MouseEvent e) { }
+
+            });
+        //end of blob
+
         }
         public void paint(Graphics g){
             Graphics2D g2 = (Graphics2D) g;
@@ -393,9 +447,18 @@ public class GUI extends JFrame {
             //Goes through all classes and prints them
             String[] classNames = Controller.listClasses();
             //this will stick every other class on an upper row, and the ones in between on a lower row
+
+            /*TODO remove the for loop. Place it in it's own method to print all classes. This print all classes method will be
+              outside of the shape drawing class, and will call shapedrawing for each class listed. You'll need int numberofclasses
+              from above to be able to do this. This could get complicated as it might require moving multiple methods
+               outside of ShapeDrawing*/
             for(int i = 0; i < numberOfClasses; i++){
+                //issue report with the mouse listeners in the if/else below:
+                // Classes are duplicated in display, so for 1 class, 2 show up. They're in weirdly bounded boxes,
+                // and the components in each box are not moveable
                 if(i % 2 == 0){
                     drawClass(classNames[i], curx, 200, g2);
+
                     coords.add(curx);
                     coords.add(200);
                 }
@@ -520,6 +583,10 @@ public class GUI extends JFrame {
         }
         //Draws the class boxes
         public void drawClass(String className, int x, int y, Graphics2D g2){
+            //TODO issue report with the mouse listeners in the if/else below:
+            // Classes are duplicated in display, so for 1 class, 2 show up. They're in weirdly bounded boxes,
+            // and the components in each box are not moveable
+
             //number of fields and methods
             String[][] classDetails = Controller.listAllClassDetails(className);
             int height = 15 * (classDetails[Controller.DETAILS_METHODS].length + classDetails[Controller.DETAILS_FIELDS].length+2);
@@ -553,6 +620,8 @@ public class GUI extends JFrame {
                 //moves down 15
                 y += 15;
             }
+            //TODO added below line displayGui
+
 
         }
         public static void drawDashedLine(Graphics2D g, int x1, int y1, int x2, int y2){
