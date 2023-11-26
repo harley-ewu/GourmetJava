@@ -83,10 +83,15 @@ public class ClassBox implements Cloneable {
         this.methods.add(newMethod);
     }
 
-    public void addField(String name, int view, String type) {
+    public Controller.STATUS_CODES addField(String name, int view, String type) {
         //call the constructor and add to list
-        Field newField = new Field(name, view, type);
-        this.fields.add(newField);
+        if (findField(name) == null) {
+            Field newField = new Field(name, view, type);
+            this.fields.add(newField);
+            return Controller.STATUS_CODES.SUCCESS;
+        } else {
+            return Controller.STATUS_CODES.OBJ_ALREADY_EXISTS;
+        }
     }
 
 
@@ -125,7 +130,7 @@ public class ClassBox implements Cloneable {
 
 
     public Controller.STATUS_CODES renameParam(String methodName, String oldParamName, String newParamName) {
-        for (int i = 0; i < fields.size(); i++) {
+        for (int i = 0; i < methods.size(); i++) {
             if (methods.get(i).getName().equals(methodName)) {
                 return methods.get(i).renameParam(oldParamName, newParamName);
             }
@@ -184,6 +189,15 @@ public class ClassBox implements Cloneable {
         for (Methods method : methods) {
             if (method.getName().equals(methodName)) {
                 return method;
+            }
+        }
+        return null;
+    }
+
+    public Field findField(String fieldName) {
+        for (Field field : fields) {
+            if (field.getName().equals(fieldName)) {
+                return field;
             }
         }
         return null;

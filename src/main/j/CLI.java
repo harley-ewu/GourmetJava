@@ -5,8 +5,22 @@ package j;
  * the information retrieved for the CLI.
  */
 
-import java.util.LinkedList;
-import java.util.Scanner;
+import org.jline.builtins.Completers;
+import org.jline.console.ArgDesc;
+import org.jline.console.CmdDesc;
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
+import org.jline.reader.impl.DefaultParser;
+import org.jline.reader.impl.completer.*;
+import org.jline.reader.impl.completer.ArgumentCompleter;
+import org.jline.reader.impl.completer.StringsCompleter;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
+import org.jline.utils.AttributedString;
+import org.jline.widget.TailTipWidgets;
+
+import java.io.IOException;
+import java.util.*;
 
 public class CLI {
     //Scanner to read user input
@@ -21,6 +35,89 @@ public class CLI {
      *
      */
     public static void menu() {
+        Terminal terminal = null;
+        /*
+            This is where the terminal object is created.
+            It essentially just works on it's own based on the OS.
+         */
+        try {
+            terminal = TerminalBuilder.terminal();
+        } catch (IOException e) {
+            System.out.print("Failed to integrate with terminal");
+        }
+
+        /*
+            The completers are configured to give autosuggestions
+            at each command level, the null completer prevents further suggestions.
+         */
+        ArgumentCompleter AddDeleteCompleter = new ArgumentCompleter(
+                new StringsCompleter("add", "delete"),
+                new StringsCompleter("class", "method", "field", "relationship", "parameter"),
+                new NullCompleter());
+
+        ArgumentCompleter ListCompleter = new ArgumentCompleter(
+                new StringsCompleter("list"),
+                new StringsCompleter("all", "classes", "relationships"),
+                new NullCompleter());
+
+        ArgumentCompleter SingleCompleter = new ArgumentCompleter(
+                new StringsCompleter("save", "load", "help", "window", "exit", "undo", "redo"),
+                new NullCompleter());
+
+        ArgumentCompleter RenameCompleter = new ArgumentCompleter(
+                new StringsCompleter("rename"),
+                new StringsCompleter("class", "field", "method", "parameter"),
+                new NullCompleter());
+
+        AggregateCompleter CombinedCompleters = new AggregateCompleter(AddDeleteCompleter, ListCompleter, SingleCompleter ,RenameCompleter);
+        // This is the LineReader that handles input and brings it all together
+        LineReader reader = LineReaderBuilder.builder()
+                .terminal(terminal)
+                .completer(CombinedCompleters)
+                .parser(new DefaultParser())
+                .build();
+
+        Map<String, CmdDesc> tailTips = new HashMap<>();
+        Map<String, List<AttributedString>> widgetOpts = new HashMap<>();
+
+        // Descriptors that display each commands requirements
+        List<AttributedString> addDesc = Arrays.asList(new AttributedString("add class [class-name] [class-type-number]"),
+                new AttributedString("add method [class-name] [method-name] [visibility-number] [return-type] [Param-1] ... [Param-N]"),
+                new AttributedString("add field [class-name] [field-name] [visibility-number] [data-type]"),
+                new AttributedString("add relationship [1st-class-name] [2nd-class-name] [relationship-type-number]"),
+                new AttributedString("add parameter [class-name] [method-name] [parameter-name]")
+        );
+
+        List<AttributedString> deleteDesc = Arrays.asList(new AttributedString("delete class [class-name]"),
+                new AttributedString("delete method [class-name] [method-name]"),
+                new AttributedString("delete field [class-name] [field-name]"),
+                new AttributedString("delete relationship [1st-class-name] [2nd-class-name]"),
+                new AttributedString("delete parameter [class-name] [method-name] [parameter-name]")
+        );
+
+        List<AttributedString> listDesc = Arrays.asList(new AttributedString("list all"),
+                new AttributedString("list classes"),
+                new AttributedString("list relationships")
+        );
+
+        List<AttributedString> renameDesc = Arrays.asList(new AttributedString("rename class [old-class-name] [new-class-name]"),
+                new AttributedString("rename field [class-name] [old-field-name] [new-field-name]"),
+                new AttributedString("rename method [class-name] [old-method-name] [new-method-name]"),
+                new AttributedString("rename parameter [class-name] [method-name] [old-parameter-name] [new-parameter-name]")
+        );
+
+        // This attaches the descriptions to the commands
+        tailTips.put("add", new CmdDesc(addDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+        tailTips.put("delete", new CmdDesc(deleteDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+        tailTips.put("list", new CmdDesc(listDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+        tailTips.put("rename", new CmdDesc(renameDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+
+        // Create tailtip widgets that uses description window size 5 and
+        // does not display suggestions after the cursor
+        TailTipWidgets tailtipWidgets = new TailTipWidgets(reader, tailTips, 5, TailTipWidgets.TipType.COMBINED);
+        // Enable autosuggestions
+        tailtipWidgets.enable();
+
         boolean cont = true;
         while (cont) {
             int input2;
@@ -30,8 +127,7 @@ public class CLI {
             //Calls a method readStringSplit that splits the users full command into elements in an array
             //Each element in the array is a word separated by a space
             //We create an array where each element is a word for us to check the type of command that is used
-            String[] input = CLI.readStringSplit("Command: ");
-
+            String[] input = reader.readLine("Command: ").split(" ");
             //If the user enters nothing, we have them restart
             if(input.length == 0){
                 System.out.println("Please enter a command");
@@ -50,6 +146,16 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
+
+                            if(!readInt(input[3])){
+                                System.out.println("Please enter a valid number");
+                                break;
+                            }
+                            if(isNegative(Integer.parseInt(input[3]))){
+                                System.out.println("Please enter a non-negative number");
+                                break;
+                            }
+
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.addClass(input[2], Integer.parseInt(input[3]));
                             if(status != Controller.STATUS_CODES.SUCCESS){
@@ -62,15 +168,24 @@ public class CLI {
                         }
                         //The next part of the command is method
                         case "method": {
-                            if(input.length != 6){
+                            if(input.length < 6){
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
 
                             LinkedList<String> params = new LinkedList<String>();
+                            params.addAll(Arrays.asList(input).subList(6, input.length));
 
 
-                            params.add("stub");
+                            if(!readInt(input[4])){
+                                System.out.println("Please enter a valid visibility number");
+                                break;
+                            }
+                            if(isNegative(Integer.parseInt(input[4]))){
+                                System.out.println("Please enter a non-negative number");
+                                break;
+                            }
+
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.addMethod(input[2], input[3], Integer.parseInt(input[4]), input[5], params);
                             if(status != Controller.STATUS_CODES.SUCCESS){
@@ -86,6 +201,16 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
+
+                            if(!readInt(input[4])){
+                                System.out.println("Please enter a valid visibility number");
+                                break;
+                            }
+                            if(isNegative(Integer.parseInt(input[4]))){
+                                System.out.println("Please enter a non-negative number");
+                                break;
+                            }
+
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.addField(input[2], input[3], Integer.parseInt(input[4]), input[5]);
                             if(status != Controller.STATUS_CODES.SUCCESS){
@@ -103,12 +228,31 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
+
+
+
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.addRelationship(input[2], input[3], input[4]);
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Relationship " + status.toString());
                             }else{
                                 System.out.println("Relationship between " + input[2] + " and " + input[3] + " created!");
+                            }
+
+                            break;
+                        }
+                        //The next part of command is parameter
+                        case "parameter": {
+                            if(input.length != 5){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
+                            //Retrieves the status code for the method and displays results
+                            Controller.STATUS_CODES status = Controller.addParam(input[2], input[3], input[4]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Parameter " + status.toString());
+                            }else{
+                                System.out.println("Parameter " + input[4] + " created!");
                             }
 
                             break;
@@ -184,6 +328,21 @@ public class CLI {
                             }
                             break;
                         }
+                        case "parameter": {
+                            if(input.length != 5){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
+                            //Retrieves the status code for the method and displays results
+                            Controller.STATUS_CODES status = Controller.deleteParam(input[2], input[3], input[4]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Parameter " + status.toString());
+                            }else{
+                                System.out.println("Parameter " + input[4] + " deleted!");
+                            }
+
+                            break;
+                        }
                         default:{
                             //The next part of the command is invalid
                             System.out.println("Your command is not valid please enter a new command.");
@@ -201,19 +360,21 @@ public class CLI {
                     switch (input[1]) {
                         case "all": {
                             listClassesDetailed();
+                            break;
                         }
                         case "classes": {
                             printStringListNumbered(Controller.listClasses());
+                            break;
                         }
                         case "relationships": {
                             CLI.printArrayOfStringList(Controller.listRelationships());
+                            break;
                         }
                         default:{
                             System.out.println("Not a valid list command. Please try again");
+                            break;
                         }
                     }
-
-
                     break;
                 case "rename":
                     //The next part of the command is rename
@@ -229,7 +390,7 @@ public class CLI {
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Class " + status.toString());
                             }else{
-                                System.out.println("Class " + input[2] +  "renamed to " + input[3]);
+                                System.out.println("Class " + input[2] +  " renamed to " + input[3]);
                             }
                             break;
                         }
@@ -263,24 +424,37 @@ public class CLI {
                             }
                             break;
                         }
+                        case "parameter": {
+                            if(input.length != 6){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
+                            //Retrieves the status code for the method and displays results
+                            Controller.STATUS_CODES status = Controller.renameParam(input[2], input[3], input[4], input[5]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Parameter " + status.toString());
+                            }else{
+                                System.out.println("Parameter " + input[4] + " renamed to " + input[5]);
+                            }
+                            break;
+                        }
                         default:{
                             System.out.println("Your command is not valid please enter a new command.");
                             break;
                         }
                     }
+                    break;
                 case "save":
                     //The next part of the command is save
-                    System.out.println("Found save!");
-                    Controller.save();
+                    CLI.save();
                     break;
                 case "load":
                     //The next part of the command is load
-                    System.out.println("Found load!");
-                    Controller.load();
+
+                    CLI.load();
                     break;
                 case "window":
                     //The next part of the command is window
-
                     Main.gview = true;
                     GUI.startGUIMenu();
                     break;
@@ -318,6 +492,7 @@ public class CLI {
                     CLI.printStringListNumbered(Controller.listRelationshipTypes());
                     break;
                 default:
+                    System.out.println("Your command is invalid. Please type a valid command");
                     break;
             }
 
@@ -511,9 +686,12 @@ public class CLI {
     }
 
     public static void listClassesDetailed() {
+        System.out.println("All created classes and their details: ");
         String[] classes = Controller.listClasses();
-        for (String aClass : classes)
+        for (String aClass : classes) {
             printArrayOfStringList(Controller.listAllClassDetails(aClass));
+            System.out.println(" ");
+        }
     }
 
 
@@ -531,16 +709,18 @@ public class CLI {
             System.out.println("There is no save to load.");
     }
 
-    public static int readInt(final String msg) {
-        System.out.print(msg);
-        while (true) {
+    public static boolean readInt(final String msg) {
             try {
-                return Integer.parseInt(kb.nextLine());
+                Integer.parseInt(msg);
+                return true;
             } catch (Exception e) {
-                System.out.println("Invalid input, try again");
-                System.out.print(msg);
+                return false;
             }
-        }
+
+
+    }
+    public static boolean isNegative(int num){
+        return num < 0;
     }
 
     public static String readString(final String msg) {
@@ -551,16 +731,6 @@ public class CLI {
         System.out.print(msg);
         return kb.nextLine().toLowerCase().split(" ");
     }
-    private static int findSpace(int startIndex, String command) {
-        int result = -1;
 
-        for (int i = startIndex; i < command.length() - startIndex; i++) {
-            if (Character.isWhitespace(command.charAt(i))) {
-                result = i;
-            }
-
-        }
-        return result;
-    }
 
 }
