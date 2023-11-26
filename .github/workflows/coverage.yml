@@ -21,30 +21,49 @@ jobs:
       - name: Run Coverage
         run: |
           chmod +x gradlew
-          ./gradlew testCoverage
+          ./gradlew
+        # run: |
+        #   chmod +x gradlew
+        #   ./gradlew testCoverage
 
-      - name: Run Coverage
-        run: ./gradlew testCoverage
+      - name: build gradle
+        run: ./gradlew build
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        # uses: codecov/codecov-action@v2.1.0
+        # with:
+        #   token: ${{ secrets.CODECOV_TOKEN }}
+        #   fail_ci_if_error: true
+        #   flags: unittests
+        #   files: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
+        #   verbose: true
+        #   name: codecov-umbrella
+        #   fail_ci_if_error: true
+        #   fail_ci_if_error: true
+        #   fail_ci_if_error: true  
+        
+      # - name: Run Coverage
+      #   run: ./gradlew testCoverage
 
-      - name: Upload Report
-        uses: 'actions/upload-artifact@v2'
-        with:
-          name: report.xml
-          path: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
+      # - name: Upload Report
+      #   uses: 'actions/upload-artifact@v2'
+      #   with:
+      #     name: report.xml
+      #     path: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
 
-      - name: Jacoco Report to PR
-        id: jacoco
-        uses: madrapps/jacoco-report@v1.1
-        with:
-          path: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 10
-          min-coverage-changed-files: 10
+      # - name: Jacoco Report to PR
+      #   id: jacoco
+      #   uses: madrapps/jacoco-report@v1.1
+      #   with:
+      #     path: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     min-coverage-overall: 10
+      #     min-coverage-changed-files: 10
 
-      - name: Get the Coverage info
-        run: |
-          echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
-          echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
+      # - name: Get the Coverage info
+      #   run: |
+      #     echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
+      #     echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
 
 # name: Measure coverage
 
