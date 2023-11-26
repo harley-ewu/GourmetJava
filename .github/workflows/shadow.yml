@@ -1,0 +1,44 @@
+name: shadowJar Jutsu
+
+# on means that this is a trigger waiting for something to happen.
+on:
+  # push means that this is a trigger waiting for a push to be made.
+  push:
+    # branches means that this is a trigger waiting for a branch to be pushed to.
+    branches: [ "Development" ]
+  # pull_request means that this is a trigger waiting for a pull request to be made.
+  pull_request:
+    # This event will only trigger if the pull request is made to the development branch.
+    branches: [ "Development" ]
+
+permissions:
+  contents: read
+
+# jobs is a list of jobs that will be run.    
+jobs:
+  # on build job these are the steps that will be run. 
+  build:
+
+    # This is the operating system that the job will run on.
+    runs-on: ubuntu-latest
+
+    # In order for the job to be run it needs to check out the code.
+    steps:
+    - uses: actions/checkout@v3
+
+    # This is the Java Development Kit version that will be used. I used this one because this seems to be the version that most teammates are using.
+    - name: Set up JDK 17
+      # Sets up the a Java environment for use in actions.
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        # This pulls the jdk from the adoptopenjdk website which provides open source OpenJDK binaries.
+        distribution: 'temurin'
+
+    # This will allow GitHub actions to use and execute gradle and the gradle wrapper.
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    # Building with gradle, I hope the uses part is linking to our GitHub repository.  
+    - name: Build with Gradle
+      uses: ./gradlew shadowJar
