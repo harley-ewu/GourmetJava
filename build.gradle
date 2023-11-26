@@ -4,14 +4,14 @@ plugins {
     id 'jacoco'
 }
 
-group 'com.madrapps'
-version '1.0-SNAPSHOT'
+// group 'com.madrapps'
+// version '1.0-SNAPSHOT'
 
 group 'io.codecov'
 version '1.0'
 
-sourceCompatibility = 18
-targetCompatibility = 18
+// sourceCompatibility = 18
+// targetCompatibility = 18
 
 sourceSets {
     main {
