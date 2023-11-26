@@ -42,7 +42,3 @@ jobs:
     # Building with gradle, I hope the uses part is linking to our GitHub repository.  
     - name: Build with Gradle
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
-
-    # # Standard gradle test command.
-    # - name: Test with Gradle
-    #   run: ./gradlew test

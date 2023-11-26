@@ -4,14 +4,8 @@ plugins {
     id 'jacoco'
 }
 
-// group 'com.madrapps'
-// version '1.0-SNAPSHOT'
-
 group 'io.codecov'
 version '1.0'
-
-// sourceCompatibility = 18
-// targetCompatibility = 18
 
 sourceSets {
     main {
@@ -32,14 +26,6 @@ sourceSets {
         }
     }
 }
-
-// jacoco { toolVersion '0.8.10' }
-
-// task.withType(Test) {
-//     jacoco.includeNoLocationClasses = true
-//     jacoco.excludes = ['jdk.internal.*']
-
-// }
 
 jar {
     manifest {
@@ -75,53 +61,6 @@ jacocoTestReport {
 }
 
 check.dependsOn jacocoTestReport
-
-// tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
-
-//     group = "Reporting"
-//     description = "Generate Jacoco coverage reports for the test build."
-
-//     reports {
-//         html.required.set(true)
-//         xml.required.set(true)
-//     }
-
-//     def excludes = [
-//             '**/*Test*.*',
-//             '**/actions/*.*',
-//             '**/core/*.*',
-//             '**/markers/*.*',
-//             '**/services/**/*.*',
-//             '**/toolwindow/*.*',
-//             '**/utils/*.*'
-//     ]
-
-//     def javaClasses = fileTree(dir: "${buildDir}/classes/java/main", excludes: excludes)
-//     classDirectories.from = files([javaClasses])
-//     afterEvaluate {
-//         classDirectories.setFrom(files(classDirectories.files.collect {
-//             fileTree(dir: it,
-//                      exclude: ['**/SomeExcludedClass.class'])
-//         }))
-//     }
-
-//     sourceDirectories.from = files([
-//             "$project.projectDir/src/main/java",
-//             "$buildDir/generated/source/kapt/test"
-//     ])
-
-//     executionData.from = files("${project.buildDir}/jacoco/test.exec")
-// }
-
-// task testCoverage(type: JacocoReport, dependsOn: ['test']) {
-//     sourceDirectories = files(sourceSets.main.allJava.srcDirs)
-//     classDirectories = files(sourceSets.main.output)
-//     executionData = files('build/jacoco/test.exec')
-//     reports {
-//         xml.required = true
-//         html.required = true
-//     }
-// }
 
 repositories {
     google()
