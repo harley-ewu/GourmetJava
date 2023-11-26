@@ -69,8 +69,8 @@ dependencies {
 
 jacocoTestReport {
     reports {
-        xml.enabled enabled
-        html.enabled enabled
+        html.required.set(true)
+        xml.required.set(true)
     }
 }
 
