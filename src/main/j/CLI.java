@@ -52,7 +52,7 @@ public class CLI {
          */
         ArgumentCompleter AddDeleteCompleter = new ArgumentCompleter(
                 new StringsCompleter("add", "delete"),
-                new StringsCompleter("class", "method", "field", "relationship"),
+                new StringsCompleter("class", "method", "field", "relationship", "parameter"),
                 new NullCompleter());
 
         ArgumentCompleter ListCompleter = new ArgumentCompleter(
@@ -66,7 +66,7 @@ public class CLI {
 
         ArgumentCompleter RenameCompleter = new ArgumentCompleter(
                 new StringsCompleter("rename"),
-                new StringsCompleter("class", "field", "method"),
+                new StringsCompleter("class", "field", "method", "parameter"),
                 new NullCompleter());
 
         AggregateCompleter CombinedCompleters = new AggregateCompleter(AddDeleteCompleter, ListCompleter, SingleCompleter ,RenameCompleter);
@@ -84,14 +84,15 @@ public class CLI {
         List<AttributedString> addDesc = Arrays.asList(new AttributedString("add class [class-name] [class-type-number]"),
                 new AttributedString("add method [class-name] [method-name] [visibility-number] [return-type] [Param-1] ... [Param-N]"),
                 new AttributedString("add field [class-name] [field-name] [visibility-number] [data-type]"),
-                new AttributedString("add relationship [1st-class-name] [2nd-class-name] [relationship-type-number]")
+                new AttributedString("add relationship [1st-class-name] [2nd-class-name] [relationship-type-number]"),
+                new AttributedString("add parameter [class-name] [method-name] [parameter-name]")
         );
 
         List<AttributedString> deleteDesc = Arrays.asList(new AttributedString("delete class [class-name]"),
                 new AttributedString("delete method [class-name] [method-name]"),
                 new AttributedString("delete field [class-name] [field-name]"),
                 new AttributedString("delete relationship [1st-class-name] [2nd-class-name]"),
-                new AttributedString("delete field [FieldName] [Type]")
+                new AttributedString("delete parameter [class-name] [method-name] [parameter-name]")
         );
 
         List<AttributedString> listDesc = Arrays.asList(new AttributedString("list all"),
@@ -101,7 +102,8 @@ public class CLI {
 
         List<AttributedString> renameDesc = Arrays.asList(new AttributedString("rename class [old-class-name] [new-class-name]"),
                 new AttributedString("rename field [class-name] [old-field-name] [new-field-name]"),
-                new AttributedString("rename method [class-name] [old-method-name] [new-method-name]")
+                new AttributedString("rename method [class-name] [old-method-name] [new-method-name]"),
+                new AttributedString("rename parameter [class-name] [method-name] [old-parameter-name] [new-parameter-name]")
         );
 
         // This attaches the descriptions to the commands
@@ -149,7 +151,7 @@ public class CLI {
                                 System.out.println("Please enter a valid number");
                                 break;
                             }
-                            if(!isNegative(Integer.parseInt(input[3]))){
+                            if(isNegative(Integer.parseInt(input[3]))){
                                 System.out.println("Please enter a non-negative number");
                                 break;
                             }
@@ -179,7 +181,7 @@ public class CLI {
                                 System.out.println("Please enter a valid visibility number");
                                 break;
                             }
-                            if(!isNegative(Integer.parseInt(input[4]))){
+                            if(isNegative(Integer.parseInt(input[4]))){
                                 System.out.println("Please enter a non-negative number");
                                 break;
                             }
@@ -204,7 +206,7 @@ public class CLI {
                                 System.out.println("Please enter a valid visibility number");
                                 break;
                             }
-                            if(!isNegative(Integer.parseInt(input[4]))){
+                            if(isNegative(Integer.parseInt(input[4]))){
                                 System.out.println("Please enter a non-negative number");
                                 break;
                             }
@@ -235,6 +237,22 @@ public class CLI {
                                 System.out.println("Relationship " + status.toString());
                             }else{
                                 System.out.println("Relationship between " + input[2] + " and " + input[3] + " created!");
+                            }
+
+                            break;
+                        }
+                        //The next part of command is parameter
+                        case "parameter": {
+                            if(input.length != 5){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
+                            //Retrieves the status code for the method and displays results
+                            Controller.STATUS_CODES status = Controller.addParam(input[2], input[3], input[4]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Parameter " + status.toString());
+                            }else{
+                                System.out.println("Parameter " + input[4] + " created!");
                             }
 
                             break;
@@ -308,6 +326,21 @@ public class CLI {
                             }else{
                                 System.out.println("Relationship between " + input[2] + " and " + input[3] + " deleted!");
                             }
+                            break;
+                        }
+                        case "parameter": {
+                            if(input.length != 5){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
+                            //Retrieves the status code for the method and displays results
+                            Controller.STATUS_CODES status = Controller.deleteParam(input[2], input[3], input[4]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Parameter " + status.toString());
+                            }else{
+                                System.out.println("Parameter " + input[4] + " deleted!");
+                            }
+
                             break;
                         }
                         default:{
@@ -391,14 +424,28 @@ public class CLI {
                             }
                             break;
                         }
+                        case "parameter": {
+                            if(input.length != 6){
+                                System.out.println("Command is an invalid length. Please try again");
+                                break;
+                            }
+                            //Retrieves the status code for the method and displays results
+                            Controller.STATUS_CODES status = Controller.renameParam(input[2], input[3], input[4], input[5]);
+                            if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Parameter " + status.toString());
+                            }else{
+                                System.out.println("Parameter " + input[4] + " renamed to " + input[5]);
+                            }
+                            break;
+                        }
                         default:{
                             System.out.println("Your command is not valid please enter a new command.");
                             break;
                         }
                     }
+                    break;
                 case "save":
                     //The next part of the command is save
-
                     CLI.save();
                     break;
                 case "load":
@@ -408,7 +455,6 @@ public class CLI {
                     break;
                 case "window":
                     //The next part of the command is window
-
                     Main.gview = true;
                     GUI.startGUIMenu();
                     break;
