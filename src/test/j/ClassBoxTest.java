@@ -74,6 +74,6 @@ public class ClassBoxTest {
         classBox.renameParam("testMethod", "testParam", "renamedParam");
         // Check that the param was renamed 
         // THIS NEEDS TO BE FIXED // It should be [-testMethod(renamedParam) : int] as output
-        assertEquals("[-testMethod(testParam) : int]", classBox.getMethods().toString());
+        assertEquals("[-testMethod(renamedParam) : int]", classBox.getMethods().toString());
     }
 }
