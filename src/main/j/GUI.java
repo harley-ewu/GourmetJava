@@ -386,11 +386,12 @@ public class GUI extends JFrame {
 
 
 
-
+        //TODO added to last push as my latest idea.
+        //Issue: graphicy2 doesn't pass in correctly as it says g2, which is what graphicy below gets, is null.
         for(int i = 0; i < classNames.length; i++){
             ShapeDrawing classBoxy = new ShapeDrawing();
-            Graphics2D Graphic = classBoxy.getGraphicy();
-            classBoxy.drawClass(classNames[i], 0, 0, Graphic);
+            Graphics2D graphicy2 = classBoxy.getGraphicy();
+            classBoxy.drawClass(classNames[i], 0, 0, graphicy2);
             guiWindow.add(classBoxy);
         }
 
@@ -778,6 +779,7 @@ public class GUI extends JFrame {
 
         }
 
+        //TODO Added to be gotten later and passed into drawClass's graphics parameter
         Graphics2D graphicy;
 
         public void paintComponent(Graphics g){
@@ -924,6 +926,7 @@ public class GUI extends JFrame {
             }
         }
 
+        //TODO this was added in the last push
         public Graphics2D getGraphicy(){
             return graphicy;
         }
