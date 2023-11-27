@@ -17,6 +17,13 @@ public class ClassBoxTest {
         });
         assertTrue(e.getMessage().contains("Bad params at ClassBox constructor"));
     }
+
+    @Test
+    public void testEquals() {
+        ClassBox c1 = new ClassBox("Test", 1);
+        ClassBox c2 = c1;
+        assertTrue(c1.equals(c2));
+    }
     
     @Test
     public void testAddMethod() {
@@ -213,6 +220,14 @@ public class ClassBoxTest {
         c1.deleteRelationship(c1,c2);
         assertEquals(c1.getChildren().size(), 0);
         assertEquals(c2.getParents().size(), 0);
+        c1.addRelationship(c2,c1,2);
+        c2.deleteRelationship(c2,c1);
+        assertEquals(c2.getChildren().size(), 0);
+        assertEquals(c1.getParents().size(), 0);
+
+        ClassBox c3 = null;
+        Controller.STATUS_CODES statCode = c2.deleteRelationship(c1,c3);
+        assertEquals(statCode.toString(), "object not found");
     }
 
     @Test
@@ -269,4 +284,63 @@ public class ClassBoxTest {
         assertEquals(c1.getChildren().get(0), r);
         //assertEquals(c2.getParents().get(0), r);*/
     }
+
+    @Test
+    public void testListRelationShips() {
+        ClassBox c1 = new ClassBox("Test", 1);
+        ClassBox c2 = new ClassBox("Test2", 2);
+
+        c1.addRelationship(c1,c2,2);
+        assertEquals(c2.listRelationships()[0], "Test2 composes Test");
+    }
+
+    @Test
+    public void testListMethods() {
+        ClassBox c1 = new ClassBox("Test", 1);
+
+        LinkedList<String> testParams = new LinkedList<>();
+        testParams.add("testParam1");
+
+        // Make a new classBox
+        ClassBox classBox = new ClassBox("Test", 1);
+        // Add a method
+        c1.addMethod("testMethod", 1,"int", testParams);
+        assertEquals(c1.listMethods()[0], "-testMethod(testParam1) : int");
+    }
+
+    @Test
+    public void testlistFields() {
+        ClassBox c1 = new ClassBox("Test", 1);
+
+        // Add a method
+        c1.addField("testMethod", 1,"int");
+        assertEquals(c1.listFields()[0], "-testMethod : int");
+    }
+
+    @Test
+    public void testListVisibilityTypes() {
+        ClassBox c1 = new ClassBox("Test", 1);
+
+        assertEquals(c1.listVisibilityTypes()[0], "PRIVATE");
+        assertEquals(c1.listVisibilityTypes()[1], "PUBLIC");
+        assertEquals(c1.listVisibilityTypes()[2], "PROTECTED");
+    }
+
+    @Test
+    public void testListRelationshipSaveHelper() {
+        /*ClassBox c1 = new ClassBox("Test", 1);
+
+        assertEquals(c1.listRelationshipsSaveHelper().get(0)[0], "PRIVATE");*/
+    }
+
+    @Test
+    public void testListRelationshipTypes() {
+        ClassBox c1 = new ClassBox("Test", 1);
+
+        assertEquals(c1.listRelationshipTypes()[0], "AGGREGATION");
+        assertEquals(c1.listRelationshipTypes()[1], "COMPOSITION");
+        assertEquals(c1.listRelationshipTypes()[2], "IMPLEMENTATION");
+        assertEquals(c1.listRelationshipTypes()[3], "REALIZATION");
+    }
+
 }
