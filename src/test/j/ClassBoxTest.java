@@ -328,12 +328,12 @@ public class ClassBoxTest {
         assertEquals(c1.listVisibilityTypes()[2], "PROTECTED");
     }
 
-    @Test
+    /*@Test
     public void testListRelationshipSaveHelper() {
-/*        ClassBox c1 = new ClassBox("Test", 1);
+        ClassBox c1 = new ClassBox("Test", 1);
 
-        assertEquals(c1.listRelationshipsSaveHelper().get(0)[0], "PRIVATE");*/
-    }
+        assertEquals(c1.listRelationshipsSaveHelper().get(0)[0], "PRIVATE");
+    }*/
 
     @Test
     public void testListRelationshipTypes() {
