@@ -6,8 +6,17 @@ import java.util.LinkedList;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 public class ClassBoxTest {
+
+    @Test
+    public void testClassBoxConstructor() {
+        Exception e = assertThrows(IllegalArgumentException.class, () -> {new ClassBox("", 2);
+        });
+        assertTrue(e.getMessage().contains("Bad params at ClassBox constructor"));
+    }
     
     @Test
     public void testAddMethod() {
@@ -31,6 +40,8 @@ public class ClassBoxTest {
         classBox.addField("int", 1,"testType");
         // Check that the field was added
         assertEquals("[-int : testType]", classBox.getFields().toString());
+        Controller.STATUS_CODES c = classBox.addField("int", 1,"testType");
+        assertEquals(c.toString(), "already exists");
     }
 
     @Test
@@ -47,6 +58,8 @@ public class ClassBoxTest {
         classBox.addParam("testMethod", "addedParam");
         // Check that the field was added
         assertEquals("[-testMethod(testParam, addedParam) : int]", classBox.getMethods().toString());
+        Controller.STATUS_CODES c = classBox.addParam("doo", "testP");
+        assertEquals(c.toString(), "object not found");
     }
 
     @Test
@@ -59,6 +72,8 @@ public class ClassBoxTest {
         classBox.deleteField("testField");
         // Check that the field was deleted
         assertEquals("[]", classBox.getFields().toString());
+        Controller.STATUS_CODES c = classBox.deleteField("doo");
+        assertEquals(c.toString(), "object not found");
     }
 
     @Test
@@ -76,6 +91,8 @@ public class ClassBoxTest {
         // Check that the param was renamed 
         // THIS NEEDS TO BE FIXED // It should be [-testMethod(renamedParam) : int] as output
         assertEquals("[-testMethod(renamedParam) : int]", classBox.getMethods().toString());
+        Controller.STATUS_CODES c = classBox.renameParam("doo","pink","ponk");
+        assertEquals(c.toString(), "object not found");
     }
 
     @Test
@@ -103,6 +120,8 @@ public class ClassBoxTest {
         classBox.addMethod("testMethod", 1,"int", testParams);
         classBox.deleteMethod("testMethod");
         assertEquals(classBox.getMethods().size(), 0);
+        Controller.STATUS_CODES c = classBox.deleteMethod("doo");
+        assertEquals(c.toString(), "object not found");
     }
 
     @Test
@@ -117,6 +136,8 @@ public class ClassBoxTest {
 
         classBox.deleteParam("testMethod", "testParam");
         assertEquals("[-testMethod() : int]", classBox.getMethods().toString());
+        Controller.STATUS_CODES c = classBox.deleteParam("doo","pink");
+        assertEquals(c.toString(), "object not found");
     }
 
     @Test
@@ -130,6 +151,8 @@ public class ClassBoxTest {
         classBox.addMethod("testMethod", 1,"int", testParams);
         classBox.renameMethod("testMethod","newTestMethod");
         assertEquals(classBox.getMethods().get(0).getName(), "newTestMethod" );
+        Controller.STATUS_CODES c = classBox.renameMethod("doo","pink");
+        assertEquals(c.toString(), "object not found");
     }
 
     @Test
@@ -139,6 +162,8 @@ public class ClassBoxTest {
         classBox.addField("testField", 1,"int");
         classBox.renameField("testField","newTestField");
         assertEquals(classBox.getFields().get(0).getName(), "newTestField" );
+        Controller.STATUS_CODES c = classBox.renameField("doo","pink");
+        assertEquals(c.toString(), "object not found");
     }
 
     @Test
@@ -175,6 +200,8 @@ public class ClassBoxTest {
         assertEquals(c2.getParents().get(0).toString(), "composes " + c1.getName());
         Controller.STATUS_CODES c = c1.addRelationship(c1,c2,2);
         assertEquals(c.toString(), "already exists");
+        Controller.STATUS_CODES statCode = c2.addRelationship(c1,c2,2);
+        assertEquals(statCode.toString(), "already exists");
     }
 
     @Test
