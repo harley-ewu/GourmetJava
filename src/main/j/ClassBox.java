@@ -169,7 +169,7 @@ public class ClassBox implements Cloneable {
 
 
     //finds a relationship between two ClassBoxes if it exists, or null if the relationship does not exist
-    public static Relationship findRelationship(final ClassBox cb1, final ClassBox cb2) {
+    /*public static Relationship findRelationship(final ClassBox cb1, final ClassBox cb2) {
         for (Relationship rel : cb1.parents) {
             if (rel.getOtherClass().equals(cb2.getName())) {
                 return rel;
@@ -181,7 +181,7 @@ public class ClassBox implements Cloneable {
             }
         }
         return null;
-    }
+    }*/
 
     // Helper method that attempts to find a method within the methods list based on name
     // returns null if not found
