@@ -369,4 +369,19 @@ public class ClassBoxTest {
         // 
         assertEquals("[-renamedMethod(testParam) : int]", classBox.getMethods().toString());
     }
+
+    @Test
+    public void testAttributeCompareTo(){
+        // Make a new classBox
+        ClassBox classBox = new ClassBox("Test", 1);
+        // Add params
+        LinkedList<String> testParams = new LinkedList<String>();
+        testParams.add("testParam");
+        // Add a method
+        classBox.addMethod("testMethod", 1,"int", testParams);
+        // Add a method
+        classBox.addMethod("testMethod2", 1,"int", testParams);
+        // Compare the methods
+        assertEquals(-1, classBox.getMethods().get(0).compareTo(classBox.getMethods().get(1)));
+    }
 }
