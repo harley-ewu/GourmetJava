@@ -390,7 +390,7 @@ public class GUI extends JFrame {
     }
     public static void displayGUI(){
         SwingUtilities.updateComponentTreeUI(guiWindow);
-        //guiWindow.add(new ShapeDrawing());
+        guiWindow.add(new ShapeDrawing());
         guiWindow.setVisible(true);
 
         //guiWindow.invalidate();
@@ -400,18 +400,17 @@ public class GUI extends JFrame {
         String[] classNames = Controller.listClasses();
 
 
-        ShapeDrawing test = new ShapeDrawing();
+        //ShapeDrawing test;
 
         //Issue: graphicy2 doesn't pass in correctly as it says g2, which is what graphicy below gets, is null.
-        for(int i = 0; i < classNames.length; i++){
+        /*for(int i = 0; i < classNames.length; i++){
             //ShapeDrawing classBoxy = new ShapeDrawing();
+            ShapeDrawing test = new ShapeDrawing();
             test.setBorder(new LineBorder(Color.BLUE, 3));
             //Graphics2D graphicy2 = classBoxy.getGraphicy();
             //classBoxy.drawClass(classNames[i], 0, 0, graphicy2);
             guiWindow.add(test);
-        }
-
-
+        } */
 
         //int numberOfClasses = Controller.getCreatedClassesSize();
         //String[] classNames = Controller.listClasses();
@@ -836,7 +835,7 @@ public class GUI extends JFrame {
 
 
 
-             /*for(int i = 0; i < numberOfClasses; i++){
+             for(int i = 0; i < numberOfClasses; i++){
                 //issue report with the mouse listeners in the if/else below:
                 // Classes are duplicated in display, so for 1 class, 2 show up. They're in weirdly bounded boxes,
                 // and the components in each box are not moveable
@@ -852,7 +851,7 @@ public class GUI extends JFrame {
                     coords.add(400);
                 }
                 curx += (1.5 * spaceWidth);
-            } */
+            }
             String[] classes = Controller.listClasses();
             //Prints the line for each relationship
             int rcount = 0;
