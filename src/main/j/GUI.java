@@ -374,7 +374,7 @@ public class GUI extends JFrame {
 
     }
     public static void displayGUI(){
-        //SwingUtilities.updateComponentTreeUI(guiWindow);
+        SwingUtilities.updateComponentTreeUI(guiWindow);
         //guiWindow.add(new ShapeDrawing());
         guiWindow.setVisible(true);
 
@@ -385,14 +385,15 @@ public class GUI extends JFrame {
         String[] classNames = Controller.listClasses();
 
 
+        ShapeDrawing test = new ShapeDrawing();
 
-        //TODO added to last push as my latest idea.
         //Issue: graphicy2 doesn't pass in correctly as it says g2, which is what graphicy below gets, is null.
         for(int i = 0; i < classNames.length; i++){
-            ShapeDrawing classBoxy = new ShapeDrawing();
-            Graphics2D graphicy2 = classBoxy.getGraphicy();
-            classBoxy.drawClass(classNames[i], 0, 0, graphicy2);
-            guiWindow.add(classBoxy);
+            //ShapeDrawing classBoxy = new ShapeDrawing();
+            test.setBorder(new LineBorder(Color.BLUE, 3));
+            //Graphics2D graphicy2 = classBoxy.getGraphicy();
+            //classBoxy.drawClass(classNames[i], 0, 0, graphicy2);
+            guiWindow.add(test);
         }
 
 
@@ -779,8 +780,8 @@ public class GUI extends JFrame {
 
         }
 
-        //TODO Added to be gotten later and passed into drawClass's graphics parameter
-        Graphics2D graphicy;
+        //Made to pass up a graphic to the for loop I tried in displayGUI
+        //Graphics2D graphicy;
 
         public void paintComponent(Graphics g){
             super.paintComponent(g);
@@ -800,7 +801,7 @@ public class GUI extends JFrame {
             String[] classNames = Controller.listClasses();
             //this will stick every other class on an upper row, and the ones in between on a lower row
 
-            /*todo remove the for loop. Place it in it's own method to print all classes. This print all classes method will be
+            /* remove the for loop. Place it in it's own method to print all classes. This print all classes method will be
               outside of the shape drawing class, and will call shapedrawing for each class listed. You'll need int numberofclasses
               from above to be able to do this. This could get complicated as it might require moving multiple methods
                outside of ShapeDrawing*/
@@ -814,8 +815,9 @@ public class GUI extends JFrame {
                 //curx += (1.5 * spaceWidth);
             //}
 
-            //int lastNameNumber = classNames.length -1;
-            //drawClass(classNames[lastNameNumber], 0, 200, g2);
+            int lastNameNumber = classNames.length - 1;
+            drawClass(classNames[lastNameNumber], curx, 200, g2);
+
 
 
 
@@ -926,10 +928,10 @@ public class GUI extends JFrame {
             }
         }
 
-        //TODO this was added in the last push
+        /*this was added in the last push
         public Graphics2D getGraphicy(){
-            return graphicy;
-        }
+            return this.graphicy;
+        } */
 
         public int getClassWidth(String className, Graphics2D g2){
             String[][] classDetails = Controller.listAllClassDetails(className);
@@ -956,7 +958,7 @@ public class GUI extends JFrame {
         }
         //Draws the class boxes
         public void drawClass(String className, int x, int y, Graphics2D g2){
-            //TODO issue report with the mouse listeners in the if/else below:
+            //issue report with the mouse listeners in the if/else below:
             // Classes are duplicated in display, so for 1 class, 2 show up. They're in weirdly bounded boxes,
             // and the components in each box are not moveable
 
