@@ -1,7 +1,11 @@
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '7.1.0'
+    id 'jacoco'
 }
+
+group 'io.codecov'
+version '1.0'
 
 sourceSets {
     main {
@@ -41,10 +45,22 @@ shadowJar {
 dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'junit:junit:4.13.1'
+    implementation group: 'org.jline', name: 'jline-terminal-jansi', version: '3.24.1'
+    implementation group: 'org.jline', name: 'jline', version: '3.24.1'
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
     testImplementation 'junit:junit:4.13.1'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
+
+jacocoTestReport {
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+    }
+}
+
+check.dependsOn jacocoTestReport
 
 repositories {
     google()

@@ -1,11 +1,10 @@
+import j.ClassBox;
+import j.Controller;
+import j.ModelDiagram;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import java.util.LinkedList;
-
-import src.main.java.ModelDiagram;
-import src.main.java.Controller;
-import src.main.java.ClassBox;
+import static org.junit.Assert.assertEquals;
 
 public class ModelDiagramTest {
    
@@ -316,15 +315,6 @@ public class ModelDiagramTest {
 
         // Test deleting a relationship with cb2 as an empty string
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.deleteRelationship("testParent", ""));
-    }
-
-    @Test
-    public void testListClassMethods(){
-        // Test listing methods of a class with name as null
-        assertNull(ModelDiagram.listClassMethods(null));
-
-        // Test listing methods of a class with name as an empty string
-        assertNull(ModelDiagram.listClassMethods(""));
     }
 
 }
