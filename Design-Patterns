@@ -1,0 +1,30 @@
+Design patterns utilized in our project:
+
+1. MVC
+    The "Model View Controller" pattern is utilized in our project. First, there is the ModelDiagram class
+    that handles the internal logic of the program. Second, there is the Controller class which handles the
+    calls to the Model class. It acts as a listener for the View (both CLI and GUI), and contacts the
+    Model when a change is made. Calls to controller can be found in both versions of the View classes,
+    CLI and GUI. Calls to ModelDiagram can be found in the Controller class.
+
+2. Memento
+    Memento is used for the undo/redo portion of the project. When the user types in the command "undo" or
+    "redo", the Controller contacts the ModelDiagram class, which contacts the Caretaker class. The caretaker
+    class contains a stack of instances to save the state of the last known action performed by the user and
+    allows them to remove or add the most recent action back to the current program. Examples of this can be found
+    in the ModelDiagram class line: 80
+
+3. Singleton
+    Singleton is utilized within the Caretaker class. In this class, we utilize the method getInstance().
+    This method ensures there is only ever one caretaker object. This method can be found in CareTaker
+    class line: 82
+
+4. Prototype
+    Prototype is used in the Classbox class. It helps to save an instance of a ClassBox object. This means
+    creating a replica of the class object's relationships, methods, fields, etc. This can be found in the
+    ClassBox class line: 41
+
+5. Builder
+    This project utilizes the builder design pattern. It does so by allowing the user to create a basic
+    class object and change it as the user wishes. The methods 'add', 'delete', and 'rename' all change
+    the ClassBox Objects. ModelDiagram demonstrates the changes made.
