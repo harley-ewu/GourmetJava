@@ -205,8 +205,10 @@ public class ClassBoxTest {
         c1.addRelationship(c1,c2,2);
         assertEquals(c1.getChildren().get(0).toString(), "composes " + c2.getName());
         assertEquals(c2.getParents().get(0).toString(), "composes " + c1.getName());
+
         Controller.STATUS_CODES c = c1.addRelationship(c1,c2,2);
         assertEquals(c.toString(), "already exists");
+
         Controller.STATUS_CODES statCode = c2.addRelationship(c1,c2,2);
         assertEquals(statCode.toString(), "already exists");
     }
@@ -221,7 +223,7 @@ public class ClassBoxTest {
         assertEquals(c1.getChildren().size(), 0);
         assertEquals(c2.getParents().size(), 0);
         c1.addRelationship(c2,c1,2);
-        c2.deleteRelationship(c2,c1);
+        c2.deleteRelationship(c1,c2);
         assertEquals(c2.getChildren().size(), 0);
         assertEquals(c1.getParents().size(), 0);
 
@@ -328,7 +330,7 @@ public class ClassBoxTest {
 
     @Test
     public void testListRelationshipSaveHelper() {
-        /*ClassBox c1 = new ClassBox("Test", 1);
+/*        ClassBox c1 = new ClassBox("Test", 1);
 
         assertEquals(c1.listRelationshipsSaveHelper().get(0)[0], "PRIVATE");*/
     }
@@ -341,6 +343,16 @@ public class ClassBoxTest {
         assertEquals(c1.listRelationshipTypes()[1], "COMPOSITION");
         assertEquals(c1.listRelationshipTypes()[2], "IMPLEMENTATION");
         assertEquals(c1.listRelationshipTypes()[3], "REALIZATION");
+    }
+
+    @Test
+    public void testListClassTypes() {
+        ClassBox c1 = new ClassBox("Test", 1);
+        assertEquals(c1.listClassTypes()[0], "CLASS");
+        assertEquals(c1.listClassTypes()[1], "INTERFACE");
+        assertEquals(c1.listClassTypes()[2], "RECORD");
+        assertEquals(c1.listClassTypes()[3], "ENUMERATION");
+        assertEquals(c1.listClassTypes()[4], "ANNOTATION");
     }
 
 }
