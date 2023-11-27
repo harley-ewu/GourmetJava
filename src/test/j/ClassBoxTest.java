@@ -354,5 +354,19 @@ public class ClassBoxTest {
         assertEquals(c1.listClassTypes()[3], "ENUMERATION");
         assertEquals(c1.listClassTypes()[4], "ANNOTATION");
     }
-
+    
+    @Test
+    public void testAttributeSetName(){
+        // Make a new classBox
+        ClassBox classBox = new ClassBox("Test", 1);
+        // Add params
+        LinkedList<String> testParams = new LinkedList<String>();
+        testParams.add("testParam");
+        // Add a method
+        classBox.addMethod("testMethod", 1,"int", testParams);
+        // Rename the method
+        classBox.getMethods().get(0).setName("renamedMethod");
+        // 
+        assertEquals("[-renamedMethod(testParam) : int]", classBox.getMethods().toString());
+    }
 }

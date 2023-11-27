@@ -48,34 +48,6 @@ This Installation guide will walk you through the process of installing a JVM an
 2. Enter `sudo apt install openjdk-19-jre-headless`. Enter `ls` to see if the rpm file is present.
 3. In the terminal enter `java --version` to check that JVM was properly installed.
 
-### Gradle Installation
-
-**For Windows**
-
-1. Open up your browser of choice. 
-2. Go to Gradle's [website](https://gradle.org/releases) &rarr; select the newest version of Gradle and download the *binary-only* option.
-3. Create a Gradle folder in your C: Drive.
-4. Go to your downloads folder and extract the Gradle zip into the Gradle folder you created in your C: Drive.
-5. Go into the bin file in the Gradle folder and copy the bin path.
-6. Open up Window's Start and go to Edit the System Enviroment Variables.
-7. Select Environment Variables &rarr; navigate the System variables window and look for Path and double-click it &rarr; click new &rarr; and then paste the bin path into the the new line &rarr; click okay out of all windows to apply changes.
-8. Open a command prompt.
-9. In the console enter `gradle --version` to check that Gradle was properly installed.
-
-**For Linux**
-
-1. Open up your browser of choice. 
-2. Go to Gradle's [website](https://gradle.org/releases) &rarr; select the newest version of Gradle and download the *binary-only* option.
-3. Unzip the distribution zip file in the directory of your choosing.
-4. Enter the following commands: 
-```bash
-❯ mkdir /opt/gradle
-❯ unzip -d /opt/gradle gradle-8.4-bin.zip
-❯ ls /opt/gradle/gradle-8.4
-```
-5. Configure your system environment. To install Gradle, the path to the unpacked files needs to be in your Path. Configure your PATH environment variable to include the bin directory of the unzipped distribution. Enter `export PATH=$PATH:/opt/gradle/gradle-8.4/bin`. 
-6. In the console enter `gradle --version` to check that Gradle was properly installed.
-
 ## Running-The-UML-Editor
 
 **For Windows**
@@ -83,30 +55,16 @@ This Installation guide will walk you through the process of installing a JVM an
 1. Download zip file from Github or clone the repository for GourmetJava.
 2. Open cmd.
 3. Go to the folder that has the GourmetJava File.
-4. Compile the Java classes. Enter `gradlew.bat compileJava`
-5. Generate a jar file. Enter `gradlew.bat shadowJar`
-6. Run the Java project. Enter `java -jar build/libs/shadow.jar`.
-7. Press 'c' or 'g' respectively for the CLI or GUI interface.
+4. Run the Java project. Enter `java -jar build/libs/shadow.jar`.
+5. Press 'c' or 'g' respectively for the CLI or GUI interface.
 
 **For Linux**
 
 1. Download zip file from Github or clone the repository for GourmetJava.
 2. Open terminal.
 3. Go to the folder that has the GourmetJava File.
-4. Compile the Java classes. Enter `./gradlew compileJava`
-5. Generate a jar file. Enter `./gradlew shadowJar`
-6. Run the Java project. Enter `java -jar build/libs/shadow.jar`.
-7. Press 'c' or 'g' respectively for the CLI or GUI interface.
-
-## Error-Codes
-- EXCEPTION - msg:"operation failed - exception caught"
-- SUCCESS - msg:"operation success"
-- OBJ_ALREADY_EXISTS - msg:"already exists"
-- OBJ_NOT_FOUND - msg:"object not found"
-- OBJ_FOUND - msg:"object was found"
-- NULL_PARAM_OBJ - msg:"object is null"
-- EMPTY_STRING - msg:"entered string is empty"
-- NULL_STRING - msg:"entered string is null"
+4. Run the Java project. Enter `java -jar build/libs/shadow.jar`.
+5. Press 'c' or 'g' respectively for the CLI or GUI interface.
 
 ## Programmers 
 - Rachael D 
