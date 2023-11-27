@@ -10,6 +10,21 @@ import java.util.LinkedList;
 
 import static javax.swing.JOptionPane.YES_NO_OPTION;
 
+/**
+ * This class has a lot of commented out lines of code in it as I've tried to work through things.
+ * Issue reports are where I tried to do something, usually adding mouse listeners, and didn't get the desired result
+ *TODOs are where I left a thought to return to later
+ *
+ * It's best to ignore all of these unless they spark an idea on how to fix something, which is mostly why
+ * I left them visible and in the code still
+ */
+
+
+
+
+
+
+
 public class GUI extends JFrame {
     // Creates a dropdown style menu framework at the top of the frame
     static JMenuBar mainMenu;
