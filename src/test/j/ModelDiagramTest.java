@@ -317,13 +317,4 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.deleteRelationship("testParent", ""));
     }
 
-//    @Test
-//    public void testListClassMethods(){
-//        // Test listing methods of a class with name as null
-//        assertNull(ModelDiagram.listClassMethods(null));
-//
-//        // Test listing methods of a class with name as an empty string
-//        assertNull(ModelDiagram.listClassMethods(""));
-//    }
-
 }
