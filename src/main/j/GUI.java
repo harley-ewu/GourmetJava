@@ -20,12 +20,7 @@ import static javax.swing.JOptionPane.YES_NO_OPTION;
  */
 
 
-
-
-
-
-
-public class GUI extends JFrame {
+public class GUI extends JFrame implements j.Observer {
     // Creates a dropdown style menu framework at the top of the frame
     static JMenuBar mainMenu;
 
@@ -39,7 +34,14 @@ public class GUI extends JFrame {
     //creates a frame to be the main, base window to hold the entirety of the GUI
     static JFrame guiWindow;
 
+    static final GUI GUIObserver = new GUI();
+
+    public void update(){
+         displayGUI();
+    }
+
     public static void startGUIMenu(){
+        Controller.addSubscriber(GUIObserver);
 
         guiWindow = new JFrame("UML Editor");
 
@@ -50,7 +52,7 @@ public class GUI extends JFrame {
          display = new JMenuItem(new AbstractAction("Refresh") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                displayGUI();
+                 
             }
         });
         displayDropdown.add(display);
@@ -71,7 +73,7 @@ public class GUI extends JFrame {
                 //Draw new box (either entire screen refresh or just draw new box)
                 //TODO added a test on the line below
                 guiWindow.add(new ShapeDrawing());
-                displayGUI();
+                 
             }
         });
 
@@ -83,7 +85,7 @@ public class GUI extends JFrame {
                 String className = JOptionPane.showInputDialog("What is the name of the class you want to delete? ");
                 //TODO - Popup prompt to make sure you want to delete the class
                 Controller.deleteClass(className);
-                displayGUI();
+                 
             }
         });
 
@@ -94,7 +96,7 @@ public class GUI extends JFrame {
                 String oldName = JOptionPane.showInputDialog("What is the name of the class you want to rename? ");
                 String newName = JOptionPane.showInputDialog("What would you like to rename this class to? ");
                 Controller.renameClass(oldName, newName);
-                displayGUI();
+                 
             }
         });
         classDropdown.add(addClass);
@@ -129,7 +131,7 @@ public class GUI extends JFrame {
                                "Example: int, string");
                        //creates field
                        Controller.addField(className,fieldName, visibilityChoice, dataType);
-                       displayGUI();
+                        
 
                    }
                    else if (attTypeAsInt == 2) { //adding a method
@@ -158,7 +160,7 @@ public class GUI extends JFrame {
 
                        //Creates a new method with the given inputs from the user
                        Controller.addMethod(className,methodName,visibilityChoice,returnType, parameters);
-                       displayGUI();
+                        
                    }
                    else{
                        attType = JOptionPane.showInputDialog("Invalid Input, please try again. \n" +
@@ -202,7 +204,7 @@ public class GUI extends JFrame {
                     } else {
                         System.out.println("Failed to delete field. Please try again");
                     } */
-                    displayGUI();
+                     
 
 
                 } else if (fieldOrMethod == 2) {
@@ -216,7 +218,7 @@ public class GUI extends JFrame {
                     } else {
                         System.out.println("Failed to delete method. Please try again");
                     } */
-                    displayGUI();
+                     
                 } else {
                     fieldOrMethodAsString = JOptionPane.showInputDialog(" Invalid input, please try again. \n Are you wanting to delete a field or a method? \n" +
                             "Type 1 for 'field' or 2 for 'method'");
@@ -244,7 +246,7 @@ public class GUI extends JFrame {
                 String methodName = JOptionPane.showInputDialog("What is the name of the method you are adding the param to?");
                 String paramName = JOptionPane.showInputDialog("What is the new parameter you are adding?");
                 Controller.addParam(classWMethod, methodName, paramName);
-                displayGUI();
+                 
             }
         });
 
@@ -256,7 +258,7 @@ public class GUI extends JFrame {
                 String methodName = JOptionPane.showInputDialog("What is the name of the method you are deleting the param from?");
                 String paramName = JOptionPane.showInputDialog("What is the parameter you are deleting?");
                 Controller.deleteParam(classWMethod, methodName, paramName);
-                displayGUI();
+                 
             }
         });
 
@@ -269,7 +271,7 @@ public class GUI extends JFrame {
                 String paramName = JOptionPane.showInputDialog("Which parameter do you want to rename?");
                 String newParamName = JOptionPane.showInputDialog("What do you want to rename it to?");
                 Controller.renameParam(classWMethod,methodName, paramName, newParamName);
-                displayGUI();
+                 
             }
         });
         parameterDropdown.add(addPar);
@@ -290,7 +292,7 @@ public class GUI extends JFrame {
                         "1.) Aggregation \n 2.) Composition \n 3.) Implementation \n 4.) Realization");
                 int type = Integer.parseInt(typeAsString);
                 Controller.addRelationship(firstClass, secondClass, type);
-                displayGUI();
+                 
 
                 //Different prompts letting the user know if the relationship was successfully added or not
             }
@@ -379,7 +381,7 @@ public class GUI extends JFrame {
         });
 
         //TODO commented out line below
-        //displayGUI();
+        // 
         //Want to stay idle if CLI view is not there; need to keep program running
 
 

@@ -5,7 +5,23 @@ import java.util.*;
 /**
  * The interface between CLI/GUI and the backend
  */
-public class Controller {
+public class Controller implements j.Observable{
+
+    private static final ArrayList<Observer> observers = new ArrayList<>();
+    private static final Controller ControllerObservable = new Controller();
+
+    public static void addSubscriber(final Observer observer) {
+        observers.add(observer);
+    }
+
+    public void notifyObservers() {
+        for(Observer o : Controller.observers)
+            o.update();
+    }
+
+    public static void updateGUI(){
+        ControllerObservable.notifyObservers();
+    }
 
     public enum STATUS_CODES {
         EXCEPTION("operation failed - exception caught"),

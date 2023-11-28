@@ -40,6 +40,7 @@ public class ModelDiagram {
         } catch (Exception ignored) {
             return Controller.STATUS_CODES.EXCEPTION;
         }
+        Controller.updateGUI();
         return Controller.STATUS_CODES.SUCCESS;
     }
 
