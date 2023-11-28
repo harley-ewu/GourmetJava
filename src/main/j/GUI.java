@@ -34,7 +34,7 @@ public class GUI extends JFrame implements j.Observer {
     //creates a frame to be the main, base window to hold the entirety of the GUI
     static JFrame guiWindow;
 
-    static final GUI GUIObserver = new GUI();
+    private static final GUI GUIObserver = new GUI();
 
     public void update(){
          displayGUI();
