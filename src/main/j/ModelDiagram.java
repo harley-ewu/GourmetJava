@@ -56,6 +56,7 @@ public class ModelDiagram {
         } catch (Exception ignored) {
             return Controller.STATUS_CODES.REDO_FAILED;
         }
+        Controller.updateGUI();
         return Controller.STATUS_CODES.SUCCESS;
     }
 
@@ -72,6 +73,7 @@ public class ModelDiagram {
         } catch (Exception ignored) {
             return Controller.STATUS_CODES.UNDO_FAILED;
         }
+        Controller.updateGUI();
         return Controller.STATUS_CODES.SUCCESS;
     }
 

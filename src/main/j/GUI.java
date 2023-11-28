@@ -831,6 +831,9 @@ public class GUI extends JFrame implements j.Observer {
                 //curx += (1.5 * spaceWidth);
             //}
 
+            if(classNames.length == 0)
+                return;
+
             int lastNameNumber = classNames.length - 1;
             drawClass(classNames[lastNameNumber], curx, 200, g2);
 
