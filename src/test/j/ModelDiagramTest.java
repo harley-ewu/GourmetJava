@@ -23,7 +23,7 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addClass("", 1));
 
         // Succesful Test
-        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.addClass("testClass", 1));
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.addClass("newClass", 1));
     }
     
     @Test
