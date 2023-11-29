@@ -23,7 +23,7 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addClass("", 1));
 
         // Succesful Test
-        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.addClass("testClass", 1));
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.addClass("newClass", 1));
     }
     
     @Test
@@ -107,6 +107,15 @@ public class ModelDiagramTest {
 
     @Test
     public void testAddParam(){
+        // Object for successful test
+        ModelDiagram.addClass("testClass", 1);
+
+        // addMethod for successful test
+        LinkedList<String> testParams = new LinkedList<String>();
+
+        // Adding a method to test adding a parameter
+        ModelDiagram.addMethod("testClass", "testMethod", 1, "returnTest", testParams);
+
         // Test adding a parameter with className as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addParam(null, "testMethod", "returnTest"));
 
@@ -126,10 +135,24 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addParam("testClass", "testMethod",""));
 
         // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.addParam("targetFail", "testMethod", "returnTest"));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.addParam("testClass", "testMethod", "returnTest"));
     }
 
     @Test
     public void testDeleteMethod(){
+        // I need this to test parameters for the LinkedList<String> params
+        LinkedList<String> testParams = new LinkedList<String>();
+        testParams.add("testParam1");
+
+        // Object for successful test
+        ModelDiagram.addClass("targetClass", 1);
+
+        // Adding a method to test deleting a method
+        ModelDiagram.addMethod("targetClass", "testMethod", 1, "returnTest", testParams);
+
         // Test deleting a method with className as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.deleteMethod(null, "testMethod"));
 
@@ -143,10 +166,20 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.deleteMethod("testClass", ""));
 
         // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.deleteMethod("targetFail", "testMethod"));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.deleteMethod("targetClass", "testMethod"));
     }
 
     @Test
     public void testDeleteField(){
+        // Object for successful test
+        ModelDiagram.addClass("targetClass", 1);
+
+        // Adding a field to test deleting a field
+        ModelDiagram.addField("targetClass", "testField", 1, "returnTest");
+
         // Test deleting a field with className as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.deleteField(null, "testField"));
 
@@ -160,10 +193,26 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.deleteField("testClass", ""));
 
         // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.deleteField("targetFail", "testField"));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.deleteField("targetClass", "testField"));
     }
 
     @Test
     public void testDeleteParam(){
+        // Object for successful test
+        ModelDiagram.addClass("testClass", 1);
+
+        // addMethod for successful test
+        LinkedList<String> testParams = new LinkedList<String>();
+
+        // Adding a method to test adding a parameter
+        ModelDiagram.addMethod("testClass", "testMethod", 1, "returnTest", testParams);
+
+        // Adding a parameter to test deleting a parameter
+        ModelDiagram.addParam("testClass", "testMethod", "deleteParam");
+
         // Test deleting a parameter with className as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.deleteParam(null, "testMethod", "testParam"));
 
@@ -183,10 +232,24 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.deleteParam("testClass", "testMethod", ""));
 
         // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.deleteParam("targetFail", "testMethod", "testParam"));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.deleteParam("testClass", "testMethod", "deleteParam"));
     }
 
     @Test
     public void testRenameMethod(){
+        // I need this to test parameters for the LinkedList<String> params
+        LinkedList<String> testParams = new LinkedList<String>();
+        testParams.add("testParam1");
+
+        // Object for successful test
+        ModelDiagram.addClass("targetClass", 1);
+
+        // Adding a method to test renaming a method
+        ModelDiagram.addMethod("targetClass", "testMethod", 1, "returnTest", testParams);
+
         // Test renaming a method with className as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.renameMethod(null, "testMethod", "testNewMethod"));
 
@@ -206,10 +269,20 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.renameMethod("testClass", "testMethod", ""));
 
         // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.renameMethod("targetFail", "testMethod", "testNewMethod"));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.renameMethod("targetClass", "testMethod", "testNewMethod"));
     }
 
     @Test
     public void testRenameField(){
+        // Object for successful test
+        ModelDiagram.addClass("targetClass", 1);
+
+        // Adding a field to test deleting a field
+        ModelDiagram.addField("targetClass", "testField", 1, "returnTest");
+
         // Test renaming a field with className as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.renameField(null, "testField", "testNewField"));
 
@@ -229,10 +302,26 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.renameField("testClass", "testField", ""));
 
         // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.renameField("targetFail", "testField", "testNewField"));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.renameField("targetClass", "testField", "testNewField"));
     }
 
     @Test
     public void testRenameParam(){
+        // Object for successful test
+        ModelDiagram.addClass("testClass", 1);
+
+        // addMethod for successful test
+        LinkedList<String> testParams = new LinkedList<String>();
+
+        // Adding a method to test adding a parameter
+        ModelDiagram.addMethod("testClass", "testMethod", 1, "returnTest", testParams);
+
+        // Adding a parameter to test renaming a parameter
+        ModelDiagram.addParam("testClass", "testMethod", "regParam");
+
         // Test renaming a parameter with className as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.renameParam(null, "testMethod", "testParam", "testNewParam"));
 
@@ -258,6 +347,11 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.renameParam("testClass", "testMethod", "testParam", ""));
 
         // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.renameParam("targetFail", "testMethod", "testParam", "testNewParam"));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.renameParam("testClass", "testMethod", "regParam", "testNewParam"));
+
     }
 
     @Test
