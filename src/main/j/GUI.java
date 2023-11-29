@@ -21,6 +21,33 @@ import static javax.swing.JOptionPane.YES_NO_OPTION;
 
 
 public class GUI extends JFrame implements j.Observer {
+
+    private LinkedList<ClassPanel> classes;
+
+    private static class ClassPanel extends JPanel{
+        JPanel panel = new JPanel();
+
+        private final String name;
+
+        private final String type;
+
+        private final String[] classFields;
+
+        private final String[] classMethods;
+
+        private int xDelta;
+
+        private int yDelta;
+
+        public ClassPanel(final String name, final String type, final String[] classFields, final String[] classMethods){
+            this.name = name;
+            this.type = type;
+            this.classMethods = classMethods;
+            this.classFields = classFields;
+        }
+
+    }
+
     // Creates a dropdown style menu framework at the top of the frame
     static JMenuBar mainMenu;
 
@@ -836,9 +863,7 @@ public class GUI extends JFrame implements j.Observer {
 
             int lastNameNumber = classNames.length - 1;
             drawClass(classNames[lastNameNumber], curx, 200, g2);
-
-
-
+            
 
              for(int i = 0; i < numberOfClasses; i++){
                 //issue report with the mouse listeners in the if/else below:
