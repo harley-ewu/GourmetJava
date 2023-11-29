@@ -36,13 +36,13 @@ public class GUI extends JFrame implements j.Observer {
 
         private final String[] classMethods;
 
-        private int xDelta = 100;
+        private int xDelta;
 
-        private int yDelta = 100;
+        private int yDelta;
 
-        private int height = 30;
+        private int height;
 
-        private int width = 20;
+        private int width;
 
         public ClassPanel(final String name, final String type, final String[] classFields, final String[] classMethods){
             this.name = name;
@@ -50,9 +50,31 @@ public class GUI extends JFrame implements j.Observer {
             this.classMethods = classMethods;
             this.classFields = classFields;
             JLabel jlabel = new JLabel(this.name);
-            jlabel.setFont(new Font("Verdana",1,3));
+            jlabel.setFont(new Font("Verdana",1,12));
+            jlabel.setHorizontalAlignment(SwingConstants.LEFT);
+            jlabel.setVisible(true);
+            this.width = jlabel.getWidth();
+            this.height = jlabel.getHeight();
             this.panel.add(jlabel);
-            this.panel.setBounds(this.xDelta,this.yDelta, jlabel.getWidth(), this.height);
+            this.panel.setBounds(this.xDelta,this.yDelta, this.width, this.height);
+            this.panel.setBorder(BorderFactory.createLineBorder(Color.black));
+        }
+
+        public ClassPanel(final String name, final String type, final String[] classFields, final String[] classMethods, final int x, final int y){
+            this.name = name;
+            this.type = type;
+            this.classMethods = classMethods;
+            this.classFields = classFields;
+            this.xDelta = x;
+            this.yDelta = y;
+            JLabel jlabel = new JLabel(this.name);
+            jlabel.setFont(new Font("Verdana",1,12));
+            jlabel.setHorizontalAlignment(SwingConstants.LEFT);
+            jlabel.setVisible(true);
+            this.width = jlabel.getWidth();
+            this.height = jlabel.getHeight();
+            this.panel.add(jlabel);
+            this.panel.setBounds(this.xDelta,this.yDelta, this.width, this.height);
             this.panel.setBorder(BorderFactory.createLineBorder(Color.black));
         }
 
@@ -84,6 +106,8 @@ public class GUI extends JFrame implements j.Observer {
         Controller.addSubscriber(GUIObserver);
 
         guiWindow = new JFrame("UML Editor");
+        guiWindow.setLayout(new GridBagLayout());
+        guiWindow.setVisible(true);
 
         // create a menubar
         mainMenu = new JMenuBar();
@@ -425,7 +449,8 @@ public class GUI extends JFrame implements j.Observer {
         //Want to stay idle if CLI view is not there; need to keep program running
 
         ClassPanel testClass = new ClassPanel("test","CLASS",
-                new String[]{"testField"}, new String[]{"testMethod"}
+                new String[]{"testField"}, new String[]{"testMethod"},
+                18,45
         );
         GUI.classes.add(testClass);
 
@@ -439,7 +464,10 @@ public class GUI extends JFrame implements j.Observer {
     }
 
     public static void drawClassPanel(final ClassPanel c){
-        guiWindow.add(c.getPanel());
+        guiWindow.add(c.getPanel(), new GridBagConstraints());
+        guiWindow.invalidate();
+        guiWindow.validate();
+        guiWindow.repaint();
     }
 
     public static void displayGUI(){
