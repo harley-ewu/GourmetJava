@@ -211,7 +211,7 @@ public class ModelDiagramTest {
         ModelDiagram.addMethod("testClass", "testMethod", 1, "returnTest", testParams);
 
         // Adding a parameter to test deleting a parameter
-        ModelDiagram.addParam("testClass", "testParam", "returnTest2");
+        ModelDiagram.addParam("testClass", "testMethod", "deleteParam");
 
         // Test deleting a parameter with className as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.deleteParam(null, "testMethod", "testParam"));
@@ -235,7 +235,7 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.deleteParam("targetFail", "testMethod", "testParam"));
 
         // Test Success
-        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.deleteParam("testClass", "testMethod", "testParam"));
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.deleteParam("testClass", "testMethod", "deleteParam"));
     }
 
     @Test
