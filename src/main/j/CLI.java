@@ -482,6 +482,7 @@ public class CLI {
                         System.out.println("Program Closed! Bye!");
                         cont = false;
                         Main.cview = false;
+                        System.exit(0);
                     }
                     break;
                 case "help":

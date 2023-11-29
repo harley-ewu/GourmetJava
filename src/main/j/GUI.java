@@ -229,7 +229,7 @@ public class GUI extends JFrame implements j.Observer {
         renameAtt = new JMenuItem(new AbstractAction("Rename Attribute") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(16);
+                //System.exit(16);
             }
         });
         attributeDropdown.add(addAtt);
@@ -335,7 +335,7 @@ public class GUI extends JFrame implements j.Observer {
         help = new JMenuItem(new AbstractAction("Help") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(1);
+                //System.exit(1);
             }
         });
         helpDropdown.add(help);
