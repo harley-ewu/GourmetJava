@@ -49,7 +49,6 @@ public class GUI extends JFrame implements j.Observer {
             this.type = type;
             this.classMethods = classMethods;
             this.classFields = classFields;
-            this.panel.setLayout(null);
             JLabel jlabel = new JLabel(this.name);
             jlabel.setFont(new Font("Verdana",1,3));
             this.panel.add(jlabel);
