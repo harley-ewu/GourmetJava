@@ -3,6 +3,7 @@ package j;
     // Java program to construct
 // Menu bar to add menu items
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
@@ -22,7 +23,7 @@ import static javax.swing.JOptionPane.YES_NO_OPTION;
 
 public class GUI extends JFrame implements j.Observer {
 
-    private LinkedList<ClassPanel> classes;
+    private static final LinkedList<ClassPanel> classes = new LinkedList<>();
 
     private static class ClassPanel extends JPanel{
         JPanel panel = new JPanel();
@@ -35,17 +36,30 @@ public class GUI extends JFrame implements j.Observer {
 
         private final String[] classMethods;
 
-        private int xDelta;
+        private int xDelta = 100;
 
-        private int yDelta;
+        private int yDelta = 100;
+
+        private int height = 30;
+
+        private int width = 20;
 
         public ClassPanel(final String name, final String type, final String[] classFields, final String[] classMethods){
             this.name = name;
             this.type = type;
             this.classMethods = classMethods;
             this.classFields = classFields;
+            this.panel.setLayout(null);
+            JLabel jlabel = new JLabel(this.name);
+            jlabel.setFont(new Font("Verdana",1,3));
+            this.panel.add(jlabel);
+            this.panel.setBounds(this.xDelta,this.yDelta, jlabel.getWidth(), this.height);
+            this.panel.setBorder(BorderFactory.createLineBorder(Color.black));
         }
 
+        public JPanel getPanel() {
+            return this.panel;
+        }
     }
 
     // Creates a dropdown style menu framework at the top of the frame
@@ -411,12 +425,24 @@ public class GUI extends JFrame implements j.Observer {
         // 
         //Want to stay idle if CLI view is not there; need to keep program running
 
+        ClassPanel testClass = new ClassPanel("test","CLASS",
+                new String[]{"testField"}, new String[]{"testMethod"}
+        );
+        GUI.classes.add(testClass);
+
+        for (ClassPanel c : GUI.classes)
+            drawClassPanel(c);
 
         while(!Main.cview) {
             ;
         }
 
     }
+
+    public static void drawClassPanel(final ClassPanel c){
+        guiWindow.add(c.getPanel());
+    }
+
     public static void displayGUI(){
         SwingUtilities.updateComponentTreeUI(guiWindow);
         guiWindow.add(new ShapeDrawing());
