@@ -81,10 +81,10 @@ public class CLI {
         Map<String, List<AttributedString>> widgetOpts = new HashMap<>();
 
         // Descriptors that display each commands requirements
-        List<AttributedString> addDesc = Arrays.asList(new AttributedString("add class [class-name] [class-type]"),
-                new AttributedString("add method [class-name] [method-name] [visibility-type] [return-type] [Param-1] ... [Param-N]"),
-                new AttributedString("add field [class-name] [field-name] [visibility-type] [data-type]"),
-                new AttributedString("add relationship [1st-class-name] [2nd-class-name] [relationship-type-number]"),
+        List<AttributedString> addDesc = Arrays.asList(new AttributedString("add class [class-name] [class-type (options: CLASS, INTERFACE, RECORD, ENUMERATION, ANNOTATION)]"),
+                new AttributedString("add method [class-name] [method-name] [visibility-type (options: PRIVATE, PUBLIC, PROTECTED)] [return-type] [Param-1] [Param-2] ... [Param-N]"),
+                new AttributedString("add field [class-name] [field-name] [visibility-type (options: PRIVATE, PUBLIC, PROTECTED)] [data-type]"),
+                new AttributedString("add relationship [1st-class-name] [relationship-type (options: aggregates, composes, implements, realizes)] [2nd-class-name]"),
                 new AttributedString("add parameter [class-name] [method-name] [parameter-name]")
         );
 
@@ -232,7 +232,7 @@ public class CLI {
 
 
                             //Retrieves the status code for the method and displays results
-                            Controller.STATUS_CODES status = Controller.addRelationship(input[2], input[3], getRelationshipTypeNumber(input[4]));
+                            Controller.STATUS_CODES status = Controller.addRelationship(input[4], input[2], getRelationshipTypeNumber(input[3]));
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Relationship " + status.toString());
                             }else{
