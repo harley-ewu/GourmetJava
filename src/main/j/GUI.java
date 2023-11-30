@@ -108,6 +108,8 @@ public class GUI extends JFrame implements j.Observer {
 
             //Add the mouse event handlers
             ClassPanel thisPanel = this;
+
+            //We need a mouse listener to catch where the initial click is, otherwise the panel will "jump"
             this.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent me){
@@ -118,7 +120,10 @@ public class GUI extends JFrame implements j.Observer {
             this.addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
                 public void mouseDragged(MouseEvent me) {
-                    me.translatePoint(thisPanel.getLocation().x - thisPanel.pressed.getX(), thisPanel.getLocation().y- thisPanel.pressed.getY());
+                    //Offset the translate by the difference between the panel's location and the initial click
+                    int xTranslated = thisPanel.getLocation().x - thisPanel.pressed.getX();
+                    int yTranslated = thisPanel.getLocation().y- thisPanel.pressed.getY();
+                    me.translatePoint(xTranslated, yTranslated);
                     thisPanel.setLocation(me.getX(),me.getY());
                 }
             });
