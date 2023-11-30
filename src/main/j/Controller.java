@@ -292,7 +292,10 @@ public class Controller implements j.Observable{
      */
     public static String[][] listAllClassDetails(final String name) {
         return ModelDiagram.listAllClassDetails(name);
+    }
 
+    public static String[][][] listEveryClassAndAllDetails(){
+        return ModelDiagram.listEveryClassAndAllDetails();
     }
 
     /**

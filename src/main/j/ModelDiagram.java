@@ -485,6 +485,14 @@ public class ModelDiagram {
         return details;
     }
 
+    public static String[][][] listEveryClassAndAllDetails() {
+        String[][][] list = new String[createdClasses.size()][][];
+        for(int i = 0; i < createdClasses.size(); ++i){
+            list[i] = listAllClassDetails(createdClasses.get(i).getName());
+        }
+        return list;
+    }
+
     /**
      * renames a class
      *
