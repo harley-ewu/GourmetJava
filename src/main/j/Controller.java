@@ -56,9 +56,9 @@ public class Controller implements j.Observable{
      * @param crisis name of the class
      * @return STATUS_CODES
      */
-    public static STATUS_CODES existentialCrisisExists(final String crisis) {
-        return ModelDiagram.existentialCrisisExists(crisis);
-    }
+//    public static STATUS_CODES existentialCrisisExists(final String crisis) {
+//        return ModelDiagram.existentialCrisisExists(crisis);
+//    }
 
     /**
      * Adds a class with the given name and type
