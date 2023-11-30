@@ -129,14 +129,14 @@ public class ModelDiagram {
      * @return STATUS_CODES.NULL_STRING or EMPTY_STRING if the passed String is null or empty<br>
      * STATUS_CODES.OBJ_NOT_FOUND if the ClassBox does not exist, OBJ_FOUND if it does
      */
-    public static Controller.STATUS_CODES existentialCrisisExists(final String crisis) {
-        if (crisis == null) return Controller.STATUS_CODES.NULL_STRING;
-
-        if (crisis.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
-
-        if (findClassBox(crisis) == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
-        return Controller.STATUS_CODES.OBJ_FOUND;
-    }
+//    public static Controller.STATUS_CODES existentialCrisisExists(final String crisis) {
+//        if (crisis == null) return Controller.STATUS_CODES.NULL_STRING;
+//
+//        if (crisis.isEmpty()) return Controller.STATUS_CODES.EMPTY_STRING;
+//
+//        if (findClassBox(crisis) == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+//        return Controller.STATUS_CODES.OBJ_FOUND;
+//    }
 
     /**
      * Adds a class
@@ -485,6 +485,14 @@ public class ModelDiagram {
         return details;
     }
 
+    public static String[][][] listEveryClassAndAllDetails() {
+        String[][][] list = new String[createdClasses.size()][][];
+        for(int i = 0; i < createdClasses.size(); ++i){
+            list[i] = listAllClassDetails(createdClasses.get(i).getName());
+        }
+        return list;
+    }
+
     /**
      * renames a class
      *
@@ -760,6 +768,7 @@ public class ModelDiagram {
             }
         }
         fileScanner.close();
+        Controller.updateGUI();
         return true;
     }
 

@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * The interface between CLI/GUI and the backend
  */
-public class Controller implements j.Observable{
+public class Controller implements j.Observable {
 
     private static final ArrayList<Observer> observers = new ArrayList<>();
     private static final Controller ControllerObservable = new Controller();
@@ -15,11 +15,11 @@ public class Controller implements j.Observable{
     }
 
     public void notifyObservers() {
-        for(Observer o : Controller.observers)
+        for (Observer o : Controller.observers)
             o.update();
     }
 
-    public static void updateGUI(){
+    public static void updateGUI() {
         ControllerObservable.notifyObservers();
     }
 
@@ -56,9 +56,9 @@ public class Controller implements j.Observable{
      * @param crisis name of the class
      * @return STATUS_CODES
      */
-    public static STATUS_CODES existentialCrisisExists(final String crisis) {
-        return ModelDiagram.existentialCrisisExists(crisis);
-    }
+//    public static STATUS_CODES existentialCrisisExists(final String crisis) {
+//        return ModelDiagram.existentialCrisisExists(crisis);
+//    }
 
     /**
      * Adds a class with the given name and type
@@ -280,7 +280,7 @@ public class Controller implements j.Observable{
     }
 
     /**
-     * Lists the classes and their types
+     * Lists the all the details for one class
      *
      * @return String[][] in the format:<br>
      * {<br>
@@ -292,7 +292,25 @@ public class Controller implements j.Observable{
      */
     public static String[][] listAllClassDetails(final String name) {
         return ModelDiagram.listAllClassDetails(name);
+    }
 
+
+    /**
+     * Lists the all the details for every class. An array of the results from listAllClassDetails() ran for every class.
+     *
+     * @return String[][][] in the format:<br>
+     * {<br>
+     * {<br>
+     * [0][x] - { Class name, Type},<br>
+     * [1][x] - { List of Methods },<br>
+     * [2][x] - { List of Fields }<br>
+     * [3][x] - { List of Relationships }<br>
+     * },<br>
+     * and another String[][] for every class<br>
+     * }<br>
+     */
+    public static String[][][] listEveryClassAndAllDetails() {
+        return ModelDiagram.listEveryClassAndAllDetails();
     }
 
     /**
@@ -537,6 +555,7 @@ public class Controller implements j.Observable{
     /**
      * displays the menu options and prompts the user to choose a
      * corresponding number on the menu
+     *
      * @return String[] with the menu items
      */
     public static String[] printMenu() {

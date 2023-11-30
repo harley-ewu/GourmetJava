@@ -1,0 +1,3 @@
+{"name":"chonkus","type":"CLASS","parents":[],"children":[],"methods":[],"fields":[{"type":"int","name":"chonk","view":"PRIVATE"}]}
+{"name":"test","type":"CLASS","parents":[],"children":[],"methods":[{"paramTypes":["p1","p2"],"returnType":"pizzaret","name":"pizza","view":"PRIVATE"}],"fields":[{"type":"quack","name":"chicken","view":"PRIVATE"},{"type":"quack quack","name":"chicken2","view":"PRIVATE"}]}
+{"name":"test2","type":"INTERFACE","parents":[],"children":[],"methods":[{"paramTypes":["p1","p2"],"returnType":"pizzaret","name":"pizza","view":"PRIVATE"},{"paramTypes":["p1","p2"],"returnType":"pizzaret","name":"pizza2","view":"PRIVATE"}],"fields":[{"type":"wee snaw","name":"chicken","view":"PRIVATE"}]}

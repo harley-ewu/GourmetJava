@@ -81,10 +81,10 @@ public class CLI {
         Map<String, List<AttributedString>> widgetOpts = new HashMap<>();
 
         // Descriptors that display each commands requirements
-        List<AttributedString> addDesc = Arrays.asList(new AttributedString("add class [class-name] [class-type-number]"),
-                new AttributedString("add method [class-name] [method-name] [visibility-number] [return-type] [Param-1] ... [Param-N]"),
-                new AttributedString("add field [class-name] [field-name] [visibility-number] [data-type]"),
-                new AttributedString("add relationship [1st-class-name] [2nd-class-name] [relationship-type-number]"),
+        List<AttributedString> addDesc = Arrays.asList(new AttributedString("add class [class-name] [class-type (options: CLASS, INTERFACE, RECORD, ENUMERATION, ANNOTATION)]"),
+                new AttributedString("add method [class-name] [method-name] [visibility-type (options: PRIVATE, PUBLIC, PROTECTED)] [return-type] [Param-1] [Param-2] ... [Param-N]"),
+                new AttributedString("add field [class-name] [field-name] [visibility-type (options: PRIVATE, PUBLIC, PROTECTED)] [data-type]"),
+                new AttributedString("add relationship [1st-class-name] [relationship-type (options: aggregates, composes, implements, realizes)] [2nd-class-name]"),
                 new AttributedString("add parameter [class-name] [method-name] [parameter-name]")
         );
 
@@ -147,17 +147,17 @@ public class CLI {
                                 break;
                             }
 
-                            if(!readInt(input[3])){
+                            /*if(!readInt(input[3])){
                                 System.out.println("Please enter a valid number");
                                 break;
                             }
                             if(isNegative(Integer.parseInt(input[3]))){
                                 System.out.println("Please enter a non-negative number");
                                 break;
-                            }
+                            }*/
 
                             //Retrieves the status code for the method and displays results
-                            Controller.STATUS_CODES status = Controller.addClass(input[2], Integer.parseInt(input[3]));
+                            Controller.STATUS_CODES status = Controller.addClass(input[2], getClassTypeNumber(input[3]));
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Class " + input[2] + " " + status.toString());
                             }else{
@@ -177,17 +177,17 @@ public class CLI {
                             params.addAll(Arrays.asList(input).subList(6, input.length));
 
 
-                            if(!readInt(input[4])){
+                            /*if(!readInt(input[4])){
                                 System.out.println("Please enter a valid visibility number");
                                 break;
                             }
                             if(isNegative(Integer.parseInt(input[4]))){
                                 System.out.println("Please enter a non-negative number");
                                 break;
-                            }
+                            }*/
 
                             //Retrieves the status code for the method and displays results
-                            Controller.STATUS_CODES status = Controller.addMethod(input[2], input[3], Integer.parseInt(input[4]), input[5], params);
+                            Controller.STATUS_CODES status = Controller.addMethod(input[2], input[3], getVisibilityNumber(input[4]), input[5], params);
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Method " + input[3] + " " + status.toString());
                             }else{
@@ -202,17 +202,17 @@ public class CLI {
                                 break;
                             }
 
-                            if(!readInt(input[4])){
+                            /*if(!readInt(input[4])){
                                 System.out.println("Please enter a valid visibility number");
                                 break;
-                            }
-                            if(isNegative(Integer.parseInt(input[4]))){
+                            }*/
+                            /*if(isNegative(Integer.parseInt(input[4]))){
                                 System.out.println("Please enter a non-negative number");
                                 break;
-                            }
+                            }*/
 
                             //Retrieves the status code for the method and displays results
-                            Controller.STATUS_CODES status = Controller.addField(input[2], input[3], Integer.parseInt(input[4]), input[5]);
+                            Controller.STATUS_CODES status = Controller.addField(input[2], input[3], CLI.getVisibilityNumber(input[4]), input[5]);
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Field " + input[3] + " " + status.toString());
                             }else{
@@ -232,7 +232,7 @@ public class CLI {
 
 
                             //Retrieves the status code for the method and displays results
-                            Controller.STATUS_CODES status = Controller.addRelationship(input[2], input[3], input[4]);
+                            Controller.STATUS_CODES status = Controller.addRelationship(input[4], input[2], getRelationshipTypeNumber(input[3]));
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Relationship " + status.toString());
                             }else{
@@ -732,6 +732,45 @@ public class CLI {
     public static String[] readStringSplit(final String msg) {
         System.out.print(msg);
         return kb.nextLine().toLowerCase().split(" ");
+    }
+
+    public static int getVisibilityNumber(final String type) {
+        if (type.equalsIgnoreCase("PRIVATE")) {
+            return 1;
+        } else if (type.equalsIgnoreCase("PUBLIC")) {
+            return 2;
+        } else if (type.equalsIgnoreCase("PROTECTED")) {
+            return 3;
+        }
+        return -1;
+    }
+
+    public static int getClassTypeNumber(final String type) {
+        if (type.equalsIgnoreCase("CLASS")) {
+            return 1;
+        } else if (type.equalsIgnoreCase("INTERFACE")) {
+            return 2;
+        } else if (type.equalsIgnoreCase("RECORD")) {
+            return 3;
+        } else if (type.equalsIgnoreCase("ENUMERATION")) {
+            return 4;
+        } else if (type.equalsIgnoreCase("ANNOTATION")) {
+            return 5;
+        }
+        return -1;
+    }
+
+    public static int getRelationshipTypeNumber(final String type) {
+        if (type.equalsIgnoreCase("aggregates")) {
+            return 1;
+        } else if (type.equalsIgnoreCase("composes")) {
+            return 2;
+        } else if (type.equalsIgnoreCase("implements")) {
+            return 3;
+        } else if (type.equalsIgnoreCase("realizes")) {
+            return 4;
+        }
+        return -1;
     }
 
 
