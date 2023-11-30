@@ -8,6 +8,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.LinkedList;
+import java.util.List;
 
 import static javax.swing.JOptionPane.YES_NO_OPTION;
 
@@ -36,53 +37,66 @@ public class GUI extends JFrame implements j.Observer {
 
         private final String[] classMethods;
 
-        private int xDelta = 100;
+        private int xDelta;
 
-        private int yDelta = 150;
+        private int yDelta;
 
         private int height;
 
         private int width;
 
-        public ClassPanel(final String name, final String type, final String[] classFields, final String[] classMethods){
-            this.name = name;
-            this.type = type;
-            this.classMethods = classMethods;
-            this.classFields = classFields;
+        public ClassPanel(final String[][] details, final int x, final int y){
+            this.name = details[Controller.DETAILS_NAME_TYPE][0];
+            this.type = details[Controller.DETAILS_NAME_TYPE][1];
+            this.classMethods = details[Controller.DETAILS_METHODS];
+            this.classFields = details[Controller.DETAILS_FIELDS];
+            this.xDelta = x;
+            this.yDelta = y;
 
             //Add the name label
             JLabel jlabel = new JLabel(this.name);
-            jlabel.setFont(new Font("Verdana",Font.PLAIN,8));
+            jlabel.setFont(new Font("Verdana",Font.PLAIN,10));
             jlabel.setHorizontalAlignment(SwingConstants.CENTER);
             jlabel.setVerticalAlignment(SwingConstants.TOP);
             jlabel.setVisible(true);
             this.panel.add(jlabel);
 
+            double maxWidth = 1.0;
+
+            for(String m : this.classMethods){
+                JLabel lbl = new JLabel(m);
+                lbl.setFont(new Font("Verdana",Font.PLAIN,10));
+                lbl.setHorizontalAlignment(SwingConstants.CENTER);
+                lbl.setVerticalAlignment(SwingConstants.TOP);
+                lbl.setVisible(true);
+                if (lbl.getPreferredSize().getWidth() > maxWidth)
+                    maxWidth = lbl.getPreferredSize().getWidth();
+                this.panel.add(lbl);
+            }
+
+            for(String f : this.classFields){
+                JLabel lbl = new JLabel(f);
+                lbl.setFont(new Font("Verdana",Font.PLAIN,10));
+                lbl.setHorizontalAlignment(SwingConstants.CENTER);
+                lbl.setVerticalAlignment(SwingConstants.TOP);
+                lbl.setVisible(true);
+                if (lbl.getPreferredSize().getWidth() > maxWidth)
+                    maxWidth = lbl.getPreferredSize().getWidth();
+                this.panel.add(lbl);
+            }
+
             //set the panel size
-            this.width = (int)jlabel.getPreferredSize().getWidth() + 10;
-            this.height = (int)jlabel.getPreferredSize().getHeight() + 100;
+            this.width = (int)maxWidth + 5;
+            int heightScale = (int)jlabel.getPreferredSize().getHeight() + 1;
+            this.height = heightScale * 2 + heightScale * this.classFields.length + heightScale * this.classMethods.length + 5;
             this.panel.setBounds(this.xDelta,this.yDelta, this.width, this.height);
             this.panel.setBorder(BorderFactory.createLineBorder(Color.black));
             this.panel.setVisible(true);
+
         }
 
-        public ClassPanel(final String name, final String type, final String[] classFields, final String[] classMethods, final int x, final int y){
-            this.name = name;
-            this.type = type;
-            this.classMethods = classMethods;
-            this.classFields = classFields;
-            this.xDelta = x;
-            this.yDelta = y;
-            JLabel jlabel = new JLabel(this.name);
-            jlabel.setFont(new Font("Verdana",1,15));
-            jlabel.setHorizontalAlignment(SwingConstants.LEFT);
-            jlabel.setVisible(true);
-            this.width = jlabel.getWidth();
-            this.height = jlabel.getHeight();
-            this.panel.add(jlabel);
-            this.panel.setBounds(this.xDelta,this.yDelta, this.width, this.height);
-            this.panel.setBorder(BorderFactory.createLineBorder(Color.black));
-            this.panel.setVisible(true);
+        public ClassPanel(final String[][] details){
+            this(details, 0, 0);
         }
 
         public JPanel getPanel() {
@@ -454,11 +468,24 @@ public class GUI extends JFrame implements j.Observer {
         //TODO commented out line below
         // 
         //Want to stay idle if CLI view is not there; need to keep program running
+        Controller.addClass("test",1);
+        Controller.addField("test","chicken",1,"chickentype");
+        LinkedList<String> ps = new LinkedList<>();
+        ps.add("p1");
+        ps.add("p2");
+        Controller.addMethod("test","pizza",1,"pizzaret",ps);
 
-        ClassPanel testClass = new ClassPanel("test","CLASS",
-                new String[]{"testField"}, new String[]{"testMethod"}
-        );
+        Controller.addClass("test2",1);
+        Controller.addField("test2","chicken",1,"chickentype");
+        LinkedList<String> ps2 = new LinkedList<>();
+        ps2.add("p1");
+        ps2.add("p2");
+        Controller.addMethod("test2","pizza",1,"pizzaret",ps2);
+
+        ClassPanel testClass = new ClassPanel(Controller.listAllClassDetails("test"));
+        ClassPanel testClass2 = new ClassPanel(Controller.listAllClassDetails("test2"),600,300);
         GUI.classes.add(testClass);
+        GUI.classes.add(testClass2);
 
         for (ClassPanel c : GUI.classes)
             drawClassPanel(c);
