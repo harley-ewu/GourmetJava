@@ -36,9 +36,9 @@ public class GUI extends JFrame implements j.Observer {
 
         private final String[] classMethods;
 
-        private int xDelta;
+        private int xDelta = 100;
 
-        private int yDelta;
+        private int yDelta = 150;
 
         private int height;
 
@@ -49,15 +49,21 @@ public class GUI extends JFrame implements j.Observer {
             this.type = type;
             this.classMethods = classMethods;
             this.classFields = classFields;
+
+            //Add the name label
             JLabel jlabel = new JLabel(this.name);
-            jlabel.setFont(new Font("Verdana",1,12));
-            jlabel.setHorizontalAlignment(SwingConstants.LEFT);
+            jlabel.setFont(new Font("Verdana",Font.PLAIN,8));
+            jlabel.setHorizontalAlignment(SwingConstants.CENTER);
+            jlabel.setVerticalAlignment(SwingConstants.TOP);
             jlabel.setVisible(true);
-            this.width = jlabel.getWidth();
-            this.height = jlabel.getHeight();
             this.panel.add(jlabel);
+
+            //set the panel size
+            this.width = (int)jlabel.getPreferredSize().getWidth() + 10;
+            this.height = (int)jlabel.getPreferredSize().getHeight() + 100;
             this.panel.setBounds(this.xDelta,this.yDelta, this.width, this.height);
             this.panel.setBorder(BorderFactory.createLineBorder(Color.black));
+            this.panel.setVisible(true);
         }
 
         public ClassPanel(final String name, final String type, final String[] classFields, final String[] classMethods, final int x, final int y){
@@ -68,7 +74,7 @@ public class GUI extends JFrame implements j.Observer {
             this.xDelta = x;
             this.yDelta = y;
             JLabel jlabel = new JLabel(this.name);
-            jlabel.setFont(new Font("Verdana",1,12));
+            jlabel.setFont(new Font("Verdana",1,15));
             jlabel.setHorizontalAlignment(SwingConstants.LEFT);
             jlabel.setVisible(true);
             this.width = jlabel.getWidth();
@@ -76,6 +82,7 @@ public class GUI extends JFrame implements j.Observer {
             this.panel.add(jlabel);
             this.panel.setBounds(this.xDelta,this.yDelta, this.width, this.height);
             this.panel.setBorder(BorderFactory.createLineBorder(Color.black));
+            this.panel.setVisible(true);
         }
 
         public JPanel getPanel() {
@@ -106,9 +113,7 @@ public class GUI extends JFrame implements j.Observer {
         Controller.addSubscriber(GUIObserver);
 
         guiWindow = new JFrame("UML Editor");
-        guiWindow.setLayout(new GridBagLayout());
-        guiWindow.setVisible(true);
-
+        guiWindow.getContentPane().setBackground(Color.BLUE);
         // create a menubar
         mainMenu = new JMenuBar();
 
@@ -429,8 +434,10 @@ public class GUI extends JFrame implements j.Observer {
         guiWindow.setSize(1000, 800);
         guiWindow.setPreferredSize(new Dimension(1000, 800));
         guiWindow.setResizable(false);
+        guiWindow.setLayout(null);
+        guiWindow.getContentPane().setLayout(null);
         guiWindow.setVisible(true);
-        Main.mainContainer.pack();
+        //Main.mainContainer.pack();
         guiWindow.addWindowListener(new WindowAdapter(){
             @Override
             public void windowClosing(WindowEvent event){
@@ -449,8 +456,7 @@ public class GUI extends JFrame implements j.Observer {
         //Want to stay idle if CLI view is not there; need to keep program running
 
         ClassPanel testClass = new ClassPanel("test","CLASS",
-                new String[]{"testField"}, new String[]{"testMethod"},
-                18,45
+                new String[]{"testField"}, new String[]{"testMethod"}
         );
         GUI.classes.add(testClass);
 
@@ -464,10 +470,10 @@ public class GUI extends JFrame implements j.Observer {
     }
 
     public static void drawClassPanel(final ClassPanel c){
-        guiWindow.add(c.getPanel(), new GridBagConstraints());
-        guiWindow.invalidate();
-        guiWindow.validate();
-        guiWindow.repaint();
+        guiWindow.getContentPane().add(c.getPanel());
+        guiWindow.getContentPane().invalidate();
+        guiWindow.getContentPane().validate();
+        guiWindow.getContentPane().repaint();
     }
 
     public static void displayGUI(){
