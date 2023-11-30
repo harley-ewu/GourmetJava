@@ -499,7 +499,7 @@ public class GUI extends JFrame implements j.Observer {
         Controller.addMethod("test2", "pizza", 1, "pizzaret", ps2);
         Controller.addMethod("test2", "pizza2", 1, "pizzaret", ps2);
 
-        ClassPanel testClass = new ClassPanel(Controller.listAllClassDetails("test"));
+        ClassPanel testClass = new ClassPanel(Controller.listAllClassDetails("test"),0,0);
         ClassPanel testClass2 = new ClassPanel(Controller.listAllClassDetails("test2"), 600, 300);
         GUI.classes.add(testClass);
         GUI.classes.add(testClass2);
