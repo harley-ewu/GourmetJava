@@ -40,9 +40,9 @@ public class GUI extends JFrame implements j.Observer {
 
         private int yDelta;
 
-        private int height;
+        private int height = 300;
 
-        private int width;
+        private int width = 200;
 
         public ClassPanel(final String name, final String type, final String[] classFields, final String[] classMethods){
             this.name = name;
