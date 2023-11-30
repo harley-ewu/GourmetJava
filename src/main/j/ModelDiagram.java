@@ -768,6 +768,7 @@ public class ModelDiagram {
             }
         }
         fileScanner.close();
+        Controller.updateGUI();
         return true;
     }
 
