@@ -43,6 +43,9 @@ public class GUI extends JFrame implements j.Observer {
 
         private int width;
 
+        //to help make dragging smooth
+        public MouseEvent pressed;
+
         public ClassPanel(final String[][] details, final int x, final int y) {
             super(new GridLayout(0, 1));
             this.name = details[Controller.DETAILS_NAME_TYPE][0];
@@ -102,6 +105,23 @@ public class GUI extends JFrame implements j.Observer {
                 this.height += this.heightScale;
             this.setBounds(this.xDelta, this.yDelta, this.width, this.height);
             this.setBorder(BorderFactory.createLineBorder(Color.black));
+
+            //Add the mouse event handlers
+            ClassPanel thisPanel = this;
+            this.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent me){
+                    thisPanel.pressed = me;
+                }
+            });
+
+            this.addMouseMotionListener(new MouseMotionAdapter() {
+                @Override
+                public void mouseDragged(MouseEvent me) {
+                    me.translatePoint(thisPanel.getLocation().x - thisPanel.pressed.getX(), thisPanel.getLocation().y- thisPanel.pressed.getY());
+                    thisPanel.setLocation(me.getX(),me.getY());
+                }
+            });
         }
 
         public ClassPanel(final String[][] details) {
@@ -512,6 +532,21 @@ public class GUI extends JFrame implements j.Observer {
         }
 
     }
+
+    public void handleDrag(final JPanel panel){
+        final JPanel p = panel;
+        panel.addMouseMotionListener(new MouseMotionAdapter() {
+
+           @Override
+           public void mouseDragged(MouseEvent me){
+               me.translatePoint(me.getComponent().getLocation().x, me.getComponent().getLocation().y);
+               p.setLocation(me.getX(), me.getY());
+            }
+
+        });
+
+    }
+
 
     public static void drawClassPanel(final ClassPanel c) {
         guiWindow.getContentPane().add(c);
