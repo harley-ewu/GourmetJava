@@ -59,7 +59,6 @@ public class GUI extends JFrame implements j.Observer {
                 JLabel header = new JLabel("<<" + this.type + ">>");
                 header.setFont(new Font("Verdana", Font.PLAIN, 10));
                 header.setHorizontalAlignment(SwingConstants.CENTER);
-                header.setVerticalAlignment(SwingConstants.TOP);
                 header.setVisible(true);
                 if (header.getPreferredSize().getWidth() > maxWidth)
                     maxWidth = header.getPreferredSize().getWidth();
@@ -70,7 +69,6 @@ public class GUI extends JFrame implements j.Observer {
             JLabel className = new JLabel(this.name);
             className.setFont(new Font("Verdana", Font.PLAIN, 10));
             className.setHorizontalAlignment(SwingConstants.CENTER);
-            className.setVerticalAlignment(SwingConstants.TOP);
             className.setVisible(true);
             if (className.getPreferredSize().getWidth() > maxWidth)
                 maxWidth = className.getPreferredSize().getWidth();
@@ -80,7 +78,6 @@ public class GUI extends JFrame implements j.Observer {
                 JLabel lbl = new JLabel(f);
                 lbl.setFont(new Font("Verdana", Font.PLAIN, 10));
                 lbl.setHorizontalAlignment(SwingConstants.CENTER);
-                lbl.setVerticalAlignment(SwingConstants.TOP);
                 lbl.setVisible(true);
                 if (lbl.getPreferredSize().getWidth() > maxWidth)
                     maxWidth = lbl.getPreferredSize().getWidth();
@@ -91,7 +88,6 @@ public class GUI extends JFrame implements j.Observer {
                 JLabel lbl = new JLabel(m);
                 lbl.setFont(new Font("Verdana", Font.PLAIN, 10));
                 lbl.setHorizontalAlignment(SwingConstants.CENTER);
-                lbl.setVerticalAlignment(SwingConstants.TOP);
                 lbl.setVisible(true);
                 if (lbl.getPreferredSize().getWidth() > maxWidth)
                     maxWidth = lbl.getPreferredSize().getWidth();
@@ -106,7 +102,6 @@ public class GUI extends JFrame implements j.Observer {
                 this.height += this.heightScale;
             this.setBounds(this.xDelta, this.yDelta, this.width, this.height);
             this.setBorder(BorderFactory.createLineBorder(Color.black));
-            //this.setVisible(true);
         }
 
         public ClassPanel(final String[][] details) {
