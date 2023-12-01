@@ -3,6 +3,7 @@ import j.Controller;
 import j.ModelDiagram;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import static org.junit.Assert.assertEquals;
 
@@ -447,4 +448,19 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.deleteRelationship("testParent", "testChild"));
     }
 
+    @Test
+    public void testListClasses(){
+        // Objects for successful test
+        ModelDiagram.addClass("testClass", 1);
+        ModelDiagram.addClass("testClass2", 1);
+        ModelDiagram.addClass("testClass3", 1);
+
+        // Turing listClasses to an actual String to test
+        String [] classes = ModelDiagram.listClasses();
+        String classString = Arrays.toString(classes);
+        System.out.println(classString);
+
+        // Test Success
+        assertEquals("[testClass, testClass2, testClass3]", classString);
+    }
 }
