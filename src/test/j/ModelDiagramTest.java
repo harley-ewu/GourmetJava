@@ -356,6 +356,12 @@ public class ModelDiagramTest {
 
     @Test
     public void testRenameClass(){
+        // Object for successful test
+        ModelDiagram.addClass("testOriginal", 1);
+
+        // Object that already exists
+        ModelDiagram.addClass("testExists", 1);
+
         // Test renaming a class with originalName as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.renameClass(null, "testNew"));
 
@@ -369,35 +375,59 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.renameClass("testOriginal", ""));
 
         // Test Object already exists
+        assertEquals(Controller.STATUS_CODES.OBJ_ALREADY_EXISTS, ModelDiagram.renameClass("testOriginal", "testExists"));
 
         // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.renameClass("targetFail", "testNew"));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.renameClass("testOriginal", "testNew"));
     }
 
     @Test
     public void testAddRelationship(){
+        // Object for successful test
+        ModelDiagram.addClass("testParent", 1);
+
+        // Object for successful test
+        ModelDiagram.addClass("testChild", 1);
+
         // Test adding a relationship with parentClass as null
-        assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship(null, "testChild", "testType"));
+        assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship(null, "testChild", "1"));
 
         // Test adding a relationship with childClass as null
-        assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship("testParent", null, "testType"));
+        assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship("testParent", null, "1"));
 
         // Test adding a relationship with type as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship("testParent", "testChild", null));
 
         // Test adding a relationship with parentClass as an empty string
-        assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("", "testChild", "testType"));
+        assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("", "testChild", "1"));
 
         // Test adding a relationship with childClass as an empty string
-        assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("testParent", "", "testType"));
+        assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("testParent", "", "1"));
 
         // Test adding a relationship with type as an empty string
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("testParent", "testChild", ""));
 
         // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.addRelationship("targetFail", "testChild", "1"));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.addRelationship("testParent", "testChild", "1"));
     }
 
     @Test
     public void testDeleteRelationship(){
+        // Object for successful test
+        ModelDiagram.addClass("testParent", 1);
+
+        // Object for successful test
+        ModelDiagram.addClass("testChild", 1);
+
+        // Adding a relationship to test deleting a relationship
+        ModelDiagram.addRelationship("testParent", "testChild", "1");
+
         // Test deleting a relationship with cb1 as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.deleteRelationship(null, "testChild"));
 
@@ -409,6 +439,12 @@ public class ModelDiagramTest {
 
         // Test deleting a relationship with cb2 as an empty string
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.deleteRelationship("testParent", ""));
+
+        // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.deleteRelationship("targetFail", "testChild"));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.deleteRelationship("testParent", "testChild"));
     }
 
 }
