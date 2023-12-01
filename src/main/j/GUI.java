@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import static javax.swing.JOptionPane.YES_NO_OPTION;
@@ -23,9 +24,10 @@ import static javax.swing.JOptionPane.YES_NO_OPTION;
 
 public class GUI extends JFrame implements j.Observer {
 
-    private static final LinkedList<ClassPanel> classes = new LinkedList<>();
+    private static ArrayList<ClassPanel> classes = new ArrayList<>();
+    private final static Caretaker<ClassPanel> caretaker = new Caretaker<>();
 
-    public static class ClassPanel extends JPanel {
+    public static class ClassPanel extends JPanel implements Cloneable {
         private final String name;
 
         private final String type;
@@ -39,6 +41,7 @@ public class GUI extends JFrame implements j.Observer {
 
         private int yDelta;
 
+        //these might not be necessary if they're calculated every time
         private int height;
 
         private int width;
@@ -108,12 +111,18 @@ public class GUI extends JFrame implements j.Observer {
 
             //Add the mouse event handlers
             ClassPanel thisPanel = this;
-
             //We need a mouse listener to catch where the initial click is, otherwise the panel will "jump"
             this.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mousePressed(MouseEvent me){
+                public void mousePressed(MouseEvent me) {
                     thisPanel.pressed = me;
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent me) {
+                    //We only need to update the coordinates when the user is done moving the boxes
+                    thisPanel.xDelta = thisPanel.getLocation().x;
+                    thisPanel.yDelta = thisPanel.getLocation().y;
                 }
             });
 
@@ -122,15 +131,25 @@ public class GUI extends JFrame implements j.Observer {
                 public void mouseDragged(MouseEvent me) {
                     //Offset the translate by the difference between the panel's location and the initial click
                     int xTranslated = thisPanel.getLocation().x - thisPanel.pressed.getX();
-                    int yTranslated = thisPanel.getLocation().y- thisPanel.pressed.getY();
+                    int yTranslated = thisPanel.getLocation().y - thisPanel.pressed.getY();
                     me.translatePoint(xTranslated, yTranslated);
-                    thisPanel.setLocation(me.getX(),me.getY());
+                    thisPanel.setLocation(me.getX(), me.getY());
                 }
             });
         }
 
         public ClassPanel(final String[][] details) {
             this(details, 0, 0);
+        }
+
+        private ClassPanel(final ClassPanel panel){
+            this.name = panel.name;
+            this.type = panel.type;
+            this.yDelta = panel.yDelta;
+            this.xDelta = panel.xDelta;
+            this.classFields = panel.classFields;
+            this.classMethods = panel.classMethods;
+            this.heightScale = panel.heightScale;
         }
 
         @Override
@@ -147,6 +166,14 @@ public class GUI extends JFrame implements j.Observer {
             g.drawLine(0, fieldsLineY, this.width, fieldsLineY);
         }
 
+        @Override
+        public ClassPanel clone() {
+            try {
+                return (new ClassPanel((ClassPanel)super.clone()));
+            } catch (Exception ignored) {
+                return null;
+            }
+        }
     }
 
     // Creates a dropdown style menu framework at the top of the frame
@@ -161,15 +188,162 @@ public class GUI extends JFrame implements j.Observer {
 
     //creates a frame to be the main, base window to hold the entirety of the GUI
     static JFrame guiWindow;
+    private static GUI guiObserver;
+    public static GUI getInstance(){
+        if(guiObserver == null)
+            return new GUI();
 
-    private static final GUI GUIObserver = new GUI();
+        return guiObserver;
+    }
 
-    public void update() {
-        displayGUI();
+    private ClassPanel findClassPanel(final String name){
+        for(ClassPanel p : GUI.classes){
+            if(p.name.equals(name))
+                return p;
+        }
+        return null;
+    }
+
+    private void GUIAddClass(final String name) {
+        ClassPanel newPanel = new ClassPanel(Controller.listAllClassDetails(name));
+        GUI.classes.add(newPanel);
+        guiWindow.getContentPane().add(newPanel);
+        guiWindow.getContentPane().revalidate();
+        guiWindow.getContentPane().repaint();
+    }
+
+    private void GUIRenameClass(final String name) {
+        //The names are passed in the format [old name]\n[new name]
+        String[] names = name.split("\n");
+        if(names.length != 2)
+            return;
+
+        String oldName = names[0];
+        String newName = names[1];
+        System.out.println(oldName + "\n" + newName);
+        ClassPanel oldPanel = findClassPanel(oldName);
+        if(oldPanel == null)
+            return;
+
+        String[][] details = Controller.listAllClassDetails(newName);
+        ClassPanel newPanel = new ClassPanel(details, oldPanel.xDelta, oldPanel.yDelta);
+        GUI.classes.add(newPanel);
+        guiWindow.getContentPane().add(newPanel);
+        GUI.classes.remove(oldPanel);
+        guiWindow.getContentPane().remove(oldPanel);
+        guiWindow.getContentPane().revalidate();
+        guiWindow.getContentPane().repaint();
+    }
+
+    private void GUIDeleteClass(final String name) {
+        ClassPanel panel = findClassPanel(name);
+        GUI.classes.remove(panel);
+        guiWindow.getContentPane().remove(panel);
+        guiWindow.getContentPane().revalidate();
+        guiWindow.getContentPane().repaint();
+    }
+
+    private void GUIUpdateAttribute(final String name){
+        ClassPanel oldPanel = findClassPanel(name);
+        if(oldPanel == null)
+            return;
+
+        String[][] details = Controller.listAllClassDetails(name);
+        ClassPanel newPanel = new ClassPanel(details, oldPanel.xDelta, oldPanel.yDelta);
+        GUI.classes.add(newPanel);
+        guiWindow.getContentPane().add(newPanel);
+        GUI.classes.remove(oldPanel);
+        guiWindow.getContentPane().remove(oldPanel);
+        guiWindow.getContentPane().revalidate();
+        guiWindow.getContentPane().repaint();
+    }
+
+    private void GUIFullRefresh(){
+        guiWindow.getContentPane().removeAll();
+        String[][][] classes = Controller.listEveryClassAndAllDetails();
+        GUI.classes.clear();
+
+        int x = 0;
+
+        for (String[][] c : classes) {
+            GUI.classes.add(new ClassPanel(c, x, 0));
+            x += 200;
+        }
+
+        for (ClassPanel c : GUI.classes)
+            drawClassPanel(c);
+    }
+
+    public static void redrawGUI(){
+        guiWindow.getContentPane().removeAll();
+        for (ClassPanel c : GUI.classes)
+            drawClassPanel(c);
+    }
+
+    public void update(int reason, String msg) {
+        switch (reason) {
+            case Controller.ADD_CLASS:
+                GUIAddClass(msg);
+                updateChange();
+                break;
+            case Controller.RENAME_CLASS:
+                GUIRenameClass(msg);
+                updateChange();
+                break;
+            case Controller.ADD_RELATIONSHIP:
+                break;
+            case Controller.DELETE_RELATIONSHIP:
+                break;
+            case Controller.DELETE_CLASS:
+                GUIDeleteClass(msg);
+                updateChange();
+                break;
+            case Controller.UPDATE_ATTRIBUTE:
+                GUIUpdateAttribute(msg);
+                updateChange();
+                break;
+            case Controller.UNDO:
+                restoreSnapshot(caretaker.undo().restore());
+                redrawGUI();
+                break;
+            case Controller.REDO:
+                restoreSnapshot(caretaker.redo().restore());
+                redrawGUI();
+                break;
+            case Controller.FULL_REFRESH:
+                GUIFullRefresh();
+                updateChange();
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    public static void updateChange(){
+        ArrayList<ClassPanel> snapList = createSnapshot(classes);
+        j.Memento<ClassPanel> snapshot = new Memento<>(snapList);
+        caretaker.updateChange(snapshot);
+    }
+
+    public static ArrayList<ClassPanel> createSnapshot(final ArrayList<ClassPanel> snapshot){
+        ArrayList<ClassPanel> snap = new ArrayList<>();
+        for(ClassPanel p : snapshot){
+            snap.add(p.clone());
+        }
+        return snap;
+    }
+
+    public static void restoreSnapshot(final ArrayList<ClassPanel> snapshot){
+        ArrayList<ClassPanel> list = new ArrayList<>();
+        for(ClassPanel p : snapshot){
+            list.add(p.clone());
+        }
+        classes = list;
     }
 
     public static void startGUIMenu() {
-        Controller.addSubscriber(GUIObserver);
+        Controller.addSubscriber(GUI.getInstance());
 
         guiWindow = new JFrame("UML Editor");
         guiWindow.getContentPane().setBackground(Color.BLUE);
@@ -524,12 +698,10 @@ public class GUI extends JFrame implements j.Observer {
         Controller.addMethod("test2", "pizza", 1, "pizzaret", ps2);
         Controller.addMethod("test2", "pizza2", 1, "pizzaret", ps2);
 
-        ClassPanel testClass = new ClassPanel(Controller.listAllClassDetails("test"),0,0);
+        ClassPanel testClass = new ClassPanel(Controller.listAllClassDetails("test"), 0, 0);
         ClassPanel testClass2 = new ClassPanel(Controller.listAllClassDetails("test2"), 600, 300);
         GUI.classes.add(testClass);
         GUI.classes.add(testClass2);
-
-
 
 
         while (!Main.cview) {
@@ -538,14 +710,14 @@ public class GUI extends JFrame implements j.Observer {
 
     }
 
-    public void handleDrag(final JPanel panel){
+    public void handleDrag(final JPanel panel) {
         final JPanel p = panel;
         panel.addMouseMotionListener(new MouseMotionAdapter() {
 
-           @Override
-           public void mouseDragged(MouseEvent me){
-               me.translatePoint(me.getComponent().getLocation().x, me.getComponent().getLocation().y);
-               p.setLocation(me.getX(), me.getY());
+            @Override
+            public void mouseDragged(MouseEvent me) {
+                me.translatePoint(me.getComponent().getLocation().x, me.getComponent().getLocation().y);
+                p.setLocation(me.getX(), me.getY());
             }
 
         });
@@ -569,8 +741,8 @@ public class GUI extends JFrame implements j.Observer {
 
         int x = 0;
 
-        for(String[][] c : classes) {
-            GUI.classes.add(new ClassPanel(c,x,0));
+        for (String[][] c : classes) {
+            GUI.classes.add(new ClassPanel(c, x, 0));
             x += 200;
         }
 
@@ -581,7 +753,7 @@ public class GUI extends JFrame implements j.Observer {
         //guiWindow.invalidate();
         //guiWindow.repaint();
 
-        guiWindow.setLayout(null);
+        //guiWindow.setLayout(null);
 
         //ShapeDrawing test;
 

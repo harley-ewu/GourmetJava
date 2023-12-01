@@ -457,7 +457,7 @@ public class CLI {
                     //The next part of the command is window
                     Main.gview = true;
                     GUI.startGUIMenu();
-                    Controller.updateGUI();
+                    Controller.updateGUI(Controller.FULL_REFRESH, null);
                     break;
 
                 case "undo":
