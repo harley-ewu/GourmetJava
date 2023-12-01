@@ -24,8 +24,13 @@ import static javax.swing.JOptionPane.YES_NO_OPTION;
 
 public class GUI extends JFrame implements j.Observer {
 
-    private static ArrayList<ClassPanel> classes = new ArrayList<>();
+    private static ArrayList<ClassPanel> classes;
     private final static Caretaker<ClassPanel> caretaker = new Caretaker<>();
+
+    static{
+        classes  = new ArrayList<>();
+        updateChange();
+    }
 
     public static class ClassPanel extends JPanel implements Cloneable {
         private final String name;
@@ -681,7 +686,7 @@ public class GUI extends JFrame implements j.Observer {
             }
         });
 
-
+/*
         Controller.addClass("test", 1);
         Controller.addField("test", "chicken", 1, "quack");
         Controller.addField("test", "chicken2", 1, "quack quack");
@@ -703,6 +708,8 @@ public class GUI extends JFrame implements j.Observer {
         GUI.classes.add(testClass);
         GUI.classes.add(testClass2);
 
+
+ */
 
         while (!Main.cview) {
             ;
