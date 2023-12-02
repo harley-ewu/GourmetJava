@@ -469,19 +469,6 @@ public class ModelDiagramTest {
         String classString = Arrays.toString(classes);
         // System.out.println(classString);
 
-        // Test Success
-        assertEquals("[testClass1, testClass2, testClass3]", classString);
-    }
-
-    @Test
-    public void testListClassesAndTypes(){
-//        // Objects for tesing listClassesAndTypes
-//        ModelDiagram.addClass("testClass1", 1);
-//        ModelDiagram.addClass("testClass2", 1);
-//        ModelDiagram.addClass("testClass3", 1);
-//        ModelDiagram.addClass("testClass4", 2);
-
-        // Turning listClassesAndTypes to an actual String to test
         String [][] classesAndTypesArray = ModelDiagram.listClassesAndTypes();
         StringBuilder sb = new StringBuilder();
 
@@ -490,9 +477,33 @@ public class ModelDiagramTest {
         }
 
         String twoDimArrayString = sb.toString();
-        System.out.println(twoDimArrayString);
+        System.out.println(twoDimArrayString);        
 
         // Test Success
+        assertEquals("[testClass1, testClass2, testClass3]", classString);
         assertEquals("[testClass1, CLASS][testClass2, CLASS][testClass3, CLASS]", twoDimArrayString);
     }
+
+//     @Test
+//     public void testListClassesAndTypes(){
+// //        // Objects for tesing listClassesAndTypes
+// //        ModelDiagram.addClass("testClass1", 1);
+// //        ModelDiagram.addClass("testClass2", 1);
+// //        ModelDiagram.addClass("testClass3", 1);
+// //        ModelDiagram.addClass("testClass4", 2);
+
+//         // Turning listClassesAndTypes to an actual String to test
+//         String [][] classesAndTypesArray = ModelDiagram.listClassesAndTypes();
+//         StringBuilder sb = new StringBuilder();
+
+//         for (String[] array: classesAndTypesArray){
+//             sb.append(Arrays.toString(array));
+//         }
+
+//         String twoDimArrayString = sb.toString();
+//         System.out.println(twoDimArrayString);
+
+//         // Test Success
+//         assertEquals("[testClass1, CLASS][testClass2, CLASS][testClass3, CLASS]", twoDimArrayString);
+//     }
 }
