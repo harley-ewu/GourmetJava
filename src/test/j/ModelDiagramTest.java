@@ -399,14 +399,17 @@ public class ModelDiagramTest {
         // Test adding a relationship with childClass as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship("testParent", null, "1"));
 
-        // Test adding a relationship with type as null
-        assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship("testParent", "testChild", null));
+        // Test adding a relationship with both child and parent as null
+        assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship(null, null, "1"));
 
         // Test adding a relationship with parentClass as an empty string
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("", "testChild", "1"));
 
         // Test adding a relationship with childClass as an empty string
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("testParent", "", "1"));
+
+        // Test adding a relationship iwth both child and parent as an empty string
+        assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("", "", "1"));
 
         // Test adding a relationship with type as an empty string
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("testParent", "testChild", ""));
