@@ -458,7 +458,7 @@ public class ModelDiagramTest {
         // Turing listClasses to an actual String to test
         String [] classes = ModelDiagram.listClasses();
         String classString = Arrays.toString(classes);
-        System.out.println(classString);
+        // System.out.println(classString);
 
         // Test Success
         assertEquals("[testClass, testClass2, testClass3]", classString);
