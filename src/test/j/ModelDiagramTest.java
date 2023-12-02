@@ -451,16 +451,25 @@ public class ModelDiagramTest {
     @Test
     public void testListClasses(){
         // Objects for successful test
-        ModelDiagram.addClass("testClass", 1);
+        ModelDiagram.addClass("testClass1", 1);
         ModelDiagram.addClass("testClass2", 1);
         ModelDiagram.addClass("testClass3", 1);
 
+        // Apparently ModelDiagram is not just an instance in each individual test method.
+        // So we will delete all the classes from before targetClass, testClass, testNew, testExists, newClass,
+
+        ModelDiagram.deleteClass("targetClass");
+        ModelDiagram.deleteClass("testClass");
+        ModelDiagram.deleteClass("testNew");
+        ModelDiagram.deleteClass("testExists");
+        ModelDiagram.deleteClass("newClass");
+        
         // Turing listClasses to an actual String to test
         String [] classes = ModelDiagram.listClasses();
         String classString = Arrays.toString(classes);
         // System.out.println(classString);
 
         // Test Success
-        assertEquals("[testClass, testClass2, testClass3]", classString);
+        assertEquals("[testClass1, testClass2, testClass3]", classString);
     }
 }
