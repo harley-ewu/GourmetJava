@@ -449,7 +449,7 @@ public class ModelDiagramTest {
     }
 
     @Test
-    public void testListClasses(){
+    public void testListClassesSuite(){
         // Objects for successful test
         ModelDiagram.addClass("testClass1", 1);
         ModelDiagram.addClass("testClass2", 1);
@@ -477,33 +477,22 @@ public class ModelDiagramTest {
         }
 
         String twoDimArrayString = sb.toString();
-        System.out.println(twoDimArrayString);        
+        System.out.println(twoDimArrayString);
+        
+        String [][] classDetails = ModelDiagram.listAllClassDetails("testClass1");
+        StringBuilder sb2 = new StringBuilder();
+
+        for (String[] array: classDetails){
+            sb2.append(Arrays.toString(array));
+        }
+
+        String twoDimArrayString2 = sb2.toString();
+        System.out.println(twoDimArrayString2);
 
         // Test Success
         assertEquals("[testClass1, testClass2, testClass3]", classString);
         assertEquals("[testClass1, CLASS][testClass2, CLASS][testClass3, CLASS]", twoDimArrayString);
+        assertEquals("[testClass1, CLASS][][][]", twoDimArrayString2);
     }
 
-//     @Test
-//     public void testListClassesAndTypes(){
-// //        // Objects for tesing listClassesAndTypes
-// //        ModelDiagram.addClass("testClass1", 1);
-// //        ModelDiagram.addClass("testClass2", 1);
-// //        ModelDiagram.addClass("testClass3", 1);
-// //        ModelDiagram.addClass("testClass4", 2);
-
-//         // Turning listClassesAndTypes to an actual String to test
-//         String [][] classesAndTypesArray = ModelDiagram.listClassesAndTypes();
-//         StringBuilder sb = new StringBuilder();
-
-//         for (String[] array: classesAndTypesArray){
-//             sb.append(Arrays.toString(array));
-//         }
-
-//         String twoDimArrayString = sb.toString();
-//         System.out.println(twoDimArrayString);
-
-//         // Test Success
-//         assertEquals("[testClass1, CLASS][testClass2, CLASS][testClass3, CLASS]", twoDimArrayString);
-//     }
 }
