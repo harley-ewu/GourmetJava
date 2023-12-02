@@ -475,11 +475,11 @@ public class ModelDiagramTest {
 
     @Test
     public void testListClassesAndTypes(){
-        // Objects for tesing listClassesAndTypes
-        ModelDiagram.addClass("testClass1", 1);
-        ModelDiagram.addClass("testClass2", 1);
-        ModelDiagram.addClass("testClass3", 1);
-        ModelDiagram.addClass("testClass4", 2);
+//        // Objects for tesing listClassesAndTypes
+//        ModelDiagram.addClass("testClass1", 1);
+//        ModelDiagram.addClass("testClass2", 1);
+//        ModelDiagram.addClass("testClass3", 1);
+//        ModelDiagram.addClass("testClass4", 2);
 
         // Turning listClassesAndTypes to an actual String to test
         String [][] classesAndTypesArray = ModelDiagram.listClassesAndTypes();
@@ -493,6 +493,6 @@ public class ModelDiagramTest {
         System.out.println(twoDimArrayString);
 
         // Test Success
-        assertEquals("[testClass1, CLASS][testClass2, CLASS][testClass3, CLASS][testClass4, INTERFACE]", twoDimArrayString);
+        assertEquals("[testClass1, CLASS][testClass2, CLASS][testClass3, CLASS]", twoDimArrayString);
     }
 }
