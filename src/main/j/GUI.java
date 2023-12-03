@@ -196,7 +196,7 @@ public class GUI extends JFrame implements j.Observer {
                 String className = "";
                 //Ensures a user enters a valid class name
                 while(className.equals("") || className.equals(null) || className.equals(" ")){
-                    className = JOptionPane.showInputDialog("What is the name of the class you want to add? ");
+                    className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
                 }
 
                 //Creates radio buttons for each class type option
