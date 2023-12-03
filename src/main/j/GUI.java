@@ -10,7 +10,7 @@ import java.awt.event.*;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import static javax.swing.JOptionPane.YES_NO_OPTION;
+import static javax.swing.JOptionPane.*;
 
 /**
  * This class has a lot of commented out lines of code in it as I've tried to work through things.
@@ -192,12 +192,15 @@ public class GUI extends JFrame implements j.Observer {
         addClass = new JMenuItem(new AbstractAction("Add Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //popup box asking the user to enter a string to use as the new class's name
-                String className = "";
+
+                String className = className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
+
                 //Ensures a user enters a valid class name
-                while(className.equals("") || className.equals(null) || className.equals(" ")){
-                    className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
-                }
+                //while(className.equals("") || className.equals(null)|| className.equals(" ")){
+                    //popup box asking the user to enter a string to use as the new class's name
+                   // className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
+                //}
+
 
                 //Creates radio buttons for each class type option
                 JRadioButton classButton = new JRadioButton("Class");
@@ -227,8 +230,8 @@ public class GUI extends JFrame implements j.Observer {
                 chooseType.add(annotationButton);
 
                 //Displays Type options, and centers the popup window on the main GUI screen
-                int result = JOptionPane.showConfirmDialog(guiWindow, chooseType, "Choose Class Type", JOptionPane.OK_CANCEL_OPTION);
-                if(result == JOptionPane.OK_OPTION) {
+                int typeChoice = JOptionPane.showConfirmDialog(guiWindow, chooseType, "Choose Class Type", JOptionPane.OK_CANCEL_OPTION);
+                if(typeChoice == JOptionPane.OK_OPTION) {
 
                     //Defaults class in order to make classType always initialized
                     String classType = classButton.getText();
@@ -263,7 +266,6 @@ public class GUI extends JFrame implements j.Observer {
                     Controller.addClass(className, typeToInt);
                     guiWindow.add(new ShapeDrawing());
                 }
-
             }
         });
 
@@ -274,9 +276,38 @@ public class GUI extends JFrame implements j.Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //popup box asks which class to delete
-                String className = JOptionPane.showInputDialog("What is the name of the class you want to delete? ");
-                //TODO - Popup prompt to make sure you want to delete the class
-                Controller.deleteClass(className);
+                //String className = JOptionPane.showInputDialog("What is the name of the class you want to delete? ");
+
+                //Get the list of existing classes
+                String[] classList = Controller.listClasses();
+
+                //Add a default option asking the user to pick a class
+                String[] classListWDefault = new String[classList.length + 1];
+                classListWDefault[0] = "Choose a class";
+                System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                //Creates a combo box with the list of classes
+                JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                boolean isAClassOption = false;
+
+                while(!isAClassOption){
+                    //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                    int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Which Class would you like to delete?",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                    String classToDelete = (String) classComboBox.getSelectedItem();
+
+                    if(chosenClass == JOptionPane.OK_OPTION && !classToDelete.equals("Choose a class")){
+                        Controller.deleteClass(classToDelete);
+                        isAClassOption = true;
+                    }
+                    else{
+                        if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                            break;
+                        }
+                    }
+                }
 
             }
         });
