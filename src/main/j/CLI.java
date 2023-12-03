@@ -162,12 +162,20 @@ public class CLI {
                             }*/
 
                             //Retrieves the status code for the method and displays results
-                            Controller.STATUS_CODES status = Controller.addClass(input[2], getClassTypeNumber(input[3]));
-                            if(status != Controller.STATUS_CODES.SUCCESS){
-                                System.out.println("Class " + input[2] + " " + status.toString());
-                            }else{
-                                System.out.println("Class " + input[2] + " added!");
+                            int classTypeNum =  getClassTypeNumber(input[3]);
+                            if (classTypeNum == -1) {
+                                System.out.println('"' + input[3] + '"' +  " is not a valid class type, please see help for valid types");
                             }
+                            else {
+                                Controller.STATUS_CODES status = Controller.addClass(input[2], classTypeNum);
+
+                                if (status != Controller.STATUS_CODES.SUCCESS){
+                                    System.out.println("Class " + input[2] + " " + status.toString());
+                                }else{
+                                    System.out.println("Class " + input[2] + " added!");
+                                }
+                            }
+
 
                             break;
                         }
@@ -192,11 +200,20 @@ public class CLI {
                             }*/
 
                             //Retrieves the status code for the method and displays results
-                            Controller.STATUS_CODES status = Controller.addMethod(input[2], input[3], getVisibilityNumber(input[4]), input[5], params);
-                            if(status != Controller.STATUS_CODES.SUCCESS){
-                                System.out.println("Method " + input[3] + " " + status.toString());
-                            }else{
-                                System.out.println("Method " + input[3] + " added to class " + input[2] + "!");
+                            int visibilityTypeNum = getVisibilityNumber(input[4]);
+                            if (visibilityTypeNum == -1) {
+                                System.out.println("'" + input[4] + "' is not a valid visibility type, please see help for valid types");
+                            }
+                            else {
+                                Controller.STATUS_CODES status = Controller.addMethod(input[2], input[3], visibilityTypeNum, input[5], params);
+                                if (status == Controller.STATUS_CODES.OBJ_NOT_FOUND) {
+                                    System.out.println("Class '" + input[2] + "' " + status.toString());
+                                }
+                                else if(status != Controller.STATUS_CODES.SUCCESS){
+                                    System.out.println("Method '" + input[3] + "' " + status.toString());
+                                }else{
+                                    System.out.println("Method " + input[3] + " added to class " + input[2] + "!");
+                                }
                             }
                             break;
                         }
@@ -215,15 +232,25 @@ public class CLI {
                                 System.out.println("Please enter a non-negative number");
                                 break;
                             }*/
+                            int visibilityTypeNum = getVisibilityNumber(input[4]);
+                            if (visibilityTypeNum == -1) {
+                                System.out.println("'" + input[4] + "' is not a valid visibility type, please see help for valid types");
+                            }
+                            else {
+                                Controller.STATUS_CODES status = Controller.addField(input[2], input[3], visibilityTypeNum, input[5]);
+                                if (status == Controller.STATUS_CODES.OBJ_NOT_FOUND) {
+                                    System.out.println("Class '" + input[2] + "' " + status.toString());
+                                }
+                                else if(status != Controller.STATUS_CODES.SUCCESS){
+                                    System.out.println("Field " + input[3] + " " + status.toString());
+                                }else{
+                                    System.out.println("Field " + input[3] + " added to class " + input[2] + "!");
+                                    CLI.printArrayOfStringList(Controller.listAllClassDetails(input[2]));
+                                }
+                            }
+
 
                             //Retrieves the status code for the method and displays results
-                            Controller.STATUS_CODES status = Controller.addField(input[2], input[3], CLI.getVisibilityNumber(input[4]), input[5]);
-                            if(status != Controller.STATUS_CODES.SUCCESS){
-                                System.out.println("Field " + input[3] + " " + status.toString());
-                            }else{
-                                System.out.println("Field " + input[3] + " added to class " + input[2] + "!");
-                            }
-                            CLI.printArrayOfStringList(Controller.listAllClassDetails(input[2]));
 
                             break;
                         }
@@ -234,14 +261,21 @@ public class CLI {
                                 break;
                             }
 
-
-
-                            //Retrieves the status code for the method and displays results
-                            Controller.STATUS_CODES status = Controller.addRelationship(input[4], input[2], getRelationshipTypeNumber(input[3]));
-                            if(status != Controller.STATUS_CODES.SUCCESS){
-                                System.out.println("Relationship " + status.toString());
-                            }else{
-                                System.out.println("Relationship between " + input[2] + " and " + input[4] + " created!");
+                            int relationshipTypeNum = getRelationshipTypeNumber(input[3]);
+                            if (relationshipTypeNum == -1) {
+                                System.out.println("'" + input[3] + "' is not a valid visibility type, please see help for valid types");
+                            }
+                            else {
+                                //Retrieves the status code for the method and displays results
+                                Controller.STATUS_CODES status = Controller.addRelationship(input[4], input[2], relationshipTypeNum);
+                                if (status == Controller.STATUS_CODES.OBJ_NOT_FOUND) {
+                                    System.out.println("One or both of the classes entered does not exist, try again with names of existing classes");
+                                }
+                                else if (status != Controller.STATUS_CODES.SUCCESS){
+                                    System.out.println("Relationship " + status.toString());
+                                }else{
+                                    System.out.println("Relationship between " + input[2] + " and " + input[4] + " created!");
+                                }
                             }
 
                             break;
@@ -254,7 +288,13 @@ public class CLI {
                             }
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.addParam(input[2], input[3], input[4]);
-                            if(status != Controller.STATUS_CODES.SUCCESS){
+                            if (status == Controller.STATUS_CODES.OBJ_NOT_FOUND) {
+                                System.out.println("Class '" + input[2] + "' not found, try again with a valid name of an existing class");
+                            }
+                            else if (status == Controller.STATUS_CODES.METHOD_NOT_FOUND) {
+                                System.out.println("Method '" + input[3] + "' " + status + ", try again with a valid name of an existing method");
+                            }
+                            else if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Parameter " + status.toString());
                             }else{
                                 System.out.println("Parameter " + input[4] + " created!");
@@ -282,7 +322,7 @@ public class CLI {
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.deleteClass(input[2]);
                             if(status != Controller.STATUS_CODES.SUCCESS){
-                                System.out.println("Class " + status.toString());
+                                System.out.println("Class '" + input[2] + "' does not exist");
                             }else{
                                 System.out.println("Class " + input[2] + " deleted!");
                             }
@@ -296,7 +336,13 @@ public class CLI {
                             }
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.deleteMethod(input[2], input[3]);
-                            if(status != Controller.STATUS_CODES.SUCCESS){
+                            if(status == Controller.STATUS_CODES.METHOD_NOT_FOUND){
+                                System.out.println("Method '" + input[3] +"' " + status.toString());
+                            }
+                            else if(status == Controller.STATUS_CODES.OBJ_NOT_FOUND){
+                                System.out.println("Class '" + input[2] + "' does not exist");
+                            }
+                            else if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Method " + status.toString());
                             }else{
                                 System.out.println("Method " + input[3] + " removed from class " + input[2] + "!");
@@ -311,8 +357,14 @@ public class CLI {
                             }
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.deleteField(input[2], input[3]);
-                            if(status != Controller.STATUS_CODES.SUCCESS){
-                                System.out.println("Field " + status.toString());
+                            if(status == Controller.STATUS_CODES.FIELD_NOT_FOUND){
+                                System.out.println("Field '" + input[3] +"' " + status.toString());
+                            }
+                            else if(status == Controller.STATUS_CODES.OBJ_NOT_FOUND){
+                                System.out.println("Class '" + input[2] + "' does not exist");
+                            }
+                            else if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Class '" + input[2] + "' " + status.toString());
                             }else{
                                 System.out.println("Field " + input[3] + " removed from class " + input[2] + "!");
                             }
@@ -326,7 +378,10 @@ public class CLI {
                             }
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.deleteRelationship(input[2], input[3]);
-                            if(status != Controller.STATUS_CODES.SUCCESS){
+                            if(status == Controller.STATUS_CODES.OBJ_NOT_FOUND){
+                                System.out.println("One or both classes don't exist, please ensure you enter existing class names");
+                            }
+                            else if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Relationship " + status.toString());
                             }else{
                                 System.out.println("Relationship between " + input[2] + " and " + input[3] + " deleted!");
@@ -340,8 +395,17 @@ public class CLI {
                             }
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.deleteParam(input[2], input[3], input[4]);
-                            if(status != Controller.STATUS_CODES.SUCCESS){
-                                System.out.println("Parameter " + status.toString());
+                            if(status == Controller.STATUS_CODES.PARAM_NOT_FOUND){
+                                System.out.println("Parameter '" + input[4] + "' does not exist in method '" + input[3] + "'");
+                            }
+                            else if(status == Controller.STATUS_CODES.METHOD_NOT_FOUND){
+                                System.out.println("Method '" + input[3] +"' " + status.toString());
+                            }
+                            else if(status == Controller.STATUS_CODES.OBJ_NOT_FOUND){
+                                System.out.println("Class '" + input[2] + "' " + status.toString());
+                            }
+                            else if(status != Controller.STATUS_CODES.SUCCESS){
+                                System.out.println("Class " + status.toString());
                             }else{
                                 System.out.println("Parameter " + input[4] + " deleted!");
                             }
@@ -392,7 +456,10 @@ public class CLI {
                             }
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.renameClass(input[2], input[3]);
-                            if(status != Controller.STATUS_CODES.SUCCESS){
+                            if(status == Controller.STATUS_CODES.OBJ_NOT_FOUND){
+                                System.out.println("Class '" + input[2] + "' " + status.toString());
+                            }
+                            else if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Class " + status.toString());
                             }else{
                                 System.out.println("Class " + input[2] +  " renamed to " + input[3]);
@@ -407,7 +474,13 @@ public class CLI {
                             }
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.renameMethod(input[2], input[3], input[4]);
-                            if(status != Controller.STATUS_CODES.SUCCESS){
+                            if(status == Controller.STATUS_CODES.METHOD_NOT_FOUND){
+                                System.out.println("Method '" + input[3] +"' " + status.toString());
+                            }
+                            else if(status == Controller.STATUS_CODES.OBJ_NOT_FOUND){
+                                System.out.println("Class '" + input[2] + "' " + status.toString());
+                            }
+                            else if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Method " + status.toString());
                             }else{
                                 System.out.println("Method " + input[3] + " renamed to " + input [4] +"from class " + input[2] + "!");
@@ -422,7 +495,13 @@ public class CLI {
                             }
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.renameField(input[2], input[3], input[4]);
-                            if(status != Controller.STATUS_CODES.SUCCESS){
+                            if(status == Controller.STATUS_CODES.FIELD_NOT_FOUND){
+                                System.out.println("Field '" + input[3] +"' " + status.toString());
+                            }
+                            else if(status == Controller.STATUS_CODES.OBJ_NOT_FOUND){
+                                System.out.println("Class '" + input[2] + "' " + status.toString());
+                            }
+                            else if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Field " + status.toString());
                             }else{
                                 System.out.println("Field " + input[3] + " renamed to " + input [4] +"from class " + input[2] + "!");
@@ -436,7 +515,16 @@ public class CLI {
                             }
                             //Retrieves the status code for the method and displays results
                             Controller.STATUS_CODES status = Controller.renameParam(input[2], input[3], input[4], input[5]);
-                            if(status != Controller.STATUS_CODES.SUCCESS){
+                            if(status == Controller.STATUS_CODES.PARAM_NOT_FOUND){
+                                System.out.println("Parameter '" + input[4] + "' does not exist in method '" + input[3] + "'");
+                            }
+                            else if(status == Controller.STATUS_CODES.METHOD_NOT_FOUND){
+                                System.out.println("Method '" + input[3] +"' " + status.toString());
+                            }
+                            else if(status == Controller.STATUS_CODES.OBJ_NOT_FOUND){
+                                System.out.println("Class '" + input[2] + "' " + status.toString());
+                            }
+                            else if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Parameter " + status.toString());
                             }else{
                                 System.out.println("Parameter " + input[4] + " renamed to " + input[5]);
