@@ -193,7 +193,11 @@ public class GUI extends JFrame implements j.Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //popup box asking the user to enter a string to use as the new class's name
-                String className = JOptionPane.showInputDialog("What is the name of the class you want to add? ");
+                String className = "";
+                //Ensures a user enters a valid class name
+                while(className.equals("") || className.equals(null) || className.equals(" ")){
+                    className = JOptionPane.showInputDialog("What is the name of the class you want to add? ");
+                }
 
                 //Creates radio buttons for each class type option
                 JRadioButton classButton = new JRadioButton("Class");
