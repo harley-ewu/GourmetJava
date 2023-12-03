@@ -362,12 +362,46 @@ public class GUI extends JFrame implements j.Observer {
 
             //Adds an attribute when the "Add attribute" button is clicked
             public void actionPerformed(ActionEvent e) {
-                String attType = JOptionPane.showInputDialog("Do you want to add a field or a method? \n" +
-                        "Type '1' for field, '2' for method");
-                int attTypeAsInt = 0;
+                //String attType = JOptionPane.showInputDialog("Do you want to add a field or a method? \n" +
+                       // "Type '1' for field, '2' for method");
 
-                try {
-                    attTypeAsInt = Integer.parseInt(attType);
+                // Create radio buttons for the field and method options.
+                JRadioButton fieldButton = new JRadioButton("Field");
+                JRadioButton methodButton = new JRadioButton("Method");
+
+                //Add them to a group so only one can be selected, then set "field" as the default option
+                ButtonGroup fieldOrMethod = new ButtonGroup();
+                fieldOrMethod.add(fieldButton);
+                fieldOrMethod.add(methodButton);
+                fieldButton.setSelected(true);
+
+                //Make a Jpanel to put the button group into
+                JPanel chooseAttType = new JPanel(new GridLayout(0,1));
+                chooseAttType.add(new JLabel("Do you want to add a field or a method?"));
+                chooseAttType.add(fieldButton);
+                chooseAttType.add(methodButton);
+
+                //Displays field and method options on an okay/cancel pane, and centers the popup window on the main GUI screen
+                int askAttType = JOptionPane.showConfirmDialog(guiWindow, chooseAttType, "Choose Attribute Type", JOptionPane.OK_CANCEL_OPTION);
+
+                if(askAttType == OK_OPTION){
+                    //Defaults class in order to make classType always initialized
+                    String choice = fieldButton.getText();
+
+                    //Change classType to give the correct text option from the selected button into the switch statement to be converted to an int
+                    if(fieldButton.isSelected()) choice = fieldButton.getText();
+                    if (methodButton.isSelected()) choice = methodButton.getText();
+
+                    int attTypeAsInt = 0;
+
+                    switch (choice){
+                        case "Field":
+                            attTypeAsInt = 1;
+                            break;
+                        case "Method":
+                            attTypeAsInt = 2;
+                            break;
+                    }
 
                     if (attTypeAsInt == 1) { //adding a field
                         String className = JOptionPane.showInputDialog("Enter the name of the class you are adding the field to");
@@ -414,16 +448,77 @@ public class GUI extends JFrame implements j.Observer {
                         Controller.addMethod(className, methodName, visibilityChoice, returnType, parameters);
 
                     } else {
-                        attType = JOptionPane.showInputDialog("Invalid Input, please try again. \n" +
-                                "Do you want to add a field or a method? \n" +
-                                "Type '1' for field, '2' for method");
+                        return;
+                        //attType = JOptionPane.showInputDialog("Invalid Input, please try again. \n" +
+                        // "Do you want to add a field or a method? \n" +
+                        //"Type '1' for field, '2' for method");
+                    }
+
+                }
+
+
+
+
+                 /*try {
+                    //attTypeAsInt = Integer.parseInt(attType);
+
+
+                    if (attTypeAsInt == 1) { //adding a field
+                        String className = JOptionPane.showInputDialog("Enter the name of the class you are adding the field to");
+                        //TODO use existentialcrisis here
+                        String fieldName = JOptionPane.showInputDialog("What would you like to call your field?");
+                        //Makes sure the visibility choice will pair with one of the 3 possible visibility options
+                        int visibilityChoice = 0;
+                        while (visibilityChoice < 1 || visibilityChoice > 3) {
+                            String visibilityChoiceAsString = JOptionPane.showInputDialog("Enter the visibility number below. \n" +
+                                    "1.) Private \n 2.) Public \n 3.) Protected");
+                            visibilityChoice = Integer.parseInt(visibilityChoiceAsString);
+                        }
+                        String dataType = JOptionPane.showInputDialog("What is the data type for this field? \n" +
+                                "Example: int, string");
+                        //creates field
+                        Controller.addField(className, fieldName, visibilityChoice, dataType);
+
+
+                    } else if (attTypeAsInt == 2) { //adding a method
+                        String className = JOptionPane.showInputDialog("Enter the name of the class you are adding this method to");
+                        String methodName = JOptionPane.showInputDialog("What is the name of this new method?");
+                        int visibilityChoice = 0;
+                        while (visibilityChoice < 1 || visibilityChoice > 3) {
+                            String visibilityChoiceAsString = JOptionPane.showInputDialog("Enter the visibility number below. \n" +
+                                    "1.) Private \n 2.) Public \n 3.) Protected");
+                            visibilityChoice = Integer.parseInt(visibilityChoiceAsString);
+                        }
+                        String returnType = JOptionPane.showInputDialog("What is the return type of this method?");
+                        String params = JOptionPane.showInputDialog("What parameters does this method have?");
+                        LinkedList<String> parameters = new LinkedList<>();
+                        parameters.add(params);
+                        //TODO come back to this when my brain turns back on and finish allowing more params to be added
+                       /*boolean moreParams = false;
+                       String areMoreParams = JOptionPane.showInputDialog("Does this method have any more parameters?\n" +
+                               "Please enter 'yes' to add more, or any key to continue.");
+                       if(areMoreParams.equalsIgnoreCase("yes")){
+                           moreParams = true;
+                       }
+                       while (moreParams = true){
+                           String params2 = JOptionPane.showInputDialog("What parameters does this method have?");
+                       } */
+
+                        //Creates a new method with the given inputs from the user
+                        /*Controller.addMethod(className, methodName, visibilityChoice, returnType, parameters);
+
+                    } else {
+                        return;
+                        //attType = JOptionPane.showInputDialog("Invalid Input, please try again. \n" +
+                              // "Do you want to add a field or a method? \n" +
+                                //"Type '1' for field, '2' for method");
                     }
                 } catch (Exception ex) {
-                    attType = JOptionPane.showInputDialog("Please enter either '1' or '2'. Please try again. \nDo you want to add a field or a method? \n" +
-                            "Type '1' for field, '2' for method");
+                   // attType = JOptionPane.showInputDialog("Please enter either '1' or '2'. Please try again. \nDo you want to add a field or a method? \n" +
+                     //       "Type '1' for field, '2' for method");
                     //System.out.println("");
                     return;
-                }
+                } */
 
                 //Pop up menu for buttons. This will be returned to if I have time to go back and make this prettier
                     /* JPopupMenu fieldOrMethod = new JPopupMenu("Which would you like to add?");
