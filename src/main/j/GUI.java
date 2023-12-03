@@ -724,7 +724,53 @@ public class GUI extends JFrame implements j.Observer {
         help = new JMenuItem(new AbstractAction("Help") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //System.exit(1);
+                String message1 = "Welcome to Gourmet Java's UML editor!\nTo use this program, you can use the buttons at the top of the window. Let's look at what each of the buttons do." +
+                        "\n\nRefresh: When clicked, it will ensure that the most recent class information is displayed in the window.\n If you added class information in the command line, this will put it here in the window." +
+                        "\n\nClass: When hovered over, this will offer you three options:" +
+                        "\n1. Add class: Allows you to add a class object to the UML." +
+                        "\n2. Delete Class: Allows you to delete a previously created class." +
+                        "\n3. Rename class: Allows you to rename a previously created class." +
+                        "\n\nAttribute: When hovered over, this will offer you three options:" +
+                        "\n1. Add attribute: Allows you to add a field or method to your previously created class." +
+                        "\n2. Delete attribute: Allows you to delete a field or method from your previously created class." +
+                        "\n3. Rename attribute: Allows you to rename a previously created field or method.";
+
+                int result1 = JOptionPane.showOptionDialog(null, message1,
+                        "Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{"Continue", "Cancel"}, "Continue");
+
+
+                if (result1 != JOptionPane.OK_OPTION) {
+                    return;
+                }
+
+
+                String message2 = "Parameters: When hovered over, this will offer you three options:" +
+                        "\n1. Add parameter: Allows you to add parameters to a previously created method." +
+                        "\n2. Delete parameter: Allows you to delete parameters from a previously created method." +
+                        "\n3. Rename parameter: Allows you to rename parameters from a previously created method." +
+                        "\n\nRelationship: When hovered over, this will offer you two options:" +
+                        "\n1. Add relationship: Allows you to add a relationship between two classes." +
+                        "\n2. Delete relationship: Allows you to delete a relationship between two classes.";
+
+                int result2 = JOptionPane.showOptionDialog(null, message2, "Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{"Continue", "Cancel"}, "Continue");
+
+
+                if (result2 != JOptionPane.OK_OPTION) {
+                    return;
+                }
+
+
+                String message3 = "Save/Load: When hovered over, this will offer you two options:" +
+                        "\n1. Save: Saves all current progress to a save file." +
+                        "\n2. Load: Loads all previously saved progress into the program from the save file." +
+                        "\n\nUndo/Redo: When hovered over, this will offer you two options:" +
+                        "\n1. Undo: Reverts to a version before an action was completed." +
+                        "\n2. Redo: Restores the reverted action." +
+                        "\n\nEach of these options will have dialog windows with prompts that can help you use them.\nGo ahead and give it a try! Happy editing!";
+
+                int result3 = JOptionPane.showOptionDialog(null, message3,"Help",JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{"OK"}, "OK");
+
+
             }
         });
         helpDropdown.add(help);
