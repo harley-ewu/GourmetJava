@@ -352,7 +352,6 @@ public class ModelDiagramTest {
 
         // Test Success
         assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.renameParam("testClass", "testMethod", "regParam", "testNewParam"));
-
     }
 
     @Test
@@ -386,7 +385,7 @@ public class ModelDiagramTest {
     }
 
     @Test
-    public void testAddRelationship(){
+    public void testRelationships(){
         // Object for successful test
         ModelDiagram.addClass("testParent", 1);
 
@@ -402,6 +401,9 @@ public class ModelDiagramTest {
         // Test adding a relationship with both child and parent as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship(null, null, "1"));
 
+        // Test with all values as null
+        assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship(null, null, null));
+
         // Test adding a relationship with parentClass as an empty string
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("", "testChild", "1"));
 
@@ -411,6 +413,9 @@ public class ModelDiagramTest {
         // Test adding a relationship iwth both child and parent as an empty string
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("", "", "1"));
 
+        // Test with all values as an empty string
+        assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("", "", ""));
+
         // Test adding a relationship with type as an empty string
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("testParent", "testChild", ""));
 
@@ -419,6 +424,17 @@ public class ModelDiagramTest {
 
         // Test Success
         assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.addRelationship("testParent", "testChild", "1"));
+
+        String [][] relationshipList = ModelDiagram.listRelationships();
+        StringBuilder sb = new StringBuilder();
+
+        for (String[] array: relationshipList){
+            sb.append(Arrays.toString(array));
+        }
+        String twoDimRelString = sb.toString();
+
+        // Test List Success
+        assertEquals("[][testChild aggregates testParent]", twoDimRelString);
     }
 
     @Test
@@ -466,11 +482,12 @@ public class ModelDiagramTest {
         ModelDiagram.deleteClass("testNew");
         ModelDiagram.deleteClass("testExists");
         ModelDiagram.deleteClass("newClass");
-        
+        ModelDiagram.deleteClass("testParent");
+        ModelDiagram.deleteClass("testChild");
+
         // Turing listClasses to an actual String to test
         String [] classes = ModelDiagram.listClasses();
         String classString = Arrays.toString(classes);
-        // System.out.println(classString);
 
         String [][] classesAndTypesArray = ModelDiagram.listClassesAndTypes();
         StringBuilder sb = new StringBuilder();
@@ -480,7 +497,6 @@ public class ModelDiagramTest {
         }
 
         String twoDimArrayString = sb.toString();
-        System.out.println(twoDimArrayString);
         
         String [][] classDetails = ModelDiagram.listAllClassDetails("testClass1");
         StringBuilder sb2 = new StringBuilder();
@@ -490,7 +506,6 @@ public class ModelDiagramTest {
         }
 
         String twoDimArrayString2 = sb2.toString();
-        System.out.println(twoDimArrayString2);
 
         // Test Success
         assertEquals("[testClass1, testClass2, testClass3]", classString);
