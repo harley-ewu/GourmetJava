@@ -202,10 +202,10 @@ public class GUI extends JFrame implements j.Observer {
     static JMenuBar mainMenu;
 
     // Creates individual dropdown menus for each category within the overall menu
-    static JMenu parameterDropdown, displayDropdown, classDropdown, attributeDropdown, relationshipDropdown, saveLoadDropdown, helpDropdown, CLIDropdown;
+    static JMenu parameterDropdown, displayDropdown, classDropdown, attributeDropdown, relationshipDropdown, saveLoadDropdown, helpDropdown, CLIDropdown, undoRedoDropdown;
 
     // Individual menu items/buttons under their individual category menus
-    static JMenuItem display, addClass, deleteClass, renameClass, addAtt, delAtt, renameAtt, addRelation, delRelation, save, load, help, addPar, delPar, renPar, openCLI;
+    static JMenuItem display, addClass, deleteClass, renameClass, addAtt, delAtt, renameAtt, addRelation, delRelation, save, load, help, addPar, delPar, renPar, openCLI, menuUndo, menuRedo;
 
 
     //creates a frame to be the main, base window to hold the entirety of the GUI
@@ -348,6 +348,16 @@ public class GUI extends JFrame implements j.Observer {
 
     }
 
+    //made these one liners to make it simpler to call undo/redo
+    public static void GUIUndo(){
+        restoreSnapshot(caretaker.undo());
+    }
+
+    public static void GUIRedo(){
+        restoreSnapshot(caretaker.redo());
+    }
+
+
     public void update(int reason, String msg) {
         switch (reason) {
             case Controller.ADD_CLASS:
@@ -375,10 +385,10 @@ public class GUI extends JFrame implements j.Observer {
                 updateChange();
                 break;
             case Controller.UNDO:
-                restoreSnapshot(caretaker.undo());
+                GUIUndo();
                 break;
             case Controller.REDO:
-                restoreSnapshot(caretaker.redo());
+                GUIRedo();
                 break;
             case Controller.FULL_REFRESH:
                 GUIFullRefresh();
@@ -395,6 +405,17 @@ public class GUI extends JFrame implements j.Observer {
 
         guiWindow = new JFrame("UML Editor");
         guiWindow.getContentPane().setBackground(Color.BLUE);
+        guiWindow.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyChar() == 'u'){
+                    GUIUndo();
+                }
+                else if (e.getKeyChar() == 'r'){
+                    GUIRedo();
+                }
+            }
+        });
         // create a menubar
         mainMenu = new JMenuBar();
 
@@ -406,7 +427,6 @@ public class GUI extends JFrame implements j.Observer {
             }
         });
         displayDropdown.add(display);
-
 
         //Adds a class and updates the display to show the new class in a box
         classDropdown = new JMenu("Class");
@@ -758,6 +778,23 @@ public class GUI extends JFrame implements j.Observer {
         });
         CLIDropdown.add(openCLI);
 
+        //Undo/Redo menu options
+        undoRedoDropdown = new JMenu("Undo/Redo");
+        menuUndo = new JMenuItem(new AbstractAction("Undo") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GUIUndo();
+            }
+        });
+        menuRedo = new JMenuItem(new AbstractAction("Redo") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GUIRedo();
+            }
+        });
+        undoRedoDropdown.add(menuUndo);
+        undoRedoDropdown.add(menuRedo);
+
         // add individual dropdown menus to menu bar
         mainMenu.add(displayDropdown);
         mainMenu.add(classDropdown);
@@ -765,7 +802,9 @@ public class GUI extends JFrame implements j.Observer {
         mainMenu.add(parameterDropdown);
         mainMenu.add(relationshipDropdown);
         mainMenu.add(saveLoadDropdown);
+        mainMenu.add(undoRedoDropdown);
         mainMenu.add(helpDropdown);
+
 
         // add menubar to our main GUI display frame
         guiWindow.setJMenuBar(mainMenu);
