@@ -33,7 +33,10 @@ public class Controller implements j.Observable {
         EMPTY_STRING("entered string is empty"),
         NULL_STRING("entered string is null"),
         UNDO_FAILED("failed to perform undo"),
+        FILE_NOT_FOUND("File does not exist"),
+        EMPTY_FILE("File specified is empty"),
         REDO_FAILED("failed to perform redo");
+
 
         private final String msg;
 
@@ -364,8 +367,8 @@ public class Controller implements j.Observable {
      *
      * @return true if it saved, false if there was an error
      */
-    public static boolean save() {
-        return ModelDiagram.save();
+    public static Controller.STATUS_CODES save(String fileName) {
+        return ModelDiagram.save(fileName);
     }
 
     /**
@@ -374,8 +377,8 @@ public class Controller implements j.Observable {
      *
      * @return true if it loaded, false if there was a problem
      */
-    public static boolean load() {
-        return ModelDiagram.load();
+    public static Controller.STATUS_CODES load(String fileName) {
+        return ModelDiagram.load(fileName);
     }
 
     // Allows the user to choose what Classbox item they want to see in detail
