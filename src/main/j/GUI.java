@@ -200,8 +200,10 @@ public class GUI extends JFrame implements j.Observer {
     }
 
     public static void restoreSnapshot(final Memento<ClassPanel> p) {
-        classes = Memento.restoreSnapshot(p);
-        redrawGUI();
+        if(p != null) {
+            classes = Memento.restoreSnapshot(p);
+            redrawGUI();
+        }
     }
 
     private static ClassPanel findClassPanel(final String name) {
