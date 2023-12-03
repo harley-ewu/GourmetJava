@@ -317,7 +317,6 @@ public class GUI extends JFrame implements j.Observer {
         renameClass = new JMenuItem(new AbstractAction("Rename Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //String oldName = JOptionPane.showInputDialog("What is the name of the class you want to rename? ");
 
                 //Get the list of existing classes
                 String[] classList = Controller.listClasses();
