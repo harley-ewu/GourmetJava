@@ -36,7 +36,7 @@ public class ModelDiagram {
      */
     public static Controller.STATUS_CODES updateChange(final int reason, final String msg) {
         try {
-            caretaker.updateChange(Memento.createSnapshot(createdClasses));
+            caretaker.addChange(Memento.createSnapshot(createdClasses));
         } catch (Exception ignored) {
             return Controller.STATUS_CODES.EXCEPTION;
         }

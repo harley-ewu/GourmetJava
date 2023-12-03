@@ -139,7 +139,7 @@ public class Caretaker<T extends gCloneable<T>> {
      * Adds a Memento object to the stack and updates the stack pointer and stack size accordingly
      * @param snapshot Memento Object to add to the stack
      */
-    public void updateChange(final Memento<T> snapshot) {
+    public void addChange(final Memento<T> snapshot) {
         if (snapshot == null)
             throw new IllegalArgumentException("null snapshot passed to Caretaker.updateChange");
 
@@ -150,6 +150,19 @@ public class Caretaker<T extends gCloneable<T>> {
             this.stack.set(stackPointer, snapshot);
         }
         this.stackSize = this.stackPointer + 1;
+    }
+
+
+    /**
+     * Replaces the Memento object on the top of the stack<br>
+     * This is mainly for GUI when boxes are moved, the moves should be preserved but they should not be added to the stack
+     * @param snapshot Memento Object that will take place of the object on the top of the stack
+     */
+    public void updateChange(final Memento<T> snapshot){
+        if (snapshot == null)
+            throw new IllegalArgumentException("null snapshot passed to Caretaker.updateChange");
+
+        this.stack.set(stackPointer, snapshot);
 
     }
 

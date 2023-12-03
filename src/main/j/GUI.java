@@ -129,6 +129,7 @@ public class GUI extends JFrame implements j.Observer {
                     //We only need to update the coordinates when the user is done moving the boxes
                     thisPanel.xDelta = thisPanel.getLocation().x;
                     thisPanel.yDelta = thisPanel.getLocation().y;
+                    caretaker.updateChange(Memento.createSnapshot(classes));
                     //updateChange();   //uncomment this if you want the undo/redo to undo the last box move
                 }
             });
@@ -196,7 +197,7 @@ public class GUI extends JFrame implements j.Observer {
     }
 
     public static void updateChange() {
-        caretaker.updateChange(Memento.createSnapshot(classes));
+        caretaker.addChange(Memento.createSnapshot(classes));
     }
 
     public static void restoreSnapshot(final Memento<ClassPanel> p) {
@@ -309,8 +310,10 @@ public class GUI extends JFrame implements j.Observer {
                 updateChange();
                 break;
             case Controller.ADD_RELATIONSHIP:
+                updateChange();
                 break;
             case Controller.DELETE_RELATIONSHIP:
+                updateChange();
                 break;
             case Controller.DELETE_CLASS:
                 GUIDeleteClass(msg);
