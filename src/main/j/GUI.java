@@ -31,25 +31,6 @@ public class GUI extends JFrame implements j.Observer {
         updateChange();
     }
 
-    public static class PanelRelationship {
-        private ClassPanel parent;
-        private ClassPanel child;
-
-        public PanelRelationship(final ClassPanel parent, final ClassPanel child) {
-            this.parent = parent;
-            this.child = child;
-        }
-
-        public ClassPanel getParent() {
-            return this.parent;
-        }
-
-        public ClassPanel getChild() {
-            return this.child;
-        }
-
-    }
-
     public static class ClassPanel extends JPanel implements GCloneable<ClassPanel>, Cloneable {
         private final String name;
 
@@ -71,8 +52,6 @@ public class GUI extends JFrame implements j.Observer {
 
         //to help make dragging smooth
         public MouseEvent pressed;
-
-        ArrayList<PanelRelationship> relationships = new ArrayList<>();
 
         public ClassPanel(final String[][] details, final int x, final int y) {
             super(new GridLayout(0, 1));
@@ -319,30 +298,12 @@ public class GUI extends JFrame implements j.Observer {
     }
 
     public static void GUIAddRelationship(final String classNames) {
-        /*
         //The names are passed in the format [parent name]\n[child name]
-        String[] names = classNames.split("\n");
-        if (names.length != 2)
-            return;
-
-        String parentName = names[0];
-        String childName = names[1];
-        ClassPanel parentPanel = findClassPanel(parentName);
-        ClassPanel childPanel = findClassPanel(childName);
-        if (parentPanel == null || childPanel == null)
-            return;
-
-        PanelRelationship relationship = new PanelRelationship(parentPanel, childPanel);
-
-        parentPanel.relationships.add(relationship);
-        childPanel.relationships.add(relationship);
-        redrawGUI();
-        */
     }
 
     //Classes are passed in as "parent" + "\n" + "child"
     public static void GUIDeleteRelationship(final String classes) {
-
+        //The names are passed in the format [parent name]\n[child name]
     }
 
     //made these one liners to make it simpler to call undo/redo
