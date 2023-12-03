@@ -706,13 +706,13 @@ public class GUI extends JFrame implements j.Observer {
         save = new JMenuItem(new AbstractAction("Save") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ModelDiagram.save();
+                ModelDiagram.save("SavedFile.json");
             }
         });
         load = new JMenuItem(new AbstractAction("Load") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ModelDiagram.load();
+                ModelDiagram.load("SavedFile.json");
             }
         });
         saveLoadDropdown.add(save);

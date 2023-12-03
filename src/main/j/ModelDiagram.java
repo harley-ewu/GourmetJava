@@ -599,17 +599,17 @@ public class ModelDiagram {
      *
      * @return true if it saved, false if there was an error
      */
-    public static boolean save() {
+    public static Controller.STATUS_CODES save(String fileName) {
         // If there is nothing to save return false
-        if (createdClasses.size() == 0) return false;
+        if (createdClasses.size() == 0) return Controller.STATUS_CODES.EMPTY_STRING;
         // Create a gson object that will take java objects and translate them to json
         Gson gson = new Gson();
         // Create a FileWriter that will write the converted Java to SavedFile.json
         FileWriter writer = null;
         try {
-            writer = new FileWriter("SavedFile.json");
+            writer = new FileWriter(fileName);
         } catch (IOException e) {
-            e.printStackTrace();
+            return Controller.STATUS_CODES.EXCEPTION;
         }
 
 
@@ -672,7 +672,7 @@ public class ModelDiagram {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return true;
+        return Controller.STATUS_CODES.SUCCESS;
     }
 
     /**
@@ -681,17 +681,17 @@ public class ModelDiagram {
      *
      * @return true if it loaded, false if there was a problem
      */
-    public static boolean load() {
+    public static Controller.STATUS_CODES load(String fileName) {
         // Create a File and add a scanner to it to read the data
-        File inputFile = new File("SavedFile.json");
+        File inputFile = new File(fileName);
         Scanner fileScanner = null;
         try {
             fileScanner = new Scanner(inputFile);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            return Controller.STATUS_CODES.FILE_NOT_FOUND;
         }
         if (!fileScanner.hasNextLine()) {
-            return false;
+            return Controller.STATUS_CODES.EMPTY_FILE;
         }
         // Delete current ClassBox's to avoid Stu loading more than once.
         createdClasses.clear();
@@ -712,7 +712,7 @@ public class ModelDiagram {
         try {
             fileScanner = new Scanner(inputFile);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            return Controller.STATUS_CODES.FILE_NOT_FOUND;
         }
 
         // Create the relationships between classes to finish restoring the save state
@@ -740,7 +740,7 @@ public class ModelDiagram {
         }
         fileScanner.close();
         Controller.updateGUI(Controller.FULL_REFRESH, null);
-        return true;
+        return Controller.STATUS_CODES.SUCCESS;
     }
 
     /**

@@ -106,11 +106,16 @@ public class CLI {
                 new AttributedString("rename parameter [class-name] [method-name] [old-parameter-name] [new-parameter-name]")
         );
 
+        List<AttributedString> saveDesc = Arrays.asList(new AttributedString("save [file-name]"));
+        List<AttributedString> loadDesc = Arrays.asList(new AttributedString("load [file-name]"));
+
         // This attaches the descriptions to the commands
         tailTips.put("add", new CmdDesc(addDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
         tailTips.put("delete", new CmdDesc(deleteDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
         tailTips.put("list", new CmdDesc(listDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
         tailTips.put("rename", new CmdDesc(renameDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+        tailTips.put("save", new CmdDesc(saveDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
+        tailTips.put("load", new CmdDesc(loadDesc, ArgDesc.doArgNames(Arrays.asList("")), widgetOpts));
 
         // Create tailtip widgets that uses description window size 5 and
         // does not display suggestions after the cursor
@@ -446,12 +451,19 @@ public class CLI {
                     break;
                 case "save":
                     //The next part of the command is save
-                    CLI.save();
+                    if (input.length != 2) {
+                        System.out.println("Command is an invalid length. Please try again");
+                        break;
+                    }
+                    CLI.save(input[1]);
                     break;
                 case "load":
+                    if (input.length != 2) {
+                        System.out.println("Command is an invalid length. Please try again");
+                        break;
+                    }
                     //The next part of the command is load
-
-                    CLI.load();
+                    CLI.load(input[1]);
                     break;
                 case "window":
                     //The next part of the command is window
@@ -477,7 +489,9 @@ public class CLI {
                         System.out.println("Would you like to save first?");
                         System.out.print("yes/no: ");
                         if (kb.nextLine().equalsIgnoreCase("yes")) {
-                            CLI.save();
+                            System.out.println("What is the name of the file you would like to overwrite / create?");
+                            System.out.print("Filename: ");
+                            CLI.save(kb.nextLine());
                         }
                         System.out.println("Program Closed! Bye!");
                         cont = false;
@@ -697,18 +711,28 @@ public class CLI {
     }
 
 
-    public static void save() {
-        if (Controller.save()) {
-            System.out.println("Your progress has been saved!");
-        } else
+    public static void save(String fileName) {
+        if (Controller.getCreatedClassesSize() == 0) {
             System.out.println("Nothing to save");
+        }
+        else if (Controller.save(fileName) == Controller.STATUS_CODES.SUCCESS) {
+            System.out.println("Your progress has been saved!");
+        }
+        else if (Controller.save(fileName) == Controller.STATUS_CODES.EXCEPTION) {
+            System.out.println("Save name specified is invalid");
+        }
     }
 
-    public static void load() {
-        if (Controller.load())
+    public static void load(String fileName) {
+        if (Controller.load(fileName) == Controller.STATUS_CODES.SUCCESS) {
             System.out.println("Your previous save has been loaded!");
-        else
-            System.out.println("There is no save to load.");
+        }
+        else if (Controller.load(fileName) == Controller.STATUS_CODES.FILE_NOT_FOUND) {
+            System.out.println(Controller.STATUS_CODES.FILE_NOT_FOUND);
+        }
+        else if (Controller.load(fileName) == Controller.STATUS_CODES.EMPTY_FILE) {
+            System.out.println(Controller.STATUS_CODES.EMPTY_FILE);
+        }
     }
 
     public static boolean readInt(final String msg) {
