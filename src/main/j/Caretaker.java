@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Keeps a list of the most recent changes, for undo/redo<br>
  * A more technical explanation is available in the source code
  */
-public class Caretaker<T> {
+public class Caretaker<T extends gCloneable<T>> {
 
     /**
      * a tweaked full ascending stack that preserves the elements that are "popped" off

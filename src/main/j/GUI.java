@@ -32,7 +32,7 @@ public class GUI extends JFrame implements j.Observer {
         updateChange();
     }
 
-    public static class ClassPanel extends JPanel implements Cloneable {
+    public static class ClassPanel extends JPanel implements gCloneable<ClassPanel>, Cloneable {
         private final String name;
 
         private final String type;
@@ -112,6 +112,7 @@ public class GUI extends JFrame implements j.Observer {
             if (!isClass)
                 this.height += this.heightScale;
             this.setBounds(this.xDelta, this.yDelta, this.width, this.height);
+            this.setLocation(this.xDelta,this.yDelta);
             this.setBorder(BorderFactory.createLineBorder(Color.black));
 
             //Add the mouse event handlers
@@ -147,16 +148,6 @@ public class GUI extends JFrame implements j.Observer {
             this(details, 0, 0);
         }
 
-        private ClassPanel(final ClassPanel panel) {
-            this.name = panel.name;
-            this.type = panel.type;
-            this.yDelta = panel.yDelta;
-            this.xDelta = panel.xDelta;
-            this.classFields = panel.classFields;
-            this.classMethods = panel.classMethods;
-            this.heightScale = panel.heightScale;
-        }
-
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -173,11 +164,12 @@ public class GUI extends JFrame implements j.Observer {
 
         @Override
         public ClassPanel clone() {
-            try {
-                return (new ClassPanel((ClassPanel) super.clone()));
-            } catch (Exception ignored) {
-                return null;
-            }
+            String[][] details = new String[3][2];
+            details[Controller.DETAILS_NAME_TYPE][0] = this.name;
+            details[Controller.DETAILS_NAME_TYPE][1] = this.type;
+            details[Controller.DETAILS_METHODS] = this.classMethods;
+            details[Controller.DETAILS_FIELDS] = this.classFields;
+            return new ClassPanel(details, this.xDelta, this.yDelta);
         }
     }
 
@@ -200,6 +192,15 @@ public class GUI extends JFrame implements j.Observer {
             return new GUI();
 
         return guiObserver;
+    }
+
+    public static void updateChange() {
+        caretaker.updateChange(Memento.createSnapshot(classes));
+    }
+
+    public static void restoreSnapshot(final Memento<ClassPanel> p) {
+        classes = Memento.restoreSnapshot(p);
+        redrawGUI();
     }
 
     private ClassPanel findClassPanel(final String name) {
@@ -286,6 +287,12 @@ public class GUI extends JFrame implements j.Observer {
             drawClassPanel(c);
     }
 
+    public static void drawClassPanel(final ClassPanel c) {
+        guiWindow.getContentPane().add(c);
+        guiWindow.getContentPane().revalidate();
+        guiWindow.getContentPane().repaint();
+    }
+
     public void update(int reason, String msg) {
         switch (reason) {
             case Controller.ADD_CLASS:
@@ -309,12 +316,10 @@ public class GUI extends JFrame implements j.Observer {
                 updateChange();
                 break;
             case Controller.UNDO:
-                restoreSnapshot(caretaker.undo().restore());
-                redrawGUI();
+                restoreSnapshot(caretaker.undo());
                 break;
             case Controller.REDO:
-                restoreSnapshot(caretaker.redo().restore());
-                redrawGUI();
+                restoreSnapshot(caretaker.redo());
                 break;
             case Controller.FULL_REFRESH:
                 GUIFullRefresh();
@@ -324,28 +329,6 @@ public class GUI extends JFrame implements j.Observer {
                 break;
         }
 
-    }
-
-    public static void updateChange() {
-        ArrayList<ClassPanel> snapList = createSnapshot(classes);
-        j.Memento<ClassPanel> snapshot = new Memento<>(snapList);
-        caretaker.updateChange(snapshot);
-    }
-
-    public static ArrayList<ClassPanel> createSnapshot(final ArrayList<ClassPanel> snapshot) {
-        ArrayList<ClassPanel> snap = new ArrayList<>();
-        for (ClassPanel p : snapshot) {
-            snap.add(p.clone());
-        }
-        return snap;
-    }
-
-    public static void restoreSnapshot(final ArrayList<ClassPanel> snapshot) {
-        ArrayList<ClassPanel> list = new ArrayList<>();
-        for (ClassPanel p : snapshot) {
-            list.add(p.clone());
-        }
-        classes = list;
     }
 
     public static void startGUIMenu() {
@@ -374,7 +357,7 @@ public class GUI extends JFrame implements j.Observer {
                 //popup box asking the user to enter a string to use as the new class's name
                 String className = "";
                 //Ensures a user enters a valid class name
-                while(className.equals("") || className.equals(null) || className.equals(" ")){
+                while (className.equals("") || className.equals(null) || className.equals(" ")) {
                     className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
                 }
 
@@ -397,7 +380,7 @@ public class GUI extends JFrame implements j.Observer {
                 classButton.setSelected(true);
 
                 //Create a JPanel and add the button group to it, aligned vertically
-                JPanel chooseType = new JPanel(new GridLayout(0,1));
+                JPanel chooseType = new JPanel(new GridLayout(0, 1));
                 chooseType.add(new JLabel("Please Choose a Type:"));
                 chooseType.add(classButton);
                 chooseType.add(interfaceButton);
@@ -407,21 +390,21 @@ public class GUI extends JFrame implements j.Observer {
 
                 //Displays Type options, and centers the popup window on the main GUI screen
                 int result = JOptionPane.showConfirmDialog(guiWindow, chooseType, "Choose Class Type", JOptionPane.OK_CANCEL_OPTION);
-                if(result == JOptionPane.OK_OPTION) {
+                if (result == JOptionPane.OK_OPTION) {
 
                     //Defaults class in order to make classType always initialized
                     String classType = classButton.getText();
 
                     //Change classType to give the correct text option from the selected button into the switch statement to be converted to an int
-                    if(classButton.isSelected()) classType = classButton.getText();
-                    if(interfaceButton.isSelected()) classType = interfaceButton.getText();
-                    if(enumButton.isSelected()) classType =  enumButton.getText();
-                    if(recordButton.isSelected()) classType =  recordButton.getText();
-                    if(annotationButton.isSelected()) classType = annotationButton.getText();
+                    if (classButton.isSelected()) classType = classButton.getText();
+                    if (interfaceButton.isSelected()) classType = interfaceButton.getText();
+                    if (enumButton.isSelected()) classType = enumButton.getText();
+                    if (recordButton.isSelected()) classType = recordButton.getText();
+                    if (annotationButton.isSelected()) classType = annotationButton.getText();
                     //get int that corresponds to the enum type
                     int typeToInt = 0;
                     //Convert chosen button's string to an int to be passed into the addClass method
-                    switch (classType){
+                    switch (classType) {
                         case "Class":
                             typeToInt = 1;
                             break;
@@ -445,7 +428,6 @@ public class GUI extends JFrame implements j.Observer {
 
             }
         });
-
 
 
         //Deletes a class and removes it from the display
@@ -795,14 +777,6 @@ public class GUI extends JFrame implements j.Observer {
 
     }
 
-
-
-    public static void drawClassPanel(final ClassPanel c) {
-        guiWindow.getContentPane().add(c);
-        guiWindow.getContentPane().revalidate();
-        guiWindow.getContentPane().repaint();
-    }
-
     public static void displayGUI() {
         //SwingUtilities.updateComponentTreeUI(guiWindow);
         //guiWindow.add(new ShapeDrawing());
@@ -824,7 +798,7 @@ public class GUI extends JFrame implements j.Observer {
 
     }
 
-    //Start of absolute mess of code
+//Start of absolute mess of code
 
     public static class MyDraggableComponent
             extends JComponent {
