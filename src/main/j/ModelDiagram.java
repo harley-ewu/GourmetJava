@@ -17,6 +17,7 @@ public class ModelDiagram {
 
 
     private static ArrayList<ClassBox> createdClasses;
+    private final static Caretaker<ClassBox> caretaker = new Caretaker<>();
 
     /*
         Necessary so that we always have an empty list of classes to undo to
@@ -24,7 +25,7 @@ public class ModelDiagram {
      */
     static {
         createdClasses = new ArrayList<>();
-        updateChange();
+        updateChange(Controller.FULL_REFRESH, null);
     }
 
 
@@ -33,14 +34,13 @@ public class ModelDiagram {
      *
      * @return STATUS_CODES.EXCEPTION if there was an error when creating the update, or SUCCESS otherwise
      */
-    public static Controller.STATUS_CODES updateChange() {
+    public static Controller.STATUS_CODES updateChange(final int reason, final String msg) {
         try {
-            Memento snapshot = new Memento(createdClasses);
-            Caretaker.getInstance().updateChange(snapshot);
+            caretaker.addChange(Memento.createSnapshot(createdClasses));
         } catch (Exception ignored) {
             return Controller.STATUS_CODES.EXCEPTION;
         }
-        Controller.updateGUI();
+        Controller.updateGUI(reason, msg);
         return Controller.STATUS_CODES.SUCCESS;
     }
 
@@ -52,11 +52,11 @@ public class ModelDiagram {
      */
     public static Controller.STATUS_CODES redo() {
         try {
-            Caretaker.getInstance().redo().restore();
+            createdClasses = Memento.restoreSnapshot(caretaker.redo());
         } catch (Exception ignored) {
             return Controller.STATUS_CODES.REDO_FAILED;
         }
-        Controller.updateGUI();
+        Controller.updateGUI(Controller.REDO, null);
         return Controller.STATUS_CODES.SUCCESS;
     }
 
@@ -69,43 +69,14 @@ public class ModelDiagram {
      */
     public static Controller.STATUS_CODES undo() {
         try {
-            Caretaker.getInstance().undo().restore();
+            createdClasses = Memento.restoreSnapshot(caretaker.undo());
         } catch (Exception ignored) {
             return Controller.STATUS_CODES.UNDO_FAILED;
         }
-        Controller.updateGUI();
+        Controller.updateGUI(Controller.UNDO, null);
         return Controller.STATUS_CODES.SUCCESS;
     }
 
-    /**
-     * Class that stores a list of ClassBox objects, used with Caretaker for undo/redo
-     */
-    public static class Memento {
-        private final ArrayList<ClassBox> snap;
-
-        /**
-         * Creates a Memento Object using the createdClasses list
-         *
-         * @param snapshot the createdClasses list (this should always be ModelDiagram.createdClasses)
-         */
-        public Memento(final ArrayList<ClassBox> snapshot) {
-            this.snap = new ArrayList<>();
-            for (ClassBox classBox : snapshot) {
-                this.snap.add(classBox.clone());
-            }
-        }
-
-        /**
-         * Creates a new list using a Memento object's object, then it to ModelDiagram.createdClasses
-         */
-        public void restore() {
-            ArrayList<ClassBox> list = new ArrayList<>();
-            for (ClassBox cb : this.snap) {
-                list.add(cb.clone());
-            }
-            createdClasses = list;
-        }
-    }
 
     /**
      * Searches the list of created classes for a ClassBox with the given name
@@ -162,7 +133,7 @@ public class ModelDiagram {
             return Controller.STATUS_CODES.EXCEPTION;
         }
 
-        return updateChange();
+        return updateChange(Controller.ADD_CLASS, name);
     }
 
     /**
@@ -182,7 +153,7 @@ public class ModelDiagram {
         if (targetBox == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
 
         createdClasses.remove(targetBox);
-        return updateChange();
+        return updateChange(Controller.DELETE_CLASS, name);
     }
 
     /**
@@ -212,7 +183,7 @@ public class ModelDiagram {
 
         try {
             target.addMethod(name, view, returnType, params);
-            return updateChange();
+            return updateChange(Controller.UPDATE_ATTRIBUTE, className);
         } catch (Exception e) {
             return Controller.STATUS_CODES.EXCEPTION;
         }
@@ -242,7 +213,7 @@ public class ModelDiagram {
         try {
             Controller.STATUS_CODES i = target.addField(name, view, type);
             if (i == Controller.STATUS_CODES.SUCCESS) {
-                return updateChange();
+                return updateChange(Controller.UPDATE_ATTRIBUTE, className);
             } else {
                 return i;
             }
@@ -272,7 +243,7 @@ public class ModelDiagram {
         if (status != Controller.STATUS_CODES.SUCCESS)
             return status;
 
-        return updateChange();
+        return updateChange(Controller.UPDATE_ATTRIBUTE, className);
     }
 
     /**
@@ -294,7 +265,7 @@ public class ModelDiagram {
         if (status != Controller.STATUS_CODES.SUCCESS)
             return status;
 
-        return updateChange();
+        return updateChange(Controller.UPDATE_ATTRIBUTE, className);
     }
 
     /**
@@ -316,7 +287,7 @@ public class ModelDiagram {
         if (status != Controller.STATUS_CODES.SUCCESS)
             return status;
 
-        return updateChange();
+        return updateChange(Controller.UPDATE_ATTRIBUTE, className);
     }
 
     /**
@@ -340,7 +311,7 @@ public class ModelDiagram {
         if (status != Controller.STATUS_CODES.SUCCESS)
             return status;
 
-        return updateChange();
+        return updateChange(Controller.UPDATE_ATTRIBUTE, className);
     }
 
     /**
@@ -365,7 +336,7 @@ public class ModelDiagram {
         if (status != Controller.STATUS_CODES.SUCCESS)
             return status;
 
-        return updateChange();
+        return updateChange(Controller.UPDATE_ATTRIBUTE, className);
     }
 
     /**
@@ -390,7 +361,7 @@ public class ModelDiagram {
             if (status != Controller.STATUS_CODES.SUCCESS)
                 return status;
 
-            return updateChange();
+            return updateChange(Controller.UPDATE_ATTRIBUTE, className);
         } catch (Exception e) {
             return Controller.STATUS_CODES.EXCEPTION;
         }
@@ -423,7 +394,7 @@ public class ModelDiagram {
             if (status != Controller.STATUS_CODES.SUCCESS)
                 return status;
 
-            return updateChange();
+            return updateChange(Controller.UPDATE_ATTRIBUTE, className);
         } catch (Exception e) {
             return Controller.STATUS_CODES.EXCEPTION;
         }
@@ -487,7 +458,7 @@ public class ModelDiagram {
 
     public static String[][][] listEveryClassAndAllDetails() {
         String[][][] list = new String[createdClasses.size()][][];
-        for(int i = 0; i < createdClasses.size(); ++i){
+        for (int i = 0; i < createdClasses.size(); ++i) {
             list[i] = listAllClassDetails(createdClasses.get(i).getName());
         }
         return list;
@@ -512,7 +483,7 @@ public class ModelDiagram {
         if (originalBox == null) return Controller.STATUS_CODES.OBJ_NOT_FOUND;
 
         originalBox.rename(newName);
-        return updateChange();
+        return updateChange(Controller.RENAME_CLASS, originalName + "\n" + newName);
     }
 
     /**
@@ -559,7 +530,7 @@ public class ModelDiagram {
         if (status != Controller.STATUS_CODES.SUCCESS)
             return status;
 
-        return updateChange();
+        return updateChange(Controller.ADD_RELATIONSHIP, parentClass + "\n" + childClass);
     }
 
     /**
@@ -582,7 +553,7 @@ public class ModelDiagram {
             Controller.STATUS_CODES status = ClassBox.deleteRelationship(parent, child);
             if (status != Controller.STATUS_CODES.SUCCESS)
                 return status;
-            return updateChange();
+            return updateChange(Controller.DELETE_RELATIONSHIP, parent.getName() + "\n" + child.getName());
         } catch (Exception e) {
             return Controller.STATUS_CODES.EXCEPTION;
         }
@@ -768,7 +739,7 @@ public class ModelDiagram {
             }
         }
         fileScanner.close();
-        Controller.updateGUI();
+        Controller.updateGUI(Controller.FULL_REFRESH, null);
         return true;
     }
 

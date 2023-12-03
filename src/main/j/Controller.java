@@ -14,13 +14,13 @@ public class Controller implements j.Observable {
         observers.add(observer);
     }
 
-    public void notifyObservers() {
+    public void notifyObservers(final int reason, final String msg) {
         for (Observer o : Controller.observers)
-            o.update();
+            o.update(reason, msg);
     }
 
-    public static void updateGUI() {
-        ControllerObservable.notifyObservers();
+    public static void updateGUI(final int reason, final String msg) {
+        ControllerObservable.notifyObservers(reason, msg);
     }
 
     public enum STATUS_CODES {
@@ -49,6 +49,16 @@ public class Controller implements j.Observable {
             return this.msg;
         }
     }
+
+    public final static int ADD_CLASS = 0,
+            RENAME_CLASS = 1,
+            ADD_RELATIONSHIP = 2,
+            DELETE_RELATIONSHIP = 3,
+            DELETE_CLASS = 4,
+            UPDATE_ATTRIBUTE = 5,
+            UNDO = 6,
+            REDO = 7,
+            FULL_REFRESH = 8;
 
     private Controller() {
     }
