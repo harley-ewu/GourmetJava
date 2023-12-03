@@ -275,6 +275,7 @@ public class GUI extends JFrame implements j.Observer {
         deleteClass = new JMenuItem(new AbstractAction("Delete Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //Adding a comment to try to fix things again
                 //popup box asks which class to delete
                 //String className = JOptionPane.showInputDialog("What is the name of the class you want to delete? ");
 
