@@ -768,7 +768,7 @@ public class GUI extends JFrame implements j.Observer {
                         "\n2. Redo: Restores the reverted action." +
                         "\n\nEach of these options will have dialog windows with prompts that can help you use them.\nGo ahead and give it a try! Happy editing!";
 
-                int result3 = JOptionPane.showOptionDialog(null, message3,"Help",JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{"OK"}, "OK");
+              JOptionPane.showOptionDialog(null, message3,"Help",JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{"OK"}, "OK");
 
 
             }
