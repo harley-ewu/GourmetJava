@@ -191,7 +191,7 @@ public class GUI extends JFrame implements j.Observer {
 
     public static GUI getInstance() {
         if (guiObserver == null)
-            return new GUI();
+            guiObserver = new GUI();
 
         return guiObserver;
     }
@@ -740,120 +740,11 @@ public class GUI extends JFrame implements j.Observer {
             }
         });
 
-/*
-        Controller.addClass("test", 1);
-        Controller.addField("test", "chicken", 1, "quack");
-        Controller.addField("test", "chicken2", 1, "quack quack");
-        LinkedList<String> ps = new LinkedList<>();
-        ps.add("p1");
-        ps.add("p2");
-        Controller.addMethod("test", "pizza", 1, "pizzaret", ps);
-
-        Controller.addClass("test2", 2);
-        Controller.addField("test2", "chicken", 1, "wee snaw");
-        LinkedList<String> ps2 = new LinkedList<>();
-        ps2.add("p1");
-        ps2.add("p2");
-        Controller.addMethod("test2", "pizza", 1, "pizzaret", ps2);
-        Controller.addMethod("test2", "pizza2", 1, "pizzaret", ps2);
-
-        ClassPanel testClass = new ClassPanel(Controller.listAllClassDetails("test"), 0, 0);
-        ClassPanel testClass2 = new ClassPanel(Controller.listAllClassDetails("test2"), 600, 300);
-        GUI.classes.add(testClass);
-        GUI.classes.add(testClass2);
-
-
- */
-
         while (!Main.cview) {
-            ;
+
         }
 
     }
-
-    public static void displayGUI() {
-        guiWindow.getContentPane().removeAll();
-        String[][][] classes = Controller.listEveryClassAndAllDetails();
-        GUI.classes.clear();
-
-        int x = 0;
-
-        for (String[][] c : classes) {
-            GUI.classes.add(new ClassPanel(c, x, 0));
-            x += 200;
-        }
-
-        for (ClassPanel c : GUI.classes)
-            drawClassPanel(c);
-
-    }
-
-//Start of absolute mess of code
-
-    public static class MyDraggableComponent
-            extends JComponent {
-
-        private volatile int screenX = 0;
-        private volatile int screenY = 0;
-        private volatile int myX = 0;
-        private volatile int myY = 0;
-
-
-        public MyDraggableComponent() {
-            super();
-            //this.setPreferredSize(new Dimension(100,300));
-            setBorder(new LineBorder(Color.BLUE, 3));
-            setBackground(Color.WHITE);
-            setBounds(0, 0, 100, 100);
-            setOpaque(false);
-
-            addMouseListener(new MouseListener() {
-
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                }
-
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    screenX = e.getXOnScreen();
-                    screenY = e.getYOnScreen();
-
-                    myX = getX();
-                    myY = getY();
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                }
-
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                }
-
-            });
-            addMouseMotionListener(new MouseMotionListener() {
-
-                @Override
-                public void mouseDragged(MouseEvent e) {
-                    int deltaX = e.getXOnScreen() - screenX;
-                    int deltaY = e.getYOnScreen() - screenY;
-
-                    setLocation(myX + deltaX, myY + deltaY);
-                }
-
-                @Override
-                public void mouseMoved(MouseEvent e) {
-                }
-
-            });
-        }
-
-    }
-
 
     public static class ShapeDrawing extends JComponent {
         //Start of blobs
@@ -913,9 +804,6 @@ public class GUI extends JFrame implements j.Observer {
             });
 
         }
-
-        //Made to pass up a graphic to the for loop I tried in displayGUI
-        //Graphics2D graphicy;
 
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
