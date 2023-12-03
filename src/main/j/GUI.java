@@ -317,9 +317,39 @@ public class GUI extends JFrame implements j.Observer {
         renameClass = new JMenuItem(new AbstractAction("Rename Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String oldName = JOptionPane.showInputDialog("What is the name of the class you want to rename? ");
-                String newName = JOptionPane.showInputDialog("What would you like to rename this class to? ");
-                Controller.renameClass(oldName, newName);
+                //String oldName = JOptionPane.showInputDialog("What is the name of the class you want to rename? ");
+
+                //Get the list of existing classes
+                String[] classList = Controller.listClasses();
+
+                //Add a default option asking the user to pick a class
+                String[] classListWDefault = new String[classList.length + 1];
+                classListWDefault[0] = "Choose a class";
+                System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                //Creates a combo box with the list of classes
+                JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                boolean isAClassOption = false;
+
+                while(!isAClassOption){
+                    //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                    int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Which Class would you like to rename?",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                    String oldName = (String) classComboBox.getSelectedItem();
+
+                    if(chosenClass == JOptionPane.OK_OPTION && !oldName.equals("Choose a class")){
+                        String newName = JOptionPane.showInputDialog(guiWindow, "What would you like to rename this class to? ");
+                        Controller.renameClass(oldName, newName);
+                        isAClassOption = true;
+                    }
+                    else{
+                        if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                            break;
+                        }
+                    }
+                }
 
             }
         });
