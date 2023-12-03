@@ -821,8 +821,10 @@ public class GUI extends JFrame implements j.Observer {
         for (ClassPanel c : GUI.classes)
             drawClassPanel(c);
 
+
     }
 
+    //Start of absolute mess of code
 
     public static class MyDraggableComponent
             extends JComponent {
