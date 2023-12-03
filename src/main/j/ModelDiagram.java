@@ -40,6 +40,7 @@ public class ModelDiagram {
         } catch (Exception ignored) {
             return Controller.STATUS_CODES.EXCEPTION;
         }
+        Controller.updateGUI();
         return Controller.STATUS_CODES.SUCCESS;
     }
 
@@ -55,6 +56,7 @@ public class ModelDiagram {
         } catch (Exception ignored) {
             return Controller.STATUS_CODES.REDO_FAILED;
         }
+        Controller.updateGUI();
         return Controller.STATUS_CODES.SUCCESS;
     }
 
@@ -71,6 +73,7 @@ public class ModelDiagram {
         } catch (Exception ignored) {
             return Controller.STATUS_CODES.UNDO_FAILED;
         }
+        Controller.updateGUI();
         return Controller.STATUS_CODES.SUCCESS;
     }
 
@@ -482,6 +485,14 @@ public class ModelDiagram {
         return details;
     }
 
+    public static String[][][] listEveryClassAndAllDetails() {
+        String[][][] list = new String[createdClasses.size()][][];
+        for(int i = 0; i < createdClasses.size(); ++i){
+            list[i] = listAllClassDetails(createdClasses.get(i).getName());
+        }
+        return list;
+    }
+
     /**
      * renames a class
      *
@@ -757,6 +768,7 @@ public class ModelDiagram {
             }
         }
         fileScanner.close();
+        Controller.updateGUI();
         return true;
     }
 

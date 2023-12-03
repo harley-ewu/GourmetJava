@@ -457,6 +457,7 @@ public class CLI {
                     //The next part of the command is window
                     Main.gview = true;
                     GUI.startGUIMenu();
+                    Controller.updateGUI();
                     break;
 
                 case "undo":
@@ -481,6 +482,7 @@ public class CLI {
                         System.out.println("Program Closed! Bye!");
                         cont = false;
                         Main.cview = false;
+                        System.exit(0);
                     }
                     break;
                 case "help":
