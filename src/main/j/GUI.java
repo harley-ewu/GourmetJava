@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -32,6 +34,25 @@ public class GUI extends JFrame implements j.Observer {
         updateChange();
     }
 
+    public static class PanelRelationship {
+        private ClassPanel parent;
+        private ClassPanel child;
+
+        public PanelRelationship(final ClassPanel parent, final ClassPanel child) {
+            this.parent = parent;
+            this.child = child;
+        }
+
+        public ClassPanel getParent() {
+            return this.parent;
+        }
+
+        public ClassPanel getChild() {
+            return this.child;
+        }
+
+    }
+
     public static class ClassPanel extends JPanel implements gCloneable<ClassPanel>, Cloneable {
         private final String name;
 
@@ -53,6 +74,8 @@ public class GUI extends JFrame implements j.Observer {
 
         //to help make dragging smooth
         public MouseEvent pressed;
+
+        ArrayList<PanelRelationship> relationships = new ArrayList<>();
 
         public ClassPanel(final String[][] details, final int x, final int y) {
             super(new GridLayout(0, 1));
@@ -112,7 +135,7 @@ public class GUI extends JFrame implements j.Observer {
             if (!isClass)
                 this.height += this.heightScale;
             this.setBounds(this.xDelta, this.yDelta, this.width, this.height);
-            this.setLocation(this.xDelta,this.yDelta);
+            this.setLocation(this.xDelta, this.yDelta);
             this.setBorder(BorderFactory.createLineBorder(Color.black));
             this.setVisible(true);
             //Add the mouse event handlers
@@ -205,7 +228,7 @@ public class GUI extends JFrame implements j.Observer {
         redrawGUI();
     }
 
-    private ClassPanel findClassPanel(final String name) {
+    private static ClassPanel findClassPanel(final String name) {
         for (ClassPanel p : GUI.classes) {
             if (p.name.equals(name))
                 return p;
@@ -213,7 +236,7 @@ public class GUI extends JFrame implements j.Observer {
         return null;
     }
 
-    private void GUIAddClass(final String name) {
+    private static void GUIAddClass(final String name) {
         ClassPanel newPanel = new ClassPanel(Controller.listAllClassDetails(name));
         GUI.classes.add(newPanel);
         guiWindow.getContentPane().add(newPanel);
@@ -221,7 +244,7 @@ public class GUI extends JFrame implements j.Observer {
         guiWindow.getContentPane().repaint();
     }
 
-    private void GUIRenameClass(final String name) {
+    private static void GUIRenameClass(final String name) {
         //The names are passed in the format [old name]\n[new name]
         String[] names = name.split("\n");
         if (names.length != 2)
@@ -229,7 +252,6 @@ public class GUI extends JFrame implements j.Observer {
 
         String oldName = names[0];
         String newName = names[1];
-        System.out.println(oldName + "\n" + newName);
         ClassPanel oldPanel = findClassPanel(oldName);
         if (oldPanel == null)
             return;
@@ -244,7 +266,7 @@ public class GUI extends JFrame implements j.Observer {
         guiWindow.getContentPane().repaint();
     }
 
-    private void GUIDeleteClass(final String name) {
+    private static void GUIDeleteClass(final String name) {
         ClassPanel panel = findClassPanel(name);
         GUI.classes.remove(panel);
         guiWindow.getContentPane().remove(panel);
@@ -252,7 +274,7 @@ public class GUI extends JFrame implements j.Observer {
         guiWindow.getContentPane().repaint();
     }
 
-    private void GUIUpdateAttribute(final String name) {
+    private static void GUIUpdateAttribute(final String name) {
         ClassPanel oldPanel = findClassPanel(name);
         if (oldPanel == null)
             return;
@@ -267,7 +289,7 @@ public class GUI extends JFrame implements j.Observer {
         guiWindow.getContentPane().repaint();
     }
 
-    private void GUIFullRefresh() {
+    private static void GUIFullRefresh() {
         guiWindow.getContentPane().removeAll();
         String[][][] classes = Controller.listEveryClassAndAllDetails();
         GUI.classes.clear();
@@ -299,6 +321,33 @@ public class GUI extends JFrame implements j.Observer {
         guiWindow.getContentPane().repaint();
     }
 
+    public static void GUIAddRelationship(final String classNames) {
+        /*
+        //The names are passed in the format [parent name]\n[child name]
+        String[] names = classNames.split("\n");
+        if (names.length != 2)
+            return;
+
+        String parentName = names[0];
+        String childName = names[1];
+        ClassPanel parentPanel = findClassPanel(parentName);
+        ClassPanel childPanel = findClassPanel(childName);
+        if (parentPanel == null || childPanel == null)
+            return;
+
+        PanelRelationship relationship = new PanelRelationship(parentPanel, childPanel);
+
+        parentPanel.relationships.add(relationship);
+        childPanel.relationships.add(relationship);
+        redrawGUI();
+        */
+    }
+
+    //Classes are passed in as "parent" + "\n" + "child"
+    public static void GUIDeleteRelationship(final String classes) {
+
+    }
+
     public void update(int reason, String msg) {
         switch (reason) {
             case Controller.ADD_CLASS:
@@ -310,9 +359,11 @@ public class GUI extends JFrame implements j.Observer {
                 updateChange();
                 break;
             case Controller.ADD_RELATIONSHIP:
+                GUIAddRelationship(msg);
                 updateChange();
                 break;
             case Controller.DELETE_RELATIONSHIP:
+                GUIDeleteRelationship(msg);
                 updateChange();
                 break;
             case Controller.DELETE_CLASS:
