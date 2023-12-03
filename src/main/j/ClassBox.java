@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class ClassBox implements gCloneable<ClassBox>, Cloneable {
+public class ClassBox implements GCloneable<ClassBox>, Cloneable {
 
     public boolean equals(final ClassBox cb) {
         return this.equals(cb.getName());

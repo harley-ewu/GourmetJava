@@ -2,7 +2,7 @@ package j;
 
 import java.util.ArrayList;
 
-public class Memento<T extends gCloneable<T>> {
+public class Memento<T extends GCloneable<T>> {
     private final ArrayList<T> snap;
     private Memento(){
         this.snap = new ArrayList<>();
@@ -21,7 +21,7 @@ public class Memento<T extends gCloneable<T>> {
     }
 
 
-    public static <T extends gCloneable<T>> Memento<T> createSnapshot(final ArrayList<T> l){
+    public static <T extends GCloneable<T>> Memento<T> createSnapshot(final ArrayList<T> l){
         ArrayList<T> list = new ArrayList<>();
         for(T o : l){
             list.add(o.clone());
@@ -29,7 +29,7 @@ public class Memento<T extends gCloneable<T>> {
         return new Memento<>(list);
     }
 
-    public static <T extends gCloneable<T>> ArrayList<T> restoreSnapshot(final Memento<T> m){
+    public static <T extends GCloneable<T>> ArrayList<T> restoreSnapshot(final Memento<T> m){
         ArrayList<T> list = new ArrayList<>();
         for(T o : m.snap)
             list.add(o.clone());

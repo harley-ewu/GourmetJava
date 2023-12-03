@@ -4,11 +4,8 @@ package j;
 // Menu bar to add menu items
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -53,7 +50,7 @@ public class GUI extends JFrame implements j.Observer {
 
     }
 
-    public static class ClassPanel extends JPanel implements gCloneable<ClassPanel>, Cloneable {
+    public static class ClassPanel extends JPanel implements GCloneable<ClassPanel>, Cloneable {
         private final String name;
 
         private final String type;
