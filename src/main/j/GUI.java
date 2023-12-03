@@ -402,6 +402,7 @@ public class GUI extends JFrame implements j.Observer {
                             attTypeAsInt = 2;
                             break;
                     }
+                    //Just adding a comment to test connection to Github
 
                     if (attTypeAsInt == 1) { //adding a field
                         String className = JOptionPane.showInputDialog("Enter the name of the class you are adding the field to");
