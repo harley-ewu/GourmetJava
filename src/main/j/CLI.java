@@ -236,7 +236,7 @@ public class CLI {
                             if(status != Controller.STATUS_CODES.SUCCESS){
                                 System.out.println("Relationship " + status.toString());
                             }else{
-                                System.out.println("Relationship between " + input[2] + " and " + input[3] + " created!");
+                                System.out.println("Relationship between " + input[2] + " and " + input[4] + " created!");
                             }
 
                             break;
@@ -457,7 +457,7 @@ public class CLI {
                     //The next part of the command is window
                     Main.gview = true;
                     GUI.startGUIMenu();
-                    Controller.updateGUI();
+                    Controller.updateGUI(Controller.FULL_REFRESH, null);
                     break;
 
                 case "undo":
@@ -657,7 +657,7 @@ public class CLI {
                     break;*/
             }
             if(Main.gview){
-                GUI.displayGUI();
+                //GUI.displayGUI();
             }
         }
 
