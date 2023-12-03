@@ -371,19 +371,82 @@ public class GUI extends JFrame implements j.Observer {
         addClass = new JMenuItem(new AbstractAction("Add Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //popup box with user input fields.
-                String className = JOptionPane.showInputDialog("What is the name of the class you want to add? ");
-                String classType = JOptionPane.showInputDialog("          What type is this? \n Please enter one of the numbers below: \n \n " +
-                        "1. Class \n 2. Interface \n 3. Enum \n 4. Record \n 5. Annotation");
-                //get int that corresponds to the enum type
-                int typeToInt = Integer.parseInt(classType);
-                Controller.addClass(className, typeToInt);
-                //Draw new box (either entire screen refresh or just draw new box)
-                //TODO added a test on the line below
-                guiWindow.add(new ShapeDrawing());
+                //popup box asking the user to enter a string to use as the new class's name
+                String className = "";
+                //Ensures a user enters a valid class name
+                while(className.equals("") || className.equals(null) || className.equals(" ")){
+                    className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
+                }
+
+                //Creates radio buttons for each class type option
+                JRadioButton classButton = new JRadioButton("Class");
+                JRadioButton interfaceButton = new JRadioButton("Interface");
+                JRadioButton enumButton = new JRadioButton("Enum");
+                JRadioButton recordButton = new JRadioButton("Record");
+                JRadioButton annotationButton = new JRadioButton("Annotation");
+
+                // Creates button group, making it so only one option can be selected instead of multiple
+                ButtonGroup classTypeGroup = new ButtonGroup();
+                classTypeGroup.add(classButton);
+                classTypeGroup.add(interfaceButton);
+                classTypeGroup.add(enumButton);
+                classTypeGroup.add(recordButton);
+                classTypeGroup.add(annotationButton);
+
+                //Sets the "Class" button as the default option. Done to ensure a button is always selected.
+                classButton.setSelected(true);
+
+                //Create a JPanel and add the button group to it, aligned vertically
+                JPanel chooseType = new JPanel(new GridLayout(0,1));
+                chooseType.add(new JLabel("Please Choose a Type:"));
+                chooseType.add(classButton);
+                chooseType.add(interfaceButton);
+                chooseType.add(enumButton);
+                chooseType.add(recordButton);
+                chooseType.add(annotationButton);
+
+                //Displays Type options, and centers the popup window on the main GUI screen
+                int result = JOptionPane.showConfirmDialog(guiWindow, chooseType, "Choose Class Type", JOptionPane.OK_CANCEL_OPTION);
+                if(result == JOptionPane.OK_OPTION) {
+
+                    //Defaults class in order to make classType always initialized
+                    String classType = classButton.getText();
+
+                    //Change classType to give the correct text option from the selected button into the switch statement to be converted to an int
+                    if(classButton.isSelected()) classType = classButton.getText();
+                    if(interfaceButton.isSelected()) classType = interfaceButton.getText();
+                    if(enumButton.isSelected()) classType =  enumButton.getText();
+                    if(recordButton.isSelected()) classType =  recordButton.getText();
+                    if(annotationButton.isSelected()) classType = annotationButton.getText();
+                    //get int that corresponds to the enum type
+                    int typeToInt = 0;
+                    //Convert chosen button's string to an int to be passed into the addClass method
+                    switch (classType){
+                        case "Class":
+                            typeToInt = 1;
+                            break;
+                        case "Interface":
+                            typeToInt = 2;
+                            break;
+                        case "Enum":
+                            typeToInt = 3;
+                            break;
+                        case "Record":
+                            typeToInt = 4;
+                            break;
+                        case "Annotation":
+                            typeToInt = 5;
+                            break;
+                    }
+
+                    Controller.addClass(className, typeToInt);
+                    guiWindow.add(new ShapeDrawing());
+                }
 
             }
         });
+
+
 
         //Deletes a class and removes it from the display
         deleteClass = new JMenuItem(new AbstractAction("Delete Class") {
@@ -731,6 +794,7 @@ public class GUI extends JFrame implements j.Observer {
         });
 
     }
+
 
 
     public static void drawClassPanel(final ClassPanel c) {
