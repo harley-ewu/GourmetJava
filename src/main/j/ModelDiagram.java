@@ -52,8 +52,7 @@ public class ModelDiagram {
      */
     public static Controller.STATUS_CODES redo() {
         try {
-            ArrayList<ClassBox> snapList = caretaker.redo().restore();
-            restoreSnapshot(snapList);
+            createdClasses = Memento.restoreSnapshot(caretaker.redo());
         } catch (Exception ignored) {
             return Controller.STATUS_CODES.REDO_FAILED;
         }
@@ -70,8 +69,7 @@ public class ModelDiagram {
      */
     public static Controller.STATUS_CODES undo() {
         try {
-            ArrayList<ClassBox> snapList = caretaker.undo().restore();
-            restoreSnapshot(snapList);
+            createdClasses = Memento.restoreSnapshot(caretaker.undo());
         } catch (Exception ignored) {
             return Controller.STATUS_CODES.UNDO_FAILED;
         }
@@ -79,29 +77,6 @@ public class ModelDiagram {
         return Controller.STATUS_CODES.SUCCESS;
     }
 
-    /**
-     * Creates a Memento Object using the createdClasses list
-     *
-     * @param snapshot the createdClasses list (this should always be ModelDiagram.createdClasses)
-     */
-    private static ArrayList<ClassBox> createSnapshot(final ArrayList<ClassBox> snapshot) {
-        ArrayList<ClassBox> snap = new ArrayList<>();
-        for (ClassBox classBox : snapshot) {
-            snap.add(classBox.clone());
-        }
-        return snap;
-    }
-
-    /**
-     * Creates a new list using a Memento object's object, then it to ModelDiagram.createdClasses
-     */
-    public static void restoreSnapshot(final ArrayList<ClassBox> snapshot) {
-        ArrayList<ClassBox> list = new ArrayList<>();
-        for (ClassBox cb : snapshot) {
-            list.add(cb.clone());
-        }
-        createdClasses = list;
-    }
 
     /**
      * Searches the list of created classes for a ClassBox with the given name

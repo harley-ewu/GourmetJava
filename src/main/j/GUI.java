@@ -114,7 +114,7 @@ public class GUI extends JFrame implements j.Observer {
             this.setBounds(this.xDelta, this.yDelta, this.width, this.height);
             this.setLocation(this.xDelta,this.yDelta);
             this.setBorder(BorderFactory.createLineBorder(Color.black));
-
+            this.setVisible(true);
             //Add the mouse event handlers
             ClassPanel thisPanel = this;
             //We need a mouse listener to catch where the initial click is, otherwise the panel will "jump"
@@ -129,6 +129,7 @@ public class GUI extends JFrame implements j.Observer {
                     //We only need to update the coordinates when the user is done moving the boxes
                     thisPanel.xDelta = thisPanel.getLocation().x;
                     thisPanel.yDelta = thisPanel.getLocation().y;
+                    //updateChange();   //uncomment this if you want the undo/redo to undo the last box move
                 }
             });
 
@@ -283,8 +284,12 @@ public class GUI extends JFrame implements j.Observer {
 
     public static void redrawGUI() {
         guiWindow.getContentPane().removeAll();
+        guiWindow.getContentPane().revalidate();
+        guiWindow.getContentPane().repaint();
         for (ClassPanel c : GUI.classes)
-            drawClassPanel(c);
+            guiWindow.getContentPane().add(c);
+        guiWindow.getContentPane().revalidate();
+        guiWindow.getContentPane().repaint();
     }
 
     public static void drawClassPanel(final ClassPanel c) {
@@ -763,24 +768,7 @@ public class GUI extends JFrame implements j.Observer {
 
     }
 
-    public void handleDrag(final JPanel panel) {
-        final JPanel p = panel;
-        panel.addMouseMotionListener(new MouseMotionAdapter() {
-
-            @Override
-            public void mouseDragged(MouseEvent me) {
-                me.translatePoint(me.getComponent().getLocation().x, me.getComponent().getLocation().y);
-                p.setLocation(me.getX(), me.getY());
-            }
-
-        });
-
-    }
-
     public static void displayGUI() {
-        //SwingUtilities.updateComponentTreeUI(guiWindow);
-        //guiWindow.add(new ShapeDrawing());
-        //guiWindow.setVisible(true);
         guiWindow.getContentPane().removeAll();
         String[][][] classes = Controller.listEveryClassAndAllDetails();
         GUI.classes.clear();
@@ -794,7 +782,6 @@ public class GUI extends JFrame implements j.Observer {
 
         for (ClassPanel c : GUI.classes)
             drawClassPanel(c);
-
 
     }
 

@@ -657,7 +657,7 @@ public class CLI {
                     break;*/
             }
             if(Main.gview){
-                GUI.displayGUI();
+                //GUI.displayGUI();
             }
         }
 
