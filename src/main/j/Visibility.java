@@ -9,10 +9,11 @@ public enum Visibility {
 
     private final String symbol;
 
-    private Visibility(final String symbol){
+    private Visibility(final String symbol) {
         this.symbol = symbol;
     }
-    public String getSymbol(){
+
+    public String getSymbol() {
         return this.symbol;
     }
 

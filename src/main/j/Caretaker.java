@@ -60,7 +60,7 @@ public class Caretaker<T extends GCloneable<T>> {
     private int stackPointer;
 
     /**
-     *   stackSize keeps track of the most updated state that we are allowed to redo to
+     * stackSize keeps track of the most updated state that we are allowed to redo to
      */
     private int stackSize;
 
@@ -81,8 +81,10 @@ public class Caretaker<T extends GCloneable<T>> {
             In cases where "undos" are valid, will return the previously recorded state of the program:
                 - The stack is not empty and the stackPointer is not 0 (the state of the program is not the oldest recorded state)
      */
+
     /**
      * returns a Memento Object containing the state of the program just before the most recent change
+     *
      * @return Memento Object with the most recent changes, or null if the undo is invalid
      */
     public Memento<T> undo() {
@@ -112,6 +114,7 @@ public class Caretaker<T extends GCloneable<T>> {
 
     /**
      * returns a Memento Object containing the state of the program before the most recent undo
+     *
      * @return Memento object containing the state of the program before the most recent undo, or null if the redo is invalid
      */
     public Memento<T> redo() {
@@ -135,8 +138,10 @@ public class Caretaker<T extends GCloneable<T>> {
             - The stackSize is increased by 1
             - The stackPointer holds the index of the most recent change
      */
+
     /**
      * Adds a Memento object to the stack and updates the stack pointer and stack size accordingly
+     *
      * @param snapshot Memento Object to add to the stack
      */
     public void addChange(final Memento<T> snapshot) {
@@ -156,9 +161,10 @@ public class Caretaker<T extends GCloneable<T>> {
     /**
      * Replaces the Memento object on the top of the stack<br>
      * This is mainly for GUI when boxes are moved, the moves should be preserved but they should not be added to the stack
+     *
      * @param snapshot Memento Object that will take place of the object on the top of the stack
      */
-    public void updateChange(final Memento<T> snapshot){
+    public void updateChange(final Memento<T> snapshot) {
         if (snapshot == null)
             throw new IllegalArgumentException("null snapshot passed to Caretaker.updateChange");
 

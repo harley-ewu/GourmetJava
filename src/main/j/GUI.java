@@ -3,8 +3,6 @@ package j;
 // Java program to construct
 // Menu bar to add menu items
 
-import org.jline.console.impl.SystemRegistryImpl;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -202,7 +200,7 @@ public class GUI extends JFrame implements j.Observer {
     }
 
     public static void restoreSnapshot(final Memento<ClassPanel> p) {
-        if(p != null) {
+        if (p != null) {
             classes = Memento.restoreSnapshot(p);
             redrawGUI();
         }
@@ -311,11 +309,11 @@ public class GUI extends JFrame implements j.Observer {
     }
 
     //made these one liners to make it simpler to call undo/redo
-    public static void GUIUndo(){
+    public static void GUIUndo() {
         restoreSnapshot(caretaker.undo());
     }
 
-    public static void GUIRedo(){
+    public static void GUIRedo() {
         restoreSnapshot(caretaker.redo());
     }
 
@@ -370,10 +368,9 @@ public class GUI extends JFrame implements j.Observer {
         guiWindow.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyChar() == 'u'){
+                if (e.getKeyChar() == 'u') {
                     GUIUndo();
-                }
-                else if (e.getKeyChar() == 'r'){
+                } else if (e.getKeyChar() == 'r') {
                     GUIRedo();
                 }
             }
@@ -396,20 +393,13 @@ public class GUI extends JFrame implements j.Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
-                if(className == null)
+                if (className == null)
                     return;
                 Controller.STATUS_CODES status = Controller.existentialCrisisExists(className);
-                if(status != Controller.STATUS_CODES.OBJ_NOT_FOUND){
+                if (status != Controller.STATUS_CODES.OBJ_NOT_FOUND) {
                     JOptionPane.showMessageDialog(new JFrame(), status.toString());
                     return;
                 }
-
-                //Ensures a user enters a valid class name
-                //while(className.equals("") || className.equals(null)|| className.equals(" ")){
-                    //popup box asking the user to enter a string to use as the new class's name
-                   // className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
-                //}
-
 
                 //Creates radio buttons for each class type option
                 JRadioButton classButton = new JRadioButton("Class");
@@ -483,7 +473,7 @@ public class GUI extends JFrame implements j.Observer {
         deleteClass = new JMenuItem(new AbstractAction("Delete Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(Controller.getCreatedClassesSize() == 0){
+                if (Controller.getCreatedClassesSize() == 0) {
                     JOptionPane.showMessageDialog(new JFrame(), "There are no classes to delete");
                     return;
                 }
@@ -501,19 +491,18 @@ public class GUI extends JFrame implements j.Observer {
 
                 boolean isAClassOption = false;
 
-                while(!isAClassOption){
+                while (!isAClassOption) {
                     //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                     int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Which Class would you like to delete?",
                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
                     String classToDelete = (String) classComboBox.getSelectedItem();
 
-                    if(chosenClass == JOptionPane.OK_OPTION && !classToDelete.equals("Choose a class")){
+                    if (chosenClass == JOptionPane.OK_OPTION && !classToDelete.equals("Choose a class")) {
                         Controller.deleteClass(classToDelete);
                         isAClassOption = true;
-                    }
-                    else{
-                        if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                    } else {
+                        if (chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION) {
                             break;
                         }
                     }
@@ -526,7 +515,7 @@ public class GUI extends JFrame implements j.Observer {
         renameClass = new JMenuItem(new AbstractAction("Rename Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(Controller.getCreatedClassesSize() == 0){
+                if (Controller.getCreatedClassesSize() == 0) {
                     JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
                     return;
                 }
@@ -544,20 +533,19 @@ public class GUI extends JFrame implements j.Observer {
 
                 boolean isAClassOption = false;
 
-                while(!isAClassOption){
+                while (!isAClassOption) {
                     //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                     int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Which Class would you like to rename?",
                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
                     String oldName = (String) classComboBox.getSelectedItem();
 
-                    if(chosenClass == JOptionPane.OK_OPTION && !oldName.equals("Choose a class")){
+                    if (chosenClass == JOptionPane.OK_OPTION && !oldName.equals("Choose a class")) {
                         String newName = JOptionPane.showInputDialog(guiWindow, "What would you like to rename this class to? ");
                         Controller.renameClass(oldName, newName);
                         isAClassOption = true;
-                    }
-                    else{
-                        if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                    } else {
+                        if (chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION) {
                             break;
                         }
                     }
@@ -575,11 +563,11 @@ public class GUI extends JFrame implements j.Observer {
 
             //Adds an attribute when the "Add attribute" button is clicked
             public void actionPerformed(ActionEvent e) {
-                if(Controller.getCreatedClassesSize() == 0){
+                if (Controller.getCreatedClassesSize() == 0) {
                     JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
                     return;
                 }
-              
+
                 // Create radio buttons for the field and method options.
                 JRadioButton fieldButton = new JRadioButton("Field");
                 JRadioButton methodButton = new JRadioButton("Method");
@@ -591,7 +579,7 @@ public class GUI extends JFrame implements j.Observer {
                 fieldButton.setSelected(true);
 
                 //Make a Jpanel to put the button group into
-                JPanel chooseAttType = new JPanel(new GridLayout(0,1));
+                JPanel chooseAttType = new JPanel(new GridLayout(0, 1));
                 chooseAttType.add(new JLabel("Do you want to add a field or a method?"));
                 chooseAttType.add(fieldButton);
                 chooseAttType.add(methodButton);
@@ -599,17 +587,17 @@ public class GUI extends JFrame implements j.Observer {
                 //Displays field and method options on an okay/cancel pane, and centers the popup window on the main GUI screen
                 int askAttType = JOptionPane.showConfirmDialog(guiWindow, chooseAttType, "Choose Attribute Type", JOptionPane.OK_CANCEL_OPTION);
 
-                if(askAttType == OK_OPTION){
+                if (askAttType == OK_OPTION) {
                     //Defaults field in order to make askAttType always initialized
                     String choice = fieldButton.getText();
 
                     //Change classType to give the correct text option from the selected button into the switch statement to be converted to an int
-                    if(fieldButton.isSelected()) choice = fieldButton.getText();
+                    if (fieldButton.isSelected()) choice = fieldButton.getText();
                     if (methodButton.isSelected()) choice = methodButton.getText();
 
                     int attTypeAsInt = 0;
 
-                    switch (choice){
+                    switch (choice) {
                         case "Field":
                             attTypeAsInt = 1;
                             break;
@@ -633,7 +621,7 @@ public class GUI extends JFrame implements j.Observer {
 
                         boolean isAClassOption = false;
 
-                        while(!isAClassOption){
+                        while (!isAClassOption) {
 
                             //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                             int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Name of the class to add a field to",
@@ -641,7 +629,7 @@ public class GUI extends JFrame implements j.Observer {
 
                             String className = (String) classComboBox.getSelectedItem();
 
-                            if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                            if (chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")) {
                                 //Gets the name of the new field
                                 String fieldName = JOptionPane.showInputDialog(guiWindow, "What would you like to call your field?");
 
@@ -657,7 +645,7 @@ public class GUI extends JFrame implements j.Observer {
                                 visibilityGroup.add(publicButton);
                                 visibilityGroup.add(protectedButton);
 
-                                JPanel visibility = new JPanel(new GridLayout(0,1));
+                                JPanel visibility = new JPanel(new GridLayout(0, 1));
                                 visibility.add(new JLabel("Enter the visibility for your field"));
                                 visibility.add(privateButton);
                                 visibility.add(publicButton);
@@ -665,14 +653,14 @@ public class GUI extends JFrame implements j.Observer {
 
                                 int visibilityPopup = JOptionPane.showConfirmDialog(guiWindow, visibility, "Visibility Type", OK_CANCEL_OPTION);
 
-                                if(visibilityPopup == OK_OPTION){
+                                if (visibilityPopup == OK_OPTION) {
                                     //VisibilityChoice will be changed given the button selected, but defaults to private
                                     String visibilityChoice = privateButton.getText();
-                                    if(publicButton.isSelected()) visibilityChoice = publicButton.getText();
-                                    if(protectedButton.isSelected()) visibilityChoice = protectedButton.getText();
+                                    if (publicButton.isSelected()) visibilityChoice = publicButton.getText();
+                                    if (protectedButton.isSelected()) visibilityChoice = protectedButton.getText();
 
                                     int visibilityChoiceInt = 0;
-                                    switch (visibilityChoice){
+                                    switch (visibilityChoice) {
                                         case ("Private"):
                                             visibilityChoiceInt = 1;
                                             break;
@@ -694,9 +682,8 @@ public class GUI extends JFrame implements j.Observer {
                                 }
 
                                 isAClassOption = true;
-                            }
-                            else{
-                                if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                            } else {
+                                if (chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION) {
                                     break;
                                 }
                             }
@@ -717,7 +704,7 @@ public class GUI extends JFrame implements j.Observer {
 
                         boolean isAClassOption = false;
 
-                        while(!isAClassOption){
+                        while (!isAClassOption) {
 
                             //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                             int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Name of the class to add a field to",
@@ -725,7 +712,7 @@ public class GUI extends JFrame implements j.Observer {
 
                             String className = (String) classComboBox.getSelectedItem();
 
-                            if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                            if (chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")) {
                                 //Gets the name of the new field
                                 String methodName = JOptionPane.showInputDialog(guiWindow, "What is the new method's name?");
 
@@ -741,7 +728,7 @@ public class GUI extends JFrame implements j.Observer {
                                 visibilityGroup.add(publicButton);
                                 visibilityGroup.add(protectedButton);
 
-                                JPanel visibility = new JPanel(new GridLayout(0,1));
+                                JPanel visibility = new JPanel(new GridLayout(0, 1));
                                 visibility.add(new JLabel("Enter the visibility for your field"));
                                 visibility.add(privateButton);
                                 visibility.add(publicButton);
@@ -749,14 +736,14 @@ public class GUI extends JFrame implements j.Observer {
 
                                 int visibilityPopup = JOptionPane.showConfirmDialog(guiWindow, visibility, "Visibility Type", OK_CANCEL_OPTION);
 
-                                if(visibilityPopup == OK_OPTION){
+                                if (visibilityPopup == OK_OPTION) {
                                     //VisibilityChoice will be changed given the button selected, but defaults to private
                                     String visibilityChoice = privateButton.getText();
-                                    if(publicButton.isSelected()) visibilityChoice = publicButton.getText();
-                                    if(protectedButton.isSelected()) visibilityChoice = protectedButton.getText();
+                                    if (publicButton.isSelected()) visibilityChoice = publicButton.getText();
+                                    if (protectedButton.isSelected()) visibilityChoice = protectedButton.getText();
 
                                     int visibilityChoiceInt = 0;
-                                    switch (visibilityChoice){
+                                    switch (visibilityChoice) {
                                         case ("Private"):
                                             visibilityChoiceInt = 1;
                                             break;
@@ -777,15 +764,14 @@ public class GUI extends JFrame implements j.Observer {
 
                                     boolean moreParams = true;
 
-                                    while(moreParams){
+                                    while (moreParams) {
                                         int addMoreParams = JOptionPane.showConfirmDialog(guiWindow, "Does this method have any more parameters?",
-                                        "More Parameters", YES_NO_OPTION);
+                                                "More Parameters", YES_NO_OPTION);
 
-                                        if(addMoreParams == YES_NO_OPTION){
-                                            String additionalParam = JOptionPane.showInputDialog(guiWindow, "What is the next parameter?" );
+                                        if (addMoreParams == YES_NO_OPTION) {
+                                            String additionalParam = JOptionPane.showInputDialog(guiWindow, "What is the next parameter?");
                                             parameters.add(additionalParam);
-                                        }
-                                        else{
+                                        } else {
                                             moreParams = false;
                                         }
                                     }
@@ -797,9 +783,8 @@ public class GUI extends JFrame implements j.Observer {
                                 }
 
                                 isAClassOption = true;
-                            }
-                            else{
-                                if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                            } else {
+                                if (chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION) {
                                     break;
                                 }
                             }
@@ -808,7 +793,6 @@ public class GUI extends JFrame implements j.Observer {
                     } else {
                         return;
                     }
-
                 }
             }
         });
@@ -817,7 +801,7 @@ public class GUI extends JFrame implements j.Observer {
         delAtt = new JMenuItem(new AbstractAction("Delete Attribute") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(Controller.getCreatedClassesSize() == 0){
+                if (Controller.getCreatedClassesSize() == 0) {
                     JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
                     return;
                 }
@@ -832,17 +816,15 @@ public class GUI extends JFrame implements j.Observer {
                 fieldButton.setSelected(true);
 
                 //Make a Jpanel to put the button group into
-                JPanel chooseAttType = new JPanel(new GridLayout(0,1));
+                JPanel chooseAttType = new JPanel(new GridLayout(0, 1));
                 chooseAttType.add(new JLabel("Do you want to delete a field or a method?"));
                 chooseAttType.add(fieldButton);
                 chooseAttType.add(methodButton);
 
-
-
                 //Displays field and method options on an okay/cancel pane, and centers the popup window on the main GUI screen
                 int askAttType = JOptionPane.showConfirmDialog(guiWindow, chooseAttType, "Choose Attribute Type", JOptionPane.OK_CANCEL_OPTION);
 
-                if(askAttType == OK_OPTION) {
+                if (askAttType == OK_OPTION) {
                     //Defaults choice in order to make askAttType always initialized
                     String choice = fieldButton.getText();
 
@@ -875,14 +857,14 @@ public class GUI extends JFrame implements j.Observer {
 
                         boolean isAClassOption = false;
 
-                        while(!isAClassOption){
+                        while (!isAClassOption) {
                             //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                             int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Deleting a field from what class?",
                                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
                             String className = (String) classComboBox.getSelectedItem();
 
-                            if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                            if (chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")) {
                                 //Gets the name of the field to delete
                                 String[][] classDetails = Controller.listAllClassDetails(className);
                                 String[] fieldList = classDetails[2];
@@ -890,7 +872,7 @@ public class GUI extends JFrame implements j.Observer {
 
                                 int chosenField = JOptionPane.showConfirmDialog(guiWindow, fieldComboBox, "Delete which field from " + className + "?",
                                         OK_CANCEL_OPTION, QUESTION_MESSAGE);
-                                if(chosenField == OK_OPTION) {
+                                if (chosenField == OK_OPTION) {
                                     String fieldToDeleteInfo = (String) fieldComboBox.getSelectedItem();
                                     String fieldToDelete = fieldToDeleteInfo.toString();
                                     //Split field name by whitespace to just get the name
@@ -908,15 +890,13 @@ public class GUI extends JFrame implements j.Observer {
                                         Controller.deleteField(className, fieldName);
                                     }
 
-                                }
-                                else{
+                                } else {
                                     return;
                                 }
 
                                 isAClassOption = true;
-                            }
-                            else{
-                                if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                            } else {
+                                if (chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION) {
                                     break;
                                 }
                             }
@@ -938,14 +918,14 @@ public class GUI extends JFrame implements j.Observer {
 
                         boolean isAClassOption = false;
 
-                        while(!isAClassOption){
+                        while (!isAClassOption) {
                             //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                             int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Deleting a method from what class?",
                                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
                             String className = (String) classComboBox.getSelectedItem();
 
-                            if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                            if (chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")) {
                                 //Gets the name of the method to delete
                                 String[][] classDetails = Controller.listAllClassDetails(className);
                                 String[] methodList = classDetails[1];
@@ -953,7 +933,7 @@ public class GUI extends JFrame implements j.Observer {
 
                                 int chosenMethod = JOptionPane.showConfirmDialog(guiWindow, methodComboBox, "Delete which Method?",
                                         OK_CANCEL_OPTION, QUESTION_MESSAGE);
-                                if(chosenMethod == OK_OPTION){
+                                if (chosenMethod == OK_OPTION) {
                                     String methodToDeleteInfo = (String) methodComboBox.getSelectedItem();
                                     String methodToDelete = methodToDeleteInfo.toString();
                                     //Separate the parameters from the method's name
@@ -963,32 +943,27 @@ public class GUI extends JFrame implements j.Observer {
                                     String methodName = methodNameWParam.substring(1).trim();
 
                                     //Confirm delete on the chosen method
-                                    JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
+                                    JPanel displayConfirmationMessage = new JPanel(new GridLayout(0, 1));
                                     displayConfirmationMessage.add(new JLabel("Delete " + methodToDelete + " ?"));
                                     int confirmDelete = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Delete ?", OK_CANCEL_OPTION);
-                                    if(confirmDelete == OK_OPTION){
+                                    if (confirmDelete == OK_OPTION) {
                                         //delete the method
                                         Controller.deleteMethod(className, methodName);
                                     }
 
-                                }
-                                else{
+                                } else {
                                     return;
                                 }
 
                                 isAClassOption = true;
-                            }
-                            else{
-                                if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                            } else {
+                                if (chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION) {
                                     break;
                                 }
                             }
                         }
-
                     }
-
                 }
-
             }
         });
         renameAtt = new JMenuItem(new AbstractAction("Rename Attribute") {
@@ -1005,17 +980,15 @@ public class GUI extends JFrame implements j.Observer {
                 fieldButton.setSelected(true);
 
                 //Make a Jpanel to put the button group into
-                JPanel chooseAttType = new JPanel(new GridLayout(0,1));
+                JPanel chooseAttType = new JPanel(new GridLayout(0, 1));
                 chooseAttType.add(new JLabel("Do you want to rename a field or a method?"));
                 chooseAttType.add(fieldButton);
                 chooseAttType.add(methodButton);
 
-
-
                 //Displays field and method options on an okay/cancel pane, and centers the popup window on the main GUI screen
                 int askAttType = JOptionPane.showConfirmDialog(guiWindow, chooseAttType, "Choose Attribute Type", JOptionPane.OK_CANCEL_OPTION);
 
-                if(askAttType == OK_OPTION) {
+                if (askAttType == OK_OPTION) {
                     //Defaults choice in order to make askAttType always initialized
                     String choice = fieldButton.getText();
 
@@ -1048,14 +1021,14 @@ public class GUI extends JFrame implements j.Observer {
 
                         boolean isAClassOption = false;
 
-                        while(!isAClassOption){
+                        while (!isAClassOption) {
                             //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                             int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Renaming a field from what class?",
                                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
                             String className = (String) classComboBox.getSelectedItem();
 
-                            if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                            if (chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")) {
                                 //Gets the name of the field to rename
                                 String[][] classDetails = Controller.listAllClassDetails(className);
                                 String[] fieldList = classDetails[2];
@@ -1063,7 +1036,7 @@ public class GUI extends JFrame implements j.Observer {
 
                                 int chosenField = JOptionPane.showConfirmDialog(guiWindow, fieldComboBox, "Rename which field from " + className + "?",
                                         OK_CANCEL_OPTION, QUESTION_MESSAGE);
-                                if(chosenField == OK_OPTION){
+                                if (chosenField == OK_OPTION) {
                                     String fieldToRenameInfo = (String) fieldComboBox.getSelectedItem();
                                     String fieldToRename = fieldToRenameInfo.toString();
                                     //Split field name by whitespace to just get the name
@@ -1075,22 +1048,20 @@ public class GUI extends JFrame implements j.Observer {
                                     String newName = JOptionPane.showInputDialog(guiWindow, "What is the new name for this field?");
 
                                     //Confirm rename of the selected field
-                                    JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
+                                    JPanel displayConfirmationMessage = new JPanel(new GridLayout(0, 1));
                                     displayConfirmationMessage.add(new JLabel("Rename " + fieldName + " to " + newName + " ?"));
                                     int confirmRename = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Rename?", OK_CANCEL_OPTION);
-                                    if(confirmRename == OK_OPTION){
+                                    if (confirmRename == OK_OPTION) {
                                         //Renames the field
                                         Controller.renameField(className, fieldName, newName);
                                     }
-                                }
-                                else{
+                                } else {
                                     return;
                                 }
 
                                 isAClassOption = true;
-                            }
-                            else{
-                                if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                            } else {
+                                if (chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION) {
                                     break;
                                 }
                             }
@@ -1112,14 +1083,14 @@ public class GUI extends JFrame implements j.Observer {
 
                         boolean isAClassOption = false;
 
-                        while(!isAClassOption){
+                        while (!isAClassOption) {
                             //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                             int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Renaming a method from what class?",
                                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
                             String className = (String) classComboBox.getSelectedItem();
 
-                            if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                            if (chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")) {
                                 //Gets the name of the method to delete
                                 String[][] classDetails = Controller.listAllClassDetails(className);
                                 String[] methodList = classDetails[1];
@@ -1127,7 +1098,7 @@ public class GUI extends JFrame implements j.Observer {
 
                                 int chosenMethod = JOptionPane.showConfirmDialog(guiWindow, methodComboBox, "Rename which Method?",
                                         OK_CANCEL_OPTION, QUESTION_MESSAGE);
-                                if(chosenMethod == OK_OPTION){
+                                if (chosenMethod == OK_OPTION) {
                                     String methodToRenameInfo = (String) methodComboBox.getSelectedItem();
                                     String methodToRename = methodToRenameInfo.toString();
                                     //Separate the parameters from the method's name
@@ -1139,33 +1110,27 @@ public class GUI extends JFrame implements j.Observer {
                                     String newName = JOptionPane.showInputDialog(guiWindow, "What is this method's new name?");
 
                                     //Confirm rename on the chosen method
-                                    JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
-                                    displayConfirmationMessage.add(new JLabel("Rename " + methodName + " to "+ newName + " ?"));
+                                    JPanel displayConfirmationMessage = new JPanel(new GridLayout(0, 1));
+                                    displayConfirmationMessage.add(new JLabel("Rename " + methodName + " to " + newName + " ?"));
                                     int confirmRename = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Rename?", OK_CANCEL_OPTION);
-                                    if(confirmRename == OK_OPTION){
+                                    if (confirmRename == OK_OPTION) {
                                         //rename the method
                                         Controller.renameMethod(className, methodName, newName);
                                     }
 
-                                }
-                                else{
+                                } else {
                                     return;
                                 }
 
                                 isAClassOption = true;
-                            }
-                            else{
-                                if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                            } else {
+                                if (chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION) {
                                     break;
                                 }
                             }
                         }
-
                     }
-
                 }
-
-
             }
         });
         attributeDropdown.add(addAtt);
@@ -1178,11 +1143,10 @@ public class GUI extends JFrame implements j.Observer {
         addPar = new JMenuItem(new AbstractAction("Add Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(Controller.getCreatedClassesSize() == 0){
+                if (Controller.getCreatedClassesSize() == 0) {
                     JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
                     return;
                 }
-                //String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to add a parameter to?");
 
                 //Get the list of existing classes
                 String[] classList = Controller.listClasses();
@@ -1197,14 +1161,14 @@ public class GUI extends JFrame implements j.Observer {
 
                 boolean isAClassOption = false;
 
-                while(!isAClassOption){
+                while (!isAClassOption) {
                     //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                     int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Add parameter to which class's method?",
                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
                     String className = (String) classComboBox.getSelectedItem();
 
-                    if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                    if (chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")) {
                         //Gets the name of the method to delete
                         String[][] classDetails = Controller.listAllClassDetails(className);
                         String[] methodList = classDetails[1];
@@ -1212,7 +1176,7 @@ public class GUI extends JFrame implements j.Observer {
 
                         int chosenMethod = JOptionPane.showConfirmDialog(guiWindow, methodComboBox, "Add parameter to which Method?",
                                 OK_CANCEL_OPTION, QUESTION_MESSAGE);
-                        if(chosenMethod == OK_OPTION){
+                        if (chosenMethod == OK_OPTION) {
                             String methodInfo = (String) methodComboBox.getSelectedItem();
                             String methodWParam = methodInfo.toString();
                             //Separate the parameters from the method's name
@@ -1224,23 +1188,21 @@ public class GUI extends JFrame implements j.Observer {
                             String newParam = JOptionPane.showInputDialog(guiWindow, "What is the parameter you are adding?");
 
                             //Confirm rename on the chosen method
-                            JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
-                            displayConfirmationMessage.add(new JLabel("Add " + newParam + " to "+ methodName + " ?"));
+                            JPanel displayConfirmationMessage = new JPanel(new GridLayout(0, 1));
+                            displayConfirmationMessage.add(new JLabel("Add " + newParam + " to " + methodName + " ?"));
                             int confirmAddParam = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Rename?", OK_CANCEL_OPTION);
-                            if(confirmAddParam == OK_OPTION){
+                            if (confirmAddParam == OK_OPTION) {
                                 //Add the parameter to the chosen method
                                 Controller.addParam(className, methodName, newParam);
                             }
 
-                        }
-                        else{
+                        } else {
                             return;
                         }
 
                         isAClassOption = true;
-                    }
-                    else{
-                        if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                    } else {
+                        if (chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION) {
                             break;
                         }
                     }
@@ -1256,7 +1218,7 @@ public class GUI extends JFrame implements j.Observer {
         delPar = new JMenuItem(new AbstractAction("Delete Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(Controller.getCreatedClassesSize() == 0){
+                if (Controller.getCreatedClassesSize() == 0) {
                     JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
                     return;
                 }
@@ -1273,14 +1235,14 @@ public class GUI extends JFrame implements j.Observer {
 
                 boolean isAClassOption = false;
 
-                while(!isAClassOption){
+                while (!isAClassOption) {
                     //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                     int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Delete param from which class's method?",
                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
                     String className = (String) classComboBox.getSelectedItem();
 
-                    if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                    if (chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")) {
                         //Gets the name of the method to delete
                         String[][] classDetails = Controller.listAllClassDetails(className);
                         String[] methodList = classDetails[1];
@@ -1288,9 +1250,9 @@ public class GUI extends JFrame implements j.Observer {
 
                         int chosenMethod = JOptionPane.showConfirmDialog(guiWindow, methodComboBox, "Which Method has param to delete?",
                                 OK_CANCEL_OPTION, QUESTION_MESSAGE);
-                        if(chosenMethod == OK_OPTION){
+                        if (chosenMethod == OK_OPTION) {
                             String methodInfo = (String) methodComboBox.getSelectedItem();
-                            if(!methodInfo.contains("(")){
+                            if (!methodInfo.contains("(")) {
                                 JOptionPane.showMessageDialog(guiWindow, "This method has no parameters");
                                 return;
                             }
@@ -1298,7 +1260,7 @@ public class GUI extends JFrame implements j.Observer {
                             String[] parts = methodInfo.split("\\(");
                             //Skip the visibility modifier to just get method name
                             String methodName = parts[0].substring(1).trim();
-                            //Replaces the ) to rwmove closing parenthesis
+                            //Replaces the ) to remove closing parenthesis
                             String parameters = parts[1].replace(")", "");
 
                             //Take the above and convert to array that Users can then choose from
@@ -1308,29 +1270,24 @@ public class GUI extends JFrame implements j.Observer {
                             int chosenParam = JOptionPane.showConfirmDialog(guiWindow, paramComboBox, "Delete which Parameter?",
                                     OK_CANCEL_OPTION, QUESTION_MESSAGE);
 
-                            if(chosenParam == OK_OPTION){
+                            if (chosenParam == OK_OPTION) {
                                 String paramToDelete = (String) paramComboBox.getSelectedItem();
 
                                 //Confirm delete param on the chosen method
-                                JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
+                                JPanel displayConfirmationMessage = new JPanel(new GridLayout(0, 1));
                                 displayConfirmationMessage.add(new JLabel("Delete " + paramToDelete + " ?"));
                                 int confirmDelete = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Delete ?", OK_CANCEL_OPTION);
-                                if(confirmDelete == OK_OPTION){
+                                if (confirmDelete == OK_OPTION) {
                                     //delete the parameter
                                     Controller.deleteParam(className, methodName, paramToDelete);
                                 }
-
                             }
-
-                        }
-                        else{
+                        } else {
                             return;
                         }
-
                         isAClassOption = true;
-                    }
-                    else{
-                        if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                    } else {
+                        if (chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION) {
                             break;
                         }
                     }
@@ -1344,13 +1301,11 @@ public class GUI extends JFrame implements j.Observer {
         renPar = new JMenuItem(new AbstractAction("Rename Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                  if(Controller.getCreatedClassesSize() == 0){
-                JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
-                return;
-            }
+                if (Controller.getCreatedClassesSize() == 0) {
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
                 String classWMethod = JOptionPane.showInputDialog(guiWindow, "What class contains the method you would like to rename a parameter in?");
-
-
 
                 String methodName = JOptionPane.showInputDialog(guiWindow, "What is the name of the method containing the parameter you are renaming?");
                 String paramName = JOptionPane.showInputDialog(guiWindow, "Which parameter do you want to rename?");
@@ -1369,7 +1324,7 @@ public class GUI extends JFrame implements j.Observer {
         addRelation = new JMenuItem(new AbstractAction("Add Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                              if(Controller.getCreatedClassesSize() < 2){
+                if (Controller.getCreatedClassesSize() < 2) {
                     JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least two classes");
                     return;
                 }
@@ -1387,7 +1342,7 @@ public class GUI extends JFrame implements j.Observer {
 
                 boolean isAClassOption = false;
 
-                while(!isAClassOption) {
+                while (!isAClassOption) {
                     //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                     int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Class being implemented",
                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -1401,7 +1356,7 @@ public class GUI extends JFrame implements j.Observer {
 
                         boolean isAClassOption2 = false;
 
-                        while(!isAClassOption2) {
+                        while (!isAClassOption2) {
                             //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                             int chosenClass2 = JOptionPane.showConfirmDialog(guiWindow, classComboBox2, "Class Implementing other class",
                                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -1423,10 +1378,8 @@ public class GUI extends JFrame implements j.Observer {
 
                                 aggregationButton.setSelected(true);
 
-
-
                                 //Create a JPanel and add the button group to it, aligned vertically
-                                JPanel chooseType = new JPanel(new GridLayout(0,1));
+                                JPanel chooseType = new JPanel(new GridLayout(0, 1));
                                 chooseType.add(new JLabel("Please Choose a Type:"));
                                 chooseType.add(aggregationButton);
                                 chooseType.add(compositionButton);
@@ -1435,20 +1388,21 @@ public class GUI extends JFrame implements j.Observer {
 
                                 //Displays Type options, and centers the popup window on the main GUI screen
                                 int typeChoice = JOptionPane.showConfirmDialog(guiWindow, chooseType, "Choose Class Type", JOptionPane.OK_CANCEL_OPTION);
-                                if(typeChoice == JOptionPane.OK_OPTION) {
+                                if (typeChoice == JOptionPane.OK_OPTION) {
 
                                     //Defaults class in order to make classType always initialized
                                     String relationshipType = aggregationButton.getText();
 
-                                    if(aggregationButton.isSelected()) relationshipType = aggregationButton.getText();
-                                    if(compositionButton.isSelected()) relationshipType = compositionButton.getText();
-                                    if(implementationButton.isSelected()) relationshipType = implementationButton.getText();
-                                    if(realizationButton.isSelected()) relationshipType = realizationButton.getText();
+                                    if (aggregationButton.isSelected()) relationshipType = aggregationButton.getText();
+                                    if (compositionButton.isSelected()) relationshipType = compositionButton.getText();
+                                    if (implementationButton.isSelected())
+                                        relationshipType = implementationButton.getText();
+                                    if (realizationButton.isSelected()) relationshipType = realizationButton.getText();
 
                                     //get int that corresponds to the enum type
                                     int typeToInt = 0;
                                     //Convert chosen button's string to an int to be passed into the addClass method
-                                    switch (relationshipType){
+                                    switch (relationshipType) {
                                         case "Aggregation":
                                             typeToInt = 1;
                                             break;
@@ -1465,25 +1419,19 @@ public class GUI extends JFrame implements j.Observer {
 
                                     Controller.addRelationship(firstClass, secondClass, typeToInt);
                                 }
-
-
-
                             }
                             isAClassOption2 = true;
                         }
-
                     }
-
                     isAClassOption = true;
                 }
-
             }
         });
 
         delRelation = new JMenuItem(new AbstractAction("Delete Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                              if(Controller.getCreatedClassesSize() < 2){
+                if (Controller.getCreatedClassesSize() < 2) {
                     JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least two classes");
                     return;
                 }
@@ -1501,7 +1449,7 @@ public class GUI extends JFrame implements j.Observer {
 
                 boolean isAClassOption = false;
 
-                while(!isAClassOption) {
+                while (!isAClassOption) {
                     //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                     int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Class being implemented",
                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -1515,7 +1463,7 @@ public class GUI extends JFrame implements j.Observer {
 
                         boolean isAClassOption2 = false;
 
-                        while(!isAClassOption2) {
+                        while (!isAClassOption2) {
                             //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                             int chosenClass2 = JOptionPane.showConfirmDialog(guiWindow, classComboBox2, "Class Implementing other class",
                                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -1525,24 +1473,19 @@ public class GUI extends JFrame implements j.Observer {
                             if (chosenClass2 == JOptionPane.OK_OPTION && !secondClass.equals("Choose a class")) {
 
                                 //Confirm delete relationship
-                                JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
+                                JPanel displayConfirmationMessage = new JPanel(new GridLayout(0, 1));
                                 displayConfirmationMessage.add(new JLabel("Delete relationship between\n " + firstClass + " and " + secondClass + " ?"));
                                 int confirmDelete = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Delete ?", OK_CANCEL_OPTION);
-                                if(confirmDelete == OK_OPTION){
+                                if (confirmDelete == OK_OPTION) {
                                     //delete the relationship
                                     Controller.deleteRelationship(firstClass, secondClass);
                                 }
-
-
                             }
                             isAClassOption2 = true;
                         }
-
                     }
-
                     isAClassOption = true;
                 }
-
             }
         });
         relationshipDropdown.add(addRelation);
@@ -1566,8 +1509,6 @@ public class GUI extends JFrame implements j.Observer {
         saveLoadDropdown.add(load);
 
         helpDropdown = new JMenu("Help");
-        /*Maybe take out the dropdown part of "help" since there's just one component.
-         that isn't exactly needed to be repeated if we can get around it*/
         help = new JMenuItem(new AbstractAction("Help") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1585,7 +1526,6 @@ public class GUI extends JFrame implements j.Observer {
                 int result1 = JOptionPane.showOptionDialog(null, message1,
                         "Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{"Continue", "Cancel"}, "Continue");
 
-
                 if (result1 != JOptionPane.OK_OPTION) {
                     return;
                 }
@@ -1597,31 +1537,28 @@ public class GUI extends JFrame implements j.Observer {
                         "\n\nRelationship: When hovered over, this will offer you two options:" +
                         "\n1. Add relationship: Allows you to add a relationship between two classes." +
                         "\n2. Delete relationship: Allows you to delete a relationship between two classes.";
-
                 int result2 = JOptionPane.showOptionDialog(null, message2, "Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{"Continue", "Cancel"}, "Continue");
-
 
                 if (result2 != JOptionPane.OK_OPTION) {
                     return;
                 }
-
                 String message3 = "Save/Load: When hovered over, this will offer you two options:" +
                         "\n1. Save: Saves all current progress to a save file." +
                         "\n2. Load: Loads all previously saved progress into the program from the save file." +
                         "\n\nUndo/Redo: When hovered over, this will offer you two options:" +
                         "\n1. Undo: Reverts to a version before an action was completed." +
                         "\n2. Redo: Restores the reverted action." +
-                        "\nNote: Pressing 'u' on the keyboard will undo the last change, and 'r' will redo it."+
+                        "\nNote: Pressing 'u' on the keyboard will undo the last change, and 'r' will redo it." +
                         "\n\nEach of these options will have dialog windows with prompts that can help you use them.\nGo ahead and give it a try! Happy editing!";
 
-              JOptionPane.showOptionDialog(null, message3,"Help",JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{"OK"}, "OK");
+                JOptionPane.showOptionDialog(null, message3, "Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{"OK"}, "OK");
             }
         });
         about = new JMenuItem(new AbstractAction("About") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String aboutUs = "This UML diagram editor was created by " +
-                        "Michael, Karen, Ben, David, Tim and Rachael\n\n"+
+                        "Michael, Karen, Ben, David, Tim and Rachael\n\n" +
                         "Special thanks to Stu for not working on this because he probably would've broken something\n\n" +
                         "Contact Dr. Cain if you would like to pay for any of our therapy bills";
                 JOptionPane.showMessageDialog(null, aboutUs);
@@ -1640,7 +1577,6 @@ public class GUI extends JFrame implements j.Observer {
         });
         CLIDropdown.add(openCLI);
 
-        //Undo/Redo menu options
         undoRedoDropdown = new JMenu("Undo/Redo");
         menuUndo = new JMenuItem(new AbstractAction("Undo") {
             @Override
@@ -1666,7 +1602,6 @@ public class GUI extends JFrame implements j.Observer {
         mainMenu.add(saveLoadDropdown);
         mainMenu.add(undoRedoDropdown);
         mainMenu.add(helpDropdown);
-
 
         // add menubar to our main GUI display frame
         guiWindow.setJMenuBar(mainMenu);
@@ -1695,7 +1630,6 @@ public class GUI extends JFrame implements j.Observer {
         while (!Main.cview) {
 
         }
-
     }
 
     public static class ShapeDrawing extends JComponent {
@@ -1773,21 +1707,6 @@ public class GUI extends JFrame implements j.Observer {
             LinkedList<Integer> coords = new LinkedList<>();
             //Goes through all classes and prints them
             String[] classNames = Controller.listClasses();
-            //this will stick every other class on an upper row, and the ones in between on a lower row
-
-            /* remove the for loop. Place it in it's own method to print all classes. This print all classes method will be
-              outside of the shape drawing class, and will call shapedrawing for each class listed. You'll need int numberofclasses
-              from above to be able to do this. This could get complicated as it might require moving multiple methods
-               outside of ShapeDrawing*/
-            //Report on the above:This shouldn't work as the methods need to be nested in the component it seems. Might be able to
-            //make it work with extra workarounds
-
-
-            //Prints a line of classboxes. Relationship drawing breaks and crashes the program. That specific line is moveable
-            //for (int i = 0; i < numberOfClasses; i++){
-            //drawClass(classNames[i], curx, 200, g2);
-            //curx += (1.5 * spaceWidth);
-            //}
 
             if (classNames.length == 0)
                 return;
@@ -1797,9 +1716,6 @@ public class GUI extends JFrame implements j.Observer {
 
 
             for (int i = 0; i < numberOfClasses; i++) {
-                //issue report with the mouse listeners in the if/else below:
-                // Classes are duplicated in display, so for 1 class, 2 show up. They're in weirdly bounded boxes,
-                // and the components in each box are not moveable
                 if (i % 2 == 0) {
                     drawClass(classNames[i], curx, 200, g2);
 
@@ -1899,11 +1815,6 @@ public class GUI extends JFrame implements j.Observer {
             }
         }
 
-        /*this was added in the last push
-        public Graphics2D getGraphicy(){
-            return this.graphicy;
-        } */
-
         public int getClassWidth(String className, Graphics2D g2) {
             String[][] classDetails = Controller.listAllClassDetails(className);
             int width = g2.getFontMetrics().stringWidth(className);
@@ -1930,10 +1841,6 @@ public class GUI extends JFrame implements j.Observer {
 
         //Draws the class boxes
         public void drawClass(String className, int x, int y, Graphics2D g2) {
-            //issue report with the mouse listeners in the if/else below:
-            // Classes are duplicated in display, so for 1 class, 2 show up. They're in weirdly bounded boxes,
-            // and the components in each box are not moveable
-
             //number of fields and methods
             String[][] classDetails = Controller.listAllClassDetails(className);
             int height = 15 * (classDetails[Controller.DETAILS_METHODS].length + classDetails[Controller.DETAILS_FIELDS].length + 2);
@@ -1978,5 +1885,4 @@ public class GUI extends JFrame implements j.Observer {
             g2d.dispose();
         }
     }
-
 }
