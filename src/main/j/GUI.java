@@ -706,6 +706,76 @@ public class GUI extends JFrame implements j.Observer {
 
                     }
 
+                    if (attTypeAsInt == 2) {
+                        //Get the list of existing classes
+                        String[] classList = Controller.listClasses();
+
+                        //Add a default option asking the user to pick a class
+                        String[] classListWDefault = new String[classList.length + 1];
+                        classListWDefault[0] = "Choose a class";
+                        System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                        //Creates a combo box with the list of classes
+                        JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                        boolean isAClassOption = false;
+
+                        while(!isAClassOption){
+                            //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                            int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Deleting a method from what class?",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                            String className = (String) classComboBox.getSelectedItem();
+
+                            if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                                //Gets the name of the new field
+                                //String fieldName = JOptionPane.showInputDialog(guiWindow, "Which field do you want to delete?");
+                                //String classWField = (String) classComboBox.getSelectedItem();
+                                String[][] classDetails = Controller.listAllClassDetails(className);
+                                String[] methodList = classDetails[1];
+                                JComboBox<String> methodComboBox = new JComboBox<>(methodList);
+
+                                int chosenMethod = JOptionPane.showConfirmDialog(guiWindow, methodComboBox, "Delete which Method?",
+                                        OK_CANCEL_OPTION, QUESTION_MESSAGE);
+                                if(chosenMethod == OK_OPTION){
+                                    String methodToDeleteInfo = (String) methodComboBox.getSelectedItem();
+                                    String methodToDelete = methodToDeleteInfo.toString();
+                                    String[] seperateMethodName = methodToDelete.split("\\(");  //\\s+//Split by whitespace
+                                    //Extract only the field's name
+                                    String methodNameWParam = seperateMethodName[0];
+                                    String methodName = methodNameWParam.substring(1).trim();
+
+
+
+                                    JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
+                                    displayConfirmationMessage.add(new JLabel("Delete " + methodToDelete + " ?"));
+                                    int confirmDelete = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Delete ?", OK_CANCEL_OPTION);
+                                    if(confirmDelete == OK_OPTION){
+                                        System.out.println("This is the fieldtodelete selected: " + methodName);
+                                        Controller.deleteMethod(className, methodName);
+                                        System.out.println("This is the passed in class name to delete from: " + className);
+                                    }
+
+                                }
+                                else{
+                                    return;
+                                }
+
+
+
+
+
+                                isAClassOption = true;
+                            }
+                            else{
+                                if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                                    break;
+                                }
+                            }
+                        }
+
+                    }
+
                 }
 
 
