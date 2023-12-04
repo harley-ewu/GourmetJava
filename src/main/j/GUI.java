@@ -1349,6 +1349,9 @@ public class GUI extends JFrame implements j.Observer {
                 return;
             }
                 String classWMethod = JOptionPane.showInputDialog(guiWindow, "What class contains the method you would like to rename a parameter in?");
+
+
+
                 String methodName = JOptionPane.showInputDialog(guiWindow, "What is the name of the method containing the parameter you are renaming?");
                 String paramName = JOptionPane.showInputDialog(guiWindow, "Which parameter do you want to rename?");
                 String newParamName = JOptionPane.showInputDialog(guiWindow, "What do you want to rename it to?");
@@ -1366,38 +1369,179 @@ public class GUI extends JFrame implements j.Observer {
         addRelation = new JMenuItem(new AbstractAction("Add Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(Controller.getCreatedClassesSize() < 2){
+                              if(Controller.getCreatedClassesSize() < 2){
                     JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least two classes");
                     return;
                 }
 
-                String firstClass = JOptionPane.showInputDialog("What is the name of the first class you want to have a relationship?\n" +
-                        "(The lower/to class, e.g this implements the other class)");
-                String secondClass = JOptionPane.showInputDialog("What is the name of the second class you want to have a relationship?\n" +
-                        "(The higher/from class, e.g the other class implements this)");
-                String typeAsString = JOptionPane.showInputDialog("Please enter the relationship type's number below\n" +
-                        "1.) Aggregation \n 2.) Composition \n 3.) Implementation \n 4.) Realization");
-                int type = Integer.parseInt(typeAsString);
-                Controller.addRelationship(firstClass, secondClass, type);
+                //Get the list of existing classes
+                String[] classList = Controller.listClasses();
+
+                //Add a default option asking the user to pick a class
+                String[] classListWDefault = new String[classList.length + 1];
+                classListWDefault[0] = "Choose a class";
+                System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                //Creates a combo box with the list of classes
+                JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                boolean isAClassOption = false;
+
+                while(!isAClassOption) {
+                    //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                    int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Class being implemented",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                    String firstClass = (String) classComboBox.getSelectedItem();
+
+                    if (chosenClass == JOptionPane.OK_OPTION && !firstClass.equals("Choose a class")) {
+
+                        //Creates a combo box with the list of classes
+                        JComboBox<String> classComboBox2 = new JComboBox<>(classListWDefault);
+
+                        boolean isAClassOption2 = false;
+
+                        while(!isAClassOption2) {
+                            //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                            int chosenClass2 = JOptionPane.showConfirmDialog(guiWindow, classComboBox2, "Class Implementing other class",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                            String secondClass = (String) classComboBox2.getSelectedItem();
+
+                            if (chosenClass2 == JOptionPane.OK_OPTION && !secondClass.equals("Choose a class")) {
+
+                                JRadioButton aggregationButton = new JRadioButton("Aggregation");
+                                JRadioButton compositionButton = new JRadioButton("Composition");
+                                JRadioButton implementationButton = new JRadioButton("Implementation");
+                                JRadioButton realizationButton = new JRadioButton("Realization");
+
+                                ButtonGroup type = new ButtonGroup();
+                                type.add(aggregationButton);
+                                type.add(compositionButton);
+                                type.add(implementationButton);
+                                type.add(realizationButton);
+
+                                aggregationButton.setSelected(true);
 
 
-                //Different prompts letting the user know if the relationship was successfully added or not
+
+                                //Create a JPanel and add the button group to it, aligned vertically
+                                JPanel chooseType = new JPanel(new GridLayout(0,1));
+                                chooseType.add(new JLabel("Please Choose a Type:"));
+                                chooseType.add(aggregationButton);
+                                chooseType.add(compositionButton);
+                                chooseType.add(implementationButton);
+                                chooseType.add(realizationButton);
+
+                                //Displays Type options, and centers the popup window on the main GUI screen
+                                int typeChoice = JOptionPane.showConfirmDialog(guiWindow, chooseType, "Choose Class Type", JOptionPane.OK_CANCEL_OPTION);
+                                if(typeChoice == JOptionPane.OK_OPTION) {
+
+                                    //Defaults class in order to make classType always initialized
+                                    String relationshipType = aggregationButton.getText();
+
+                                    if(aggregationButton.isSelected()) relationshipType = aggregationButton.getText();
+                                    if(compositionButton.isSelected()) relationshipType = compositionButton.getText();
+                                    if(implementationButton.isSelected()) relationshipType = implementationButton.getText();
+                                    if(realizationButton.isSelected()) relationshipType = realizationButton.getText();
+
+                                    //get int that corresponds to the enum type
+                                    int typeToInt = 0;
+                                    //Convert chosen button's string to an int to be passed into the addClass method
+                                    switch (relationshipType){
+                                        case "Aggregation":
+                                            typeToInt = 1;
+                                            break;
+                                        case "Composition":
+                                            typeToInt = 2;
+                                            break;
+                                        case "Implementation":
+                                            typeToInt = 3;
+                                            break;
+                                        case "Realization":
+                                            typeToInt = 4;
+                                            break;
+                                    }
+
+                                    Controller.addRelationship(firstClass, secondClass, typeToInt);
+                                }
+
+
+
+                            }
+                            isAClassOption2 = true;
+                        }
+
+                    }
+
+                    isAClassOption = true;
+                }
+
             }
         });
+
         delRelation = new JMenuItem(new AbstractAction("Delete Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(Controller.getCreatedClassesSize() < 2){
+                              if(Controller.getCreatedClassesSize() < 2){
                     JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least two classes");
                     return;
                 }
 
-                String firstClass = JOptionPane.showInputDialog("What is the name of the first class with this relationship? ");
-                String secondClass = JOptionPane.showInputDialog("What is the name of the second class with this relationship? ");
-                //TODO Prompt with a message asking "Delete the relationship from firstClass to secondClass?" with an okay or cancel button
-                String doubleCheckDelete = JOptionPane.showInputDialog("Delete the relationship between " + firstClass + " and " + secondClass + "? \n" +
-                        "Please type yes to confirm, or enter anything else to cancel. ");
+                //Get the list of existing classes
+                String[] classList = Controller.listClasses();
 
+                //Add a default option asking the user to pick a class
+                String[] classListWDefault = new String[classList.length + 1];
+                classListWDefault[0] = "Choose a class";
+                System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                //Creates a combo box with the list of classes
+                JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                boolean isAClassOption = false;
+
+                while(!isAClassOption) {
+                    //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                    int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Class being implemented",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                    String firstClass = (String) classComboBox.getSelectedItem();
+
+                    if (chosenClass == JOptionPane.OK_OPTION && !firstClass.equals("Choose a class")) {
+
+                        //Creates a combo box with the list of classes
+                        JComboBox<String> classComboBox2 = new JComboBox<>(classListWDefault);
+
+                        boolean isAClassOption2 = false;
+
+                        while(!isAClassOption2) {
+                            //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                            int chosenClass2 = JOptionPane.showConfirmDialog(guiWindow, classComboBox2, "Class Implementing other class",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                            String secondClass = (String) classComboBox2.getSelectedItem();
+
+                            if (chosenClass2 == JOptionPane.OK_OPTION && !secondClass.equals("Choose a class")) {
+
+                                //Confirm delete relationship
+                                JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
+                                displayConfirmationMessage.add(new JLabel("Delete relationship between\n " + firstClass + " and " + secondClass + " ?"));
+                                int confirmDelete = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Delete ?", OK_CANCEL_OPTION);
+                                if(confirmDelete == OK_OPTION){
+                                    //delete the relationship
+                                    Controller.deleteRelationship(firstClass, secondClass);
+                                }
+
+
+                            }
+                            isAClassOption2 = true;
+                        }
+
+                    }
+
+                    isAClassOption = true;
+                }
 
             }
         });
