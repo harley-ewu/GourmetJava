@@ -16,8 +16,4 @@ public enum Visibility {
         return this.symbol;
     }
 
-    public String getVisibility() {
-        return this.name();
-    }
-
 }
