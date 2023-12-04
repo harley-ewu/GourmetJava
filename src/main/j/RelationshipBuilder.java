@@ -19,6 +19,7 @@ public class RelationshipBuilder {
     public int getFirstIndex() {
         return this.firstIndex;
     }
+
     public int getSecondIndex() {
         return this.secondIndex;
     }

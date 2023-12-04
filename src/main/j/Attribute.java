@@ -2,7 +2,7 @@ package j;
 
 import java.util.Arrays;
 
-public abstract class Attribute implements Comparable<Attribute>, Cloneable{
+public abstract class Attribute implements Comparable<Attribute>, Cloneable {
 
     @Override
     public Attribute clone() {

@@ -2,7 +2,7 @@ package j;
 
 import java.util.LinkedList;
 
-public class Methods extends Attribute implements Cloneable{
+public class Methods extends Attribute implements Cloneable {
     //parameter types
     private final LinkedList<String> paramTypes;
     //return type
@@ -30,7 +30,6 @@ public class Methods extends Attribute implements Cloneable{
         return Controller.STATUS_CODES.PARAM_NOT_FOUND;
     }
 
-  
     public Controller.STATUS_CODES renameParam(String oldParamName, String newParamName) {
         for (int i = 0; i < paramTypes.size(); i++) {
             if (paramTypes.get(i).equals(oldParamName)) {
@@ -39,8 +38,8 @@ public class Methods extends Attribute implements Cloneable{
             }
         }
         return Controller.STATUS_CODES.PARAM_NOT_FOUND;
-  }
-  
+    }
+
     public void addParam(String param) {
         this.paramTypes.add(param);
     }
