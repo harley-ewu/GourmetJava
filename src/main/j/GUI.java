@@ -252,10 +252,10 @@ public class GUI extends JFrame implements j.Observer {
                         case "Interface":
                             typeToInt = 2;
                             break;
-                        case "Enum":
+                        case "Record":
                             typeToInt = 3;
                             break;
-                        case "Record":
+                        case "Enum":
                             typeToInt = 4;
                             break;
                         case "Annotation":
@@ -399,9 +399,8 @@ public class GUI extends JFrame implements j.Observer {
                             break;
                     }
 
-                    if (attTypeAsInt == 1) { //adding a field
-                        //String className = JOptionPane.showInputDialog("Enter the name of the class you are adding the field to");
-
+                    //Adding a field
+                    if (attTypeAsInt == 1) {
                         //Get the list of existing classes
                         String[] classList = Controller.listClasses();
 
@@ -416,7 +415,7 @@ public class GUI extends JFrame implements j.Observer {
                         boolean isAClassOption = false;
 
                         while(!isAClassOption){
-                            isAClassOption = true;
+
                             //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
                             int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Name of the class to add a field to",
                                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -475,7 +474,7 @@ public class GUI extends JFrame implements j.Observer {
                                     break;
                                 }
 
-
+                                isAClassOption = true;
                             }
                             else{
                                 if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
@@ -486,37 +485,111 @@ public class GUI extends JFrame implements j.Observer {
 
 
                     } else if (attTypeAsInt == 2) { //adding a method
-                        String className = JOptionPane.showInputDialog("Enter the name of the class you are adding this method to");
-                        String methodName = JOptionPane.showInputDialog("What is the name of this new method?");
-                        int visibilityChoice = 0;
-                        while (visibilityChoice < 1 || visibilityChoice > 3) {
-                            String visibilityChoiceAsString = JOptionPane.showInputDialog("Enter the visibility number below. \n" +
-                                    "1.) Private \n 2.) Public \n 3.) Protected");
-                            visibilityChoice = Integer.parseInt(visibilityChoiceAsString);
-                        }
-                        String returnType = JOptionPane.showInputDialog("What is the return type of this method?");
-                        String params = JOptionPane.showInputDialog("What parameters does this method have?");
-                        LinkedList<String> parameters = new LinkedList<>();
-                        parameters.add(params);
-                        //TODO come back to this when my brain turns back on and finish allowing more params to be added
-                       /*boolean moreParams = false;
-                       String areMoreParams = JOptionPane.showInputDialog("Does this method have any more parameters?\n" +
-                               "Please enter 'yes' to add more, or any key to continue.");
-                       if(areMoreParams.equalsIgnoreCase("yes")){
-                           moreParams = true;
-                       }
-                       while (moreParams = true){
-                           String params2 = JOptionPane.showInputDialog("What parameters does this method have?");
-                       } */
+                        //String className = JOptionPane.showInputDialog("Enter the name of the class you are adding this method to");
 
-                        //Creates a new method with the given inputs from the user
-                        Controller.addMethod(className, methodName, visibilityChoice, returnType, parameters);
+                        //Get the list of existing classes
+                        String[] classList = Controller.listClasses();
+
+                        //Add a default option asking the user to pick a class
+                        String[] classListWDefault = new String[classList.length + 1];
+                        classListWDefault[0] = "Choose a class";
+                        System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                        //Creates a combo box with the list of classes
+                        JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                        boolean isAClassOption = false;
+
+                        while(!isAClassOption){
+
+                            //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                            int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Name of the class to add a field to",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                            String className = (String) classComboBox.getSelectedItem();
+
+                            if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                                //Gets the name of the new field
+                                String methodName = JOptionPane.showInputDialog(guiWindow, "What is the new method's name?");
+
+                                //Makes sure the visibility choice will pair with one of the 3 possible visibility options.
+                                JRadioButton privateButton = new JRadioButton("Private");
+                                JRadioButton publicButton = new JRadioButton("Public");
+                                JRadioButton protectedButton = new JRadioButton("Protected");
+                                //Sets protected as the default visibility
+                                privateButton.setSelected(true);
+
+                                ButtonGroup visibilityGroup = new ButtonGroup();
+                                visibilityGroup.add(privateButton);
+                                visibilityGroup.add(publicButton);
+                                visibilityGroup.add(protectedButton);
+
+                                JPanel visibility = new JPanel(new GridLayout(0,1));
+                                visibility.add(new JLabel("Enter the visibility for your field"));
+                                visibility.add(privateButton);
+                                visibility.add(publicButton);
+                                visibility.add(protectedButton);
+
+                                int visibilityPopup = JOptionPane.showConfirmDialog(guiWindow, visibility, "Visibility Type", OK_CANCEL_OPTION);
+
+                                if(visibilityPopup == OK_OPTION){
+                                    //VisibilityChoice will be changed given the button selected, but defaults to private
+                                    String visibilityChoice = privateButton.getText();
+                                    if(publicButton.isSelected()) visibilityChoice = publicButton.getText();
+                                    if(protectedButton.isSelected()) visibilityChoice = protectedButton.getText();
+
+                                    int visibilityChoiceInt = 0;
+                                    switch (visibilityChoice){
+                                        case ("Private"):
+                                            visibilityChoiceInt = 1;
+                                            break;
+                                        case ("Public"):
+                                            visibilityChoiceInt = 2;
+                                            break;
+                                        case ("Protected"):
+                                            visibilityChoiceInt = 3;
+                                            break;
+                                    }
+
+                                    String returnType = JOptionPane.showInputDialog(guiWindow, "What is the return type of this method?");
+                                    String params = JOptionPane.showInputDialog(guiWindow, "What parameters does this method have? \n " +
+                                            "If there are multiple, you'll need to do \n this one at a time.");
+
+                                    LinkedList<String> parameters = new LinkedList<>();
+                                    parameters.add(params);
+
+                                    boolean moreParams = true;
+
+                                    while(moreParams){
+                                        int addMoreParams = JOptionPane.showConfirmDialog(guiWindow, "Does this method have any more parameters?",
+                                        "More Parameters", YES_NO_OPTION);
+
+                                        if(addMoreParams == YES_NO_OPTION){
+                                            String additionalParam = JOptionPane.showInputDialog(guiWindow, "What is the next parameter?" );
+                                            parameters.add(additionalParam);
+                                        }
+                                        else{
+                                            moreParams = false;
+                                        }
+                                    }
+
+                                    //Creates a new method with the given inputs from the user
+                                    Controller.addMethod(className, methodName, visibilityChoiceInt, returnType, parameters);
+                                } else if (visibilityPopup == CANCEL_OPTION || visibilityPopup == CANCEL_OPTION) {
+                                    break;
+                                }
+
+                                isAClassOption = true;
+                            }
+                            else{
+                                if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                                    break;
+                                }
+                            }
+                        }
 
                     } else {
                         return;
-                        //attType = JOptionPane.showInputDialog("Invalid Input, please try again. \n" +
-                        // "Do you want to add a field or a method? \n" +
-                        //"Type '1' for field, '2' for method");
                     }
 
                 }
@@ -762,6 +835,8 @@ public class GUI extends JFrame implements j.Observer {
         });
 
     }
+
+
 
 
 
