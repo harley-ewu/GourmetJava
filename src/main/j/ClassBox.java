@@ -1,10 +1,9 @@
 package j;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class ClassBox implements Cloneable {
+public class ClassBox implements GCloneable<ClassBox> {
 
     public boolean equals(final ClassBox cb) {
         return this.equals(cb.getName());
@@ -39,11 +38,7 @@ public class ClassBox implements Cloneable {
 
     @Override
     public ClassBox clone() {
-        try {
-            return new ClassBox((ClassBox) super.clone());
-        } catch (Exception e) {
-            return null;
-        }
+        return new ClassBox(this);
     }
 
     private ClassBox(final ClassBox cb) {
@@ -99,7 +94,7 @@ public class ClassBox implements Cloneable {
     public Controller.STATUS_CODES addParam(String methodName, String newParamName) {
         Methods target = findMethod(methodName);
         if (target == null)
-            return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+            return Controller.STATUS_CODES.METHOD_NOT_FOUND;
 
         target.addParam(newParamName);
         return Controller.STATUS_CODES.SUCCESS;
@@ -115,7 +110,7 @@ public class ClassBox implements Cloneable {
                 return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+        return Controller.STATUS_CODES.FIELD_NOT_FOUND;
     }
 
     public Controller.STATUS_CODES deleteMethod(String name/*, LinkedList<String> params*/) {
@@ -125,7 +120,7 @@ public class ClassBox implements Cloneable {
                 return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+        return Controller.STATUS_CODES.METHOD_NOT_FOUND;
     }
 
 
@@ -135,13 +130,13 @@ public class ClassBox implements Cloneable {
                 return methods.get(i).renameParam(oldParamName, newParamName);
             }
         }
-        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+        return Controller.STATUS_CODES.METHOD_NOT_FOUND;
     }
 
     public Controller.STATUS_CODES deleteParam(String methodName, String paramName) {
         Methods target = findMethod(methodName);
         if (target == null)
-            return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+            return Controller.STATUS_CODES.METHOD_NOT_FOUND;
 
         return target.deleteParam(paramName);
     }
@@ -154,7 +149,7 @@ public class ClassBox implements Cloneable {
                 return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+        return Controller.STATUS_CODES.METHOD_NOT_FOUND;
     }
 
     public Controller.STATUS_CODES renameField(String fieldName, String newFieldName) {
@@ -164,24 +159,8 @@ public class ClassBox implements Cloneable {
                 return Controller.STATUS_CODES.SUCCESS;
             }
         }
-        return Controller.STATUS_CODES.OBJ_NOT_FOUND;
+        return Controller.STATUS_CODES.FIELD_NOT_FOUND;
     }
-
-
-    //finds a relationship between two ClassBoxes if it exists, or null if the relationship does not exist
-    /*public static Relationship findRelationship(final ClassBox cb1, final ClassBox cb2) {
-        for (Relationship rel : cb1.parents) {
-            if (rel.getOtherClass().equals(cb2.getName())) {
-                return rel;
-            }
-        }
-        for (Relationship rel : cb1.children) {
-            if (rel.getOtherClass().equals(cb2.getName())) {
-                return rel;
-            }
-        }
-        return null;
-    }*/
 
     // Helper method that attempts to find a method within the methods list based on name
     // returns null if not found
@@ -272,18 +251,6 @@ public class ClassBox implements Cloneable {
 
     public static String[] listVisibilityTypes() {
         return Arrays.stream(Visibility.values()).map(Enum::name).toArray(String[]::new);
-    }
-
-    public ArrayList<String[]> listRelationshipsSaveHelper() {
-        ArrayList<String[]> list = new ArrayList<>();
-        for (Relationship parent : this.parents) {
-            list.add(new String[]{
-                    parent.getOtherClass(),
-                    this.getName(),
-                    String.valueOf(parent.getTypeOrdinal())
-            });
-        }
-        return list;
     }
 
     public static String[] listRelationshipTypes() {

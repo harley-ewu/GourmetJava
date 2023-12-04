@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class Main {
     public static boolean cview = false;
     public static boolean gview = false;
-    public static GUI mainContainer = new GUI();
     public static void main(String[] args) {
         //System.out.println("Welcome to Gourmet Java's UML Editor!");
         System.out.println("Welcome to Gourmet Java's UML Editor!");

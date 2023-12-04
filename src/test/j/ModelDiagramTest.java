@@ -3,6 +3,7 @@ import j.Controller;
 import j.ModelDiagram;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import static org.junit.Assert.assertEquals;
 
@@ -351,11 +352,16 @@ public class ModelDiagramTest {
 
         // Test Success
         assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.renameParam("testClass", "testMethod", "regParam", "testNewParam"));
-
     }
 
     @Test
     public void testRenameClass(){
+        // Object for successful test
+        ModelDiagram.addClass("testOriginal", 1);
+
+        // Object that already exists
+        ModelDiagram.addClass("testExists", 1);
+
         // Test renaming a class with originalName as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.renameClass(null, "testNew"));
 
@@ -369,35 +375,79 @@ public class ModelDiagramTest {
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.renameClass("testOriginal", ""));
 
         // Test Object already exists
+        assertEquals(Controller.STATUS_CODES.OBJ_ALREADY_EXISTS, ModelDiagram.renameClass("testOriginal", "testExists"));
 
         // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.renameClass("targetFail", "testNew"));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.renameClass("testOriginal", "testNew"));
     }
 
     @Test
-    public void testAddRelationship(){
+    public void testRelationships(){
+        // Object for successful test
+        ModelDiagram.addClass("testParent", 1);
+
+        // Object for successful test
+        ModelDiagram.addClass("testChild", 1);
+
         // Test adding a relationship with parentClass as null
-        assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship(null, "testChild", "testType"));
+        assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship(null, "testChild", "1"));
 
         // Test adding a relationship with childClass as null
-        assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship("testParent", null, "testType"));
+        assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship("testParent", null, "1"));
 
-        // Test adding a relationship with type as null
-        assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship("testParent", "testChild", null));
+        // Test adding a relationship with both child and parent as null
+        assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship(null, null, "1"));
+
+        // Test with all values as null
+        assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.addRelationship(null, null, null));
 
         // Test adding a relationship with parentClass as an empty string
-        assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("", "testChild", "testType"));
+        assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("", "testChild", "1"));
 
         // Test adding a relationship with childClass as an empty string
-        assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("testParent", "", "testType"));
+        assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("testParent", "", "1"));
+
+        // Test adding a relationship iwth both child and parent as an empty string
+        assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("", "", "1"));
+
+        // Test with all values as an empty string
+        assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("", "", ""));
 
         // Test adding a relationship with type as an empty string
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.addRelationship("testParent", "testChild", ""));
 
         // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.addRelationship("targetFail", "testChild", "1"));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.addRelationship("testParent", "testChild", "1"));
+
+        String [][] relationshipList = ModelDiagram.listRelationships();
+        StringBuilder sb = new StringBuilder();
+
+        for (String[] array: relationshipList){
+            sb.append(Arrays.toString(array));
+        }
+        String twoDimRelString = sb.toString();
+
+        // Test List Success
+        assertEquals("[][testChild aggregates testParent]", twoDimRelString);
     }
 
     @Test
     public void testDeleteRelationship(){
+        // Object for successful test
+        ModelDiagram.addClass("testParent", 1);
+
+        // Object for successful test
+        ModelDiagram.addClass("testChild", 1);
+
+        // Adding a relationship to test deleting a relationship
+        ModelDiagram.addRelationship("testParent", "testChild", "1");
+
         // Test deleting a relationship with cb1 as null
         assertEquals(Controller.STATUS_CODES.NULL_STRING, ModelDiagram.deleteRelationship(null, "testChild"));
 
@@ -409,6 +459,58 @@ public class ModelDiagramTest {
 
         // Test deleting a relationship with cb2 as an empty string
         assertEquals(Controller.STATUS_CODES.EMPTY_STRING, ModelDiagram.deleteRelationship("testParent", ""));
+
+        // Test Object not found
+        assertEquals(Controller.STATUS_CODES.OBJ_NOT_FOUND, ModelDiagram.deleteRelationship("targetFail", "testChild"));
+
+        // Test Success
+        assertEquals(Controller.STATUS_CODES.SUCCESS, ModelDiagram.deleteRelationship("testParent", "testChild"));
+    }
+
+    @Test
+    public void testListClassesSuite(){
+        // Objects for successful test
+        ModelDiagram.addClass("testClass1", 1);
+        ModelDiagram.addClass("testClass2", 1);
+        ModelDiagram.addClass("testClass3", 1);
+
+        // Apparently ModelDiagram is not just an instance in each individual test method.
+        // So we will delete all the classes from before targetClass, testClass, testNew, testExists, newClass,
+
+        ModelDiagram.deleteClass("targetClass");
+        ModelDiagram.deleteClass("testClass");
+        ModelDiagram.deleteClass("testNew");
+        ModelDiagram.deleteClass("testExists");
+        ModelDiagram.deleteClass("newClass");
+        ModelDiagram.deleteClass("testParent");
+        ModelDiagram.deleteClass("testChild");
+
+        // Turing listClasses to an actual String to test
+        String [] classes = ModelDiagram.listClasses();
+        String classString = Arrays.toString(classes);
+
+        String [][] classesAndTypesArray = ModelDiagram.listClassesAndTypes();
+        StringBuilder sb = new StringBuilder();
+
+        for (String[] array: classesAndTypesArray){
+            sb.append(Arrays.toString(array));
+        }
+
+        String twoDimArrayString = sb.toString();
+        
+        String [][] classDetails = ModelDiagram.listAllClassDetails("testClass1");
+        StringBuilder sb2 = new StringBuilder();
+
+        for (String[] array: classDetails){
+            sb2.append(Arrays.toString(array));
+        }
+
+        String twoDimArrayString2 = sb2.toString();
+
+        // Test Success
+        assertEquals("[testClass1, testClass2, testClass3]", classString);
+        assertEquals("[testClass1, CLASS][testClass2, CLASS][testClass3, CLASS]", twoDimArrayString);
+        assertEquals("[testClass1, CLASS][][][]", twoDimArrayString2);
     }
 
 }
