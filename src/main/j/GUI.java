@@ -1112,6 +1112,9 @@ public class GUI extends JFrame implements j.Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String classWMethod = JOptionPane.showInputDialog(guiWindow, "What class contains the method you would like to rename a parameter in?");
+
+
+
                 String methodName = JOptionPane.showInputDialog(guiWindow, "What is the name of the method containing the parameter you are renaming?");
                 String paramName = JOptionPane.showInputDialog(guiWindow, "Which parameter do you want to rename?");
                 String newParamName = JOptionPane.showInputDialog(guiWindow, "What do you want to rename it to?");
@@ -1129,17 +1132,54 @@ public class GUI extends JFrame implements j.Observer {
         addRelation = new JMenuItem(new AbstractAction("Add Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String firstClass = JOptionPane.showInputDialog("What is the name of the first class you want to have a relationship?\n" +
-                        "(The lower/to class, e.g this implements the other class)");
-                String secondClass = JOptionPane.showInputDialog("What is the name of the second class you want to have a relationship?\n" +
-                        "(The higher/from class, e.g the other class implements this)");
-                String typeAsString = JOptionPane.showInputDialog("Please enter the relationship type's number below\n" +
-                        "1.) Aggregation \n 2.) Composition \n 3.) Implementation \n 4.) Realization");
-                int type = Integer.parseInt(typeAsString);
-                Controller.addRelationship(firstClass, secondClass, type);
+                //String firstClass = JOptionPane.showInputDialog("What is the name of the first class you want to have a relationship?\n" +
+                        //"(The lower/to class, e.g this implements the other class)");
 
+                //Get the list of existing classes
+                String[] classList = Controller.listClasses();
 
-                //Different prompts letting the user know if the relationship was successfully added or not
+                //Add a default option asking the user to pick a class
+                String[] classListWDefault = new String[classList.length + 1];
+                classListWDefault[0] = "Choose a class";
+                System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                //Creates a combo box with the list of classes
+                JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                boolean isAClassOption = false;
+
+                while(!isAClassOption) {
+                    //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                    int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Class being implemented",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                    String firstClass = (String) classComboBox.getSelectedItem();
+
+                    if (chosenClass == JOptionPane.OK_OPTION && !firstClass.equals("Choose a class")) {
+
+                        //Creates a combo box with the list of classes
+                        JComboBox<String> classComboBox2 = new JComboBox<>(classListWDefault);
+
+                        boolean isAClassOption2 = false;
+
+                        while(!isAClassOption2) {
+                            //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                            int chosenClass2 = JOptionPane.showConfirmDialog(guiWindow, classComboBox2, "Class Implementing other class",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                            String secondClass = (String) classComboBox2.getSelectedItem();
+
+                            if (chosenClass2 == JOptionPane.OK_OPTION && !secondClass.equals("Choose a class")) {
+                                Controller.addRelationship(firstClass, secondClass, 2);
+                            }
+                            isAClassOption2 = true;
+                        }
+
+                    }
+
+                    isAClassOption = true;
+                }
+
             }
         });
         delRelation = new JMenuItem(new AbstractAction("Delete Relationship") {
