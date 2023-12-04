@@ -48,7 +48,7 @@ public class ClassBoxTest {
         // Check that the field was added
         assertEquals("[-int : testType]", classBox.getFields().toString());
         Controller.STATUS_CODES c = classBox.addField("int", 1,"testType");
-        assertEquals(c.toString(), "already exists");
+        assertEquals(c.toString(), "Class already exists");
     }
 
     @Test
@@ -207,10 +207,10 @@ public class ClassBoxTest {
         assertEquals(c2.getParents().get(0).toString(), "composes " + c1.getName());
 
         Controller.STATUS_CODES c = c1.addRelationship(c1,c2,2);
-        assertEquals(c.toString(), "already exists");
+        assertEquals("Class already exists", c.toString());
 
         Controller.STATUS_CODES statCode = c2.addRelationship(c1,c2,2);
-        assertEquals(statCode.toString(), "already exists");
+        assertEquals("Class already exists", statCode.toString());
     }
 
     @Test
@@ -229,7 +229,7 @@ public class ClassBoxTest {
 
         ClassBox c3 = null;
         Controller.STATUS_CODES statCode = c2.deleteRelationship(c1,c3);
-        assertEquals(statCode.toString(), "object not found");
+        assertEquals(statCode.toString(), "Object not found");
     }
 
     @Test

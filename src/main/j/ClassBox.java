@@ -1,6 +1,5 @@
 package j;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -163,22 +162,6 @@ public class ClassBox implements GCloneable<ClassBox> {
         return Controller.STATUS_CODES.FIELD_NOT_FOUND;
     }
 
-
-    //finds a relationship between two ClassBoxes if it exists, or null if the relationship does not exist
-    /*public static Relationship findRelationship(final ClassBox cb1, final ClassBox cb2) {
-        for (Relationship rel : cb1.parents) {
-            if (rel.getOtherClass().equals(cb2.getName())) {
-                return rel;
-            }
-        }
-        for (Relationship rel : cb1.children) {
-            if (rel.getOtherClass().equals(cb2.getName())) {
-                return rel;
-            }
-        }
-        return null;
-    }*/
-
     // Helper method that attempts to find a method within the methods list based on name
     // returns null if not found
     public Methods findMethod(String methodName) {
@@ -268,18 +251,6 @@ public class ClassBox implements GCloneable<ClassBox> {
 
     public static String[] listVisibilityTypes() {
         return Arrays.stream(Visibility.values()).map(Enum::name).toArray(String[]::new);
-    }
-
-    public ArrayList<String[]> listRelationshipsSaveHelper() {
-        ArrayList<String[]> list = new ArrayList<>();
-        for (Relationship parent : this.parents) {
-            list.add(new String[]{
-                    parent.getOtherClass(),
-                    this.getName(),
-                    String.valueOf(parent.getTypeOrdinal())
-            });
-        }
-        return list;
     }
 
     public static String[] listRelationshipTypes() {

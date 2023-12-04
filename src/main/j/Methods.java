@@ -45,10 +45,6 @@ public class Methods extends Attribute implements Cloneable{
         this.paramTypes.add(param);
     }
 
-    public LinkedList<String> getParamTypes() {
-        return this.paramTypes;
-    }
-
     /*
         returns a String in the format:
             [visibility symbol][method name] ([param types]) : [return type]

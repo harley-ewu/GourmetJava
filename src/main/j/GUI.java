@@ -9,7 +9,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import static javax.swing.JOptionPane.YES_NO_OPTION;
+import static javax.swing.JOptionPane.*;
 
 /**
  * This class has a lot of commented out lines of code in it as I've tried to work through things.
@@ -154,7 +154,7 @@ public class GUI extends JFrame implements j.Observer {
             super.paintComponent(g);
             int nameLineY;
             if (!this.type.equals("CLASS"))
-                nameLineY = this.heightScale * 2 + 6;
+                nameLineY = this.heightScale * 3 + 4;
             else
                 nameLineY = this.heightScale + 6;
 
@@ -393,12 +393,21 @@ public class GUI extends JFrame implements j.Observer {
         addClass = new JMenuItem(new AbstractAction("Add Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //popup box asking the user to enter a string to use as the new class's name
-                String className = "";
-                //Ensures a user enters a valid class name
-                while (className.equals("") || className.equals(null) || className.equals(" ")) {
-                    className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
+                String className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
+                if(className == null)
+                    return;
+                Controller.STATUS_CODES status = Controller.existentialCrisisExists(className);
+                if(status != Controller.STATUS_CODES.OBJ_NOT_FOUND){
+                    JOptionPane.showMessageDialog(new JFrame(), status.toString());
+                    return;
                 }
+
+                //Ensures a user enters a valid class name
+                //while(className.equals("") || className.equals(null)|| className.equals(" ")){
+                    //popup box asking the user to enter a string to use as the new class's name
+                   // className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
+                //}
+
 
                 //Creates radio buttons for each class type option
                 JRadioButton classButton = new JRadioButton("Class");
@@ -450,10 +459,10 @@ public class GUI extends JFrame implements j.Observer {
                         case "Interface":
                             typeToInt = 2;
                             break;
-                        case "Enum":
+                        case "Record":
                             typeToInt = 3;
                             break;
-                        case "Record":
+                        case "Enum":
                             typeToInt = 4;
                             break;
                         case "Annotation":
@@ -464,7 +473,6 @@ public class GUI extends JFrame implements j.Observer {
                     Controller.addClass(className, typeToInt);
                     guiWindow.add(new ShapeDrawing());
                 }
-
             }
         });
 
@@ -473,10 +481,41 @@ public class GUI extends JFrame implements j.Observer {
         deleteClass = new JMenuItem(new AbstractAction("Delete Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //popup box asks which class to delete
-                String className = JOptionPane.showInputDialog("What is the name of the class you want to delete? ");
-                //TODO - Popup prompt to make sure you want to delete the class
-                Controller.deleteClass(className);
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There are no classes to delete");
+                    return;
+                }
+
+                //Get the list of existing classes
+                String[] classList = Controller.listClasses();
+
+                //Add a default option asking the user to pick a class
+                String[] classListWDefault = new String[classList.length + 1];
+                classListWDefault[0] = "Choose a class";
+                System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                //Creates a combo box with the list of classes
+                JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                boolean isAClassOption = false;
+
+                while(!isAClassOption){
+                    //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                    int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Which Class would you like to delete?",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                    String classToDelete = (String) classComboBox.getSelectedItem();
+
+                    if(chosenClass == JOptionPane.OK_OPTION && !classToDelete.equals("Choose a class")){
+                        Controller.deleteClass(classToDelete);
+                        isAClassOption = true;
+                    }
+                    else{
+                        if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                            break;
+                        }
+                    }
+                }
 
             }
         });
@@ -485,9 +524,42 @@ public class GUI extends JFrame implements j.Observer {
         renameClass = new JMenuItem(new AbstractAction("Rename Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String oldName = JOptionPane.showInputDialog("What is the name of the class you want to rename? ");
-                String newName = JOptionPane.showInputDialog("What would you like to rename this class to? ");
-                Controller.renameClass(oldName, newName);
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
+
+                //Get the list of existing classes
+                String[] classList = Controller.listClasses();
+
+                //Add a default option asking the user to pick a class
+                String[] classListWDefault = new String[classList.length + 1];
+                classListWDefault[0] = "Choose a class";
+                System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                //Creates a combo box with the list of classes
+                JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                boolean isAClassOption = false;
+
+                while(!isAClassOption){
+                    //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                    int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Which Class would you like to rename?",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                    String oldName = (String) classComboBox.getSelectedItem();
+
+                    if(chosenClass == JOptionPane.OK_OPTION && !oldName.equals("Choose a class")){
+                        String newName = JOptionPane.showInputDialog(guiWindow, "What would you like to rename this class to? ");
+                        Controller.renameClass(oldName, newName);
+                        isAClassOption = true;
+                    }
+                    else{
+                        if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                            break;
+                        }
+                    }
+                }
 
             }
         });
@@ -501,78 +573,245 @@ public class GUI extends JFrame implements j.Observer {
 
             //Adds an attribute when the "Add attribute" button is clicked
             public void actionPerformed(ActionEvent e) {
-                String attType = JOptionPane.showInputDialog("Do you want to add a field or a method? \n" +
-                        "Type '1' for field, '2' for method");
-                int attTypeAsInt = 0;
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
+                //String attType = JOptionPane.showInputDialog("Do you want to add a field or a method? \n" +
+                       // "Type '1' for field, '2' for method");
 
-                try {
-                    attTypeAsInt = Integer.parseInt(attType);
+                // Create radio buttons for the field and method options.
+                JRadioButton fieldButton = new JRadioButton("Field");
+                JRadioButton methodButton = new JRadioButton("Method");
 
-                    if (attTypeAsInt == 1) { //adding a field
-                        String className = JOptionPane.showInputDialog("Enter the name of the class you are adding the field to");
-                        //TODO use existentialcrisis here
-                        String fieldName = JOptionPane.showInputDialog("What would you like to call your field?");
-                        //Makes sure the visibility choice will pair with one of the 3 possible visibility options
-                        int visibilityChoice = 0;
-                        while (visibilityChoice < 1 || visibilityChoice > 3) {
-                            String visibilityChoiceAsString = JOptionPane.showInputDialog("Enter the visibility number below. \n" +
-                                    "1.) Private \n 2.) Public \n 3.) Protected");
-                            visibilityChoice = Integer.parseInt(visibilityChoiceAsString);
+                //Add them to a group so only one can be selected, then set "field" as the default option
+                ButtonGroup fieldOrMethod = new ButtonGroup();
+                fieldOrMethod.add(fieldButton);
+                fieldOrMethod.add(methodButton);
+                fieldButton.setSelected(true);
+
+                //Make a Jpanel to put the button group into
+                JPanel chooseAttType = new JPanel(new GridLayout(0,1));
+                chooseAttType.add(new JLabel("Do you want to add a field or a method?"));
+                chooseAttType.add(fieldButton);
+                chooseAttType.add(methodButton);
+
+                //Displays field and method options on an okay/cancel pane, and centers the popup window on the main GUI screen
+                int askAttType = JOptionPane.showConfirmDialog(guiWindow, chooseAttType, "Choose Attribute Type", JOptionPane.OK_CANCEL_OPTION);
+
+                if(askAttType == OK_OPTION){
+                    //Defaults class in order to make classType always initialized
+                    String choice = fieldButton.getText();
+
+                    //Change classType to give the correct text option from the selected button into the switch statement to be converted to an int
+                    if(fieldButton.isSelected()) choice = fieldButton.getText();
+                    if (methodButton.isSelected()) choice = methodButton.getText();
+
+                    int attTypeAsInt = 0;
+
+                    switch (choice){
+                        case "Field":
+                            attTypeAsInt = 1;
+                            break;
+                        case "Method":
+                            attTypeAsInt = 2;
+                            break;
+                    }
+
+                    //Adding a field
+                    if (attTypeAsInt == 1) {
+                        //Get the list of existing classes
+                        String[] classList = Controller.listClasses();
+
+                        //Add a default option asking the user to pick a class
+                        String[] classListWDefault = new String[classList.length + 1];
+                        classListWDefault[0] = "Choose a class";
+                        System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                        //Creates a combo box with the list of classes
+                        JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                        boolean isAClassOption = false;
+
+                        while(!isAClassOption){
+
+                            //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                            int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Name of the class to add a field to",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                            String className = (String) classComboBox.getSelectedItem();
+
+                            if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                                //Gets the name of the new field
+                                String fieldName = JOptionPane.showInputDialog(guiWindow, "What would you like to call your field?");
+
+                                //Makes sure the visibility choice will pair with one of the 3 possible visibility options.
+                                JRadioButton privateButton = new JRadioButton("Private");
+                                JRadioButton publicButton = new JRadioButton("Public");
+                                JRadioButton protectedButton = new JRadioButton("Protected");
+                                //Sets protected as the default visibility
+                                privateButton.setSelected(true);
+
+                                ButtonGroup visibilityGroup = new ButtonGroup();
+                                visibilityGroup.add(privateButton);
+                                visibilityGroup.add(publicButton);
+                                visibilityGroup.add(protectedButton);
+
+                                JPanel visibility = new JPanel(new GridLayout(0,1));
+                                visibility.add(new JLabel("Enter the visibility for your field"));
+                                visibility.add(privateButton);
+                                visibility.add(publicButton);
+                                visibility.add(protectedButton);
+
+                                int visibilityPopup = JOptionPane.showConfirmDialog(guiWindow, visibility, "Visibility Type", OK_CANCEL_OPTION);
+
+                                if(visibilityPopup == OK_OPTION){
+                                    //VisibilityChoice will be changed given the button selected, but defaults to private
+                                    String visibilityChoice = privateButton.getText();
+                                    if(publicButton.isSelected()) visibilityChoice = publicButton.getText();
+                                    if(protectedButton.isSelected()) visibilityChoice = protectedButton.getText();
+
+                                    int visibilityChoiceInt = 0;
+                                    switch (visibilityChoice){
+                                        case ("Private"):
+                                            visibilityChoiceInt = 1;
+                                            break;
+                                        case ("Public"):
+                                            visibilityChoiceInt = 2;
+                                            break;
+                                        case ("Protected"):
+                                            visibilityChoiceInt = 3;
+                                            break;
+                                    }
+                                    String dataType = JOptionPane.showInputDialog(guiWindow, "What is the first data type for this field? \n" +
+                                            "You can add more later. \n" +
+                                            "Example: int, string");
+                                    //creates field
+                                    Controller.addField(className, fieldName, visibilityChoiceInt, dataType);
+
+                                } else if (visibilityPopup == CANCEL_OPTION || visibilityPopup == CANCEL_OPTION) {
+                                    break;
+                                }
+
+                                isAClassOption = true;
+                            }
+                            else{
+                                if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                                    break;
+                                }
+                            }
                         }
-                        String dataType = JOptionPane.showInputDialog("What is the data type for this field? \n" +
-                                "Example: int, string");
-                        //creates field
-                        Controller.addField(className, fieldName, visibilityChoice, dataType);
 
 
                     } else if (attTypeAsInt == 2) { //adding a method
-                        String className = JOptionPane.showInputDialog("Enter the name of the class you are adding this method to");
-                        String methodName = JOptionPane.showInputDialog("What is the name of this new method?");
-                        int visibilityChoice = 0;
-                        while (visibilityChoice < 1 || visibilityChoice > 3) {
-                            String visibilityChoiceAsString = JOptionPane.showInputDialog("Enter the visibility number below. \n" +
-                                    "1.) Private \n 2.) Public \n 3.) Protected");
-                            visibilityChoice = Integer.parseInt(visibilityChoiceAsString);
-                        }
-                        String returnType = JOptionPane.showInputDialog("What is the return type of this method?");
-                        String params = JOptionPane.showInputDialog("What parameters does this method have?");
-                        LinkedList<String> parameters = new LinkedList<>();
-                        parameters.add(params);
-                        //TODO come back to this when my brain turns back on and finish allowing more params to be added
-                       /*boolean moreParams = false;
-                       String areMoreParams = JOptionPane.showInputDialog("Does this method have any more parameters?\n" +
-                               "Please enter 'yes' to add more, or any key to continue.");
-                       if(areMoreParams.equalsIgnoreCase("yes")){
-                           moreParams = true;
-                       }
-                       while (moreParams = true){
-                           String params2 = JOptionPane.showInputDialog("What parameters does this method have?");
-                       } */
+                        //String className = JOptionPane.showInputDialog("Enter the name of the class you are adding this method to");
 
-                        //Creates a new method with the given inputs from the user
-                        Controller.addMethod(className, methodName, visibilityChoice, returnType, parameters);
+                        //Get the list of existing classes
+                        String[] classList = Controller.listClasses();
+
+                        //Add a default option asking the user to pick a class
+                        String[] classListWDefault = new String[classList.length + 1];
+                        classListWDefault[0] = "Choose a class";
+                        System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                        //Creates a combo box with the list of classes
+                        JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                        boolean isAClassOption = false;
+
+                        while(!isAClassOption){
+
+                            //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                            int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Name of the class to add a field to",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                            String className = (String) classComboBox.getSelectedItem();
+
+                            if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                                //Gets the name of the new field
+                                String methodName = JOptionPane.showInputDialog(guiWindow, "What is the new method's name?");
+
+                                //Makes sure the visibility choice will pair with one of the 3 possible visibility options.
+                                JRadioButton privateButton = new JRadioButton("Private");
+                                JRadioButton publicButton = new JRadioButton("Public");
+                                JRadioButton protectedButton = new JRadioButton("Protected");
+                                //Sets protected as the default visibility
+                                privateButton.setSelected(true);
+
+                                ButtonGroup visibilityGroup = new ButtonGroup();
+                                visibilityGroup.add(privateButton);
+                                visibilityGroup.add(publicButton);
+                                visibilityGroup.add(protectedButton);
+
+                                JPanel visibility = new JPanel(new GridLayout(0,1));
+                                visibility.add(new JLabel("Enter the visibility for your field"));
+                                visibility.add(privateButton);
+                                visibility.add(publicButton);
+                                visibility.add(protectedButton);
+
+                                int visibilityPopup = JOptionPane.showConfirmDialog(guiWindow, visibility, "Visibility Type", OK_CANCEL_OPTION);
+
+                                if(visibilityPopup == OK_OPTION){
+                                    //VisibilityChoice will be changed given the button selected, but defaults to private
+                                    String visibilityChoice = privateButton.getText();
+                                    if(publicButton.isSelected()) visibilityChoice = publicButton.getText();
+                                    if(protectedButton.isSelected()) visibilityChoice = protectedButton.getText();
+
+                                    int visibilityChoiceInt = 0;
+                                    switch (visibilityChoice){
+                                        case ("Private"):
+                                            visibilityChoiceInt = 1;
+                                            break;
+                                        case ("Public"):
+                                            visibilityChoiceInt = 2;
+                                            break;
+                                        case ("Protected"):
+                                            visibilityChoiceInt = 3;
+                                            break;
+                                    }
+
+                                    String returnType = JOptionPane.showInputDialog(guiWindow, "What is the return type of this method?");
+                                    String params = JOptionPane.showInputDialog(guiWindow, "What parameters does this method have? \n " +
+                                            "If there are multiple, you'll need to do \n this one at a time.");
+
+                                    LinkedList<String> parameters = new LinkedList<>();
+                                    parameters.add(params);
+
+                                    boolean moreParams = true;
+
+                                    while(moreParams){
+                                        int addMoreParams = JOptionPane.showConfirmDialog(guiWindow, "Does this method have any more parameters?",
+                                        "More Parameters", YES_NO_OPTION);
+
+                                        if(addMoreParams == YES_NO_OPTION){
+                                            String additionalParam = JOptionPane.showInputDialog(guiWindow, "What is the next parameter?" );
+                                            parameters.add(additionalParam);
+                                        }
+                                        else{
+                                            moreParams = false;
+                                        }
+                                    }
+
+                                    //Creates a new method with the given inputs from the user
+                                    Controller.addMethod(className, methodName, visibilityChoiceInt, returnType, parameters);
+                                } else if (visibilityPopup == CANCEL_OPTION || visibilityPopup == CANCEL_OPTION) {
+                                    break;
+                                }
+
+                                isAClassOption = true;
+                            }
+                            else{
+                                if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                                    break;
+                                }
+                            }
+                        }
 
                     } else {
-                        attType = JOptionPane.showInputDialog("Invalid Input, please try again. \n" +
-                                "Do you want to add a field or a method? \n" +
-                                "Type '1' for field, '2' for method");
+                        return;
                     }
-                } catch (Exception ex) {
-                    attType = JOptionPane.showInputDialog("Please enter either '1' or '2'. Please try again. \nDo you want to add a field or a method? \n" +
-                            "Type '1' for field, '2' for method");
-                    //System.out.println("");
-                    return;
+
                 }
-
-                //Pop up menu for buttons. This will be returned to if I have time to go back and make this prettier
-                    /* JPopupMenu fieldOrMethod = new JPopupMenu("Which would you like to add?");
-                    JMenuItem field = new JMenuItem("Field");
-                    JMenuItem method = new JMenuItem("Method");
-                    fieldOrMethod.add(field);
-                    fieldOrMethod.add(method);
-                    fieldOrMethod.setVisible(true);
-                     */
-
             }
         });
 
@@ -580,6 +819,11 @@ public class GUI extends JFrame implements j.Observer {
         delAtt = new JMenuItem(new AbstractAction("Delete Attribute") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
+
                 String fieldOrMethodAsString = JOptionPane.showInputDialog("Are you wanting to delete a field or a method? \n" +
                         "Type 1 for 'field' or 2 for 'method'");
                 int fieldOrMethod = Integer.parseInt(fieldOrMethodAsString);
@@ -631,6 +875,11 @@ public class GUI extends JFrame implements j.Observer {
         addPar = new JMenuItem(new AbstractAction("Add Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
+
                 String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to add a parameter to?");
                 String methodName = JOptionPane.showInputDialog("What is the name of the method you are adding the param to?");
                 String paramName = JOptionPane.showInputDialog("What is the new parameter you are adding?");
@@ -643,6 +892,11 @@ public class GUI extends JFrame implements j.Observer {
         delPar = new JMenuItem(new AbstractAction("Delete Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
+
                 String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to delete a parameter from?");
                 String methodName = JOptionPane.showInputDialog("What is the name of the method you are deleting the param from?");
                 String paramName = JOptionPane.showInputDialog("What is the parameter you are deleting?");
@@ -654,7 +908,11 @@ public class GUI extends JFrame implements j.Observer {
         //renames an existing parameter
         renPar = new JMenuItem(new AbstractAction("Rename Parameter") {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {                if(Controller.getCreatedClassesSize() == 0){
+                JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                return;
+            }
+
                 String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to rename a parameter in?");
                 String methodName = JOptionPane.showInputDialog("What is the name of the method containing the parameter you are renaming?");
                 String paramName = JOptionPane.showInputDialog("Which parameter do you want to rename?");
@@ -673,6 +931,11 @@ public class GUI extends JFrame implements j.Observer {
         addRelation = new JMenuItem(new AbstractAction("Add Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() < 2){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least two classes");
+                    return;
+                }
+
                 String firstClass = JOptionPane.showInputDialog("What is the name of the first class you want to have a relationship?\n" +
                         "(The lower/to class, e.g this implements the other class)");
                 String secondClass = JOptionPane.showInputDialog("What is the name of the second class you want to have a relationship?\n" +
@@ -689,6 +952,11 @@ public class GUI extends JFrame implements j.Observer {
         delRelation = new JMenuItem(new AbstractAction("Delete Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() < 2){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least two classes");
+                    return;
+                }
+
                 String firstClass = JOptionPane.showInputDialog("What is the name of the first class with this relationship? ");
                 String secondClass = JOptionPane.showInputDialog("What is the name of the second class with this relationship? ");
                 //TODO Prompt with a message asking "Delete the relationship from firstClass to secondClass?" with an okay or cancel button
