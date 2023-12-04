@@ -3,6 +3,8 @@ package j;
 // Java program to construct
 // Menu bar to add menu items
 
+import org.jline.console.impl.SystemRegistryImpl;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -611,7 +613,6 @@ public class GUI extends JFrame implements j.Observer {
                 chooseAttType.add(fieldButton);
                 chooseAttType.add(methodButton);
 
-                //made a change to make sure nothing broke
 
 
                 //Displays field and method options on an okay/cancel pane, and centers the popup window on the main GUI screen
@@ -668,13 +669,20 @@ public class GUI extends JFrame implements j.Observer {
                                 int chosenField = JOptionPane.showConfirmDialog(guiWindow, fieldComboBox, "Delete which field from " + className + "?",
                                         OK_CANCEL_OPTION, QUESTION_MESSAGE);
                                 if(chosenField == OK_OPTION){
-                                    String fieldToDelete = (String) fieldComboBox.getSelectedItem();
+                                    String fieldToDeleteInfo = (String) fieldComboBox.getSelectedItem();
+                                    String fieldToDelete = fieldToDeleteInfo.toString();
+                                    String[] seperateFieldName = fieldToDelete.split("\\s+"); //Split by whitespace
+                                    //Extract only the field's name
+                                    String fieldNameWParam = seperateFieldName[0];
+                                    String fieldName = fieldNameWParam.substring(1).trim();
+
+
                                     JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
                                     displayConfirmationMessage.add(new JLabel("Delete " + fieldToDelete + " ?"));
                                     int confirmDelete = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Delete ?", OK_CANCEL_OPTION);
                                     if(confirmDelete == OK_OPTION){
-                                        System.out.println("This is the fieldtodelete selected: " + fieldToDelete);
-                                        Controller.deleteField(className, fieldToDelete);
+                                        System.out.println("This is the fieldtodelete selected: " + fieldName);
+                                        Controller.deleteField(className, fieldName);
                                         System.out.println("This is the passed in class name to delete from: " + className);
                                     }
 
