@@ -610,6 +610,7 @@ public class GUI extends JFrame implements j.Observer {
                 chooseAttType.add(new JLabel("Do you want to delete a field or a method?"));
                 chooseAttType.add(fieldButton);
                 chooseAttType.add(methodButton);
+                //Made a change for github thing
 
                 //Displays field and method options on an okay/cancel pane, and centers the popup window on the main GUI screen
                 int askAttType = JOptionPane.showConfirmDialog(guiWindow, chooseAttType, "Choose Attribute Type", JOptionPane.OK_CANCEL_OPTION);
