@@ -24,16 +24,16 @@ public class Controller implements j.Observable {
     }
 
     public enum STATUS_CODES {
-        EXCEPTION("operation failed - exception caught"),
-        SUCCESS("operation success"),
-        OBJ_ALREADY_EXISTS("already exists"),
-        OBJ_NOT_FOUND("object not found"),
-        OBJ_FOUND("object was found"),
-        NULL_PARAM_OBJ("object is null"),
-        EMPTY_STRING("entered string is empty"),
-        NULL_STRING("entered string is null"),
-        UNDO_FAILED("failed to perform undo"),
-        REDO_FAILED("failed to perform redo");
+        EXCEPTION("Operation failed - exception caught"),
+        SUCCESS("Operation success"),
+        OBJ_ALREADY_EXISTS("Class already exists"),
+        OBJ_NOT_FOUND("Object not found"),
+        OBJ_FOUND("Object was found"),
+        NULL_PARAM_OBJ("Object is null"),
+        EMPTY_STRING("The entered string is empty"),
+        NULL_STRING("The entered string is null"),
+        UNDO_FAILED("Failed to perform undo"),
+        REDO_FAILED("Failed to perform redo");
 
         private final String msg;
 
@@ -56,9 +56,9 @@ public class Controller implements j.Observable {
      * @param crisis name of the class
      * @return STATUS_CODES
      */
-//    public static STATUS_CODES existentialCrisisExists(final String crisis) {
-//        return ModelDiagram.existentialCrisisExists(crisis);
-//    }
+    public static STATUS_CODES existentialCrisisExists(final String crisis) {
+        return ModelDiagram.existentialCrisisExists(crisis);
+    }
 
     /**
      * Adds a class with the given name and type

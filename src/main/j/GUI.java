@@ -192,8 +192,14 @@ public class GUI extends JFrame implements j.Observer {
         addClass = new JMenuItem(new AbstractAction("Add Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                String className = className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
+                String className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
+                if(className == null)
+                    return;
+                Controller.STATUS_CODES status = Controller.existentialCrisisExists(className);
+                if(status != Controller.STATUS_CODES.OBJ_NOT_FOUND){
+                    JOptionPane.showMessageDialog(new JFrame(), status.toString());
+                    return;
+                }
 
                 //Ensures a user enters a valid class name
                 //while(className.equals("") || className.equals(null)|| className.equals(" ")){
@@ -275,6 +281,11 @@ public class GUI extends JFrame implements j.Observer {
         deleteClass = new JMenuItem(new AbstractAction("Delete Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There are no classes to delete");
+                    return;
+                }
+
                 //Get the list of existing classes
                 String[] classList = Controller.listClasses();
 
