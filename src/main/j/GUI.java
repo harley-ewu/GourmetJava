@@ -659,9 +659,7 @@ public class GUI extends JFrame implements j.Observer {
                             String className = (String) classComboBox.getSelectedItem();
 
                             if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
-                                //Gets the name of the new field
-                                //String fieldName = JOptionPane.showInputDialog(guiWindow, "Which field do you want to delete?");
-                                //String classWField = (String) classComboBox.getSelectedItem();
+                                //Gets the name of the field to delete
                                 String[][] classDetails = Controller.listAllClassDetails(className);
                                 String[] fieldList = classDetails[2];
                                 JComboBox<String> fieldComboBox = new JComboBox<>(fieldList);
@@ -671,19 +669,19 @@ public class GUI extends JFrame implements j.Observer {
                                 if(chosenField == OK_OPTION){
                                     String fieldToDeleteInfo = (String) fieldComboBox.getSelectedItem();
                                     String fieldToDelete = fieldToDeleteInfo.toString();
-                                    String[] seperateFieldName = fieldToDelete.split("\\s+"); //Split by whitespace
-                                    //Extract only the field's name
+                                    //Split field name by whitespace to just get the name
+                                    String[] seperateFieldName = fieldToDelete.split("\\s+");
+                                    //Extract only the field's name, not the visibility type appended to the front
                                     String fieldNameWParam = seperateFieldName[0];
                                     String fieldName = fieldNameWParam.substring(1).trim();
 
-
+                                    //Confirm delete of the selected field
                                     JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
                                     displayConfirmationMessage.add(new JLabel("Delete " + fieldToDelete + " ?"));
                                     int confirmDelete = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Delete ?", OK_CANCEL_OPTION);
                                     if(confirmDelete == OK_OPTION){
-                                        System.out.println("This is the fieldtodelete selected: " + fieldName);
+                                        //deletes the field
                                         Controller.deleteField(className, fieldName);
-                                        System.out.println("This is the passed in class name to delete from: " + className);
                                     }
 
                                 }
@@ -728,9 +726,7 @@ public class GUI extends JFrame implements j.Observer {
                             String className = (String) classComboBox.getSelectedItem();
 
                             if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
-                                //Gets the name of the new field
-                                //String fieldName = JOptionPane.showInputDialog(guiWindow, "Which field do you want to delete?");
-                                //String classWField = (String) classComboBox.getSelectedItem();
+                                //Gets the name of the method to delete
                                 String[][] classDetails = Controller.listAllClassDetails(className);
                                 String[] methodList = classDetails[1];
                                 JComboBox<String> methodComboBox = new JComboBox<>(methodList);
@@ -740,30 +736,25 @@ public class GUI extends JFrame implements j.Observer {
                                 if(chosenMethod == OK_OPTION){
                                     String methodToDeleteInfo = (String) methodComboBox.getSelectedItem();
                                     String methodToDelete = methodToDeleteInfo.toString();
+                                    //Separate the parameters from the method's name
                                     String[] seperateMethodName = methodToDelete.split("\\(");  //\\s+//Split by whitespace
-                                    //Extract only the field's name
+                                    //Extract only the field's name without the attached visibility modifier
                                     String methodNameWParam = seperateMethodName[0];
                                     String methodName = methodNameWParam.substring(1).trim();
 
-
-
+                                    //Confirm delete on the chosen method
                                     JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
                                     displayConfirmationMessage.add(new JLabel("Delete " + methodToDelete + " ?"));
                                     int confirmDelete = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Delete ?", OK_CANCEL_OPTION);
                                     if(confirmDelete == OK_OPTION){
-                                        System.out.println("This is the fieldtodelete selected: " + methodName);
+                                        //delete the method
                                         Controller.deleteMethod(className, methodName);
-                                        System.out.println("This is the passed in class name to delete from: " + className);
                                     }
 
                                 }
                                 else{
                                     return;
                                 }
-
-
-
-
 
                                 isAClassOption = true;
                             }
