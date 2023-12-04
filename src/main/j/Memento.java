@@ -16,10 +16,6 @@ public class Memento<T extends GCloneable<T>> {
         this.snap.add(obj);
     }
 
-    public ArrayList<T> restore(){
-        return this.snap;
-    }
-
 
     public static <T extends GCloneable<T>> Memento<T> createSnapshot(final ArrayList<T> l){
         ArrayList<T> list = new ArrayList<>();

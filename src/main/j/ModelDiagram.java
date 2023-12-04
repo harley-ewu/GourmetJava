@@ -574,25 +574,6 @@ public class ModelDiagram {
         return list;
     }
 
-
-    /**
-     * Lists classes and relationships, used for save/load
-     *
-     * @return ArrayList&lt;String[]&gt; in the format:<br>
-     * {<br>
-     * { parent, child, type (integer stored as String) },<br>
-     * { parent, child, type (integer stored as String) },<br>
-     * etc.<br>
-     * }
-     */
-    public static ArrayList<String[]> listRelationshipsSaveHelper() {
-        ArrayList<String[]> list = new ArrayList<>();
-        for (ClassBox cb : createdClasses) {
-            list.addAll(cb.listRelationshipsSaveHelper());
-        }
-        return list;
-    }
-
     /**
      * Saves the program to json file<br>
      * only a single save can be made

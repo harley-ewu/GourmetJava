@@ -5,7 +5,6 @@ package j;
  * the information retrieved for the CLI.
  */
 
-import org.jline.builtins.Completers;
 import org.jline.console.ArgDesc;
 import org.jline.console.CmdDesc;
 import org.jline.reader.LineReader;
@@ -125,13 +124,7 @@ public class CLI {
 
         boolean cont = true;
         while (cont) {
-            int input2;
-            int input3;
 
-            //Retrieves the user input in 'input'
-            //Calls a method readStringSplit that splits the users full command into elements in an array
-            //Each element in the array is a word separated by a space
-            //We create an array where each element is a word for us to check the type of command that is used
             String[] input = reader.readLine("Command: ").split(" ");
             //If the user enters nothing, we have them restart
             if(input.length == 0){
@@ -151,15 +144,6 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
-
-                            /*if(!readInt(input[3])){
-                                System.out.println("Please enter a valid number");
-                                break;
-                            }
-                            if(isNegative(Integer.parseInt(input[3]))){
-                                System.out.println("Please enter a non-negative number");
-                                break;
-                            }*/
 
                             //Retrieves the status code for the method and displays results
                             int classTypeNum =  getClassTypeNumber(input[3]);
@@ -189,16 +173,6 @@ public class CLI {
                             LinkedList<String> params = new LinkedList<String>();
                             params.addAll(Arrays.asList(input).subList(6, input.length));
 
-
-                            /*if(!readInt(input[4])){
-                                System.out.println("Please enter a valid visibility number");
-                                break;
-                            }
-                            if(isNegative(Integer.parseInt(input[4]))){
-                                System.out.println("Please enter a non-negative number");
-                                break;
-                            }*/
-
                             //Retrieves the status code for the method and displays results
                             int visibilityTypeNum = getVisibilityNumber(input[4]);
                             if (visibilityTypeNum == -1) {
@@ -224,14 +198,6 @@ public class CLI {
                                 break;
                             }
 
-                            /*if(!readInt(input[4])){
-                                System.out.println("Please enter a valid visibility number");
-                                break;
-                            }*/
-                            /*if(isNegative(Integer.parseInt(input[4]))){
-                                System.out.println("Please enter a non-negative number");
-                                break;
-                            }*/
                             int visibilityTypeNum = getVisibilityNumber(input[4]);
                             if (visibilityTypeNum == -1) {
                                 System.out.println("'" + input[4] + "' is not a valid visibility type, please see help for valid types");
@@ -600,174 +566,14 @@ public class CLI {
                     break;
             }
 
-                    /**
-                     * //If the user selects 1, it will display the listing options
-                    //These are all display commands
-                    if (Controller.getCreatedClassesSize() == 0) {
-                        System.out.println("Nothing to display! Please make a class first");
-                    } else {
-                        printStringList(Controller.subMenu1());
-                        //'input2' takes in user input for the submenu
-                        input2 = CLI.readInt("Choice: ");
-                        if (input2 == 1) {
-                            CLI.printStringListNumbered(Controller.listClasses());
-                        } else if (input2 == 2) {
-                            CLI.listClassesDetailed();
-                        } else if (input2 == 3) {
-                            CLI.listAllClassDetails();
-                        } else if (input2 == 4) {
-                            //Rerieves relationships for all class objects and displays them
-                            for (String[] list : Controller.listRelationships()) {
-                                printStringList(list);
-                            }
-                        } else if (input2 == 5) {
-                            CLI.printStringList(Controller.listHelp());
-                        } else if (input2 == 6) {
-                            //This is the back option, it just returns to the original menu
-                            break;
-                        } else {
-                            System.out.println("Invalid input, please try again");
-                        }
-                    }
-                    break;
-                case 2:
-                    //If the user selects 2, it takes them to the class manipulation submenu
-                    //This is where the user can add, delete, and rename classes
-                    printStringList(Controller.subMenu2());
-                    //'input2' reads user input for the sub menu
-                    input2 = CLI.readInt("Choice: ");
-                    if (input2 == 1) {
-                        CLI.addClass();
-                    } else if (input2 == 2) {
-                        CLI.deleteClass();
-                    } else if (input2 == 3) {
-                        CLI.renameClass();
-                    } else if (input2 == 4) {
-                        CLI.printStringList(Controller.classHelp());
-                    } else if (input2 == 5) {
-                        break;
-                    } else {
-                        System.out.println("Invalid input, please try again");
-                    }
-                    break;
-                case 3:
-                    //If the user selects 3, it takes them to the attribute submenu
-                    //Here, the user can add, delete, or rename fields and methods
-                    if (Controller.getCreatedClassesSize() == 0) {
-                        System.out.println("Please create a class first");
-                    } else {
-                        printStringList(Controller.subMenu3());
-                        //'input2' reads the user input for the submenu
-                        input2 = CLI.readInt("Choice: ");
-                        if (input2 == 1) {
-                            CLI.addAttribute();
-                        } else if (input2 == 2) {
-                            CLI.deleteAttribute();
-                        } else if (input2 == 3) {
-                            CLI.renameAttribute();
-                        } else if (input2 == 4) {
-                            printStringList(Controller.subMenu6());
-                            input3 = CLI.readInt("Choice ");
-                            if (input3 == 1) {
-                                CLI.addParam();
-                            } else if (input3 == 2) {
-                                CLI.deleteParam();
-                            } else if (input3 == 3) {
-                                CLI.renameParam();
-                            } else if (input3 == 4) {
-                                printStringList(Controller.editParamHelp());
-                            } else if (input3 == 5) {
-                                break;
-                            }
-                        } else if (input2 == 5) {
-                            CLI.printStringList(Controller.attributeHelp());
-                        } else if (input2 == 6) {
-                            return;
-                        } else {
-                            System.out.println("Invalid input, please try again");
-                        }
-                    }
-                    break;
-                case 4:
-                    //If the user selects 4, it takes them to the relationships submenu
-                    //This is where the user can create, delete, and rename relationships between classes
+            }
 
-                    if (Controller.getCreatedClassesSize() < 2) {
-                        System.out.println("Please create 2 classes first");
-                    } else {
-                        printStringList(Controller.subMenu4());
-                        //'input2' reads the user input for the submenu
-                        input2 = CLI.readInt("Choice: ");
-                        if (input2 == 1) {
-                            CLI.addRelationship();
-                        } else if (input2 == 2) {
-                            CLI.deleteRelationship();
-                        } else if (input2 == 3) {
-                            CLI.printStringList(Controller.relationshipHelp());
-                        } else if (input2 == 4) {
-                            break;
-                        } else {
-                            System.out.println("Invalid input, please try again");
-                        }
-                    }
-                    break;
-                case 5:
-                    //If the user selects 5, it takes them to the save / load menu
-                    //It allows them to choose if they want to save their current progress or load previously saved
-                    printStringList(Controller.subMenu5());
-                    //'input2' takes in user input for the small menu
-                    input2 = CLI.readInt("Choice: ");
-                    if (input2 == 1) {
-                        CLI.save();
-                    } else if (input2 == 2) {
-                        CLI.load();
-                    } else if (input2 == 3) {
-                        printStringList(Controller.saveLoadHelp());
-                    } else if (input2 == 4) {
-                        break;
-                    } else {
-                        System.out.println("Invalid input, please try again");
-                    }
-                    break;
-                case 6:
-                    //If the user selects 6, it opens the help menu which can help you understand how the program runs
-                    printArrayOfStringList(Controller.help());
-                    break;
-                case 7:
-                    //If the user selects 7, it will open and start the GUI menu with the same information from CLI
-                    Main.gview = true;
-                    GUI.startGUIMenu();
-                    break;
-                case 8:
-                    //If the user selects 8, it will pull up the exit menu, confirm exit with the user, then proceed as directed
-                    System.out.println("Are you sure you want to exit? Type \"yes\" to confirm");
-                    System.out.print("yes/no: ");
-                    if (kb.nextLine().equalsIgnoreCase("yes")) {
-                        System.out.println("Would you like to save first?");
-                        System.out.print("yes/no: ");
-                        if (kb.nextLine().equalsIgnoreCase("yes")) {
-                            CLI.save();
-                        }
-                        System.out.println("Program Closed! Bye!");
-                        cont = false;
-                        Main.cview = false;
-                    }
-                    break;
-                default:
-                    //If the user selects an invalid option, it will let them know and bring them back to the main menu
-                    System.out.println("That is not a valid input. Please try again");
-                    break;*/
-            }
-            if(Main.gview){
-                //GUI.displayGUI();
-            }
         }
 
     /**
      *  This method takes in an arraylist of strings and is able to print it out line after line.
      *  This method is used for many other methods that return String arrays full of data
      */
-
     public static void printStringList(final String[] list) {
         for (String s : list) {
             System.out.println(s);
@@ -821,29 +627,6 @@ public class CLI {
         else if (Controller.load(fileName) == Controller.STATUS_CODES.EMPTY_FILE) {
             System.out.println(Controller.STATUS_CODES.EMPTY_FILE);
         }
-    }
-
-    public static boolean readInt(final String msg) {
-            try {
-                Integer.parseInt(msg);
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
-
-
-    }
-    public static boolean isNegative(int num){
-        return num < 0;
-    }
-
-    public static String readString(final String msg) {
-        System.out.print(msg);
-        return kb.nextLine().toLowerCase();
-    }
-    public static String[] readStringSplit(final String msg) {
-        System.out.print(msg);
-        return kb.nextLine().toLowerCase().split(" ");
     }
 
     public static int getVisibilityNumber(final String type) {
