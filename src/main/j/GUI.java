@@ -611,6 +611,8 @@ public class GUI extends JFrame implements j.Observer {
                 chooseAttType.add(fieldButton);
                 chooseAttType.add(methodButton);
 
+                //made a change to make sure nothing broke
+
 
                 //Displays field and method options on an okay/cancel pane, and centers the popup window on the main GUI screen
                 int askAttType = JOptionPane.showConfirmDialog(guiWindow, chooseAttType, "Choose Attribute Type", JOptionPane.OK_CANCEL_OPTION);
