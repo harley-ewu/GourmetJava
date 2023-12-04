@@ -657,8 +657,29 @@ public class GUI extends JFrame implements j.Observer {
 
                             if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
                                 //Gets the name of the new field
-                                String fieldName = JOptionPane.showInputDialog(guiWindow, "Which field do you want to delete?");
+                                //String fieldName = JOptionPane.showInputDialog(guiWindow, "Which field do you want to delete?");
+                                //String classWField = (String) classComboBox.getSelectedItem();
+                                String[][] classDetails = Controller.listAllClassDetails(className);
+                                String[] fieldList = classDetails[2];
+                                JComboBox<String> fieldComboBox = new JComboBox<>(fieldList);
 
+                                int chosenField = JOptionPane.showConfirmDialog(guiWindow, fieldComboBox, "Delete which field from " + className + "?",
+                                        OK_CANCEL_OPTION, QUESTION_MESSAGE);
+                                if(chosenField == OK_OPTION){
+                                    String fieldToDelete = (String) fieldComboBox.getSelectedItem();
+                                    JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
+                                    displayConfirmationMessage.add(new JLabel("Delete " + fieldToDelete + " ?"));
+                                    int confirmDelete = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Delete ?", OK_CANCEL_OPTION);
+                                    if(confirmDelete == OK_OPTION){
+                                        System.out.println("This is the fieldtodelete selected: " + fieldToDelete);
+                                        Controller.deleteField(className, fieldToDelete);
+                                        System.out.println("This is the passed in class name to delete from: " + className);
+                                    }
+
+                                }
+                                else{
+                                    return;
+                                }
 
 
 
@@ -681,7 +702,7 @@ public class GUI extends JFrame implements j.Observer {
 
 
 
-                    if (fieldOrMethod == 1) {
+                   /* if (fieldOrMethod == 1) {
                     String className = JOptionPane.showInputDialog("What is the name of the class you want to remove a field from?");
                     String fieldName = JOptionPane.showInputDialog("What is the name of the field you wish to delete?");
                     //Controller delete field method is called with user inputs
@@ -693,7 +714,7 @@ public class GUI extends JFrame implements j.Observer {
                     } */
 
 
-                } else if (fieldOrMethod == 2) {
+              /*  } else if (fieldOrMethod == 2) {
                     String className = JOptionPane.showInputDialog("What is the name of the class you want to remove a Method from?");
                     String methodName = JOptionPane.showInputDialog("What is the name of the method you wish to delete?");
                     //Deletes Method with input from user
@@ -705,10 +726,10 @@ public class GUI extends JFrame implements j.Observer {
                         System.out.println("Failed to delete method. Please try again");
                     } */
 
-                } else {
+                 /* } else {
                     fieldOrMethodAsString = JOptionPane.showInputDialog(" Invalid input, please try again. \n Are you wanting to delete a field or a method? \n" +
                             "Type 1 for 'field' or 2 for 'method'");
-                }
+                } */
                     //changes
 
             }
