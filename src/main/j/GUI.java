@@ -1169,9 +1169,64 @@ public class GUI extends JFrame implements j.Observer {
 
                             if (chosenClass2 == JOptionPane.OK_OPTION && !secondClass.equals("Choose a class")) {
 
+                                JRadioButton aggregationButton = new JRadioButton("Aggregation");
+                                JRadioButton compositionButton = new JRadioButton("Composition");
+                                JRadioButton implementationButton = new JRadioButton("Implementation");
+                                JRadioButton realizationButton = new JRadioButton("Realization");
+
+                                ButtonGroup type = new ButtonGroup();
+                                type.add(aggregationButton);
+                                type.add(compositionButton);
+                                type.add(implementationButton);
+                                type.add(realizationButton);
+
+                                aggregationButton.setSelected(true);
 
 
-                                Controller.addRelationship(firstClass, secondClass, 2);
+
+                                //Create a JPanel and add the button group to it, aligned vertically
+                                JPanel chooseType = new JPanel(new GridLayout(0,1));
+                                chooseType.add(new JLabel("Please Choose a Type:"));
+                                chooseType.add(aggregationButton);
+                                chooseType.add(compositionButton);
+                                chooseType.add(implementationButton);
+                                chooseType.add(realizationButton);
+
+                                //Displays Type options, and centers the popup window on the main GUI screen
+                                int typeChoice = JOptionPane.showConfirmDialog(guiWindow, chooseType, "Choose Class Type", JOptionPane.OK_CANCEL_OPTION);
+                                if(typeChoice == JOptionPane.OK_OPTION) {
+
+                                    //Defaults class in order to make classType always initialized
+                                    String relationshipType = aggregationButton.getText();
+
+                                    if(aggregationButton.isSelected()) relationshipType = aggregationButton.getText();
+                                    if(compositionButton.isSelected()) relationshipType = compositionButton.getText();
+                                    if(implementationButton.isSelected()) relationshipType = implementationButton.getText();
+                                    if(realizationButton.isSelected()) relationshipType = realizationButton.getText();
+
+                                    //get int that corresponds to the enum type
+                                    int typeToInt = 0;
+                                    //Convert chosen button's string to an int to be passed into the addClass method
+                                    switch (relationshipType){
+                                        case "Aggregation":
+                                            typeToInt = 1;
+                                            break;
+                                        case "Composition":
+                                            typeToInt = 2;
+                                            break;
+                                        case "Implementation":
+                                            typeToInt = 3;
+                                            break;
+                                        case "Realization":
+                                            typeToInt = 4;
+                                            break;
+                                    }
+
+                                    Controller.addRelationship(firstClass, secondClass, typeToInt);
+                                }
+
+
+
                             }
                             isAClassOption2 = true;
                         }
