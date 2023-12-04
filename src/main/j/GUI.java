@@ -1182,14 +1182,75 @@ public class GUI extends JFrame implements j.Observer {
                     JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
                     return;
                 }
+                //String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to add a parameter to?");
 
-                String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to add a parameter to?");
-                String methodName = JOptionPane.showInputDialog("What is the name of the method you are adding the param to?");
-                String paramName = JOptionPane.showInputDialog("What is the new parameter you are adding?");
-                Controller.addParam(classWMethod, methodName, paramName);
+                //Get the list of existing classes
+                String[] classList = Controller.listClasses();
+
+                //Add a default option asking the user to pick a class
+                String[] classListWDefault = new String[classList.length + 1];
+                classListWDefault[0] = "Choose a class";
+                System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                //Creates a combo box with the list of classes
+                JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                boolean isAClassOption = false;
+
+                while(!isAClassOption){
+                    //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                    int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Add parameter to which class's method?",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                    String className = (String) classComboBox.getSelectedItem();
+
+                    if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                        //Gets the name of the method to delete
+                        String[][] classDetails = Controller.listAllClassDetails(className);
+                        String[] methodList = classDetails[1];
+                        JComboBox<String> methodComboBox = new JComboBox<>(methodList);
+
+                        int chosenMethod = JOptionPane.showConfirmDialog(guiWindow, methodComboBox, "Add parameter to which Method?",
+                                OK_CANCEL_OPTION, QUESTION_MESSAGE);
+                        if(chosenMethod == OK_OPTION){
+                            String methodInfo = (String) methodComboBox.getSelectedItem();
+                            String methodWParam = methodInfo.toString();
+                            //Separate the parameters from the method's name
+                            String[] seperateMethodName = methodWParam.split("\\(");  //\\s+//Split by whitespace
+                            //Extract only the field's name without the attached visibility modifier
+                            String methodNameWParam = seperateMethodName[0];
+                            String methodName = methodNameWParam.substring(1).trim();
+
+                            String newParam = JOptionPane.showInputDialog(guiWindow, "What is the parameter you are adding?");
+
+                            //Confirm rename on the chosen method
+                            JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
+                            displayConfirmationMessage.add(new JLabel("Add " + newParam + " to "+ methodName + " ?"));
+                            int confirmAddParam = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Rename?", OK_CANCEL_OPTION);
+                            if(confirmAddParam == OK_OPTION){
+                                //Add the parameter to the chosen method
+                                Controller.addParam(className, methodName, newParam);
+                            }
+
+                        }
+                        else{
+                            return;
+                        }
+
+                        isAClassOption = true;
+                    }
+                    else{
+                        if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                            break;
+                        }
+                    }
+
+                }
+
 
             }
         });
+
 
         //deletes an existing parameter from a method in a class
         delPar = new JMenuItem(new AbstractAction("Delete Parameter") {
@@ -1199,11 +1260,82 @@ public class GUI extends JFrame implements j.Observer {
                     JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
                     return;
                 }
+                //Get the list of existing classes
+                String[] classList = Controller.listClasses();
 
-                String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to delete a parameter from?");
-                String methodName = JOptionPane.showInputDialog("What is the name of the method you are deleting the param from?");
-                String paramName = JOptionPane.showInputDialog("What is the parameter you are deleting?");
-                Controller.deleteParam(classWMethod, methodName, paramName);
+                //Add a default option asking the user to pick a class
+                String[] classListWDefault = new String[classList.length + 1];
+                classListWDefault[0] = "Choose a class";
+                System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                //Creates a combo box with the list of classes
+                JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                boolean isAClassOption = false;
+
+                while(!isAClassOption){
+                    //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                    int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Delete param from which class's method?",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                    String className = (String) classComboBox.getSelectedItem();
+
+                    if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                        //Gets the name of the method to delete
+                        String[][] classDetails = Controller.listAllClassDetails(className);
+                        String[] methodList = classDetails[1];
+                        JComboBox<String> methodComboBox = new JComboBox<>(methodList);
+
+                        int chosenMethod = JOptionPane.showConfirmDialog(guiWindow, methodComboBox, "Which Method has param to delete?",
+                                OK_CANCEL_OPTION, QUESTION_MESSAGE);
+                        if(chosenMethod == OK_OPTION){
+                            String methodInfo = (String) methodComboBox.getSelectedItem();
+                            if(!methodInfo.contains("(")){
+                                JOptionPane.showMessageDialog(guiWindow, "This method has no parameters");
+                                return;
+                            }
+
+                            String[] parts = methodInfo.split("\\(");
+                            //Skip the visibility modifier to just get method name
+                            String methodName = parts[0].substring(1).trim();
+                            //Replaces the ) to rwmove closing parenthesis
+                            String parameters = parts[1].replace(")", "");
+
+                            //Take the above and convert to array that Users can then choose from
+                            String[] paramChoices = parameters.split(",");
+                            JComboBox<String> paramComboBox = new JComboBox<>(paramChoices);
+
+                            int chosenParam = JOptionPane.showConfirmDialog(guiWindow, paramComboBox, "Delete which Parameter?",
+                                    OK_CANCEL_OPTION, QUESTION_MESSAGE);
+
+                            if(chosenParam == OK_OPTION){
+                                String paramToDelete = (String) paramComboBox.getSelectedItem();
+
+                                //Confirm delete param on the chosen method
+                                JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
+                                displayConfirmationMessage.add(new JLabel("Delete " + paramToDelete + " ?"));
+                                int confirmDelete = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Delete ?", OK_CANCEL_OPTION);
+                                if(confirmDelete == OK_OPTION){
+                                    //delete the parameter
+                                    Controller.deleteParam(className, methodName, paramToDelete);
+                                }
+
+                            }
+
+                        }
+                        else{
+                            return;
+                        }
+
+                        isAClassOption = true;
+                    }
+                    else{
+                        if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                            break;
+                        }
+                    }
+                }
+
 
             }
         });
@@ -1211,15 +1343,15 @@ public class GUI extends JFrame implements j.Observer {
         //renames an existing parameter
         renPar = new JMenuItem(new AbstractAction("Rename Parameter") {
             @Override
-            public void actionPerformed(ActionEvent e) {                if(Controller.getCreatedClassesSize() == 0){
+            public void actionPerformed(ActionEvent e) {
+                  if(Controller.getCreatedClassesSize() == 0){
                 JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
                 return;
             }
-
-                String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to rename a parameter in?");
-                String methodName = JOptionPane.showInputDialog("What is the name of the method containing the parameter you are renaming?");
-                String paramName = JOptionPane.showInputDialog("Which parameter do you want to rename?");
-                String newParamName = JOptionPane.showInputDialog("What do you want to rename it to?");
+                String classWMethod = JOptionPane.showInputDialog(guiWindow, "What class contains the method you would like to rename a parameter in?");
+                String methodName = JOptionPane.showInputDialog(guiWindow, "What is the name of the method containing the parameter you are renaming?");
+                String paramName = JOptionPane.showInputDialog(guiWindow, "Which parameter do you want to rename?");
+                String newParamName = JOptionPane.showInputDialog(guiWindow, "What do you want to rename it to?");
                 Controller.renameParam(classWMethod, methodName, paramName, newParamName);
 
             }
