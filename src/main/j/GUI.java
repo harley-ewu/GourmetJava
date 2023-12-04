@@ -154,7 +154,7 @@ public class GUI extends JFrame implements j.Observer {
             super.paintComponent(g);
             int nameLineY;
             if (!this.type.equals("CLASS"))
-                nameLineY = this.heightScale * 2 + 6;
+                nameLineY = this.heightScale * 3 + 4;
             else
                 nameLineY = this.heightScale + 6;
 
