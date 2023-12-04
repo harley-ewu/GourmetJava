@@ -183,7 +183,7 @@ public class GUI extends JFrame implements j.Observer {
     static JMenu parameterDropdown, displayDropdown, classDropdown, attributeDropdown, relationshipDropdown, saveLoadDropdown, helpDropdown, CLIDropdown, undoRedoDropdown;
 
     // Individual menu items/buttons under their individual category menus
-    static JMenuItem display, addClass, deleteClass, renameClass, addAtt, delAtt, renameAtt, addRelation, delRelation, save, load, help, addPar, delPar, renPar, openCLI, menuUndo, menuRedo;
+    static JMenuItem about, display, addClass, deleteClass, renameClass, addAtt, delAtt, renameAtt, addRelation, delRelation, save, load, help, addPar, delPar, renPar, openCLI, menuUndo, menuRedo;
 
 
     //creates a frame to be the main, base window to hold the entirety of the GUI
@@ -1590,7 +1590,6 @@ public class GUI extends JFrame implements j.Observer {
                     return;
                 }
 
-
                 String message2 = "Parameters: When hovered over, this will offer you three options:" +
                         "\n1. Add parameter: Allows you to add parameters to a previously created method." +
                         "\n2. Delete parameter: Allows you to delete parameters from a previously created method." +
@@ -1606,21 +1605,31 @@ public class GUI extends JFrame implements j.Observer {
                     return;
                 }
 
-
                 String message3 = "Save/Load: When hovered over, this will offer you two options:" +
                         "\n1. Save: Saves all current progress to a save file." +
                         "\n2. Load: Loads all previously saved progress into the program from the save file." +
                         "\n\nUndo/Redo: When hovered over, this will offer you two options:" +
                         "\n1. Undo: Reverts to a version before an action was completed." +
                         "\n2. Redo: Restores the reverted action." +
+                        "\nNote: Pressing 'u' on the keyboard will undo the last change, and 'r' will redo it."+
                         "\n\nEach of these options will have dialog windows with prompts that can help you use them.\nGo ahead and give it a try! Happy editing!";
 
               JOptionPane.showOptionDialog(null, message3,"Help",JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{"OK"}, "OK");
-
-
+            }
+        });
+        about = new JMenuItem(new AbstractAction("About") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String aboutUs = "This UML diagram editor was created by " +
+                        "Michael, Karen, Ben, David, Tim and Rachael\n\n"+
+                        "Special thanks to Stu for not working on this because he probably would've broken something\n\n" +
+                        "Contact Dr. Cain if you would like to pay for any of our therapy bills";
+                JOptionPane.showMessageDialog(null, aboutUs);
             }
         });
         helpDropdown.add(help);
+        helpDropdown.add(about);
+
         CLIDropdown = new JMenu("CLI");
         openCLI = new JMenuItem(new AbstractAction("Open CLI") {
             @Override
