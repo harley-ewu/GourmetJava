@@ -1132,8 +1132,6 @@ public class GUI extends JFrame implements j.Observer {
         addRelation = new JMenuItem(new AbstractAction("Add Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //String firstClass = JOptionPane.showInputDialog("What is the name of the first class you want to have a relationship?\n" +
-                        //"(The lower/to class, e.g this implements the other class)");
 
                 //Get the list of existing classes
                 String[] classList = Controller.listClasses();
@@ -1170,6 +1168,9 @@ public class GUI extends JFrame implements j.Observer {
                             String secondClass = (String) classComboBox2.getSelectedItem();
 
                             if (chosenClass2 == JOptionPane.OK_OPTION && !secondClass.equals("Choose a class")) {
+
+
+
                                 Controller.addRelationship(firstClass, secondClass, 2);
                             }
                             isAClassOption2 = true;
@@ -1182,15 +1183,65 @@ public class GUI extends JFrame implements j.Observer {
 
             }
         });
+
         delRelation = new JMenuItem(new AbstractAction("Delete Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String firstClass = JOptionPane.showInputDialog("What is the name of the first class with this relationship? ");
-                String secondClass = JOptionPane.showInputDialog("What is the name of the second class with this relationship? ");
-                //TODO Prompt with a message asking "Delete the relationship from firstClass to secondClass?" with an okay or cancel button
-                String doubleCheckDelete = JOptionPane.showInputDialog("Delete the relationship between " + firstClass + " and " + secondClass + "? \n" +
-                        "Please type yes to confirm, or enter anything else to cancel. ");
 
+                //Get the list of existing classes
+                String[] classList = Controller.listClasses();
+
+                //Add a default option asking the user to pick a class
+                String[] classListWDefault = new String[classList.length + 1];
+                classListWDefault[0] = "Choose a class";
+                System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                //Creates a combo box with the list of classes
+                JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                boolean isAClassOption = false;
+
+                while(!isAClassOption) {
+                    //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                    int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Class being implemented",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                    String firstClass = (String) classComboBox.getSelectedItem();
+
+                    if (chosenClass == JOptionPane.OK_OPTION && !firstClass.equals("Choose a class")) {
+
+                        //Creates a combo box with the list of classes
+                        JComboBox<String> classComboBox2 = new JComboBox<>(classListWDefault);
+
+                        boolean isAClassOption2 = false;
+
+                        while(!isAClassOption2) {
+                            //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                            int chosenClass2 = JOptionPane.showConfirmDialog(guiWindow, classComboBox2, "Class Implementing other class",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                            String secondClass = (String) classComboBox2.getSelectedItem();
+
+                            if (chosenClass2 == JOptionPane.OK_OPTION && !secondClass.equals("Choose a class")) {
+
+                                //Confirm delete relationship
+                                JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
+                                displayConfirmationMessage.add(new JLabel("Delete relationship between\n " + firstClass + " and " + secondClass + " ?"));
+                                int confirmDelete = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Delete ?", OK_CANCEL_OPTION);
+                                if(confirmDelete == OK_OPTION){
+                                    //delete the relationship
+                                    Controller.deleteRelationship(firstClass, secondClass);
+                                }
+
+
+                            }
+                            isAClassOption2 = true;
+                        }
+
+                    }
+
+                    isAClassOption = true;
+                }
 
             }
         });
