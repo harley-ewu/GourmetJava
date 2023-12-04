@@ -709,6 +709,7 @@ public class GUI extends JFrame implements j.Observer {
                     fieldOrMethodAsString = JOptionPane.showInputDialog(" Invalid input, please try again. \n Are you wanting to delete a field or a method? \n" +
                             "Type 1 for 'field' or 2 for 'method'");
                 }
+                    //changes
 
             }
         });
