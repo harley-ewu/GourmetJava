@@ -14,26 +14,32 @@ public class Controller implements j.Observable {
         observers.add(observer);
     }
 
-    public void notifyObservers() {
+    public void notifyObservers(final int reason, final String msg) {
         for (Observer o : Controller.observers)
-            o.update();
+            o.update(reason, msg);
     }
 
-    public static void updateGUI() {
-        ControllerObservable.notifyObservers();
+    public static void updateGUI(final int reason, final String msg) {
+        ControllerObservable.notifyObservers(reason, msg);
     }
 
     public enum STATUS_CODES {
-        EXCEPTION("Operation failed - exception caught"),
+        EXCEPTION("Operation failed"),
         SUCCESS("Operation success"),
         OBJ_ALREADY_EXISTS("Class already exists"),
         OBJ_NOT_FOUND("Object not found"),
+        METHOD_NOT_FOUND("not found"),
+        FIELD_NOT_FOUND("not found"),
+        PARAM_NOT_FOUND("not found"),
         OBJ_FOUND("Object was found"),
         NULL_PARAM_OBJ("Object is null"),
         EMPTY_STRING("The entered string is empty"),
         NULL_STRING("The entered string is null"),
         UNDO_FAILED("Failed to perform undo"),
+        FILE_NOT_FOUND("File does not exist"),
+        EMPTY_FILE("File specified is empty"),
         REDO_FAILED("Failed to perform redo");
+
 
         private final String msg;
 
@@ -46,6 +52,16 @@ public class Controller implements j.Observable {
             return this.msg;
         }
     }
+
+    public final static int ADD_CLASS = 0,
+            RENAME_CLASS = 1,
+            ADD_RELATIONSHIP = 2,
+            DELETE_RELATIONSHIP = 3,
+            DELETE_CLASS = 4,
+            UPDATE_ATTRIBUTE = 5,
+            UNDO = 6,
+            REDO = 7,
+            FULL_REFRESH = 8;
 
     private Controller() {
     }
@@ -354,8 +370,8 @@ public class Controller implements j.Observable {
      *
      * @return true if it saved, false if there was an error
      */
-    public static boolean save() {
-        return ModelDiagram.save();
+    public static Controller.STATUS_CODES save(String fileName) {
+        return ModelDiagram.save(fileName);
     }
 
     /**
@@ -364,8 +380,8 @@ public class Controller implements j.Observable {
      *
      * @return true if it loaded, false if there was a problem
      */
-    public static boolean load() {
-        return ModelDiagram.load();
+    public static Controller.STATUS_CODES load(String fileName) {
+        return ModelDiagram.load(fileName);
     }
 
     // Allows the user to choose what Classbox item they want to see in detail

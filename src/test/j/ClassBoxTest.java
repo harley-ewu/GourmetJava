@@ -66,7 +66,7 @@ public class ClassBoxTest {
         // Check that the field was added
         assertEquals("[-testMethod(testParam, addedParam) : int]", classBox.getMethods().toString());
         Controller.STATUS_CODES c = classBox.addParam("doo", "testP");
-        assertEquals(c.toString(), "object not found");
+        assertEquals(c.toString(), "not found");
     }
 
     @Test
@@ -80,7 +80,7 @@ public class ClassBoxTest {
         // Check that the field was deleted
         assertEquals("[]", classBox.getFields().toString());
         Controller.STATUS_CODES c = classBox.deleteField("doo");
-        assertEquals(c.toString(), "object not found");
+        assertEquals(c.toString(), "not found");
     }
 
     @Test
@@ -99,7 +99,7 @@ public class ClassBoxTest {
         // THIS NEEDS TO BE FIXED // It should be [-testMethod(renamedParam) : int] as output
         assertEquals("[-testMethod(renamedParam) : int]", classBox.getMethods().toString());
         Controller.STATUS_CODES c = classBox.renameParam("doo","pink","ponk");
-        assertEquals(c.toString(), "object not found");
+        assertEquals(c.toString(), "not found");
     }
 
     @Test
@@ -128,7 +128,7 @@ public class ClassBoxTest {
         classBox.deleteMethod("testMethod");
         assertEquals(classBox.getMethods().size(), 0);
         Controller.STATUS_CODES c = classBox.deleteMethod("doo");
-        assertEquals(c.toString(), "object not found");
+        assertEquals(c.toString(), "not found");
     }
 
     @Test
@@ -144,7 +144,7 @@ public class ClassBoxTest {
         classBox.deleteParam("testMethod", "testParam");
         assertEquals("[-testMethod() : int]", classBox.getMethods().toString());
         Controller.STATUS_CODES c = classBox.deleteParam("doo","pink");
-        assertEquals(c.toString(), "object not found");
+        assertEquals(c.toString(), "not found");
     }
 
     @Test
@@ -159,7 +159,7 @@ public class ClassBoxTest {
         classBox.renameMethod("testMethod","newTestMethod");
         assertEquals(classBox.getMethods().get(0).getName(), "newTestMethod" );
         Controller.STATUS_CODES c = classBox.renameMethod("doo","pink");
-        assertEquals(c.toString(), "object not found");
+        assertEquals(c.toString(), "not found");
     }
 
     @Test
@@ -170,7 +170,7 @@ public class ClassBoxTest {
         classBox.renameField("testField","newTestField");
         assertEquals(classBox.getFields().get(0).getName(), "newTestField" );
         Controller.STATUS_CODES c = classBox.renameField("doo","pink");
-        assertEquals(c.toString(), "object not found");
+        assertEquals(c.toString(), "not found");
     }
 
     @Test
