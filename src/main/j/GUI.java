@@ -6,10 +6,9 @@ package j;
 import org.jline.console.impl.SystemRegistryImpl;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import static javax.swing.JOptionPane.*;
@@ -26,9 +25,15 @@ import static javax.swing.JOptionPane.*;
 
 public class GUI extends JFrame implements j.Observer {
 
-    private static final LinkedList<ClassPanel> classes = new LinkedList<>();
+    private static ArrayList<ClassPanel> classes;
+    private final static Caretaker<ClassPanel> caretaker = new Caretaker<>();
 
-    public static class ClassPanel extends JPanel {
+    static {
+        classes = new ArrayList<>();
+        updateChange();
+    }
+
+    public static class ClassPanel extends JPanel implements GCloneable<ClassPanel>, Cloneable {
         private final String name;
 
         private final String type;
@@ -42,9 +47,10 @@ public class GUI extends JFrame implements j.Observer {
 
         private int yDelta;
 
-        private int height = 300;
+        //these might not be necessary if they're calculated every time
+        private int height;
 
-        private int width = 200;
+        private int width;
 
         //to help make dragging smooth
         public MouseEvent pressed;
@@ -107,16 +113,25 @@ public class GUI extends JFrame implements j.Observer {
             if (!isClass)
                 this.height += this.heightScale;
             this.setBounds(this.xDelta, this.yDelta, this.width, this.height);
+            this.setLocation(this.xDelta, this.yDelta);
             this.setBorder(BorderFactory.createLineBorder(Color.black));
-
+            this.setVisible(true);
             //Add the mouse event handlers
             ClassPanel thisPanel = this;
-
             //We need a mouse listener to catch where the initial click is, otherwise the panel will "jump"
             this.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mousePressed(MouseEvent me){
+                public void mousePressed(MouseEvent me) {
                     thisPanel.pressed = me;
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent me) {
+                    //We only need to update the coordinates when the user is done moving the boxes
+                    thisPanel.xDelta = thisPanel.getLocation().x;
+                    thisPanel.yDelta = thisPanel.getLocation().y;
+                    caretaker.updateChange(Memento.createSnapshot(classes));
+                    //updateChange();   //uncomment this if you want the undo/redo to undo the last box move
                 }
             });
 
@@ -125,9 +140,9 @@ public class GUI extends JFrame implements j.Observer {
                 public void mouseDragged(MouseEvent me) {
                     //Offset the translate by the difference between the panel's location and the initial click
                     int xTranslated = thisPanel.getLocation().x - thisPanel.pressed.getX();
-                    int yTranslated = thisPanel.getLocation().y- thisPanel.pressed.getY();
+                    int yTranslated = thisPanel.getLocation().y - thisPanel.pressed.getY();
                     me.translatePoint(xTranslated, yTranslated);
-                    thisPanel.setLocation(me.getX(),me.getY());
+                    thisPanel.setLocation(me.getX(), me.getY());
                 }
             });
         }
@@ -141,7 +156,7 @@ public class GUI extends JFrame implements j.Observer {
             super.paintComponent(g);
             int nameLineY;
             if (!this.type.equals("CLASS"))
-                nameLineY = this.heightScale * 2 + 6;
+                nameLineY = this.heightScale * 3 + 4;
             else
                 nameLineY = this.heightScale + 6;
 
@@ -150,32 +165,219 @@ public class GUI extends JFrame implements j.Observer {
             g.drawLine(0, fieldsLineY, this.width, fieldsLineY);
         }
 
+        @Override
+        public ClassPanel clone() {
+            String[][] details = new String[3][2];
+            details[Controller.DETAILS_NAME_TYPE][0] = this.name;
+            details[Controller.DETAILS_NAME_TYPE][1] = this.type;
+            details[Controller.DETAILS_METHODS] = this.classMethods;
+            details[Controller.DETAILS_FIELDS] = this.classFields;
+            return new ClassPanel(details, this.xDelta, this.yDelta);
+        }
     }
 
     // Creates a dropdown style menu framework at the top of the frame
     static JMenuBar mainMenu;
 
     // Creates individual dropdown menus for each category within the overall menu
-    static JMenu parameterDropdown, displayDropdown, classDropdown, attributeDropdown, relationshipDropdown, saveLoadDropdown, helpDropdown, CLIDropdown;
+    static JMenu parameterDropdown, displayDropdown, classDropdown, attributeDropdown, relationshipDropdown, saveLoadDropdown, helpDropdown, CLIDropdown, undoRedoDropdown;
 
     // Individual menu items/buttons under their individual category menus
-    static JMenuItem display, addClass, deleteClass, renameClass, addAtt, delAtt, renameAtt, addRelation, delRelation, save, load, help, addPar, delPar, renPar, openCLI;
+    static JMenuItem display, addClass, deleteClass, renameClass, addAtt, delAtt, renameAtt, addRelation, delRelation, save, load, help, addPar, delPar, renPar, openCLI, menuUndo, menuRedo;
 
 
     //creates a frame to be the main, base window to hold the entirety of the GUI
     static JFrame guiWindow;
+    private static GUI guiObserver;
 
-    private static final GUI GUIObserver = new GUI();
+    public static GUI getInstance() {
+        if (guiObserver == null)
+            guiObserver = new GUI();
 
-    public void update() {
-        displayGUI();
+        return guiObserver;
+    }
+
+    public static void updateChange() {
+        caretaker.addChange(Memento.createSnapshot(classes));
+    }
+
+    public static void restoreSnapshot(final Memento<ClassPanel> p) {
+        if(p != null) {
+            classes = Memento.restoreSnapshot(p);
+            redrawGUI();
+        }
+    }
+
+    private static ClassPanel findClassPanel(final String name) {
+        for (ClassPanel p : GUI.classes) {
+            if (p.name.equals(name))
+                return p;
+        }
+        return null;
+    }
+
+    private static void GUIAddClass(final String name) {
+        ClassPanel newPanel = new ClassPanel(Controller.listAllClassDetails(name));
+        GUI.classes.add(newPanel);
+        guiWindow.getContentPane().add(newPanel);
+        guiWindow.getContentPane().revalidate();
+        guiWindow.getContentPane().repaint();
+    }
+
+    private static void GUIRenameClass(final String name) {
+        //The names are passed in the format [old name]\n[new name]
+        String[] names = name.split("\n");
+        if (names.length != 2)
+            return;
+
+        String oldName = names[0];
+        String newName = names[1];
+        ClassPanel oldPanel = findClassPanel(oldName);
+        if (oldPanel == null)
+            return;
+
+        String[][] details = Controller.listAllClassDetails(newName);
+        ClassPanel newPanel = new ClassPanel(details, oldPanel.xDelta, oldPanel.yDelta);
+        GUI.classes.add(newPanel);
+        guiWindow.getContentPane().add(newPanel);
+        GUI.classes.remove(oldPanel);
+        guiWindow.getContentPane().remove(oldPanel);
+        guiWindow.getContentPane().revalidate();
+        guiWindow.getContentPane().repaint();
+    }
+
+    private static void GUIDeleteClass(final String name) {
+        ClassPanel panel = findClassPanel(name);
+        GUI.classes.remove(panel);
+        guiWindow.getContentPane().remove(panel);
+        guiWindow.getContentPane().revalidate();
+        guiWindow.getContentPane().repaint();
+    }
+
+    private static void GUIUpdateAttribute(final String name) {
+        ClassPanel oldPanel = findClassPanel(name);
+        if (oldPanel == null)
+            return;
+
+        String[][] details = Controller.listAllClassDetails(name);
+        ClassPanel newPanel = new ClassPanel(details, oldPanel.xDelta, oldPanel.yDelta);
+        GUI.classes.add(newPanel);
+        guiWindow.getContentPane().add(newPanel);
+        GUI.classes.remove(oldPanel);
+        guiWindow.getContentPane().remove(oldPanel);
+        guiWindow.getContentPane().revalidate();
+        guiWindow.getContentPane().repaint();
+    }
+
+    private static void GUIFullRefresh() {
+        guiWindow.getContentPane().removeAll();
+        String[][][] classes = Controller.listEveryClassAndAllDetails();
+        GUI.classes.clear();
+
+        int x = 0;
+
+        for (String[][] c : classes) {
+            GUI.classes.add(new ClassPanel(c, x, 0));
+            x += 100;
+        }
+
+        for (ClassPanel c : GUI.classes)
+            drawClassPanel(c);
+    }
+
+    public static void redrawGUI() {
+        guiWindow.getContentPane().removeAll();
+        guiWindow.getContentPane().revalidate();
+        guiWindow.getContentPane().repaint();
+        for (ClassPanel c : GUI.classes)
+            guiWindow.getContentPane().add(c);
+        guiWindow.getContentPane().revalidate();
+        guiWindow.getContentPane().repaint();
+    }
+
+    public static void drawClassPanel(final ClassPanel c) {
+        guiWindow.getContentPane().add(c);
+        guiWindow.getContentPane().revalidate();
+        guiWindow.getContentPane().repaint();
+    }
+
+    public static void GUIAddRelationship(final String classNames) {
+        //The names are passed in the format [parent name]\n[child name]
+    }
+
+    //Classes are passed in as "parent" + "\n" + "child"
+    public static void GUIDeleteRelationship(final String classes) {
+        //The names are passed in the format [parent name]\n[child name]
+    }
+
+    //made these one liners to make it simpler to call undo/redo
+    public static void GUIUndo(){
+        restoreSnapshot(caretaker.undo());
+    }
+
+    public static void GUIRedo(){
+        restoreSnapshot(caretaker.redo());
+    }
+
+
+    public void update(int reason, String msg) {
+        switch (reason) {
+            case Controller.ADD_CLASS:
+                GUIAddClass(msg);
+                updateChange();
+                break;
+            case Controller.RENAME_CLASS:
+                GUIRenameClass(msg);
+                updateChange();
+                break;
+            case Controller.ADD_RELATIONSHIP:
+                GUIAddRelationship(msg);
+                updateChange();
+                break;
+            case Controller.DELETE_RELATIONSHIP:
+                GUIDeleteRelationship(msg);
+                updateChange();
+                break;
+            case Controller.DELETE_CLASS:
+                GUIDeleteClass(msg);
+                updateChange();
+                break;
+            case Controller.UPDATE_ATTRIBUTE:
+                GUIUpdateAttribute(msg);
+                updateChange();
+                break;
+            case Controller.UNDO:
+                GUIUndo();
+                break;
+            case Controller.REDO:
+                GUIRedo();
+                break;
+            case Controller.FULL_REFRESH:
+                GUIFullRefresh();
+                updateChange();
+                break;
+            default:
+                break;
+        }
+
     }
 
     public static void startGUIMenu() {
-        Controller.addSubscriber(GUIObserver);
+        Controller.addSubscriber(GUI.getInstance());
 
         guiWindow = new JFrame("UML Editor");
-        guiWindow.getContentPane().setBackground(Color.BLUE);
+        guiWindow.getContentPane().setBackground(Color.LIGHT_GRAY);
+        guiWindow.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyChar() == 'u'){
+                    GUIUndo();
+                }
+                else if (e.getKeyChar() == 'r'){
+                    GUIRedo();
+                }
+            }
+        });
         // create a menubar
         mainMenu = new JMenuBar();
 
@@ -188,14 +390,19 @@ public class GUI extends JFrame implements j.Observer {
         });
         displayDropdown.add(display);
 
-
         //Adds a class and updates the display to show the new class in a box
         classDropdown = new JMenu("Class");
         addClass = new JMenuItem(new AbstractAction("Add Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                String className = className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
+                String className = JOptionPane.showInputDialog(guiWindow, "What is the name of the class you want to add? ");
+                if(className == null)
+                    return;
+                Controller.STATUS_CODES status = Controller.existentialCrisisExists(className);
+                if(status != Controller.STATUS_CODES.OBJ_NOT_FOUND){
+                    JOptionPane.showMessageDialog(new JFrame(), status.toString());
+                    return;
+                }
 
                 //Ensures a user enters a valid class name
                 //while(className.equals("") || className.equals(null)|| className.equals(" ")){
@@ -223,7 +430,7 @@ public class GUI extends JFrame implements j.Observer {
                 classButton.setSelected(true);
 
                 //Create a JPanel and add the button group to it, aligned vertically
-                JPanel chooseType = new JPanel(new GridLayout(0,1));
+                JPanel chooseType = new JPanel(new GridLayout(0, 1));
                 chooseType.add(new JLabel("Please Choose a Type:"));
                 chooseType.add(classButton);
                 chooseType.add(interfaceButton);
@@ -232,22 +439,22 @@ public class GUI extends JFrame implements j.Observer {
                 chooseType.add(annotationButton);
 
                 //Displays Type options, and centers the popup window on the main GUI screen
-                int typeChoice = JOptionPane.showConfirmDialog(guiWindow, chooseType, "Choose Class Type", JOptionPane.OK_CANCEL_OPTION);
-                if(typeChoice == JOptionPane.OK_OPTION) {
+                int result = JOptionPane.showConfirmDialog(guiWindow, chooseType, "Choose Class Type", JOptionPane.OK_CANCEL_OPTION);
+                if (result == JOptionPane.OK_OPTION) {
 
                     //Defaults class in order to make classType always initialized
                     String classType = classButton.getText();
 
                     //Change classType to give the correct text option from the selected button into the switch statement to be converted to an int
-                    if(classButton.isSelected()) classType = classButton.getText();
-                    if(interfaceButton.isSelected()) classType = interfaceButton.getText();
-                    if(enumButton.isSelected()) classType =  enumButton.getText();
-                    if(recordButton.isSelected()) classType =  recordButton.getText();
-                    if(annotationButton.isSelected()) classType = annotationButton.getText();
+                    if (classButton.isSelected()) classType = classButton.getText();
+                    if (interfaceButton.isSelected()) classType = interfaceButton.getText();
+                    if (enumButton.isSelected()) classType = enumButton.getText();
+                    if (recordButton.isSelected()) classType = recordButton.getText();
+                    if (annotationButton.isSelected()) classType = annotationButton.getText();
                     //get int that corresponds to the enum type
                     int typeToInt = 0;
                     //Convert chosen button's string to an int to be passed into the addClass method
-                    switch (classType){
+                    switch (classType) {
                         case "Class":
                             typeToInt = 1;
                             break;
@@ -272,11 +479,15 @@ public class GUI extends JFrame implements j.Observer {
         });
 
 
-
         //Deletes a class and removes it from the display
         deleteClass = new JMenuItem(new AbstractAction("Delete Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There are no classes to delete");
+                    return;
+                }
+
                 //Get the list of existing classes
                 String[] classList = Controller.listClasses();
 
@@ -315,6 +526,10 @@ public class GUI extends JFrame implements j.Observer {
         renameClass = new JMenuItem(new AbstractAction("Rename Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
 
                 //Get the list of existing classes
                 String[] classList = Controller.listClasses();
@@ -360,6 +575,11 @@ public class GUI extends JFrame implements j.Observer {
 
             //Adds an attribute when the "Add attribute" button is clicked
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
+              
                 // Create radio buttons for the field and method options.
                 JRadioButton fieldButton = new JRadioButton("Field");
                 JRadioButton methodButton = new JRadioButton("Method");
@@ -597,6 +817,10 @@ public class GUI extends JFrame implements j.Observer {
         delAtt = new JMenuItem(new AbstractAction("Delete Attribute") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
                 // Create radio buttons for the field and method options.
                 JRadioButton fieldButton = new JRadioButton("Field");
                 JRadioButton methodButton = new JRadioButton("Method");
@@ -954,6 +1178,10 @@ public class GUI extends JFrame implements j.Observer {
         addPar = new JMenuItem(new AbstractAction("Add Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
                 //String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to add a parameter to?");
 
                 //Get the list of existing classes
@@ -1019,6 +1247,7 @@ public class GUI extends JFrame implements j.Observer {
 
                 }
 
+
             }
         });
 
@@ -1027,7 +1256,10 @@ public class GUI extends JFrame implements j.Observer {
         delPar = new JMenuItem(new AbstractAction("Delete Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
                 //Get the list of existing classes
                 String[] classList = Controller.listClasses();
 
@@ -1104,6 +1336,7 @@ public class GUI extends JFrame implements j.Observer {
                     }
                 }
 
+
             }
         });
 
@@ -1111,6 +1344,10 @@ public class GUI extends JFrame implements j.Observer {
         renPar = new JMenuItem(new AbstractAction("Rename Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                  if(Controller.getCreatedClassesSize() == 0){
+                JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                return;
+            }
                 String classWMethod = JOptionPane.showInputDialog(guiWindow, "What class contains the method you would like to rename a parameter in?");
 
 
@@ -1132,6 +1369,10 @@ public class GUI extends JFrame implements j.Observer {
         addRelation = new JMenuItem(new AbstractAction("Add Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                              if(Controller.getCreatedClassesSize() < 2){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least two classes");
+                    return;
+                }
 
                 //Get the list of existing classes
                 String[] classList = Controller.listClasses();
@@ -1242,6 +1483,10 @@ public class GUI extends JFrame implements j.Observer {
         delRelation = new JMenuItem(new AbstractAction("Delete Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                              if(Controller.getCreatedClassesSize() < 2){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least two classes");
+                    return;
+                }
 
                 //Get the list of existing classes
                 String[] classList = Controller.listClasses();
@@ -1308,13 +1553,13 @@ public class GUI extends JFrame implements j.Observer {
         save = new JMenuItem(new AbstractAction("Save") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ModelDiagram.save();
+                ModelDiagram.save("SavedFile.json");
             }
         });
         load = new JMenuItem(new AbstractAction("Load") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ModelDiagram.load();
+                ModelDiagram.load("SavedFile.json");
             }
         });
         saveLoadDropdown.add(save);
@@ -1326,7 +1571,53 @@ public class GUI extends JFrame implements j.Observer {
         help = new JMenuItem(new AbstractAction("Help") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //System.exit(1);
+                String message1 = "Welcome to Gourmet Java's UML editor!\nTo use this program, you can use the buttons at the top of the window. Let's look at what each of the buttons do." +
+                        "\n\nRefresh: When clicked, it will ensure that the most recent class information is displayed in the window.\n If you added class information in the command line, this will put it here in the window." +
+                        "\n\nClass: When hovered over, this will offer you three options:" +
+                        "\n1. Add class: Allows you to add a class object to the UML." +
+                        "\n2. Delete Class: Allows you to delete a previously created class." +
+                        "\n3. Rename class: Allows you to rename a previously created class." +
+                        "\n\nAttribute: When hovered over, this will offer you three options:" +
+                        "\n1. Add attribute: Allows you to add a field or method to your previously created class." +
+                        "\n2. Delete attribute: Allows you to delete a field or method from your previously created class." +
+                        "\n3. Rename attribute: Allows you to rename a previously created field or method.";
+
+                int result1 = JOptionPane.showOptionDialog(null, message1,
+                        "Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{"Continue", "Cancel"}, "Continue");
+
+
+                if (result1 != JOptionPane.OK_OPTION) {
+                    return;
+                }
+
+
+                String message2 = "Parameters: When hovered over, this will offer you three options:" +
+                        "\n1. Add parameter: Allows you to add parameters to a previously created method." +
+                        "\n2. Delete parameter: Allows you to delete parameters from a previously created method." +
+                        "\n3. Rename parameter: Allows you to rename parameters from a previously created method." +
+                        "\n\nRelationship: When hovered over, this will offer you two options:" +
+                        "\n1. Add relationship: Allows you to add a relationship between two classes." +
+                        "\n2. Delete relationship: Allows you to delete a relationship between two classes.";
+
+                int result2 = JOptionPane.showOptionDialog(null, message2, "Help", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{"Continue", "Cancel"}, "Continue");
+
+
+                if (result2 != JOptionPane.OK_OPTION) {
+                    return;
+                }
+
+
+                String message3 = "Save/Load: When hovered over, this will offer you two options:" +
+                        "\n1. Save: Saves all current progress to a save file." +
+                        "\n2. Load: Loads all previously saved progress into the program from the save file." +
+                        "\n\nUndo/Redo: When hovered over, this will offer you two options:" +
+                        "\n1. Undo: Reverts to a version before an action was completed." +
+                        "\n2. Redo: Restores the reverted action." +
+                        "\n\nEach of these options will have dialog windows with prompts that can help you use them.\nGo ahead and give it a try! Happy editing!";
+
+              JOptionPane.showOptionDialog(null, message3,"Help",JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{"OK"}, "OK");
+
+
             }
         });
         helpDropdown.add(help);
@@ -1340,6 +1631,23 @@ public class GUI extends JFrame implements j.Observer {
         });
         CLIDropdown.add(openCLI);
 
+        //Undo/Redo menu options
+        undoRedoDropdown = new JMenu("Undo/Redo");
+        menuUndo = new JMenuItem(new AbstractAction("Undo") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GUIUndo();
+            }
+        });
+        menuRedo = new JMenuItem(new AbstractAction("Redo") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GUIRedo();
+            }
+        });
+        undoRedoDropdown.add(menuUndo);
+        undoRedoDropdown.add(menuRedo);
+
         // add individual dropdown menus to menu bar
         mainMenu.add(displayDropdown);
         mainMenu.add(classDropdown);
@@ -1347,7 +1655,9 @@ public class GUI extends JFrame implements j.Observer {
         mainMenu.add(parameterDropdown);
         mainMenu.add(relationshipDropdown);
         mainMenu.add(saveLoadDropdown);
+        mainMenu.add(undoRedoDropdown);
         mainMenu.add(helpDropdown);
+
 
         // add menubar to our main GUI display frame
         guiWindow.setJMenuBar(mainMenu);
@@ -1373,428 +1683,11 @@ public class GUI extends JFrame implements j.Observer {
             }
         });
 
-
-        Controller.addClass("test", 1);
-        Controller.addField("test", "chicken", 1, "quack");
-        Controller.addField("test", "chicken2", 1, "quack quack");
-        LinkedList<String> ps = new LinkedList<>();
-        ps.add("p1");
-        ps.add("p2");
-        Controller.addMethod("test", "pizza", 1, "pizzaret", ps);
-
-        Controller.addClass("test2", 2);
-        Controller.addField("test2", "chicken", 1, "wee snaw");
-        LinkedList<String> ps2 = new LinkedList<>();
-        ps2.add("p1");
-        ps2.add("p2");
-        Controller.addMethod("test2", "pizza", 1, "pizzaret", ps2);
-        Controller.addMethod("test2", "pizza2", 1, "pizzaret", ps2);
-
-        ClassPanel testClass = new ClassPanel(Controller.listAllClassDetails("test"),0,0);
-        ClassPanel testClass2 = new ClassPanel(Controller.listAllClassDetails("test2"), 600, 300);
-        GUI.classes.add(testClass);
-        GUI.classes.add(testClass2);
-
-
-
-
         while (!Main.cview) {
-            ;
+
         }
 
     }
-
-    public void handleDrag(final JPanel panel){
-        final JPanel p = panel;
-        panel.addMouseMotionListener(new MouseMotionAdapter() {
-
-           @Override
-           public void mouseDragged(MouseEvent me){
-               me.translatePoint(me.getComponent().getLocation().x, me.getComponent().getLocation().y);
-               p.setLocation(me.getX(), me.getY());
-            }
-
-        });
-
-    }
-
-
-
-
-
-    public static void drawClassPanel(final ClassPanel c) {
-        guiWindow.getContentPane().add(c);
-        guiWindow.getContentPane().revalidate();
-        guiWindow.getContentPane().repaint();
-    }
-
-    public static void displayGUI() {
-        //SwingUtilities.updateComponentTreeUI(guiWindow);
-        //guiWindow.add(new ShapeDrawing());
-        //guiWindow.setVisible(true);
-        guiWindow.getContentPane().removeAll();
-        String[][][] classes = Controller.listEveryClassAndAllDetails();
-        GUI.classes.clear();
-
-        int x = 0;
-
-        for(String[][] c : classes) {
-            GUI.classes.add(new ClassPanel(c,x,0));
-            x += 200;
-        }
-
-        for (ClassPanel c : GUI.classes)
-            drawClassPanel(c);
-
-
-        //guiWindow.invalidate();
-        //guiWindow.repaint();
-
-        guiWindow.setLayout(null);
-
-        //ShapeDrawing test;
-
-        //Issue: graphicy2 doesn't pass in correctly as it says g2, which is what graphicy below gets, is null.
-        /*for(int i = 0; i < classNames.length; i++){
-            //ShapeDrawing classBoxy = new ShapeDrawing();
-            ShapeDrawing test = new ShapeDrawing();
-            test.setBorder(new LineBorder(Color.BLUE, 3));
-            //Graphics2D graphicy2 = classBoxy.getGraphicy();
-            //classBoxy.drawClass(classNames[i], 0, 0, graphicy2);
-            guiWindow.add(test);
-        } */
-
-        //int numberOfClasses = Controller.getCreatedClassesSize();
-        //String[] classNames = Controller.listClasses();
-        //for(int i = 0; i < numberOfClasses; i++){
-        //MyDraggableComponent newbie = new MyDraggableComponent();
-        //guiWindow.add(newbie);
-        // }
-
-    }
-
-    /* public static class ShapeDrawing extends JComponent{
-        //Start of blobs
-        private volatile int screenX = 0;
-        private volatile int screenY = 0;
-        private volatile int myX = 0;
-        private volatile int myY = 0;
-        //End of blobs
-
-        public ShapeDrawing(){
-            super();
-        // code blob error report: Same as below unfortunately :<
-        //Start of blob
-            addMouseListener(new MouseListener() {
-
-                @Override
-                public void mouseClicked(MouseEvent e) { }
-
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    screenX = e.getXOnScreen();
-                    screenY = e.getYOnScreen();
-
-                    myX = getX();
-                    myY = getY();
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) { }
-
-                @Override
-                public void mouseEntered(MouseEvent e) { }
-
-                @Override
-                public void mouseExited(MouseEvent e) { }
-
-            });
-            addMouseMotionListener(new MouseMotionListener() {
-
-                @Override
-                public void mouseDragged(MouseEvent e) {
-                    int deltaX = e.getXOnScreen() - screenX;
-                    int deltaY = e.getYOnScreen() - screenY;
-
-                    setLocation(myX + deltaX, myY + deltaY);
-                }
-
-                @Override
-                public void mouseMoved(MouseEvent e) { }
-
-            });
-        //end of blob
-
-        }
-        public void paint(Graphics g){
-            Graphics2D g2 = (Graphics2D) g;
-            //Spacing out based on the number of classes
-            int numberOfClasses = Controller.getCreatedClassesSize();
-            // number of total spaces including class boxes and empty spaces in between
-            // If there are 3 classes, it has 3 spots with one classbox space between each box
-            int totalSpace = (2 * numberOfClasses) + 1;
-            //Overall width of panel divided by spots
-            int spaceWidth = 1000/totalSpace;
-            //Current x coordinate
-            int curx = spaceWidth;
-            //Stores coordinates of each class when printed for relationship printing
-            LinkedList<Integer> coords = new LinkedList<>();
-            //Goes through all classes and prints them
-            String[] classNames = Controller.listClasses();
-            //this will stick every other class on an upper row, and the ones in between on a lower row
-
-            /*TODO remove the for loop. Place it in it's own method to print all classes. This print all classes method will be
-              outside of the shape drawing class, and will call shapedrawing for each class listed. You'll need int numberofclasses
-              from above to be able to do this. This could get complicated as it might require moving multiple methods
-               outside of ShapeDrawing*/
-            /*for(int i = 0; i < numberOfClasses; i++){
-                //issue report with the mouse listeners in the if/else below:
-                // Classes are duplicated in display, so for 1 class, 2 show up. They're in weirdly bounded boxes,
-                // and the components in each box are not moveable
-                if(i % 2 == 0){
-                    drawClass(classNames[i], curx, 200, g2);
-
-                    coords.add(curx);
-                    coords.add(200);
-                }
-                else{
-                    drawClass(classNames[i], curx, 400, g2);
-                    coords.add(curx);
-                    coords.add(400);
-                }
-                curx += (1.5 * spaceWidth);
-            }
-            String[] classes = Controller.listClasses();
-            //Prints the line for each relationship
-            int rcount = 0;
-            for (int i = 0; i < Controller.getCreatedClassesSize(); i++){
-                String[][] relationships = Controller.listRelationships();
-                for(int j = 0; j<relationships[i].length; j++) {
-                    //For each relationship, retrieve the coordinates of each, and draw a line between them
-                    int class1XIndex = i * 2; //index of where the coordinates are in the array
-                    int class1YIndex = class1XIndex + 1;
-                    String[] relationship = relationships[i][j].split(" ");
-                    int class2Index = -1;
-                    for (int k = 0; k < classes.length; k++) {
-                        if (relationship[2].equals(classes[k])) {
-                            class2Index = k;
-                        }
-                    }
-                    int class2XIndex = class2Index * 2;
-
-                    int class2YIndex = class2XIndex + 1;
-                    int class1XCoords = coords.get(class1XIndex) + (rcount * 20);
-                    int class1YCoords = coords.get(class1YIndex) - (rcount * 10);
-                    int class2XCoords = coords.get(class2XIndex) + (rcount * 20);
-                    int class2YCoords = coords.get(class2YIndex) - (rcount * 10);
-                    class1XCoords += 10;
-                    //scooches the line over to the right a bit so it isn't on the corner
-                    class2XCoords += 10;
-                    String relationshipType = relationship[1];
-                    if (relationshipType.equals("aggregates") || relationshipType.equals("composes")) {
-                        if (class1YCoords == class2YCoords) {
-                            g2.drawLine(class1XCoords, class1YCoords + (rcount * 10), class1XCoords, class1YCoords - 20);
-                            g2.drawLine(class1XCoords, class1YCoords - 20, class2XCoords, class2YCoords - 20);
-                            g2.drawLine(class2XCoords, class2YCoords + (rcount * 10), class2XCoords, class2YCoords - 20);
-                        }
-                        else {
-                            if (class1XCoords < class2XCoords) {
-                                g2.drawLine(class1XCoords, class1YCoords + (rcount * 10), class1XCoords, class1YCoords - 20);
-                                g2.drawLine(class1XCoords, class1YCoords - 20, class1XCoords + getClassWidth(relationship[0], g2) + 40, class1YCoords - 20);
-                                g2.drawLine(class1XCoords + getClassWidth(relationship[0], g2) + 40, class1YCoords - 20, class1XCoords + getClassWidth(relationship[0], g2) + 40, class2YCoords - 20);
-                                g2.drawLine(class1XCoords + getClassWidth(relationship[0], g2) + 40, class2YCoords - 20, class2XCoords, class2YCoords - 20);
-                                g2.drawLine(class2XCoords, class2YCoords + (rcount * 10), class2XCoords, class2YCoords - 20);
-                            } else {
-                                g2.drawLine(class1XCoords, class1YCoords + (rcount * 10), class1XCoords, class1YCoords - 20);
-                                g2.drawLine(class1XCoords, class1YCoords - 20, class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class1YCoords - 20);
-                                g2.drawLine(class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class1YCoords - 20, class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class2YCoords - 20);
-                                g2.drawLine(class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class2YCoords - 20, class2XCoords, class2YCoords - 20);
-                                g2.drawLine(class2XCoords, class2YCoords + (rcount * 10), class2XCoords, class2YCoords - 20);
-                            }
-                        }
-                        class2YCoords += 10*rcount-20;
-                        int[] xpoints = {class2XCoords, class2XCoords - 10, class2XCoords, class2XCoords + 10};
-                        int[] ypoints = {class2YCoords, class2YCoords + 10, class2YCoords + 20, class2YCoords + 10};
-                        int npoints = 4;
-                        if (relationshipType.equals("aggregates")) {
-                            g2.drawPolygon(xpoints, ypoints, npoints);
-                        } else {
-                            g2.fillPolygon(xpoints, ypoints, npoints);
-                        }
-                    }
-                    else{
-                        if (class1YCoords == class2YCoords) {
-                            drawDashedLine(g2, class1XCoords, class1YCoords + (rcount * 10), class1XCoords, class1YCoords - 20);
-                            drawDashedLine(g2, class1XCoords, class1YCoords - 20, class2XCoords, class2YCoords - 20);
-                            drawDashedLine(g2, class2XCoords, class2YCoords + (rcount * 10), class2XCoords, class2YCoords - 20);
-                        }
-                        else {
-                            if (class1XCoords < class2XCoords) {
-                                drawDashedLine(g2, class1XCoords, class1YCoords + (rcount * 10), class1XCoords, class1YCoords - 20);
-                                drawDashedLine(g2, class1XCoords, class1YCoords - 20, class1XCoords + getClassWidth(relationship[0], g2) + 40, class1YCoords - 20);
-                                drawDashedLine(g2, class1XCoords + getClassWidth(relationship[0], g2) + 40, class1YCoords - 20, class1XCoords + getClassWidth(relationship[0], g2) + 40, class2YCoords - 20);
-                                drawDashedLine(g2, class1XCoords + getClassWidth(relationship[0], g2) + 40, class2YCoords - 20, class2XCoords, class2YCoords - 20);
-                                drawDashedLine(g2, class2XCoords, class2YCoords + (rcount * 10), class2XCoords, class2YCoords - 20);
-                            } else {
-                                drawDashedLine(g2, class1XCoords, class1YCoords + (rcount * 10), class1XCoords, class1YCoords - 20);
-                                drawDashedLine(g2, class1XCoords, class1YCoords - 20, class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class1YCoords - 20);
-                                drawDashedLine(g2, class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class1YCoords - 20, class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class2YCoords - 20);
-                                drawDashedLine(g2, class1XCoords - (class1XCoords - class2XCoords - getClassWidth(relationship[2], g2) - 20), class2YCoords - 20, class2XCoords, class2YCoords - 20);
-                                drawDashedLine(g2, class2XCoords, class2YCoords + (rcount * 10), class2XCoords, class2YCoords - 20);
-                            }
-                        }
-                        class2YCoords += 10*rcount-20;
-                        int[] xpoints = {class2XCoords,class2XCoords-10,class2XCoords+10};
-                        int[] ypoints = {class2YCoords+20,class2YCoords,class2YCoords};
-                        int npoints = 3;
-                        g2.drawPolygon(xpoints, ypoints, npoints);
-                    }
-                    rcount++;
-                }
-            }
-        }
-        public int getClassWidth(String className, Graphics2D g2){
-            String[][] classDetails = Controller.listAllClassDetails(className);
-            int width = g2.getFontMetrics().stringWidth(className);
-            //Set width to largest of the attribute toStrings
-            for(int i = 0; i < classDetails[Controller.DETAILS_METHODS].length; i++){
-                if(g2.getFontMetrics().stringWidth(classDetails[Controller.DETAILS_METHODS][i]) > width){
-                    width = g2.getFontMetrics().stringWidth(classDetails[Controller.DETAILS_METHODS][i]) + 10;
-                }
-            }
-            for(int i = 0; i < classDetails[Controller.DETAILS_FIELDS].length; i++){
-                if(g2.getFontMetrics().stringWidth(classDetails[Controller.DETAILS_FIELDS][i]) > width){
-                    width = g2.getFontMetrics().stringWidth(classDetails[Controller.DETAILS_FIELDS][i]) + 10;
-                }
-            }
-
-            String classType = "<<"+classDetails[Controller.DETAILS_NAME_TYPE][1].toLowerCase()+">>";
-            if(width<g2.getFontMetrics().stringWidth(classType)){
-                width = g2.getFontMetrics().stringWidth(classType);
-            }
-            //Add 10 to width for nice spacing
-            width += 10;
-            return width;
-        }
-        //Draws the class boxes
-        public void drawClass(String className, int x, int y, Graphics2D g2){
-            //TODO issue report with the mouse listeners in the if/else below:
-            // Classes are duplicated in display, so for 1 class, 2 show up. They're in weirdly bounded boxes,
-            // and the components in each box are not moveable
-
-            //number of fields and methods
-            String[][] classDetails = Controller.listAllClassDetails(className);
-            int height = 15 * (classDetails[Controller.DETAILS_METHODS].length + classDetails[Controller.DETAILS_FIELDS].length+2);
-            int width = getClassWidth(className, g2);
-            //If the box is not a class, it needs a special header above the name
-            boolean isClass = classDetails[Controller.DETAILS_NAME_TYPE][1].equals("CLASS");
-            if(!isClass)
-                height += 15;
-            //Outer rectangle
-            g2.drawRect(x,y,width,height);
-            //If the box is not a class, it needs a special header above the name
-            String classType = "<<"+classDetails[Controller.DETAILS_NAME_TYPE][1].toLowerCase()+">>";
-            if(!isClass) {
-                g2.drawString(classType, x + width / 2 - g2.getFontMetrics().stringWidth(classType)/2, y + 15);
-                y += 15;
-            }
-            //Write Class name
-            g2.drawString(className, x + ((width/2) - (g2.getFontMetrics().stringWidth(className)/2)), y+15);
-            //Draw line under the name
-            g2.drawLine(x,y + 17,x+width, y+17);
-            //moves down twice the spacing of above
-            y = y + 30;
-            //For each attribute, print the gui toString
-            for(int i=0; i <classDetails[Controller.DETAILS_FIELDS].length; i++){
-                g2.drawString(classDetails[Controller.DETAILS_FIELDS][i], x+10, y);
-                y += 15;
-            }
-            g2.drawLine(x,y - 12,x+width, y - 12);
-            for(int i=0; i < classDetails[Controller.DETAILS_METHODS].length; i++){
-                g2.drawString(classDetails[Controller.DETAILS_METHODS][i], x+10, y);
-                //moves down 15
-                y += 15;
-            }
-            //TODO added below line displayGui
-
-
-        }
-        public static void drawDashedLine(Graphics2D g, int x1, int y1, int x2, int y2){
-            Graphics2D g2d = (Graphics2D) g.create();
-            Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
-            g2d.setStroke(dashed);
-            g2d.drawLine(x1, y1, x2, y2);
-            g2d.dispose();
-        }
-    } */
-
-
-    //Start of absolute mess of code
-
-    public static class MyDraggableComponent
-            extends JComponent {
-
-        private volatile int screenX = 0;
-        private volatile int screenY = 0;
-        private volatile int myX = 0;
-        private volatile int myY = 0;
-
-
-        public MyDraggableComponent() {
-            super();
-            //this.setPreferredSize(new Dimension(100,300));
-            setBorder(new LineBorder(Color.BLUE, 3));
-            setBackground(Color.WHITE);
-            setBounds(0, 0, 100, 100);
-            setOpaque(false);
-
-            addMouseListener(new MouseListener() {
-
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                }
-
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    screenX = e.getXOnScreen();
-                    screenY = e.getYOnScreen();
-
-                    myX = getX();
-                    myY = getY();
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                }
-
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                }
-
-            });
-            addMouseMotionListener(new MouseMotionListener() {
-
-                @Override
-                public void mouseDragged(MouseEvent e) {
-                    int deltaX = e.getXOnScreen() - screenX;
-                    int deltaY = e.getYOnScreen() - screenY;
-
-                    setLocation(myX + deltaX, myY + deltaY);
-                }
-
-                @Override
-                public void mouseMoved(MouseEvent e) {
-                }
-
-            });
-        }
-
-    }
-
 
     public static class ShapeDrawing extends JComponent {
         //Start of blobs
@@ -1854,9 +1747,6 @@ public class GUI extends JFrame implements j.Observer {
             });
 
         }
-
-        //Made to pass up a graphic to the for loop I tried in displayGUI
-        //Graphics2D graphicy;
 
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -2080,10 +1970,4 @@ public class GUI extends JFrame implements j.Observer {
         }
     }
 
-
 }
-
-// make the buttons work
-// to display, change the actual display button under Display to open CLI
-// we need to get the actual class boxes listed
-// all of a class's fields, methods, and relationships are added to the box as well

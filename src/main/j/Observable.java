@@ -2,6 +2,6 @@ package j;
 
 public interface Observable {
 
-    void notifyObservers();
+    void notifyObservers(int reason, String msg);
 
 }

@@ -50,10 +50,6 @@ public abstract class Attribute implements Comparable<Attribute>, Cloneable{
         return this.name;
     }
 
-    public int getView() {
-        return this.view.ordinal();
-    }
-
     @Override
     public int compareTo(Attribute a) {
         return this.name.compareTo(a.name);
