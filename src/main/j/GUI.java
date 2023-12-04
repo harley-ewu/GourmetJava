@@ -1027,10 +1027,82 @@ public class GUI extends JFrame implements j.Observer {
         delPar = new JMenuItem(new AbstractAction("Delete Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to delete a parameter from?");
-                String methodName = JOptionPane.showInputDialog("What is the name of the method you are deleting the param from?");
-                String paramName = JOptionPane.showInputDialog("What is the parameter you are deleting?");
-                Controller.deleteParam(classWMethod, methodName, paramName);
+
+                //Get the list of existing classes
+                String[] classList = Controller.listClasses();
+
+                //Add a default option asking the user to pick a class
+                String[] classListWDefault = new String[classList.length + 1];
+                classListWDefault[0] = "Choose a class";
+                System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                //Creates a combo box with the list of classes
+                JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                boolean isAClassOption = false;
+
+                while(!isAClassOption){
+                    //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                    int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Delete param from which class's method?",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                    String className = (String) classComboBox.getSelectedItem();
+
+                    if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                        //Gets the name of the method to delete
+                        String[][] classDetails = Controller.listAllClassDetails(className);
+                        String[] methodList = classDetails[1];
+                        JComboBox<String> methodComboBox = new JComboBox<>(methodList);
+
+                        int chosenMethod = JOptionPane.showConfirmDialog(guiWindow, methodComboBox, "Which Method has param to delete?",
+                                OK_CANCEL_OPTION, QUESTION_MESSAGE);
+                        if(chosenMethod == OK_OPTION){
+                            String methodInfo = (String) methodComboBox.getSelectedItem();
+                            if(!methodInfo.contains("(")){
+                                JOptionPane.showMessageDialog(guiWindow, "This method has no parameters");
+                                return;
+                            }
+
+                            String[] parts = methodInfo.split("\\(");
+                            //Skip the visibility modifier to just get method name
+                            String methodName = parts[0].substring(1).trim();
+                            //Replaces the ) to rwmove closing parenthesis
+                            String parameters = parts[1].replace(")", "");
+
+                            //Take the above and convert to array that Users can then choose from
+                            String[] paramChoices = parameters.split(",");
+                            JComboBox<String> paramComboBox = new JComboBox<>(paramChoices);
+
+                            int chosenParam = JOptionPane.showConfirmDialog(guiWindow, paramComboBox, "Delete which Parameter?",
+                                    OK_CANCEL_OPTION, QUESTION_MESSAGE);
+
+                            if(chosenParam == OK_OPTION){
+                                String paramToDelete = (String) paramComboBox.getSelectedItem();
+
+                                //Confirm delete param on the chosen method
+                                JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
+                                displayConfirmationMessage.add(new JLabel("Delete " + paramToDelete + " ?"));
+                                int confirmDelete = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Delete ?", OK_CANCEL_OPTION);
+                                if(confirmDelete == OK_OPTION){
+                                    //delete the parameter
+                                    Controller.deleteParam(className, methodName, paramToDelete);
+                                }
+
+                            }
+
+                        }
+                        else{
+                            return;
+                        }
+
+                        isAClassOption = true;
+                    }
+                    else{
+                        if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                            break;
+                        }
+                    }
+                }
 
             }
         });
