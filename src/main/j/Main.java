@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
     public static boolean cview = false;
     public static boolean gview = false;
-    public static GUI mainContainer = new GUI();
+
     public static void main(String[] args) {
         //System.out.println("Welcome to Gourmet Java's UML Editor!");
         System.out.println("Welcome to Gourmet Java's UML Editor!");
@@ -18,18 +18,16 @@ public class Main {
         System.out.print("(c/g):");
         Scanner kb = new Scanner(System.in);
         char input = '.';
-        while(!(input=='c'||input=='g')){
+        while (!(input == 'c' || input == 'g')) {
             input = kb.nextLine().charAt(0);
-            if(input=='c'){
+            if (input == 'c') {
                 cview = true;
                 System.out.println("For instructions on how to use this program, please type the word \"help\"");
                 CLI.menu();
-            }
-            else if (input=='g'){
+            } else if (input == 'g') {
                 gview = true;
                 GUI.startGUIMenu();
-            }
-            else{
+            } else {
                 System.out.println("Invalid option! Please try again");
                 System.out.print("(c/g):");
             }

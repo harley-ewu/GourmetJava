@@ -8,23 +8,40 @@ Design patterns utilized in our project:
     CLI and GUI. Calls to ModelDiagram can be found in the Controller class.
 
 2. Memento
-    Memento is used for the undo/redo portion of the project. When the user types in the command "undo" or
-    "redo", the Controller contacts the ModelDiagram class, which contacts the Caretaker class. The caretaker
-    class contains a stack of instances to save the state of the last known action performed by the user and
-    allows them to remove or add the most recent action back to the current program. Examples of this can be found
-    in the ModelDiagram class line: 80
+    Memento is used for the undo/redo portion of the project for both CLI and GUI. The CLI and GUI have lists of objects that make up their current state.
+    The Memento class contains a list of generic objects. There is a Caretaker class that stores Memento objects in a stack.
+    When changes are made, the CLI/GUI make a new Memento objects and push them to their caretaker's stack.
+    When undo/redo is called, the caretaker retrieves the Memento object (if applicable), and the Memento class returns its list. 
+    The list that makes up the CLI/GUI's current state is set to this list.       
+    The relevant files are Caretaker.java and Memento.java. Uses of the classes can be found in GUI.java:GUIundo()/redo() and 
+    ModelDiagram.java:undo()/redo().
 
 3. Singleton
-    Singleton is utilized within the Caretaker class. In this class, we utilize the method getInstance().
-    This method ensures there is only ever one caretaker object. This method can be found in CareTaker
-    class line: 82
+    Singleton is utilized within the GUI class. In this class, we utilize the method getInstance().
+    The object that is a Singleton is a GUI observer object, part of the Observer design pattern.
+    There is a static "guiObserver" object within the GUI class. We only ever want one GUI observer object
+    because there should only be one observer (for the only window that can be opened)
 
 4. Prototype
-    Prototype is used in the Classbox class. It helps to save an instance of a ClassBox object. This means
-    creating a replica of the class object's relationships, methods, fields, etc. This can be found in the
-    ClassBox class line: 41
+    Prototype is used by any class that's implementing the "GCloneable" interface (GCloneable.java).
+    It's used as part of Memento. When we save the current state, we need deep copies of the current state because they contain mutable objects.
+    We're using a custom interface for clone() because Memento uses generics and the Cloneable interface's clone() is protected.
+    The only actual use of GCloneable.java:clone() is within the Memento.java file.
+    The classes that implement GCloneable are ClassBox.java:ClassBox and GUI.java:ClassPanel.
 
 5. Builder
     This project utilizes the builder design pattern. It does so by allowing the user to create a basic
     class object and change it as the user wishes. The methods 'add', 'delete', and 'rename' all change
     the ClassBox Objects. ModelDiagram demonstrates the changes made.
+
+6. Observer
+    Observer is used to update the GUI when changes are made in the CLI. There are 2 interfaces, Observer and Observable (not Java's implementation).
+    The Controller class is Observable, and the GUI class is the Observer. 
+    Controller has a list of Observers, and GUI has a guiObserver object that adds itself to that list.
+    When a change is made within ModelDiagram (the only place where changes by the CLI are made), it calls Controller.java:updateGUI().
+    updateGUI() eventually loops through the list of Observers and calls their update() method.
+    The GUI's update() method refreshes the GUI as necessary. There is a "reason" code and a "message" that is passed with the updates,
+    which are used by the GUI to determine what action to take and what classes are affected. The actual reasoning behind the solution are too technical
+    for this writeup, but it's mostly a workaround to make updating the GUI easier.
+    There will only ever be 1 Observer in this case.
+    

@@ -6,14 +6,12 @@ import java.util.ArrayList;
  * Keeps a list of the most recent changes, for undo/redo<br>
  * A more technical explanation is available in the source code
  */
-public class Caretaker {
-
-    private static Caretaker caretaker = null;
+public class Caretaker<T extends GCloneable<T>> {
 
     /**
      * a tweaked full ascending stack that preserves the elements that are "popped" off
      */
-    private final ArrayList<ModelDiagram.Memento> stack;
+    private final ArrayList<j.Memento<T>> stack;
 
     /*
         This explanation will not go into edge cases, just how it works
@@ -62,28 +60,17 @@ public class Caretaker {
     private int stackPointer;
 
     /**
-     *   stackSize keeps track of the most updated state that we are allowed to redo to
+     * stackSize keeps track of the most updated state that we are allowed to redo to
      */
     private int stackSize;
 
     /**
      * This class is a singleton so the c'tor is private
      */
-    private Caretaker() {
+    public Caretaker() {
         this.stackPointer = -1;
         this.stackSize = 0;
         this.stack = new ArrayList<>();
-    }
-
-    /**
-     * Gets the instance of the sole Caretaker object
-     * @return the Caretaker object
-     */
-    public static Caretaker getInstance() {
-        if (caretaker == null) {
-            caretaker = new Caretaker();
-        }
-        return caretaker;
     }
 
     /*
@@ -94,11 +81,13 @@ public class Caretaker {
             In cases where "undos" are valid, will return the previously recorded state of the program:
                 - The stack is not empty and the stackPointer is not 0 (the state of the program is not the oldest recorded state)
      */
+
     /**
      * returns a Memento Object containing the state of the program just before the most recent change
+     *
      * @return Memento Object with the most recent changes, or null if the undo is invalid
      */
-    public ModelDiagram.Memento undo() {
+    public Memento<T> undo() {
         if (this.stackSize == 0 || this.stackPointer == 0)
             return null;
 
@@ -125,9 +114,10 @@ public class Caretaker {
 
     /**
      * returns a Memento Object containing the state of the program before the most recent undo
+     *
      * @return Memento object containing the state of the program before the most recent undo, or null if the redo is invalid
      */
-    public ModelDiagram.Memento redo() {
+    public Memento<T> redo() {
         //CASE: Stack is empty or stackPointer is already at 0 (the state of the program is already the oldest recorded state)
         if (this.stackSize == 0 || this.stackPointer == (stackSize - 1))
             return null;
@@ -148,11 +138,13 @@ public class Caretaker {
             - The stackSize is increased by 1
             - The stackPointer holds the index of the most recent change
      */
+
     /**
      * Adds a Memento object to the stack and updates the stack pointer and stack size accordingly
+     *
      * @param snapshot Memento Object to add to the stack
      */
-    public void updateChange(final ModelDiagram.Memento snapshot) {
+    public void addChange(final Memento<T> snapshot) {
         if (snapshot == null)
             throw new IllegalArgumentException("null snapshot passed to Caretaker.updateChange");
 
@@ -163,6 +155,20 @@ public class Caretaker {
             this.stack.set(stackPointer, snapshot);
         }
         this.stackSize = this.stackPointer + 1;
+    }
+
+
+    /**
+     * Replaces the Memento object on the top of the stack<br>
+     * This is mainly for GUI when boxes are moved, the moves should be preserved but they should not be added to the stack
+     *
+     * @param snapshot Memento Object that will take place of the object on the top of the stack
+     */
+    public void updateChange(final Memento<T> snapshot) {
+        if (snapshot == null)
+            throw new IllegalArgumentException("null snapshot passed to Caretaker.updateChange");
+
+        this.stack.set(stackPointer, snapshot);
 
     }
 

@@ -2,7 +2,7 @@ package j;
 
 import java.util.Arrays;
 
-public abstract class Attribute implements Comparable<Attribute>, Cloneable{
+public abstract class Attribute implements Comparable<Attribute>, Cloneable {
 
     @Override
     public Attribute clone() {
@@ -48,10 +48,6 @@ public abstract class Attribute implements Comparable<Attribute>, Cloneable{
 
     public String getName() {
         return this.name;
-    }
-
-    public int getView() {
-        return this.view.ordinal();
     }
 
     @Override
