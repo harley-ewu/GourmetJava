@@ -324,6 +324,10 @@ public class GUI extends JFrame implements j.Observer {
         renameClass = new JMenuItem(new AbstractAction("Rename Class") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
 
                 //Get the list of existing classes
                 String[] classList = Controller.listClasses();
@@ -369,6 +373,10 @@ public class GUI extends JFrame implements j.Observer {
 
             //Adds an attribute when the "Add attribute" button is clicked
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
                 //String attType = JOptionPane.showInputDialog("Do you want to add a field or a method? \n" +
                        // "Type '1' for field, '2' for method");
 
@@ -611,6 +619,11 @@ public class GUI extends JFrame implements j.Observer {
         delAtt = new JMenuItem(new AbstractAction("Delete Attribute") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
+
                 String fieldOrMethodAsString = JOptionPane.showInputDialog("Are you wanting to delete a field or a method? \n" +
                         "Type 1 for 'field' or 2 for 'method'");
                 int fieldOrMethod = Integer.parseInt(fieldOrMethodAsString);
@@ -662,6 +675,11 @@ public class GUI extends JFrame implements j.Observer {
         addPar = new JMenuItem(new AbstractAction("Add Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
+
                 String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to add a parameter to?");
                 String methodName = JOptionPane.showInputDialog("What is the name of the method you are adding the param to?");
                 String paramName = JOptionPane.showInputDialog("What is the new parameter you are adding?");
@@ -674,6 +692,11 @@ public class GUI extends JFrame implements j.Observer {
         delPar = new JMenuItem(new AbstractAction("Delete Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() == 0){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                    return;
+                }
+
                 String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to delete a parameter from?");
                 String methodName = JOptionPane.showInputDialog("What is the name of the method you are deleting the param from?");
                 String paramName = JOptionPane.showInputDialog("What is the parameter you are deleting?");
@@ -685,7 +708,11 @@ public class GUI extends JFrame implements j.Observer {
         //renames an existing parameter
         renPar = new JMenuItem(new AbstractAction("Rename Parameter") {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {                if(Controller.getCreatedClassesSize() == 0){
+                JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
+                return;
+            }
+
                 String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to rename a parameter in?");
                 String methodName = JOptionPane.showInputDialog("What is the name of the method containing the parameter you are renaming?");
                 String paramName = JOptionPane.showInputDialog("Which parameter do you want to rename?");
@@ -704,6 +731,11 @@ public class GUI extends JFrame implements j.Observer {
         addRelation = new JMenuItem(new AbstractAction("Add Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() < 2){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least two classes");
+                    return;
+                }
+
                 String firstClass = JOptionPane.showInputDialog("What is the name of the first class you want to have a relationship?\n" +
                         "(The lower/to class, e.g this implements the other class)");
                 String secondClass = JOptionPane.showInputDialog("What is the name of the second class you want to have a relationship?\n" +
@@ -720,6 +752,11 @@ public class GUI extends JFrame implements j.Observer {
         delRelation = new JMenuItem(new AbstractAction("Delete Relationship") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(Controller.getCreatedClassesSize() < 2){
+                    JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least two classes");
+                    return;
+                }
+
                 String firstClass = JOptionPane.showInputDialog("What is the name of the first class with this relationship? ");
                 String secondClass = JOptionPane.showInputDialog("What is the name of the second class with this relationship? ");
                 //TODO Prompt with a message asking "Delete the relationship from firstClass to secondClass?" with an okay or cancel button
