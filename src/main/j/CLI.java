@@ -49,8 +49,37 @@ public class CLI {
             The completers are configured to give autosuggestions
             at each command level, the null completer prevents further suggestions.
          */
-        ArgumentCompleter AddDeleteCompleter = new ArgumentCompleter(
-                new StringsCompleter("add", "delete"),
+        ArgumentCompleter AddCompleter = new ArgumentCompleter(
+                new StringsCompleter("add"),
+                new StringsCompleter("class", "method", "field", "relationship", "parameter"),
+                new NullCompleter());
+
+        ArgumentCompleter ClassCompleter = new ArgumentCompleter(
+                new StringsCompleter("add"),
+                new StringsCompleter("class"),
+                new StringsCompleter("class", "interface", "record", "enumeration", "annotation"),
+                new NullCompleter());
+
+        ArgumentCompleter MethodCompleter = new ArgumentCompleter(
+                new StringsCompleter("add"),
+                new StringsCompleter("method"),
+                new StringsCompleter("private", "public", "protected"),
+                new NullCompleter());
+
+        ArgumentCompleter FieldCompleter = new ArgumentCompleter(
+                new StringsCompleter("add"),
+                new StringsCompleter("field"),
+                new StringsCompleter("private", "public", "protected"),
+                new NullCompleter());
+
+        ArgumentCompleter RelationshipCompleter = new ArgumentCompleter(
+                new StringsCompleter("add"),
+                new StringsCompleter("relationship"),
+                new StringsCompleter("aggregates", "composes", "implements", "realizes"),
+                new NullCompleter());
+
+        ArgumentCompleter DeleteCompleter = new ArgumentCompleter(
+                new StringsCompleter("delete"),
                 new StringsCompleter("class", "method", "field", "relationship", "parameter"),
                 new NullCompleter());
 
@@ -68,7 +97,7 @@ public class CLI {
                 new StringsCompleter("class", "field", "method", "parameter"),
                 new NullCompleter());
 
-        AggregateCompleter CombinedCompleters = new AggregateCompleter(AddDeleteCompleter, ListCompleter, SingleCompleter ,RenameCompleter);
+        AggregateCompleter CombinedCompleters = new AggregateCompleter(AddCompleter, DeleteCompleter, ListCompleter, SingleCompleter ,RenameCompleter,ClassCompleter, MethodCompleter, FieldCompleter, RelationshipCompleter);
         // This is the LineReader that handles input and brings it all together
         LineReader reader = LineReaderBuilder.builder()
                 .terminal(terminal)
@@ -80,10 +109,10 @@ public class CLI {
         Map<String, List<AttributedString>> widgetOpts = new HashMap<>();
 
         // Descriptors that display each commands requirements
-        List<AttributedString> addDesc = Arrays.asList(new AttributedString("add class [class-name] [class-type (options: CLASS, INTERFACE, RECORD, ENUMERATION, ANNOTATION)]"),
-                new AttributedString("add method [class-name] [method-name] [visibility-type (options: PRIVATE, PUBLIC, PROTECTED)] [return-type] [Param-1] [Param-2] ... [Param-N]"),
-                new AttributedString("add field [class-name] [field-name] [visibility-type (options: PRIVATE, PUBLIC, PROTECTED)] [data-type]"),
-                new AttributedString("add relationship [1st-class-name] [relationship-type (options: aggregates, composes, implements, realizes)] [2nd-class-name]"),
+        List<AttributedString> addDesc = Arrays.asList(new AttributedString("add class [class-type (options: CLASS, INTERFACE, RECORD, ENUMERATION, ANNOTATION)] [class-name]"),
+                new AttributedString("add method [visibility-type (options: PRIVATE, PUBLIC, PROTECTED)] [class-name] [method-name] [return-type] [Param-1] [Param-2] ... [Param-N]"),
+                new AttributedString("add field [visibility-type (options: PRIVATE, PUBLIC, PROTECTED)] [class-name] [field-name] [data-type]"),
+                new AttributedString("add relationship [relationship-type (options: aggregates, composes, implements, realizes)] [1st-class-name] [2nd-class-name]"),
                 new AttributedString("add parameter [class-name] [method-name] [parameter-name]")
         );
 
@@ -146,17 +175,17 @@ public class CLI {
                             }
 
                             //Retrieves the status code for the method and displays results
-                            int classTypeNum =  getClassTypeNumber(input[3]);
+                            int classTypeNum =  getClassTypeNumber(input[2]);
                             if (classTypeNum == -1) {
-                                System.out.println('"' + input[3] + '"' +  " is not a valid class type, please see help for valid types");
+                                System.out.println('"' + input[2] + '"' +  " is not a valid class type, please see help for valid types");
                             }
                             else {
-                                Controller.STATUS_CODES status = Controller.addClass(input[2], classTypeNum);
+                                Controller.STATUS_CODES status = Controller.addClass(input[3], classTypeNum);
 
                                 if (status != Controller.STATUS_CODES.SUCCESS){
-                                    System.out.println("Class " + input[2] + " " + status.toString());
+                                    System.out.println("Class " + input[3] + " " + status.toString());
                                 }else{
-                                    System.out.println("Class " + input[2] + " added!");
+                                    System.out.println("Class " + input[3] + " added!");
                                 }
                             }
 
@@ -174,19 +203,19 @@ public class CLI {
                             params.addAll(Arrays.asList(input).subList(6, input.length));
 
                             //Retrieves the status code for the method and displays results
-                            int visibilityTypeNum = getVisibilityNumber(input[4]);
+                            int visibilityTypeNum = getVisibilityNumber(input[2]);
                             if (visibilityTypeNum == -1) {
-                                System.out.println("'" + input[4] + "' is not a valid visibility type, please see help for valid types");
+                                System.out.println("'" + input[2] + "' is not a valid visibility type, please see help for valid types");
                             }
                             else {
-                                Controller.STATUS_CODES status = Controller.addMethod(input[2], input[3], visibilityTypeNum, input[5], params);
+                                Controller.STATUS_CODES status = Controller.addMethod(input[3], input[4], visibilityTypeNum, input[5], params);
                                 if (status == Controller.STATUS_CODES.OBJ_NOT_FOUND) {
-                                    System.out.println("Class '" + input[2] + "' " + status.toString());
+                                    System.out.println("Class '" + input[3] + "' " + status.toString());
                                 }
                                 else if(status != Controller.STATUS_CODES.SUCCESS){
-                                    System.out.println("Method '" + input[3] + "' " + status.toString());
+                                    System.out.println("Method '" + input[4] + "' " + status.toString());
                                 }else{
-                                    System.out.println("Method " + input[3] + " added to class " + input[2] + "!");
+                                    System.out.println("Method " + input[4] + " added to class " + input[3] + "!");
                                 }
                             }
                             break;
@@ -197,21 +226,20 @@ public class CLI {
                                 System.out.println("Command is an invalid length. Please try again");
                                 break;
                             }
-
-                            int visibilityTypeNum = getVisibilityNumber(input[4]);
+                            int visibilityTypeNum = getVisibilityNumber(input[2]);
                             if (visibilityTypeNum == -1) {
-                                System.out.println("'" + input[4] + "' is not a valid visibility type, please see help for valid types");
+                                System.out.println("'" + input[2] + "' is not a valid visibility type, please see help for valid types");
                             }
                             else {
-                                Controller.STATUS_CODES status = Controller.addField(input[2], input[3], visibilityTypeNum, input[5]);
+                                Controller.STATUS_CODES status = Controller.addField(input[3], input[4], visibilityTypeNum, input[5]);
                                 if (status == Controller.STATUS_CODES.OBJ_NOT_FOUND) {
-                                    System.out.println("Class '" + input[2] + "' " + status.toString());
+                                    System.out.println("Class '" + input[3] + "' " + status.toString());
                                 }
                                 else if(status != Controller.STATUS_CODES.SUCCESS){
-                                    System.out.println("Field " + input[3] + " " + status.toString());
+                                    System.out.println("Field " + input[4] + " " + status.toString());
                                 }else{
-                                    System.out.println("Field " + input[3] + " added to class " + input[2] + "!");
-                                    CLI.printArrayOfStringList(Controller.listAllClassDetails(input[2]));
+                                    System.out.println("Field " + input[4] + " added to class " + input[3] + "!");
+                                    CLI.printArrayOfStringList(Controller.listAllClassDetails(input[3]));
                                 }
                             }
 
@@ -227,20 +255,20 @@ public class CLI {
                                 break;
                             }
 
-                            int relationshipTypeNum = getRelationshipTypeNumber(input[3]);
+                            int relationshipTypeNum = getRelationshipTypeNumber(input[2]);
                             if (relationshipTypeNum == -1) {
-                                System.out.println("'" + input[3] + "' is not a valid visibility type, please see help for valid types");
+                                System.out.println("'" + input[2] + "' is not a valid visibility type, please see help for valid types");
                             }
                             else {
                                 //Retrieves the status code for the method and displays results
-                                Controller.STATUS_CODES status = Controller.addRelationship(input[4], input[2], relationshipTypeNum);
+                                Controller.STATUS_CODES status = Controller.addRelationship(input[4], input[3], relationshipTypeNum);
                                 if (status == Controller.STATUS_CODES.OBJ_NOT_FOUND) {
                                     System.out.println("One or both of the classes entered does not exist, try again with names of existing classes");
                                 }
                                 else if (status != Controller.STATUS_CODES.SUCCESS){
                                     System.out.println("Relationship " + status.toString());
                                 }else{
-                                    System.out.println("Relationship between " + input[2] + " and " + input[4] + " created!");
+                                    System.out.println("Relationship between " + input[3] + " and " + input[4] + " created!");
                                 }
                             }
 
