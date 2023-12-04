@@ -1111,10 +1111,10 @@ public class GUI extends JFrame implements j.Observer {
         renPar = new JMenuItem(new AbstractAction("Rename Parameter") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String classWMethod = JOptionPane.showInputDialog("What class contains the method you would like to rename a parameter in?");
-                String methodName = JOptionPane.showInputDialog("What is the name of the method containing the parameter you are renaming?");
-                String paramName = JOptionPane.showInputDialog("Which parameter do you want to rename?");
-                String newParamName = JOptionPane.showInputDialog("What do you want to rename it to?");
+                String classWMethod = JOptionPane.showInputDialog(guiWindow, "What class contains the method you would like to rename a parameter in?");
+                String methodName = JOptionPane.showInputDialog(guiWindow, "What is the name of the method containing the parameter you are renaming?");
+                String paramName = JOptionPane.showInputDialog(guiWindow, "Which parameter do you want to rename?");
+                String newParamName = JOptionPane.showInputDialog(guiWindow, "What do you want to rename it to?");
                 Controller.renameParam(classWMethod, methodName, paramName, newParamName);
 
             }
