@@ -366,7 +366,7 @@ public class GUI extends JFrame implements j.Observer {
         Controller.addSubscriber(GUI.getInstance());
 
         guiWindow = new JFrame("UML Editor");
-        guiWindow.getContentPane().setBackground(Color.BLUE);
+        guiWindow.getContentPane().setBackground(Color.LIGHT_GRAY);
         guiWindow.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
