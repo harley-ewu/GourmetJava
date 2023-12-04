@@ -3,6 +3,8 @@ package j;
 // Java program to construct
 // Menu bar to add menu items
 
+import org.jline.console.impl.SystemRegistryImpl;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -577,9 +579,7 @@ public class GUI extends JFrame implements j.Observer {
                     JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
                     return;
                 }
-                //String attType = JOptionPane.showInputDialog("Do you want to add a field or a method? \n" +
-                       // "Type '1' for field, '2' for method");
-
+              
                 // Create radio buttons for the field and method options.
                 JRadioButton fieldButton = new JRadioButton("Field");
                 JRadioButton methodButton = new JRadioButton("Method");
@@ -600,7 +600,7 @@ public class GUI extends JFrame implements j.Observer {
                 int askAttType = JOptionPane.showConfirmDialog(guiWindow, chooseAttType, "Choose Attribute Type", JOptionPane.OK_CANCEL_OPTION);
 
                 if(askAttType == OK_OPTION){
-                    //Defaults class in order to make classType always initialized
+                    //Defaults field in order to make askAttType always initialized
                     String choice = fieldButton.getText();
 
                     //Change classType to give the correct text option from the selected button into the switch statement to be converted to an int
@@ -704,8 +704,6 @@ public class GUI extends JFrame implements j.Observer {
 
 
                     } else if (attTypeAsInt == 2) { //adding a method
-                        //String className = JOptionPane.showInputDialog("Enter the name of the class you are adding this method to");
-
                         //Get the list of existing classes
                         String[] classList = Controller.listClasses();
 
@@ -823,38 +821,172 @@ public class GUI extends JFrame implements j.Observer {
                     JOptionPane.showMessageDialog(new JFrame(), "There needs to be at least one class");
                     return;
                 }
+                // Create radio buttons for the field and method options.
+                JRadioButton fieldButton = new JRadioButton("Field");
+                JRadioButton methodButton = new JRadioButton("Method");
 
-                String fieldOrMethodAsString = JOptionPane.showInputDialog("Are you wanting to delete a field or a method? \n" +
-                        "Type 1 for 'field' or 2 for 'method'");
-                int fieldOrMethod = Integer.parseInt(fieldOrMethodAsString);
+                //Add them to a group so only one can be selected, then set "field" as the default option
+                ButtonGroup fieldOrMethod = new ButtonGroup();
+                fieldOrMethod.add(fieldButton);
+                fieldOrMethod.add(methodButton);
+                fieldButton.setSelected(true);
 
-                if (fieldOrMethod == 1) {
-                    String className = JOptionPane.showInputDialog("What is the name of the class you want to remove a field from?");
-                    String fieldName = JOptionPane.showInputDialog("What is the name of the field you wish to delete?");
-                    //Controller delete field method is called with user inputs
-                    Controller.deleteField(className, fieldName);
-                    /*if (Controller.deleteField(className, fieldName)) {
-                        System.out.println("Field " + fieldName + " was removed from class " + className);
-                    } else {
-                        System.out.println("Failed to delete field. Please try again");
-                    } */
+                //Make a Jpanel to put the button group into
+                JPanel chooseAttType = new JPanel(new GridLayout(0,1));
+                chooseAttType.add(new JLabel("Do you want to delete a field or a method?"));
+                chooseAttType.add(fieldButton);
+                chooseAttType.add(methodButton);
 
 
-                } else if (fieldOrMethod == 2) {
-                    String className = JOptionPane.showInputDialog("What is the name of the class you want to remove a Method from?");
-                    String methodName = JOptionPane.showInputDialog("What is the name of the method you wish to delete?");
-                    //Deletes Method with input from user
-                    Controller.deleteMethod(className, methodName);
 
-                    /*if (Controller.deleteMethod(className, methodName)) {
-                        System.out.println("Method " + methodName + " was removed from class " + className);
-                    } else {
-                        System.out.println("Failed to delete method. Please try again");
-                    } */
+                //Displays field and method options on an okay/cancel pane, and centers the popup window on the main GUI screen
+                int askAttType = JOptionPane.showConfirmDialog(guiWindow, chooseAttType, "Choose Attribute Type", JOptionPane.OK_CANCEL_OPTION);
 
-                } else {
-                    fieldOrMethodAsString = JOptionPane.showInputDialog(" Invalid input, please try again. \n Are you wanting to delete a field or a method? \n" +
-                            "Type 1 for 'field' or 2 for 'method'");
+                if(askAttType == OK_OPTION) {
+                    //Defaults choice in order to make askAttType always initialized
+                    String choice = fieldButton.getText();
+
+                    //Change classType to give the correct text option from the selected button into the switch statement to be converted to an int
+                    if (fieldButton.isSelected()) choice = fieldButton.getText();
+                    if (methodButton.isSelected()) choice = methodButton.getText();
+
+                    int attTypeAsInt = 0;
+
+                    switch (choice) {
+                        case "Field":
+                            attTypeAsInt = 1;
+                            break;
+                        case "Method":
+                            attTypeAsInt = 2;
+                            break;
+                    }
+
+                    if (attTypeAsInt == 1) {
+                        //Get the list of existing classes
+                        String[] classList = Controller.listClasses();
+
+                        //Add a default option asking the user to pick a class
+                        String[] classListWDefault = new String[classList.length + 1];
+                        classListWDefault[0] = "Choose a class";
+                        System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                        //Creates a combo box with the list of classes
+                        JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                        boolean isAClassOption = false;
+
+                        while(!isAClassOption){
+                            //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                            int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Deleting a field from what class?",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                            String className = (String) classComboBox.getSelectedItem();
+
+                            if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                                //Gets the name of the field to delete
+                                String[][] classDetails = Controller.listAllClassDetails(className);
+                                String[] fieldList = classDetails[2];
+                                JComboBox<String> fieldComboBox = new JComboBox<>(fieldList);
+
+                                int chosenField = JOptionPane.showConfirmDialog(guiWindow, fieldComboBox, "Delete which field from " + className + "?",
+                                        OK_CANCEL_OPTION, QUESTION_MESSAGE);
+                                if(chosenField == OK_OPTION) {
+                                    String fieldToDeleteInfo = (String) fieldComboBox.getSelectedItem();
+                                    String fieldToDelete = fieldToDeleteInfo.toString();
+                                    //Split field name by whitespace to just get the name
+                                    String[] seperateFieldName = fieldToDelete.split("\\s+");
+                                    //Extract only the field's name, not the visibility type appended to the front
+                                    String fieldNameWParam = seperateFieldName[0];
+                                    String fieldName = fieldNameWParam.substring(1).trim();
+
+                                    //Confirm delete of the selected field
+                                    JPanel displayConfirmationMessage = new JPanel(new GridLayout(0, 1));
+                                    displayConfirmationMessage.add(new JLabel("Delete " + fieldToDelete + " ?"));
+                                    int confirmDelete = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Delete ?", OK_CANCEL_OPTION);
+                                    if (confirmDelete == OK_OPTION) {
+                                        //deletes the field
+                                        Controller.deleteField(className, fieldName);
+                                    }
+
+                                }
+                                else{
+                                    return;
+                                }
+
+                                isAClassOption = true;
+                            }
+                            else{
+                                if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                                    break;
+                                }
+                            }
+                        }
+
+                    }
+
+                    if (attTypeAsInt == 2) {
+                        //Get the list of existing classes
+                        String[] classList = Controller.listClasses();
+
+                        //Add a default option asking the user to pick a class
+                        String[] classListWDefault = new String[classList.length + 1];
+                        classListWDefault[0] = "Choose a class";
+                        System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                        //Creates a combo box with the list of classes
+                        JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                        boolean isAClassOption = false;
+
+                        while(!isAClassOption){
+                            //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                            int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Deleting a method from what class?",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                            String className = (String) classComboBox.getSelectedItem();
+
+                            if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                                //Gets the name of the method to delete
+                                String[][] classDetails = Controller.listAllClassDetails(className);
+                                String[] methodList = classDetails[1];
+                                JComboBox<String> methodComboBox = new JComboBox<>(methodList);
+
+                                int chosenMethod = JOptionPane.showConfirmDialog(guiWindow, methodComboBox, "Delete which Method?",
+                                        OK_CANCEL_OPTION, QUESTION_MESSAGE);
+                                if(chosenMethod == OK_OPTION){
+                                    String methodToDeleteInfo = (String) methodComboBox.getSelectedItem();
+                                    String methodToDelete = methodToDeleteInfo.toString();
+                                    //Separate the parameters from the method's name
+                                    String[] seperateMethodName = methodToDelete.split("\\(");  //\\s+//Split by whitespace
+                                    //Extract only the field's name without the attached visibility modifier
+                                    String methodNameWParam = seperateMethodName[0];
+                                    String methodName = methodNameWParam.substring(1).trim();
+
+                                    //Confirm delete on the chosen method
+                                    JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
+                                    displayConfirmationMessage.add(new JLabel("Delete " + methodToDelete + " ?"));
+                                    int confirmDelete = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Delete ?", OK_CANCEL_OPTION);
+                                    if(confirmDelete == OK_OPTION){
+                                        //delete the method
+                                        Controller.deleteMethod(className, methodName);
+                                    }
+
+                                }
+                                else{
+                                    return;
+                                }
+
+                                isAClassOption = true;
+                            }
+                            else{
+                                if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                                    break;
+                                }
+                            }
+                        }
+
+                    }
+
                 }
 
             }
@@ -862,7 +994,178 @@ public class GUI extends JFrame implements j.Observer {
         renameAtt = new JMenuItem(new AbstractAction("Rename Attribute") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //System.exit(16);
+                // Create radio buttons for the field and method options.
+                JRadioButton fieldButton = new JRadioButton("Field");
+                JRadioButton methodButton = new JRadioButton("Method");
+
+                //Add them to a group so only one can be selected, then set "field" as the default option
+                ButtonGroup fieldOrMethod = new ButtonGroup();
+                fieldOrMethod.add(fieldButton);
+                fieldOrMethod.add(methodButton);
+                fieldButton.setSelected(true);
+
+                //Make a Jpanel to put the button group into
+                JPanel chooseAttType = new JPanel(new GridLayout(0,1));
+                chooseAttType.add(new JLabel("Do you want to rename a field or a method?"));
+                chooseAttType.add(fieldButton);
+                chooseAttType.add(methodButton);
+
+
+
+                //Displays field and method options on an okay/cancel pane, and centers the popup window on the main GUI screen
+                int askAttType = JOptionPane.showConfirmDialog(guiWindow, chooseAttType, "Choose Attribute Type", JOptionPane.OK_CANCEL_OPTION);
+
+                if(askAttType == OK_OPTION) {
+                    //Defaults choice in order to make askAttType always initialized
+                    String choice = fieldButton.getText();
+
+                    //Change classType to give the correct text option from the selected button into the switch statement to be converted to an int
+                    if (fieldButton.isSelected()) choice = fieldButton.getText();
+                    if (methodButton.isSelected()) choice = methodButton.getText();
+
+                    int attTypeAsInt = 0;
+
+                    switch (choice) {
+                        case "Field":
+                            attTypeAsInt = 1;
+                            break;
+                        case "Method":
+                            attTypeAsInt = 2;
+                            break;
+                    }
+
+                    if (attTypeAsInt == 1) {
+                        //Get the list of existing classes
+                        String[] classList = Controller.listClasses();
+
+                        //Add a default option asking the user to pick a class
+                        String[] classListWDefault = new String[classList.length + 1];
+                        classListWDefault[0] = "Choose a class";
+                        System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                        //Creates a combo box with the list of classes
+                        JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                        boolean isAClassOption = false;
+
+                        while(!isAClassOption){
+                            //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                            int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Renaming a field from what class?",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                            String className = (String) classComboBox.getSelectedItem();
+
+                            if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                                //Gets the name of the field to rename
+                                String[][] classDetails = Controller.listAllClassDetails(className);
+                                String[] fieldList = classDetails[2];
+                                JComboBox<String> fieldComboBox = new JComboBox<>(fieldList);
+
+                                int chosenField = JOptionPane.showConfirmDialog(guiWindow, fieldComboBox, "Rename which field from " + className + "?",
+                                        OK_CANCEL_OPTION, QUESTION_MESSAGE);
+                                if(chosenField == OK_OPTION){
+                                    String fieldToRenameInfo = (String) fieldComboBox.getSelectedItem();
+                                    String fieldToRename = fieldToRenameInfo.toString();
+                                    //Split field name by whitespace to just get the name
+                                    String[] seperateFieldName = fieldToRename.split("\\s+");
+                                    //Extract only the field's name, not the visibility type appended to the front
+                                    String fieldNameWParam = seperateFieldName[0];
+                                    String fieldName = fieldNameWParam.substring(1).trim();
+
+                                    String newName = JOptionPane.showInputDialog(guiWindow, "What is the new name for this field?");
+
+                                    //Confirm rename of the selected field
+                                    JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
+                                    displayConfirmationMessage.add(new JLabel("Rename " + fieldName + " to " + newName + " ?"));
+                                    int confirmRename = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Rename?", OK_CANCEL_OPTION);
+                                    if(confirmRename == OK_OPTION){
+                                        //Renames the field
+                                        Controller.renameField(className, fieldName, newName);
+                                    }
+                                }
+                                else{
+                                    return;
+                                }
+
+                                isAClassOption = true;
+                            }
+                            else{
+                                if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                                    break;
+                                }
+                            }
+                        }
+
+                    }
+
+                    if (attTypeAsInt == 2) {
+                        //Get the list of existing classes
+                        String[] classList = Controller.listClasses();
+
+                        //Add a default option asking the user to pick a class
+                        String[] classListWDefault = new String[classList.length + 1];
+                        classListWDefault[0] = "Choose a class";
+                        System.arraycopy(classList, 0, classListWDefault, 1, classList.length);
+
+                        //Creates a combo box with the list of classes
+                        JComboBox<String> classComboBox = new JComboBox<>(classListWDefault);
+
+                        boolean isAClassOption = false;
+
+                        while(!isAClassOption){
+                            //Put combo box in a dialog "yes/Cancel" popup. Centers it in the GUI window
+                            int chosenClass = JOptionPane.showConfirmDialog(guiWindow, classComboBox, "Renaming a method from what class?",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                            String className = (String) classComboBox.getSelectedItem();
+
+                            if(chosenClass == JOptionPane.OK_OPTION && !className.equals("Choose a class")){
+                                //Gets the name of the method to delete
+                                String[][] classDetails = Controller.listAllClassDetails(className);
+                                String[] methodList = classDetails[1];
+                                JComboBox<String> methodComboBox = new JComboBox<>(methodList);
+
+                                int chosenMethod = JOptionPane.showConfirmDialog(guiWindow, methodComboBox, "Rename which Method?",
+                                        OK_CANCEL_OPTION, QUESTION_MESSAGE);
+                                if(chosenMethod == OK_OPTION){
+                                    String methodToRenameInfo = (String) methodComboBox.getSelectedItem();
+                                    String methodToRename = methodToRenameInfo.toString();
+                                    //Separate the parameters from the method's name
+                                    String[] seperateMethodName = methodToRename.split("\\(");  //\\s+//Split by whitespace
+                                    //Extract only the field's name without the attached visibility modifier
+                                    String methodNameWParam = seperateMethodName[0];
+                                    String methodName = methodNameWParam.substring(1).trim();
+
+                                    String newName = JOptionPane.showInputDialog(guiWindow, "What is this method's new name?");
+
+                                    //Confirm rename on the chosen method
+                                    JPanel displayConfirmationMessage = new JPanel(new GridLayout(0,1));
+                                    displayConfirmationMessage.add(new JLabel("Rename " + methodName + " to "+ newName + " ?"));
+                                    int confirmRename = JOptionPane.showConfirmDialog(guiWindow, displayConfirmationMessage, "Rename?", OK_CANCEL_OPTION);
+                                    if(confirmRename == OK_OPTION){
+                                        //rename the method
+                                        Controller.renameMethod(className, methodName, newName);
+                                    }
+
+                                }
+                                else{
+                                    return;
+                                }
+
+                                isAClassOption = true;
+                            }
+                            else{
+                                if(chosenClass == JOptionPane.CANCEL_OPTION || chosenClass == JOptionPane.CLOSED_OPTION){
+                                    break;
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+
+
             }
         });
         attributeDropdown.add(addAtt);
